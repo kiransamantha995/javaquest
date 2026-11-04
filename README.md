@@ -79,11 +79,37 @@ Open `http://localhost:3000` in your browser.
 └── vercel.json        # Static routing and Content Security Policy rules
 ```
 
-## Security & Architecture
+## Security Measures
 
-- **Content Security Policy**: Headers configured across `vercel.json` and `_headers` to restrict unauthorized script execution and restrict external connections to trusted endpoints.
-- **Database Row-Level Security**: Supabase tables enforce RLS policies ensuring users can only read and write their own records.
-- **Static Hosting**: The client runs entirely in the browser with zero custom server-side dependencies to maintain.
+JavaQuest is designed with security best practices across client-side logic, network communications, and cloud database access:
+
+- **Strict Content Security Policy (CSP)**: HTTP response headers configured across `vercel.json` and `_headers` enforce restrictive resource boundaries:
+  - `connect-src` is strictly allowlisted to Supabase (`https://*.supabase.co`), Google Gemini AI (`https://generativelanguage.googleapis.com`), and Piston code execution (`https://emkc.org`).
+  - `X-Frame-Options: DENY` prevents Clickjacking and UI redress attacks.
+  - `X-Content-Type-Options: nosniff` protects against MIME-type confusion attacks.
+  - `Strict-Transport-Security` enforces modern TLS and HTTPS across all requests.
+  - `Permissions-Policy` completely disables unauthorized access to camera, microphone, and geolocation APIs.
+
+- **PostgreSQL Row-Level Security (RLS)**:
+  - Every database table (`profiles`, `progress`, `earned_badges`) enforces strict Row Level Security.
+  - Read, write, and delete operations are restricted to the record owner via cryptographically verified Supabase auth tokens (`auth.uid() = id`).
+  - No user or unauthenticated client can read or modify another learner's profile, lesson progress, or achievements.
+
+- **Credential & Secret Protection**:
+  - Runtime API keys and database credentials in `config.js` and `.env` are excluded from version control via `.gitignore`.
+  - Deployment platforms inject secrets via encrypted environment variables at build time using `build.js`.
+  - User-supplied API keys for the AI tutor (JavaBot) are kept exclusively within browser `localStorage` and sent only to Google's official Gemini endpoint.
+
+- **Input Sanitization & XSS Defense**:
+  - Compiler outputs and AI chat responses are escaped before DOM insertion. Code snippets are rendered within `<pre>` and `<code>` blocks with syntax tokens rather than executable HTML.
+  - Persistent state from remote storage and local cache passes through validation (`sanitizeState()`) to protect against malformed or malicious payloads.
+
+- **Sandboxed Code Execution**:
+  - User Java code is compiled and executed inside ephemeral, resource-constrained container sandboxes via Piston API with strict execution timeouts, isolating untrusted code from the host system.
+
+- **Session & Token Hygiene**:
+  - Authentication tokens received from email confirmation flows are parsed and immediately purged from the browser address bar using `window.history.replaceState` to prevent token exposure in browser histories or referrers.
+  - JWT sessions automatically expire and refresh securely.
 
 ## License
 
