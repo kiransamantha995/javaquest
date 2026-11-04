@@ -1,0 +1,21 @@
+{
+  "name": "javaquest",
+  "version": "1.0.0",
+  "description": "JavaQuest — Gamified Java Learning Platform with 24-module roadmap, native Java compiler, Supabase authentication & database, and Gemini Flash-Lite AI tutor.",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node local-server.js",
+    "dev": "node local-server.js"
+  },
+  "keywords": [
+    "java",
+    "learning",
+    "gamification",
+    "supabase",
+    "postgresql",
+    "gemini",
+    "compiler"
+  ],
+  "author": "Advaith M Joy",
+  "license": "MIT"
+}
