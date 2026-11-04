@@ -73,6 +73,7 @@ Open `http://localhost:3000` in your browser.
 ├── curriculum.js      # Complete 24-module curriculum and challenge data
 ├── ai-tutor.js        # AI tutor integration and prompt handling
 ├── supabase.js        # Authentication and cloud database synchronization
+├── supabase_schema.sql # Database schema, RLS policies, and triggers for Supabase
 ├── animations.js      # UI transitions and micro-interactions
 ├── local-server.js    # Minimal local HTTP development server
 └── vercel.json        # Static routing and Content Security Policy rules
