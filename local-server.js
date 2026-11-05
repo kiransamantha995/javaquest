@@ -175,16 +175,45 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Secure AI Proxy Endpoint (for local dev parity with Vercel serverless)
+  if (req.method === 'POST' && urlPath === '/api/ai') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const aiHandler = require('./api/ai.js');
+        const fakeReq = { method: 'POST', body: payload };
+        const fakeRes = {
+          setHeader: (k, v) => res.setHeader(k, v),
+          status: (code) => {
+            res.writeHead(code, { 'Content-Type': 'application/json' });
+            return fakeRes;
+          },
+          json: (data) => res.end(JSON.stringify(data))
+        };
+        aiHandler(fakeReq, fakeRes).catch(err => {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        });
+      } catch(e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
   // Health check endpoint
   if (urlPath === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ status: 'ok', java: true }));
   }
 
-  // Config endpoint (exposes public client config like Gemini Key from .env)
+  // Config endpoint (exposes public client config without secrets)
   if (urlPath === '/api/config') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify({ geminiKey: process.env.GEMINI_API_KEY || '' }));
+    return res.end(JSON.stringify({ serverAI: true }));
   }
 
   // Static file serving with Windows path normalization and directory/SPA fallback

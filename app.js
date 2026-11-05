@@ -1606,12 +1606,17 @@ function renderSlide() {
 }
 
 function renderVis(slide) {
-  var c=ge('vis-now'); if(!c) return;
-  if(slide.visual==='memory'&&slide.visualData) renderMemoryDiagram(c,slide.visualData);
-  else if(slide.visual==='loop'&&slide.visualData) renderLoopTracer(c,slide.visualData);
-  else if(slide.visual==='flowchart') renderFlowchart(c,slide.visualData||{});
-  else if(slide.visual==='class-diagram'&&slide.visualData) renderClassDiagram(c,slide.visualData);
-  else{var icons={memory:'🗃️',loop:'🔄',flowchart:'🔀','class-diagram':'🏗️'};c.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.3);padding:1rem"><div style="font-size:3rem">'+(icons[slide.visual]||'👁️')+'</div></div>';}
+  var c = ge('vis-now'); if (!c) return;
+  if (typeof renderVisualizer === 'function') {
+    renderVisualizer(c, slide.visual, slide.visualData || {});
+  } else if (slide.visual==='memory'&&slide.visualData) renderMemoryDiagram(c,slide.visualData);
+  else if (slide.visual==='loop'&&slide.visualData) renderLoopTracer(c,slide.visualData);
+  else if (slide.visual==='flowchart') renderFlowchart(c,slide.visualData||{});
+  else if (slide.visual==='class-diagram'&&slide.visualData) renderClassDiagram(c,slide.visualData);
+  else {
+    var icons = { memory: '🗃️', loop: '🔄', flowchart: '🔀', 'class-diagram': '🏗️', jvm: '⚙️', hashmap: '📦', stream: '🌊', thread: '🧵' };
+    c.innerHTML = '<div style="text-align:center;padding:1.5rem"><div style="font-size:3rem">' + (icons[slide.visual]||'👁️') + '</div></div>';
+  }
 }
 
 function nextSlide(){ if(_slideIdx<_curLesson.slides.length-1){_slideIdx++;renderSlide();addXP(5);}else finishLesson(); }
@@ -1699,7 +1704,7 @@ function checkAnswer() {
     if (aiBox) { aiBox.innerHTML = ''; aiBox.classList.add('hidden'); }
     var explainBtn = ge('btn-explain-mistake');
     if (explainBtn) {
-      if (!correct && typeof getGeminiKey === 'function' && getGeminiKey()) {
+      if (!correct && typeof explainMistakeWithAI === 'function') {
         explainBtn.classList.remove('hidden');
         explainBtn.disabled = false;
         explainBtn.textContent = '🤖 Explain My Mistake';

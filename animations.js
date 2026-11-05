@@ -1,4 +1,5 @@
 // JavaQuest — animations.js
+// Interactive Neobrutalist Visualizers, Java Syntax Highlighter & Canvas Animations
 
 /* ── Helpers ─────────────────────────────────────── */
 function escHtml(s) {
@@ -16,42 +17,35 @@ const TYPES = new Set(['String','Integer','Double','Boolean','Character','Long',
   'Byte','Object','System','Math','Scanner','ArrayList','LinkedList','HashMap','HashSet',
   'List','Map','Set','Queue','Stack','Arrays','Collections','Optional','StringBuilder',
   'StringBuffer','Exception','RuntimeException','Thread','Runnable','Iterable','Stream',
-  'Collectors','Predicate','Function','Consumer','Supplier']);
+  'Collectors','Predicate','Function','Consumer','Supplier','CompletableFuture']);
 
 function highlightSyntax(code) {
   let r = '', i = 0, n = code.length;
   while (i < n) {
-    // line comment
     if (code[i]==='/' && code[i+1]==='/') {
       let j=i; while(j<n && code[j]!=='\n') j++;
       r+=`<span class="syn-cmt">${escHtml(code.slice(i,j))}</span>`; i=j; continue;
     }
-    // block comment
     if (code[i]==='/' && code[i+1]==='*') {
       let j=i+2; while(j<n-1&&!(code[j]==='*'&&code[j+1]==='/')) j++; j+=2;
       r+=`<span class="syn-cmt">${escHtml(code.slice(i,j))}</span>`; i=j; continue;
     }
-    // string
     if (code[i]==='"') {
       let j=i+1; while(j<n&&code[j]!=='"'){if(code[j]==='\\')j++;j++;}j++;
       r+=`<span class="syn-str">${escHtml(code.slice(i,j))}</span>`; i=j; continue;
     }
-    // char
     if (code[i]==="'") {
       let j=i+1; while(j<n&&code[j]!=="'"){if(code[j]==='\\')j++;j++;}j++;
       r+=`<span class="syn-str">${escHtml(code.slice(i,j))}</span>`; i=j; continue;
     }
-    // annotation
     if (code[i]==='@') {
       let j=i+1; while(j<n&&/[A-Za-z0-9_]/.test(code[j]))j++;
       r+=`<span class="syn-ann">${escHtml(code.slice(i,j))}</span>`; i=j; continue;
     }
-    // number
     if (/[0-9]/.test(code[i]) && (i===0||!/[A-Za-z_]/.test(code[i-1]))) {
       let j=i; while(j<n&&/[0-9._xXbBfFlL]/.test(code[j]))j++;
       r+=`<span class="syn-num">${escHtml(code.slice(i,j))}</span>`; i=j; continue;
     }
-    // identifier
     if (/[A-Za-z_$]/.test(code[i])) {
       let j=i; while(j<n&&/[A-Za-z0-9_$]/.test(code[j]))j++;
       const w=code.slice(i,j);
@@ -62,7 +56,6 @@ function highlightSyntax(code) {
       else r+=escHtml(w);
       i=j; continue;
     }
-    // operators
     if (/[+\-*/%=<>!&|^~?:;,.]/.test(code[i])) {
       r+=`<span class="syn-op">${escHtml(code[i])}</span>`; i++; continue;
     }
@@ -91,105 +84,459 @@ function copyCode(btn) {
   }).catch(function() {});
 }
 
-/* ── Memory Diagram ──────────────────────────────── */
-function renderMemoryDiagram(container, vars) {
-  if (!container || !vars) return;
-  container.innerHTML = '';
-  const box = document.createElement('div');
-  box.style.cssText = 'display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap';
-
-  const stack = document.createElement('div');
-  stack.style.cssText = 'border:1px solid rgba(108,99,255,.35);border-radius:12px;padding:12px 16px;min-width:180px;background:rgba(108,99,255,.07);font-family:monospace;font-size:.82rem';
-  stack.innerHTML = '<div style="color:#94A3B8;font-size:.7rem;font-weight:700;text-transform:uppercase;margin-bottom:8px">Stack</div>';
-  vars.forEach(function(v, i) {
-    const row = document.createElement('div');
-    row.style.cssText = 'display:flex;justify-content:space-between;gap:.75rem;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,.05);margin-bottom:4px';
-    row.innerHTML = `<span style="color:#C084FC">${escHtml(v.type)}</span><span style="color:#60A5FA">${escHtml(v.name)}</span><span style="color:#86EFAC">${escHtml(String(v.value))}</span>`;
-    stack.appendChild(row);
-  });
-  box.appendChild(stack);
-  container.appendChild(box);
-}
-
-/* ── Loop Tracer ──────────────────────────────────── */
-function renderLoopTracer(container, config) {
+/* ═════════════════════════════════════════════════════════════════════
+   MASTER VISUALIZER DISPATCHER
+   ═════════════════════════════════════════════════════════════════════ */
+function renderVisualizer(container, type, data) {
   if (!container) return;
-  config = config || {};
-  const start = config.start||0, end = config.end||5, varName = config.varName||'i';
   container.innerHTML = '';
-  const track = document.createElement('div');
-  track.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-family:monospace';
-  const count = Math.min(end - start, 8);
-  for (let i = 0; i < count; i++) {
-    const cell = document.createElement('div');
-    cell.style.cssText = 'width:56px;height:56px;border-radius:10px;border:1.5px solid rgba(108,99,255,.3);background:rgba(108,99,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;';
-    cell.innerHTML = `<div style="color:#94A3B8;font-size:.6rem">${varName}=${start+i}</div><div style="color:#C084FC;font-size:.9rem;font-weight:700">step ${i+1}</div>`;
-    track.appendChild(cell);
+
+  if (type === 'jvm') {
+    renderJVMVisualizer(container, data);
+  } else if (type === 'memory') {
+    renderMemoryDiagram(container, data);
+  } else if (type === 'hashmap') {
+    renderHashMapVisualizer(container, data);
+  } else if (type === 'stream') {
+    renderStreamVisualizer(container, data);
+  } else if (type === 'thread' || type === 'threads') {
+    renderThreadVisualizer(container, data);
+  } else if (type === 'loop') {
+    renderLoopTracer(container, data);
+  } else if (type === 'flowchart') {
+    renderFlowchart(container, data);
+  } else if (type === 'class-diagram') {
+    renderClassDiagram(container, data);
+  } else {
+    container.innerHTML = `<div style="padding:1.5rem;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem">🎯</div>
+      <div style="font-weight:800;color:var(--ink)">${escHtml(type ? type.toUpperCase() : 'INTERACTIVE VISUALIZER')}</div>
+    </div>`;
   }
-  container.appendChild(track);
 }
 
-/* ── Flowchart ────────────────────────────────────── */
-function renderFlowchart(container, config) {
-  if (!container) return;
+/* ── 1. JVM Architecture & Execution Pipeline Visualizer ─────────── */
+function renderJVMVisualizer(container, data) {
+  const stages = [
+    { id: 'src', title: '1. Source (.java)', desc: 'Human-readable Java code with classes and methods.' },
+    { id: 'cmp', title: '2. javac Compiler', desc: 'Type-checks and compiles source into portable .class bytecode.' },
+    { id: 'cld', title: '3. ClassLoader', desc: 'Loads, verifies, prepares, and links classes into memory.' },
+    { id: 'mem', title: '4. JVM Runtime Memory', desc: 'Allocates Metaspace (classes), Heap (objects), and Thread Stacks.' },
+    { id: 'eng', title: '5. Execution Engine', desc: 'Interpreter + HotSpot JIT (C1/C2 tiered compilation) + GC.' },
+    { id: 'cpu', title: '6. Native Silicon', desc: 'Executes native machine code directly on OS hardware.' }
+  ];
+
+  let activeIdx = 0;
+  const wrap = document.createElement('div');
+  wrap.className = 'vis-neobrutal-wrap';
+  wrap.innerHTML = `
+    <div class="vis-header-bar">
+      <span class="vis-title-badge">⚙️ JVM EXECUTION ARCHITECTURE</span>
+      <span class="vis-sub-badge">Click steps to inspect</span>
+    </div>
+    <div class="vis-pipeline-steps" id="jvm-steps-row"></div>
+    <div class="vis-detail-card" id="jvm-detail-box"></div>
+    <div class="vis-control-bar">
+      <button class="vis-ctrl-btn" id="jvm-btn-prev">← Previous</button>
+      <button class="vis-ctrl-btn active" id="jvm-btn-step">Step Next ⚡</button>
+      <button class="vis-ctrl-btn" id="jvm-btn-auto">Auto Run ▶</button>
+    </div>
+  `;
+
+  container.appendChild(wrap);
+
+  const row = wrap.querySelector('#jvm-steps-row');
+  const detail = wrap.querySelector('#jvm-detail-box');
+
+  function renderSteps() {
+    row.innerHTML = '';
+    stages.forEach((st, idx) => {
+      const stepEl = document.createElement('div');
+      stepEl.className = 'vis-step-chip' + (idx === activeIdx ? ' active' : '') + (idx < activeIdx ? ' passed' : '');
+      stepEl.textContent = st.title;
+      stepEl.addEventListener('click', () => { activeIdx = idx; renderSteps(); });
+      row.appendChild(stepEl);
+      if (idx < stages.length - 1) {
+        const arrow = document.createElement('span');
+        arrow.className = 'vis-step-arrow';
+        arrow.textContent = '➔';
+        row.appendChild(arrow);
+      }
+    });
+
+    const curr = stages[activeIdx];
+    detail.innerHTML = `
+      <div class="vis-card-title">${curr.title}</div>
+      <div class="vis-card-desc">${curr.desc}</div>
+      <div class="vis-card-stat">Status: <strong>Active Stage ${activeIdx + 1} of ${stages.length}</strong></div>
+    `;
+  }
+
+  renderSteps();
+
+  wrap.querySelector('#jvm-btn-step').onclick = () => {
+    activeIdx = (activeIdx + 1) % stages.length;
+    renderSteps();
+  };
+  wrap.querySelector('#jvm-btn-prev').onclick = () => {
+    activeIdx = (activeIdx - 1 + stages.length) % stages.length;
+    renderSteps();
+  };
+
+  let autoTimer = null;
+  wrap.querySelector('#jvm-btn-auto').onclick = function() {
+    if (autoTimer) {
+      clearInterval(autoTimer);
+      autoTimer = null;
+      this.textContent = 'Auto Run ▶';
+    } else {
+      this.textContent = 'Pause ⏸';
+      autoTimer = setInterval(() => {
+        activeIdx = (activeIdx + 1) % stages.length;
+        renderSteps();
+      }, 1600);
+    }
+  };
+}
+
+/* ── 2. Memory Diagram (Stack, Heap & String Pool) ────────────────── */
+function renderMemoryDiagram(container, data) {
+  let isReassigned = false;
+  const wrap = document.createElement('div');
+  wrap.className = 'vis-neobrutal-wrap';
+  
+  function renderLayout() {
+    wrap.innerHTML = `
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">🗃️ JAVA MEMORY MODEL (STACK VS HEAP)</span>
+        <button class="vis-pill-action" id="mem-toggle-btn">${isReassigned ? 'Reset Initial Reference ↺' : 'Simulate: p = null (Trigger GC) 🧹'}</button>
+      </div>
+      <div class="vis-memory-grid">
+        <!-- STACK FRAME -->
+        <div class="vis-mem-col stack-col">
+          <div class="vis-col-header">🧵 Thread Stack (main() frame)</div>
+          <div class="vis-mem-entry">
+            <span class="vis-type">int</span> <span class="vis-name">count</span> = <span class="vis-val">42</span>
+          </div>
+          <div class="vis-mem-entry">
+            <span class="vis-type">boolean</span> <span class="vis-name">active</span> = <span class="vis-val">true</span>
+          </div>
+          <div class="vis-mem-entry highlight">
+            <span class="vis-type">Person</span> <span class="vis-name">p</span> = <span class="vis-val">${isReassigned ? 'null' : '0x7F2B ➔'}</span>
+          </div>
+          <div class="vis-mem-entry">
+            <span class="vis-type">String</span> <span class="vis-name">s1</span> = <span class="vis-val">0x33A0 ➔</span>
+          </div>
+        </div>
+
+        <!-- HEAP MEMORY -->
+        <div class="vis-mem-col heap-col">
+          <div class="vis-col-header">📦 JVM Heap Space (Dynamic Objects)</div>
+          
+          <div class="vis-heap-object ${isReassigned ? 'garbage' : ''}">
+            <div class="vis-obj-addr">Address: 0x7F2B ${isReassigned ? '<span class="vis-gc-badge">UNREACHABLE (GC Candidate)</span>' : '<span class="vis-live-badge">Referenced by p</span>'}</div>
+            <div class="vis-obj-name">new Person("Alice", 28)</div>
+            <div class="vis-obj-field">• name: "Alice" (String)</div>
+            <div class="vis-obj-field">• age: 28</div>
+          </div>
+
+          <div class="vis-heap-object pool-obj">
+            <div class="vis-obj-addr">Address: 0x33A0 <span class="vis-live-badge">String Constant Pool</span></div>
+            <div class="vis-obj-name">"JavaQuest" (Interned Literal)</div>
+            <div class="vis-obj-field">• All matching literals share this 1 instance</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    wrap.querySelector('#mem-toggle-btn').onclick = () => {
+      isReassigned = !isReassigned;
+      renderLayout();
+    };
+  }
+
+  renderLayout();
+  container.appendChild(wrap);
+}
+
+/* ── 3. HashMap Internal Bucket & Treeification Visualizer ───────── */
+function renderHashMapVisualizer(container, data) {
+  let treeified = false;
+  const wrap = document.createElement('div');
+  wrap.className = 'vis-neobrutal-wrap';
+
+  function renderMap() {
+    wrap.innerHTML = `
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">📦 HASHMAP INTERNALS: BUCKET ARRAY & TREEIFICATION</span>
+        <button class="vis-pill-action" id="hm-tree-btn">${treeified ? 'Revert to Linked List ↩' : 'Simulate 8 Collisions (Treeify) 🌲'}</button>
+      </div>
+      <div class="vis-hm-meta">
+        <div><strong>Formula:</strong> <code>index = (n - 1) & hash(key)</code></div>
+        <div><strong>Treeify Threshold:</strong> 8 Nodes per bucket | <strong>Capacity:</strong> 16 Buckets</div>
+      </div>
+      <div class="vis-bucket-list">
+        <div class="vis-bucket-row">
+          <div class="vis-bucket-label">Bucket [0]</div>
+          <div class="vis-bucket-content empty">null (Empty)</div>
+        </div>
+        <div class="vis-bucket-row">
+          <div class="vis-bucket-label">Bucket [3]</div>
+          <div class="vis-bucket-content">
+            <span class="vis-node-chip">"Java" : 21</span>
+          </div>
+        </div>
+        <div class="vis-bucket-row highlight-bucket">
+          <div class="vis-bucket-label">Bucket [7]</div>
+          <div class="vis-bucket-content">
+            ${treeified ? `
+              <div class="vis-tree-block">
+                <span class="vis-tree-tag">🌲 Red-Black Tree (TreeNode)</span>
+                <span class="vis-node-chip">O(log n) Lookup Time!</span>
+                <span class="vis-node-chip">8 Linked Nodes Treeified</span>
+              </div>
+            ` : `
+              <div class="vis-chain-block">
+                <span class="vis-node-chip">"K1" : V1</span> ➔
+                <span class="vis-node-chip">"K2" : V2</span> ➔
+                <span class="vis-node-chip">"K3" : V3</span> ➔
+                <span class="vis-chain-tail">(O(n) Collision Chain)</span>
+              </div>
+            `}
+          </div>
+        </div>
+        <div class="vis-bucket-row">
+          <div class="vis-bucket-label">Bucket [12]</div>
+          <div class="vis-bucket-content">
+            <span class="vis-node-chip">"Spring" : 3.2</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    wrap.querySelector('#hm-tree-btn').onclick = () => {
+      treeified = !treeified;
+      renderMap();
+    };
+  }
+
+  renderMap();
+  container.appendChild(wrap);
+}
+
+/* ── 4. Java Stream API Pipeline Visualizer ───────────────────────── */
+function renderStreamVisualizer(container, data) {
+  let step = 0;
+  const wrap = document.createElement('div');
+  wrap.className = 'vis-neobrutal-wrap';
+
+  const stages = [
+    { title: '1. Source Stream', desc: 'Data elements loaded into pipeline: [1, 2, 3, 4, 5, 6, 7, 8]' },
+    { title: '2. .filter(x -> x % 2 == 0)', desc: 'Odd numbers rejected; only evens pass through: [2, 4, 6, 8]' },
+    { title: '3. .map(x -> x * 10)', desc: 'Transforms each even number by multiplying by 10: [20, 40, 60, 80]' },
+    { title: '4. .collect(Collectors.toList())', desc: 'Terminal operation triggers execution and returns final List<Integer>' }
+  ];
+
+  function renderStream() {
+    wrap.innerHTML = `
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">🌊 STREAM API PIPELINE (LAZY EVALUATION)</span>
+        <button class="vis-pill-action" id="stream-next-btn">Step Pipeline (${step + 1}/4) ➔</button>
+      </div>
+      <div class="vis-stream-stage-desc">${stages[step].desc}</div>
+      <div class="vis-stream-track">
+        <div class="vis-stream-box ${step >= 0 ? 'active' : ''}">Source [1..8]</div>
+        <span class="vis-stream-arrow">➔</span>
+        <div class="vis-stream-box ${step >= 1 ? 'active' : ''}">.filter(even)</div>
+        <span class="vis-stream-arrow">➔</span>
+        <div class="vis-stream-box ${step >= 2 ? 'active' : ''}">.map(*10)</div>
+        <span class="vis-stream-arrow">➔</span>
+        <div class="vis-stream-box ${step >= 3 ? 'active' : ''}">.collect(toList)</div>
+      </div>
+      <div class="vis-stream-items">
+        ${renderStreamChips(step)}
+      </div>
+    `;
+
+    wrap.querySelector('#stream-next-btn').onclick = () => {
+      step = (step + 1) % stages.length;
+      renderStream();
+    };
+  }
+
+  function renderStreamChips(s) {
+    if (s === 0) {
+      return [1,2,3,4,5,6,7,8].map(n => `<span class="vis-node-chip">${n}</span>`).join(' ');
+    } else if (s === 1) {
+      return [1,2,3,4,5,6,7,8].map(n => n % 2 === 0 ? `<span class="vis-node-chip pass">${n} (PASS)</span>` : `<span class="vis-node-chip drop">${n} (DROP)</span>`).join(' ');
+    } else if (s === 2) {
+      return [2,4,6,8].map(n => `<span class="vis-node-chip pass">${n * 10}</span>`).join(' ');
+    } else {
+      return `<div class="vis-result-box"><strong>Result:</strong> List.of(20, 40, 60, 80) 🎉</div>`;
+    }
+  }
+
+  renderStream();
+  container.appendChild(wrap);
+}
+
+/* ── 5. Thread Lifecycle & Lock Concurrency Visualizer ─────────────── */
+function renderThreadVisualizer(container, data) {
+  let lockedBy = 'Thread-1';
+  const wrap = document.createElement('div');
+  wrap.className = 'vis-neobrutal-wrap';
+
+  function renderThreads() {
+    wrap.innerHTML = `
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">🧵 THREAD CONCURRENCY & MONITOR LOCKS</span>
+        <button class="vis-pill-action" id="thread-switch-btn">Switch Lock Holder ⇄</button>
+      </div>
+      <div class="vis-thread-grid">
+        <div class="vis-thread-card ${lockedBy === 'Thread-1' ? 'running' : 'blocked'}">
+          <div class="vis-thread-name">Thread-1</div>
+          <div class="vis-thread-status">${lockedBy === 'Thread-1' ? '🟢 RUNNABLE (Holding Lock)' : '🔴 BLOCKED (Waiting for Lock)'}</div>
+          <div class="vis-thread-code">synchronized(lock) { ... }</div>
+        </div>
+
+        <div class="vis-lock-card">
+          <div class="vis-lock-icon">🔒</div>
+          <div class="vis-lock-title">Object Monitor Lock</div>
+          <div class="vis-lock-owner">Owner: <strong>${lockedBy}</strong></div>
+        </div>
+
+        <div class="vis-thread-card ${lockedBy === 'Thread-2' ? 'running' : 'blocked'}">
+          <div class="vis-thread-name">Thread-2</div>
+          <div class="vis-thread-status">${lockedBy === 'Thread-2' ? '🟢 RUNNABLE (Holding Lock)' : '🔴 BLOCKED (Waiting for Lock)'}</div>
+          <div class="vis-thread-code">synchronized(lock) { ... }</div>
+        </div>
+      </div>
+    `;
+
+    wrap.querySelector('#thread-switch-btn').onclick = () => {
+      lockedBy = lockedBy === 'Thread-1' ? 'Thread-2' : 'Thread-1';
+      renderThreads();
+    };
+  }
+
+  renderThreads();
+  container.appendChild(wrap);
+}
+
+/* ── 6. Loop Tracer ───────────────────────────────────────────────── */
+function renderLoopTracer(container, config) {
   config = config || {};
-  const cond = (config.condition||'x > 0').slice(0,14);
-  const yes  = (config.trueBranch||'true path').slice(0,12);
-  const no   = (config.falseBranch||'false path').slice(0,12);
-  container.innerHTML = `<svg width="100%" height="200" viewBox="0 0 320 200" style="max-width:320px;margin:0 auto;display:block">
-    <rect x="110" y="6" width="100" height="28" rx="14" fill="rgba(108,99,255,.3)" stroke="#6C63FF" stroke-width="1.5"/>
-    <text x="160" y="25" text-anchor="middle" fill="#C084FC" font-size="11" font-family="monospace">START</text>
-    <line x1="160" y1="34" x2="160" y2="60" stroke="#6B7280" stroke-width="1.5" marker-end="url(#ar)"/>
-    <polygon points="160,60 216,90 160,120 104,90" fill="rgba(255,209,102,.15)" stroke="#FFD166" stroke-width="1.5"/>
-    <text x="160" y="87" text-anchor="middle" fill="#FFD166" font-size="9" font-family="monospace">${escHtml(cond)}</text>
-    <text x="160" y="100" text-anchor="middle" fill="#94A3B8" font-size="8">?</text>
-    <line x1="104" y1="90" x2="55" y2="90" stroke="#06D6A0" stroke-width="1.5" marker-end="url(#arg)"/>
-    <text x="78" y="84" text-anchor="middle" fill="#06D6A0" font-size="8">true</text>
-    <line x1="55" y1="90" x2="55" y2="142" stroke="#06D6A0" stroke-width="1.5" marker-end="url(#arg)"/>
-    <rect x="8" y="142" width="94" height="28" rx="6" fill="rgba(6,214,160,.15)" stroke="#06D6A0" stroke-width="1.5"/>
-    <text x="55" y="161" text-anchor="middle" fill="#06D6A0" font-size="9" font-family="monospace">${escHtml(yes)}</text>
-    <line x1="216" y1="90" x2="262" y2="90" stroke="#F72585" stroke-width="1.5" marker-end="url(#arr)"/>
-    <text x="240" y="84" text-anchor="middle" fill="#F72585" font-size="8">false</text>
-    <line x1="262" y1="90" x2="262" y2="142" stroke="#F72585" stroke-width="1.5" marker-end="url(#arr)"/>
-    <rect x="218" y="142" width="94" height="28" rx="6" fill="rgba(247,37,133,.15)" stroke="#F72585" stroke-width="1.5"/>
-    <text x="265" y="161" text-anchor="middle" fill="#F72585" font-size="9" font-family="monospace">${escHtml(no)}</text>
-    <defs>
-      <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#6B7280" stroke-width="1.2"/></marker>
-      <marker id="arg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#06D6A0" stroke-width="1.2"/></marker>
-      <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F72585" stroke-width="1.2"/></marker>
-    </defs>
-  </svg>`;
+  let start = config.start || 0, end = config.end || 5, varName = config.varName || 'i';
+  let cur = start;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'vis-neobrutal-wrap';
+
+  function renderTracer() {
+    wrap.innerHTML = `
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">🔄 LOOP STEP TRACER: for (${varName} = ${start}; ${varName} &lt; ${end}; ${varName}++)</span>
+        <button class="vis-pill-action" id="loop-step-btn">${cur >= end ? 'Reset Loop ↺' : 'Step Next ▶'}</button>
+      </div>
+      <div class="vis-loop-grid">
+        <div class="vis-loop-state">
+          <div>Current Variable: <strong>${varName} = ${cur}</strong></div>
+          <div>Condition Check: <strong>${varName} &lt; ${end} ➔ ${cur < end ? '✅ TRUE (Continue)' : '❌ FALSE (Exit Loop)'}</strong></div>
+        </div>
+        <div class="vis-loop-steps">
+          ${Array.from({ length: end - start }, (_, i) => start + i).map(n => `
+            <span class="vis-step-chip ${n === cur ? 'active' : ''} ${n < cur ? 'passed' : ''}">Step ${n + 1}: ${varName}=${n}</span>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    wrap.querySelector('#loop-step-btn').onclick = () => {
+      if (cur >= end) cur = start;
+      else cur++;
+      renderTracer();
+    };
+  }
+
+  renderTracer();
+  container.appendChild(wrap);
 }
 
-/* ── Class Diagram ───────────────────────────────── */
+/* ── 7. Decision Flowchart ────────────────────────────────────────── */
+function renderFlowchart(container, config) {
+  config = config || {};
+  const cond = config.condition || 'x > 0';
+  const yes  = config.trueBranch || 'Execute True Block';
+  const no   = config.falseBranch || 'Execute Else Block';
+
+  container.innerHTML = `
+    <div class="vis-neobrutal-wrap">
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">🔀 CONTROL FLOW: DECISION BRANCH</span>
+      </div>
+      <div class="vis-flow-diagram">
+        <div class="vis-flow-node start">START</div>
+        <div class="vis-flow-arrow">↓</div>
+        <div class="vis-flow-diamond">
+          <div class="vis-diamond-text">if (${escHtml(cond)}) ?</div>
+        </div>
+        <div class="vis-flow-branches">
+          <div class="vis-branch true-branch">
+            <span class="vis-branch-tag">✅ TRUE</span>
+            <div class="vis-flow-node action true-node">${escHtml(yes)}</div>
+          </div>
+          <div class="vis-branch false-branch">
+            <span class="vis-branch-tag">❌ FALSE</span>
+            <div class="vis-flow-node action false-node">${escHtml(no)}</div>
+          </div>
+        </div>
+        <div class="vis-flow-arrow">↓</div>
+        <div class="vis-flow-node end">CONTINUE EXECUTION</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ── 8. Class & Interface Diagram ─────────────────────────────────── */
 function renderClassDiagram(container, config) {
-  if (!container || !config || !config.classes) return;
-  container.innerHTML = '';
-  container.style.cssText = 'display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;font-family:monospace;font-size:.78rem';
-  config.classes.forEach(function(cls) {
-    const card = document.createElement('div');
-    card.style.cssText = 'border:1.5px solid rgba(108,99,255,.4);border-radius:10px;overflow:hidden;min-width:150px;max-width:200px;background:rgba(108,99,255,.06)';
-    const title = document.createElement('div');
-    title.style.cssText = 'padding:6px 10px;background:rgba(108,99,255,.25);color:#C084FC;font-weight:700;text-align:center';
-    title.textContent = cls.name;
-    card.appendChild(title);
-    if (cls.fields && cls.fields.length) {
-      const sec = document.createElement('div');
-      sec.style.cssText = 'padding:6px 10px;border-top:1px solid rgba(255,255,255,.06)';
-      cls.fields.forEach(function(f){ const d=document.createElement('div');d.style.color='#60A5FA';d.textContent=f;sec.appendChild(d); });
-      card.appendChild(sec);
-    }
-    if (cls.methods && cls.methods.length) {
-      const sec = document.createElement('div');
-      sec.style.padding = '6px 10px';
-      cls.methods.forEach(function(m){ const d=document.createElement('div');d.style.color='#FCD34D';d.textContent=m+'()';sec.appendChild(d); });
-      card.appendChild(sec);
-    }
-    container.appendChild(card);
-  });
+  config = config || {};
+  const classes = config.classes || [
+    { name: 'Vehicle', type: 'abstract class', fields: ['String brand', 'int speed'], methods: ['startEngine()', 'abstract stop()'] },
+    { name: 'Car', type: 'class (extends Vehicle)', fields: ['int numDoors'], methods: ['stop() [Overridden]', 'drift()'] }
+  ];
+
+  container.innerHTML = `
+    <div class="vis-neobrutal-wrap">
+      <div class="vis-header-bar">
+        <span class="vis-title-badge">🏗️ OOP HIERARCHY & CLASS ARCHITECTURE</span>
+      </div>
+      <div class="vis-uml-grid">
+        ${classes.map(cls => `
+          <div class="vis-uml-card">
+            <div class="vis-uml-header">
+              <span class="vis-uml-kind">${escHtml(cls.type || 'class')}</span>
+              <div class="vis-uml-name">${escHtml(cls.name)}</div>
+            </div>
+            ${cls.fields && cls.fields.length ? `
+              <div class="vis-uml-section">
+                <div class="vis-sec-label">Fields</div>
+                ${cls.fields.map(f => `<div class="vis-uml-item">• ${escHtml(f)}</div>`).join('')}
+              </div>
+            ` : ''}
+            ${cls.methods && cls.methods.length ? `
+              <div class="vis-uml-section">
+                <div class="vis-sec-label">Methods</div>
+                ${cls.methods.map(m => `<div class="vis-uml-item method">ƒ ${escHtml(m)}</div>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
 }
 
-/* ── XP Float ────────────────────────────────────── */
+/* ── XP Float & Particles ─────────────────────────────────────────── */
 function showXpFloat(amount, sourceEl) {
   const el = document.createElement('div');
   el.className = 'xp-float';
@@ -208,7 +555,6 @@ function showXpFloat(amount, sourceEl) {
   el.addEventListener('animationend', function(){ el.remove(); });
 }
 
-/* ── Particle Burst ──────────────────────────────── */
 function burstParticles(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;

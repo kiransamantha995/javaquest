@@ -1,7 +1,6 @@
 // JavaQuest Curriculum — curriculum.js
-// 24 Modules (B1-B8, I1-I8, A1-A8) according to the official JavaQuest Roadmap
-// Includes interactive Coding Challenges with Attempt-Based Scoring:
-// Attempt 1: 100 XP | Attempt 2: 75 XP | Attempt 3: 50 XP | Attempt 4+: 25 XP (Fixed)
+// 24 Modules (B1-B8, I1-I8, A1-A8) grounded in "Core Java" (Cay Horstmann) and "Effective Java" (Joshua Bloch)
+// Enhanced with interactive Neobrutalist visualizers (JVM, Stack/Heap, HashMap, Streams, Threads)
 
 const CURRICULUM = [
   {
@@ -25,9 +24,10 @@ const CURRICULUM = [
           },
           {
             "type": "visual",
-            "visual": "flowchart",
+            "visual": "jvm",
             "title": "How Code Runs",
-            "content": "Your `.java` source code is compiled by **javac** into portable **bytecode** (`.class` files). The **Java Virtual Machine (JVM)** executes this bytecode on any OS."
+            "content": "Your `.java` source code is compiled by **javac** into portable **bytecode** (`.class` files). The **Java Virtual Machine (JVM)** executes this bytecode on any OS.",
+            "visualData": null
           },
           {
             "type": "code",
@@ -100,6 +100,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "print(\"A\") does not emit a newline, so \"B\" prints right after it on the same line."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Java Orientation & Setup?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -147,23 +159,7 @@ const CURRICULUM = [
           {
             "type": "visual",
             "visual": "memory",
-            "visualData": [
-              {
-                "type": "int",
-                "name": "age",
-                "value": 21
-              },
-              {
-                "type": "double",
-                "name": "gpa",
-                "value": 3.85
-              },
-              {
-                "type": "boolean",
-                "name": "enrolled",
-                "value": "true"
-              }
-            ],
+            "visualData": null,
             "title": "Stack Memory",
             "content": "Primitives live directly on the stack with their actual value."
           },
@@ -172,6 +168,11 @@ const CURRICULUM = [
             "title": "Declaring Variables",
             "content": "Syntax: `type variableName = value;`",
             "code": "public class Main {\n    public static void main(String[] args) {\n        int heroLevel = 5;\n        double health = 98.5;\n        boolean hasPotion = true;\n        char rank = 'A';\n        System.out.println(\"Hero Level: \" + heroLevel);\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -190,6 +191,11 @@ const CURRICULUM = [
             "title": "Scanner for Input",
             "content": "Use `java.util.Scanner` to read keyboard input.",
             "code": "import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.out.nextLine());\n        // sc.nextInt(), sc.nextDouble(), sc.nextLine()\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -228,6 +234,18 @@ const CURRICULUM = [
           "question": "In Java, a variable can change its declared type at runtime.",
           "answer": false,
           "explanation": "Java is statically typed: a variable type cannot change once declared."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Variables, Data Types & Input?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -269,10 +287,26 @@ const CURRICULUM = [
             "content": "Java provides `+`, `-`, `*`, `/`, and `%` (modulus / remainder). Beware of **integer division**: dividing two ints truncates decimals!"
           },
           {
+            "type": "visual",
+            "visual": "flowchart",
+            "visualData": {
+              "condition": "x != null && x > 0",
+              "trueBranch": "Valid Data",
+              "falseBranch": "Reject / Fallback"
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Integer Division Traps",
             "content": "`7 / 2` is `3`, not `3.5`. To get a double result, at least one operand must be a double: `7.0 / 2` is `3.5`.",
             "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(7 / 2);      // prints 3\n        System.out.println(7.0 / 2);    // prints 3.5\n        System.out.println(7 % 2);      // remainder: 1\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -291,6 +325,11 @@ const CURRICULUM = [
             "title": "Ternary Operator",
             "content": "`condition ? valueIfTrue : valueIfFalse`",
             "code": "public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        String result = (score >= 60) ? \"PASS\" : \"FAIL\";\n        System.out.println(result);\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -329,6 +368,18 @@ const CURRICULUM = [
           "question": "The expression (5 > 3 || 10 / 0 == 0) throws an ArithmeticException at runtime.",
           "answer": false,
           "explanation": "Because 5 > 3 is true, short-circuit OR (||) does not evaluate the second operand."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Operators & Expressions?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -370,10 +421,26 @@ const CURRICULUM = [
             "content": "Branching lets programs choose execution paths using `if`, `else if`, and `else`."
           },
           {
+            "type": "visual",
+            "visual": "loop",
+            "visualData": {
+              "start": 0,
+              "end": 5,
+              "varName": "i"
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Modern Switch Expressions (Java 14+)",
             "content": "Modern Java supports arrow syntax `->` in switch expressions without break statements!",
             "code": "int day = 3;\nString name = switch (day) {\n    case 1 -> \"Monday\";\n    case 2 -> \"Tuesday\";\n    case 3 -> \"Wednesday\";\n    default -> \"Other\";\n};\nSystem.out.println(name);"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -403,6 +470,11 @@ const CURRICULUM = [
             "title": "Break and Continue",
             "content": "`break` exits loop immediately; `continue` skips to the next iteration.",
             "code": "for (int i = 1; i <= 5; i++) {\n    if (i == 3) continue; // skip 3\n    System.out.print(i + \" \");\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -441,6 +513,18 @@ const CURRICULUM = [
           "question": "The continue statement terminates the entire loop and jumps out of it.",
           "answer": false,
           "explanation": "continue skips only the current iteration; break terminates the entire loop."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Decision Making & Loops?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -482,10 +566,22 @@ const CURRICULUM = [
             "content": "A method is a block of code designed to perform a specific task. Methods improve reusability and maintainability."
           },
           {
+            "type": "visual",
+            "visual": "memory",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Method Anatomy",
             "content": "`returnType methodName(parameters) { ... }`",
             "code": "public class Main {\n    static int add(int a, int b) {\n        return a + b;\n    }\n    public static void main(String[] args) {\n        int sum = add(10, 20);\n        System.out.println(\"Sum: \" + sum);\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -504,6 +600,11 @@ const CURRICULUM = [
             "title": "Overloading Example",
             "content": "Notice `multiply(int, int)` vs `multiply(double, double)`.",
             "code": "static int multiply(int a, int b) { return a * b; }\nstatic double multiply(double a, double b) { return a * b; }"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -542,6 +643,18 @@ const CURRICULUM = [
           "question": "Two methods in the same class can have the same name and identical parameter lists if their return types differ.",
           "answer": false,
           "explanation": "In Java, return type alone cannot be used to overload a method."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Methods & Scope?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -582,10 +695,22 @@ const CURRICULUM = [
             "content": "An array holds elements of the same type in contiguous memory. Indexing starts at `0` and length is fixed at creation."
           },
           {
+            "type": "visual",
+            "visual": "memory",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Creating & Iterating Arrays",
             "content": "Use enhanced for-each loop to traverse.",
             "code": "int[] numbers = {10, 20, 30, 40};\nfor (int n : numbers) {\n    System.out.println(n);\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -604,6 +729,11 @@ const CURRICULUM = [
             "title": "Using StringBuilder",
             "content": "For heavy string concatenation inside loops, use `StringBuilder` for high performance.",
             "code": "StringBuilder sb = new StringBuilder();\nsb.append(\"Hello\").append(\" \").append(\"World\");\nSystem.out.println(sb.toString());"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -642,6 +772,18 @@ const CURRICULUM = [
           "question": "In Java, array indices are 0-based and array.length is a method call length().",
           "answer": false,
           "explanation": "Arrays have a public final field .length, not a method length()."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Arrays & Strings?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -688,14 +830,16 @@ const CURRICULUM = [
             "visualData": {
               "classes": [
                 {
-                  "name": "Student",
+                  "name": "BankAccount",
+                  "type": "class",
                   "fields": [
-                    "name: String",
-                    "grade: int"
+                    "- String owner",
+                    "- double balance"
                   ],
                   "methods": [
-                    "study()",
-                    "getGrade()"
+                    "+ deposit(amount)",
+                    "+ withdraw(amount)",
+                    "+ getBalance()"
                   ]
                 }
               ]
@@ -708,6 +852,11 @@ const CURRICULUM = [
             "title": "Class with Constructor",
             "content": "Using this keyword to distinguish fields from parameters.",
             "code": "class Hero {\n    String name;\n    Hero(String name) { this.name = name; }\n    void shout() { System.out.println(name + \" is here!\"); }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -726,6 +875,11 @@ const CURRICULUM = [
             "title": "Getters and Setters",
             "content": "Encapsulation example with validation.",
             "code": "class Account {\n    private double balance;\n    public double getBalance() { return balance; }\n    public void deposit(double amt) {\n        if (amt > 0) balance += amt;\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -763,6 +917,18 @@ const CURRICULUM = [
           "question": "Static methods can directly access non-static instance variables without an object reference.",
           "answer": false,
           "explanation": "Static methods belong to the class and have no this reference; they cannot directly access instance fields."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for OOP Foundations?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -804,10 +970,22 @@ const CURRICULUM = [
             "content": "Exceptions disrupt normal flow. Use `try-catch-finally` to prevent crashes and handle errors gracefully."
           },
           {
+            "type": "visual",
+            "visual": "memory",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Try-Catch-Finally",
             "content": "The finally block runs whether an exception occurred or not.",
             "code": "try {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Cannot divide by zero!\");\n} finally {\n    System.out.println(\"Cleanup completed.\");\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -826,6 +1004,11 @@ const CURRICULUM = [
             "title": "ArrayList & HashMap in Action",
             "content": "Essential collection operations.",
             "code": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>();\n        list.add(\"Java\");\n        Map<String, Integer> map = new HashMap<>();\n        map.put(\"Java\", 21);\n        System.out.println(map.get(\"Java\"));\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -863,6 +1046,18 @@ const CURRICULUM = [
           "question": "The code inside a finally block is only executed if an exception is thrown in the try block.",
           "answer": false,
           "explanation": "A finally block executes regardless of whether an exception occurred or was handled."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Exceptions & Collections Intro?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -904,10 +1099,46 @@ const CURRICULUM = [
             "content": "SOLID guides robust design: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion. Favor **composition over inheritance** for flexible architectures."
           },
           {
+            "type": "visual",
+            "visual": "class-diagram",
+            "visualData": {
+              "classes": [
+                {
+                  "name": "Employee",
+                  "type": "abstract class",
+                  "fields": [
+                    "- String name",
+                    "- double salary"
+                  ],
+                  "methods": [
+                    "+ abstract calculateBonus()"
+                  ]
+                },
+                {
+                  "name": "Manager",
+                  "type": "class (extends Employee)",
+                  "fields": [
+                    "- int teamSize"
+                  ],
+                  "methods": [
+                    "+ calculateBonus() [Overridden]"
+                  ]
+                }
+              ]
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Modern Java Records",
             "content": "Records (Java 16+) provide concise, immutable data carriers with auto-generated constructor, getters, equals, and hashCode.",
             "code": "public record User(String name, int age) {}\n// Usage:\nUser u = new User(\"Alice\", 25);\nSystem.out.println(u.name());"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -926,6 +1157,11 @@ const CURRICULUM = [
             "title": "Sealed Hierarchy",
             "content": "Example of sealed interface and permits.",
             "code": "public sealed interface Shape permits Circle, Square {}\nfinal class Circle implements Shape {}\nfinal class Square implements Shape {}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -964,6 +1200,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "p.x() is 3 and p.y() is 7; 3 + 7 = 10."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for OOP Beyond the Basics?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1005,10 +1253,44 @@ const CURRICULUM = [
             "content": "Java Collections provide standardized architecture for representing and manipulating collections of objects. `Set` models a mathematical set with **no duplicates**."
           },
           {
+            "type": "visual",
+            "visual": "class-diagram",
+            "visualData": {
+              "classes": [
+                {
+                  "name": "PaymentGateway",
+                  "type": "interface",
+                  "fields": [
+                    "+ String API_VER = \"v2\""
+                  ],
+                  "methods": [
+                    "+ void process(double amt)",
+                    "+ default void refund()"
+                  ]
+                },
+                {
+                  "name": "StripeAdapter",
+                  "type": "class implements PaymentGateway",
+                  "fields": [],
+                  "methods": [
+                    "+ void process(double amt)"
+                  ]
+                }
+              ]
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Set Uniqueness",
             "content": "HashSet vs TreeSet (sorted).",
             "code": "Set<String> set = new HashSet<>();\nset.add(\"A\");\nset.add(\"A\"); // Duplicate ignored\nSystem.out.println(set.size()); // prints 1"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1027,6 +1309,11 @@ const CURRICULUM = [
             "title": "Generic Method",
             "content": "Generic print method.",
             "code": "public static <T> void printItem(T item) {\n    System.out.println(\"Item: \" + item);\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1064,6 +1351,18 @@ const CURRICULUM = [
           "question": "TreeSet orders its elements naturally or using a supplied Comparator.",
           "answer": true,
           "explanation": "TreeSet uses a red-black tree to keep elements sorted in natural or comparator order."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Collections & Generics?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1105,10 +1404,22 @@ const CURRICULUM = [
             "content": "Any resource implementing `java.lang.AutoCloseable` can be opened in `try(...)`. Java guarantees it will be closed automatically, preventing resource leaks!"
           },
           {
+            "type": "visual",
+            "visual": "memory",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Try-With-Resources Syntax",
             "content": "No finally block needed for closing streams.",
             "code": "import java.io.*;\ntry (BufferedReader br = new BufferedReader(new StringReader(\"Line 1\\nLine 2\"))) {\n    System.out.println(br.readLine());\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1127,6 +1438,11 @@ const CURRICULUM = [
             "title": "Files.readString / writeString",
             "content": "Quick reading and writing in Java 11+.",
             "code": "Path p = Path.of(\"notes.txt\");\n// Files.writeString(p, \"Java rocks!\");\n// String content = Files.readString(p);"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1165,6 +1481,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "Integer.parseInt(\"abc\") throws NumberFormatException, caught by the catch block."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Exceptions, Files & I/O?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1206,10 +1534,26 @@ const CURRICULUM = [
             "content": "A functional interface has exactly **one abstract method** (e.g. `Predicate<T>`, `Function<T,R>`, `Consumer<T>`). Lambda expressions provide concise implementations."
           },
           {
+            "type": "visual",
+            "visual": "flowchart",
+            "visualData": {
+              "condition": "riskyOperation()",
+              "trueBranch": "Commit Work",
+              "falseBranch": "catch (IOException e)"
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Lambda Syntax",
             "content": "`parameter -> expression`",
             "code": "List<String> names = List.of(\"Java\", \"Kotlin\", \"Scala\");\nnames.forEach(n -> System.out.println(n));"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1228,6 +1572,11 @@ const CURRICULUM = [
             "title": "Filter and Map",
             "content": "Stream transformation example.",
             "code": "List<Integer> nums = List.of(1, 2, 3, 4, 5, 6);\nList<Integer> evens = nums.stream()\n    .filter(n -> n % 2 == 0)\n    .map(n -> n * 10)\n    .toList();\nSystem.out.println(evens); // [20, 40, 60]"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1272,6 +1621,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "\"cat\" and \"dog\" have length 3, so count is 2."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Lambdas, Streams & Functional Java?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1314,10 +1675,37 @@ const CURRICULUM = [
             "content": "Modern Java includes `LocalDate`, `LocalDateTime`, `Duration`, and `Period`. They are thread-safe and immutable!"
           },
           {
+            "type": "visual",
+            "visual": "class-diagram",
+            "visualData": {
+              "classes": [
+                {
+                  "name": "Box<T extends Number>",
+                  "type": "generic class",
+                  "fields": [
+                    "- T content"
+                  ],
+                  "methods": [
+                    "+ void set(T val)",
+                    "+ T get()",
+                    "+ double doubleVal()"
+                  ]
+                }
+              ]
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "LocalDate Operations",
             "content": "Date manipulation with java.time.",
             "code": "import java.time.LocalDate;\nLocalDate today = LocalDate.of(2026, 11, 4);\nLocalDate nextWeek = today.plusDays(7);\nSystem.out.println(nextWeek);"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1336,6 +1724,11 @@ const CURRICULUM = [
             "title": "BigDecimal Precision",
             "content": "Precise financial math.",
             "code": "import java.math.BigDecimal;\nBigDecimal price = new BigDecimal(\"19.99\");\nBigDecimal tax = new BigDecimal(\"1.08\");\nSystem.out.println(price.multiply(tax));"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1374,6 +1767,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "\\d{5} matches exactly 5 numeric digits, so it returns true."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Date/Time, Regex & Useful APIs?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1414,10 +1819,22 @@ const CURRICULUM = [
             "content": "Unit tests prove individual units of code work as expected. JUnit 5 uses `@Test`, `@BeforeEach`, and assertions like `assertEquals()`."
           },
           {
+            "type": "visual",
+            "visual": "hashmap",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "JUnit 5 Anatomy",
             "content": "Testing expected behavior.",
             "code": "import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass CalculatorTest {\n    @Test\n    void testAdd() {\n        assertEquals(5, 2 + 3);\n    }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1436,6 +1853,11 @@ const CURRICULUM = [
             "title": "Testing Exceptions",
             "content": "Asserting that an exception is thrown.",
             "code": "assertThrows(IllegalArgumentException.class, () -> {\n    throw new IllegalArgumentException(\"Invalid\");\n});"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1473,6 +1895,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "Expected was 5 but actual was 4, causing the test assertion to fail."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Testing & Debugging?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1513,10 +1947,22 @@ const CURRICULUM = [
             "content": "Java Database Connectivity (JDBC) standardizes database operations. Always use **`PreparedStatement`** to bind parameters and prevent catastrophic SQL Injection!"
           },
           {
+            "type": "visual",
+            "visual": "stream",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Safe PreparedStatement",
             "content": "Parameter binding with placeholder `?`.",
             "code": "String sql = \"SELECT * FROM users WHERE email = ?\";\nPreparedStatement ps = conn.prepareStatement(sql);\nps.setString(1, \"alice@example.com\");\nResultSet rs = ps.executeQuery();"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1535,6 +1981,11 @@ const CURRICULUM = [
             "title": "Transaction Template",
             "content": "Safe transaction handling pattern.",
             "code": "try {\n    conn.setAutoCommit(false);\n    // execute queries\n    conn.commit();\n} catch (Exception e) {\n    conn.rollback();\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1572,6 +2023,18 @@ const CURRICULUM = [
           "question": "A database transaction ensures that either all operations succeed or all are rolled back.",
           "answer": true,
           "explanation": "Atomicity in ACID transactions guarantees all-or-nothing execution."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Database Programming with JDBC?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1612,10 +2075,22 @@ const CURRICULUM = [
             "content": "A Thread is an independent path of execution. Modern Java prefers `ExecutorService` (thread pools) over creating raw `new Thread()` manually."
           },
           {
+            "type": "visual",
+            "visual": "jvm",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "ExecutorService Pattern",
             "content": "Submitting tasks to a thread pool.",
             "code": "import java.util.concurrent.*;\nExecutorService pool = Executors.newFixedThreadPool(2);\npool.submit(() -> System.out.println(\"Running async!\"));\npool.shutdown();"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1634,6 +2109,11 @@ const CURRICULUM = [
             "title": "Maven pom.xml Dependency",
             "content": "Adding external libraries declarative.",
             "code": "<dependency>\n    <groupId>org.junit.jupiter</groupId>\n    <artifactId>junit-jupiter</artifactId>\n    <version>5.10.0</version>\n    <scope>test</scope>\n</dependency>"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1671,6 +2151,18 @@ const CURRICULUM = [
           "question": "A race condition occurs when concurrent operations produce unpredictable results depending on execution timing.",
           "answer": true,
           "explanation": "Unsynchronized access to shared mutable state leads to race conditions."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Concurrency Foundations & Tooling?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1711,10 +2203,22 @@ const CURRICULUM = [
             "content": "JVM memory is divided into: **Heap** (objects & instances), **Stack** (thread execution & local frames), and **Metaspace** (class metadata). Objects allocated at runtime live on the Heap."
           },
           {
+            "type": "visual",
+            "visual": "jvm",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Understanding Garbage Collection",
             "content": "Garbage collectors (G1, ZGC) reclaim unreachable objects on the heap automatically.",
             "code": "// Objects with no live references become eligible for GC:\nObject obj = new Object();\nobj = null; // eligible for GC"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1733,6 +2237,11 @@ const CURRICULUM = [
             "title": "Inspecting Bytecode with javap",
             "content": "Run `javap -c Main` in terminal to view the bytecode instructions generated by javac.",
             "code": "// Bytecode instructions: aload_0, invokespecial, getstatic, etc."
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1770,6 +2279,18 @@ const CURRICULUM = [
           "question": "Local primitive variables inside a method are stored in stack memory frames.",
           "answer": true,
           "explanation": "Local primitive variables and method call states reside on the thread stack."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for JVM & Memory Model?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1810,10 +2331,22 @@ const CURRICULUM = [
             "content": "The **Java Memory Model (JMM)** defines how threads interact through memory. The **happens-before** relationship guarantees ordering and visibility of memory writes across threads."
           },
           {
+            "type": "visual",
+            "visual": "thread",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Volatile & Atomics",
             "content": "`volatile` guarantees read/write visibility. Atomics (like `AtomicInteger`) guarantee lock-free atomic operations.",
             "code": "import java.util.concurrent.atomic.AtomicInteger;\nAtomicInteger counter = new AtomicInteger(0);\ncounter.incrementAndGet(); // thread-safe without synchronized"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1832,6 +2365,11 @@ const CURRICULUM = [
             "title": "Launching Virtual Threads",
             "content": "Using Thread.ofVirtual() in Java 21.",
             "code": "Thread.ofVirtual().start(() -> {\n    System.out.println(\"Running on a lightweight virtual thread!\");\n});"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1869,6 +2407,18 @@ const CURRICULUM = [
           "question": "Virtual threads introduced in Java 21 have a 1:1 mapping to operating system kernel threads.",
           "answer": false,
           "explanation": "Virtual threads are M:N user-mode threads managed by the JVM, multiplexed over a small pool of carrier OS threads."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Advanced Concurrency?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -1909,10 +2459,22 @@ const CURRICULUM = [
             "content": "Modern Java lets you switch directly on object types with pattern matching, casting automatically!"
           },
           {
+            "type": "visual",
+            "visual": "thread",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Pattern Matching Example",
             "content": "Clean polymorphic handling without instanceof chains.",
             "code": "Object obj = \"Hello Java 21\";\nif (obj instanceof String s) {\n    System.out.println(s.toUpperCase());\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -1931,6 +2493,11 @@ const CURRICULUM = [
             "title": "Custom Annotation",
             "content": "Defining annotations with retention policy.",
             "code": "@Retention(RetentionPolicy.RUNTIME)\n@Target(ElementType.METHOD)\npublic @interface Endpoint {\n    String path();\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -1969,6 +2536,18 @@ const CURRICULUM = [
           ],
           "answer": 2,
           "explanation": "RetentionPolicy.RUNTIME keeps annotations in the compiled class file and accessible via reflection."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Advanced Language Features?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -2009,10 +2588,35 @@ const CURRICULUM = [
             "content": "Solves the \"telescoping constructor\" anti-pattern when objects have many optional parameters. Produces readable, immutable objects step-by-step."
           },
           {
+            "type": "visual",
+            "visual": "class-diagram",
+            "visualData": {
+              "classes": [
+                {
+                  "name": "ServiceProxy",
+                  "type": "dynamic proxy",
+                  "fields": [
+                    "- InvocationHandler h"
+                  ],
+                  "methods": [
+                    "+ Object invoke(proxy, method, args)"
+                  ]
+                }
+              ]
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Builder Pattern",
             "content": "Fluent method chaining pattern.",
             "code": "User u = new User.Builder(\"Alex\")\n    .email(\"alex@code.com\")\n    .role(\"ADMIN\")\n    .build();"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -2031,6 +2635,11 @@ const CURRICULUM = [
             "title": "Strategy with Functional Interface",
             "content": "In modern Java, Strategy is simply a lambda or method reference!",
             "code": "Function<Double, Double> discountStrategy = price -> price * 0.9;"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -2068,6 +2677,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "Builder methods return this to allow chaining: .setA().setB().build()."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Design & Architecture?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -2109,10 +2730,39 @@ const CURRICULUM = [
             "content": "Never store plaintext passwords! Always use salted, adaptive hashing algorithms (Argon2, BCrypt). Never hardcode API secrets in source control."
           },
           {
+            "type": "visual",
+            "visual": "class-diagram",
+            "visualData": {
+              "classes": [
+                {
+                  "name": "HttpRequest",
+                  "type": "class (Builder Pattern)",
+                  "fields": [
+                    "- String url",
+                    "- String method",
+                    "- Map headers"
+                  ],
+                  "methods": [
+                    "+ static class Builder",
+                    "+ Builder header(k, v)",
+                    "+ HttpRequest build()"
+                  ]
+                }
+              ]
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Java 11+ HttpClient",
             "content": "Modern non-blocking HTTP client.",
             "code": "HttpClient client = HttpClient.newHttpClient();\nHttpRequest req = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://api.example.com\"))\n    .GET()\n    .build();"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -2131,6 +2781,11 @@ const CURRICULUM = [
             "title": "Exponential Backoff Pattern",
             "content": "Retrying transient errors with increasing delay.",
             "code": "// waitTime = baseDelay * (2 ^ attemptCount)"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -2168,6 +2823,18 @@ const CURRICULUM = [
           "question": "HTTPS encrypts data in transit between client and server using TLS.",
           "answer": true,
           "explanation": "TLS guarantees confidentiality and integrity of transmitted data over the network."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Networking, Security & Reliability?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -2208,10 +2875,26 @@ const CURRICULUM = [
             "content": "Spring Boot is the standard enterprise framework for Java. The **Spring Container** creates and injects dependencies (`@Service`, `@Repository`, `@RestController`), decoupling components."
           },
           {
+            "type": "visual",
+            "visual": "flowchart",
+            "visualData": {
+              "condition": "connection.commit()",
+              "trueBranch": "Transaction Committed",
+              "falseBranch": "connection.rollback()"
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Spring REST Controller",
             "content": "Clean declarative endpoints.",
             "code": "@RestController\n@RequestMapping(\"/api/tasks\")\npublic class TaskController {\n    @GetMapping\n    public List<Task> getTasks() { return taskService.findAll(); }\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -2230,6 +2913,11 @@ const CURRICULUM = [
             "title": "Repository Interface",
             "content": "Automatic SQL generation from method names.",
             "code": "public interface UserRepository extends JpaRepository<User, UUID> {\n    Optional<User> findByEmail(String email);\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -2267,6 +2955,18 @@ const CURRICULUM = [
           "question": "Spring Data JPA automatically implements common CRUD operations without writing manual boilerplate SQL.",
           "answer": true,
           "explanation": "JpaRepository generates save, findById, findAll, delete implementations automatically."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Spring Boot & Persistence?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -2307,10 +3007,22 @@ const CURRICULUM = [
             "content": "Never guess bottlenecks! Use profilers (Async-Profiler, JProfiler, VisualVM) to measure CPU usage, heap allocations, and lock contention under realistic loads."
           },
           {
+            "type": "visual",
+            "visual": "jvm",
+            "visualData": null,
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Benchmarking with JMH",
             "content": "Java Microbenchmark Harness prevents JIT dead-code elimination artifacts.",
             "code": "@Benchmark\npublic void measurePerformance() {\n    // benchmarked code\n}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -2329,6 +3041,11 @@ const CURRICULUM = [
             "title": "Structured JSON Logging",
             "content": "Machine-parseable logging output.",
             "code": "// {\"timestamp\":\"...\",\"level\":\"INFO\",\"traceId\":\"...\",\"msg\":\"Order placed\"}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -2366,6 +3083,18 @@ const CURRICULUM = [
           "question": "Premature optimization without profiling often adds unnecessary complexity without improving real performance.",
           "answer": true,
           "explanation": "\"Premature optimization is the root of all evil\" — Donald Knuth."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Performance & Observability?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },
@@ -2406,10 +3135,41 @@ const CURRICULUM = [
             "content": "Docker packages the Java application, dependencies, and JRE into a standardized, lightweight container image. Multi-stage builds produce tiny production images."
           },
           {
+            "type": "visual",
+            "visual": "class-diagram",
+            "visualData": {
+              "classes": [
+                {
+                  "name": "Shape",
+                  "type": "sealed interface",
+                  "fields": [],
+                  "methods": [
+                    "permits Circle, Rectangle"
+                  ]
+                },
+                {
+                  "name": "Circle(double r)",
+                  "type": "record implements Shape",
+                  "fields": [
+                    "r: double"
+                  ],
+                  "methods": []
+                }
+              ]
+            },
+            "title": "Interactive System Architecture",
+            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+          },
+          {
             "type": "code",
             "title": "Multi-stage Dockerfile",
             "content": "Build stage with JDK; runner stage with slim JRE.",
             "code": "FROM eclipse-temurin:21-jre-alpine\nWORKDIR /app\nCOPY target/*.jar app.jar\nENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       },
@@ -2428,6 +3188,11 @@ const CURRICULUM = [
             "title": "Production Health Probes",
             "content": "Liveness and Readiness checks for Kubernetes.",
             "code": "// GET /actuator/health -> {\"status\":\"UP\"}"
+          },
+          {
+            "type": "tip",
+            "title": "Authoritative Best Practice (Effective Java)",
+            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
           }
         ]
       }
@@ -2465,6 +3230,18 @@ const CURRICULUM = [
           ],
           "answer": 0,
           "explanation": "Health endpoints return status UP with HTTP 200 to signal readiness."
+        },
+        {
+          "type": "mcq",
+          "question": "What runtime architectural advantage does Java offer for Deployment & Engineering Workflow?",
+          "options": [
+            "Automatic memory safety and JIT compiler optimizations",
+            "Direct hardware register access like raw assembly",
+            "Zero compile-time type checking",
+            "Forced manual memory pointer deallocation"
+          ],
+          "answer": 0,
+          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
         }
       ]
     },

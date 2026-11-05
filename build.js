@@ -7,7 +7,6 @@ const configPath = path.join(__dirname, 'config.js');
 
 if (!fs.existsSync(configPath)) {
   const config = {
-    GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
     SUPABASE_URL: process.env.SUPABASE_URL || '',
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || ''
   };
