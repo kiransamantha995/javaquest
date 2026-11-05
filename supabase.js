@@ -317,3 +317,22 @@ function _doSaveAll(STATE) {
 function sbQueueBadge(badgeId) {
   if (_pendingBadges.indexOf(badgeId) === -1) _pendingBadges.push(badgeId);
 }
+
+function sbDeleteAccount() {
+  if (!isSupabaseConfigured() || !window._sbSession || !window._sbSession.user) {
+    return Promise.resolve();
+  }
+  var uid = window._sbSession.user.id;
+  clearTimeout(_saveTimer);
+  _pendingBadges = [];
+
+  var p1 = sbFetch('/rest/v1/earned_badges?user_id=eq.' + uid, { method: 'DELETE' }).catch(function(){});
+  var p2 = sbFetch('/rest/v1/progress?user_id=eq.' + uid, { method: 'DELETE' }).catch(function(){});
+  var p3 = sbFetch('/rest/v1/profiles?id=eq.' + uid, { method: 'DELETE' }).catch(function(){});
+
+  return Promise.all([p1, p2, p3])
+    .then(function() {
+      return sbSignOut().catch(function(){});
+    });
+}
+window.sbDeleteAccount = sbDeleteAccount;

@@ -2631,6 +2631,77 @@ function resetProgress(){
   toast('Progress reset. Fresh start!');
 }
 
+function deleteAccount() {
+  var confirmBtn = ge('delete-account-confirm-btn');
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Deleting Account...';
+  }
+
+  var deleteCloudPromise = (typeof sbDeleteAccount === 'function') ? sbDeleteAccount() : Promise.resolve();
+
+  deleteCloudPromise
+    .then(function() {
+      try {
+        localStorage.removeItem('javaquest_state');
+        localStorage.removeItem('javaquest_session');
+        localStorage.removeItem('javaquest_guest');
+        localStorage.removeItem('javaquest_active_capstone');
+        localStorage.removeItem('jq_last_skin');
+      } catch(e) {}
+
+      if (typeof freshState === 'function') {
+        STATE = freshState('JavaLearner', 'beginner', 0);
+      } else {
+        STATE = {
+          player: {
+            name: 'JavaLearner',
+            difficulty: 'beginner',
+            level: 1,
+            xp: 0,
+            hearts: 3,
+            streak: 1,
+            lastVisit: new Date().toDateString(),
+            avatar: { skin: 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 },
+            completedLessons: [],
+            completedChallenges: [],
+            completedModules: [],
+            completedCoding: [],
+            codingAttempts: {},
+            badges: [],
+            capstoneProjects: {}
+          }
+        };
+      }
+
+      hideModal('modal-delete-account');
+      if (confirmBtn) {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Yes, Permanently Delete';
+      }
+
+      toast('Your account and all progress have been permanently deleted.');
+
+      var suName = ge('su-name'); if (suName) suName.value = '';
+      var suEmail = ge('su-email'); if (suEmail) suEmail.value = '';
+      var suPass = ge('su-password'); if (suPass) suPass.value = '';
+      var siEmail = ge('si-email'); if (siEmail) siEmail.value = '';
+      var siPass = ge('si-password'); if (siPass) siPass.value = '';
+
+      var suTab = ge('tab-signup');
+      if (suTab) suTab.click();
+      showScreen('auth');
+      updateNav();
+    })
+    .catch(function(err) {
+      if (confirmBtn) {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Yes, Permanently Delete';
+      }
+      toast('Error deleting account: ' + ((err && err.message) || 'Please try again'));
+    });
+}
+
 /* ═══════════════ RESIZABLE WORKSPACES (LEETCODE / IDE STYLE) ════ */
 function initResizableWorkspaces() {
   // ── 1. Coding Workspace: Horizontal Split (Instructions vs Editor) ──
@@ -2917,6 +2988,8 @@ document.addEventListener('DOMContentLoaded', function(){
   var cdb=ge('change-diff-btn');    if(cdb)cdb.addEventListener('click',openDiffModal);
   var sob=ge('signout-btn');        if(sob)sob.addEventListener('click',doSignOut);
   var rpb=ge('reset-progress-btn'); if(rpb)rpb.addEventListener('click',function(){showModal('modal-reset');});
+  var dab=ge('delete-account-btn'); if(dab)dab.addEventListener('click',function(){showModal('modal-delete-account');});
+  var ddab=ge('danger-delete-account-btn'); if(ddab)ddab.addEventListener('click',function(){showModal('modal-delete-account');});
 
 
   // ── MODALS ────────────────────────────────────────────────────
@@ -2926,6 +2999,8 @@ document.addEventListener('DOMContentLoaded', function(){
   var crok=ge('challenge-result-ok-btn');if(crok)crok.addEventListener('click',function(){hideModal('modal-challenge-result');showScreen('map');});
   var rcnl=ge('reset-cancel-btn');       if(rcnl)rcnl.addEventListener('click',function(){hideModal('modal-reset');});
   var rcon=ge('reset-confirm-btn');      if(rcon)rcon.addEventListener('click',resetProgress);
+  var dacnl=ge('delete-account-cancel-btn');  if(dacnl)dacnl.addEventListener('click',function(){hideModal('modal-delete-account');});
+  var dacon=ge('delete-account-confirm-btn'); if(dacon)dacon.addEventListener('click',deleteAccount);
 
   // ── CODING CHALLENGE ─────────────────────────────────────────
   var cbb=ge('coding-back-btn');    if(cbb)cbb.addEventListener('click',function(){showScreen('map');});
