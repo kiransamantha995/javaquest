@@ -1,15 +1,14 @@
 // JavaQuest — ai-tutor.js
 // Ultra-low token Gemini AI Integration with Secure Serverless Backend Proxy (/api/ai)
-// No API keys are leaked to client browsers or git. Seamless guest access out of the box!
+// Zero client-side API key exposure. Backend securely uses process.env.GEMINI_API_KEY.
+
+try {
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('javaquest_gemini_key');
+  }
+} catch(e) {}
 
 function getGeminiKey() {
-  if (typeof window !== 'undefined') {
-    var stored = localStorage.getItem('javaquest_gemini_key');
-    if (stored && stored.trim()) return stored.trim();
-    if (window.CONFIG && window.CONFIG.GEMINI_API_KEY && window.CONFIG.GEMINI_API_KEY.trim()) {
-      return window.CONFIG.GEMINI_API_KEY.trim();
-    }
-  }
   return '';
 }
 
@@ -219,7 +218,7 @@ function sendChatMessage() {
     })
     .catch(function(err) {
       if (typing) typing.classList.add('hidden');
-      appendChatMsg('bot', err.message + '. You can also enter a custom Gemini key in Settings.');
+      appendChatMsg('bot', 'Sorry, I encountered an issue: ' + err.message + '. Please try again in a moment!');
     });
 }
 
@@ -373,10 +372,7 @@ function openDeepDive() {
       + '<div style="font-size:2rem;font-weight:900;color:#DC2626;margin-bottom:0.5rem">!</div>'
       + '<h3 style="font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:0.5rem">Deep Dive Unavailable</h3>'
       + '<p style="color:var(--text-secondary);font-size:0.92rem;max-width:440px;margin:0 auto 1.25rem;">' + esc(err.message) + '</p>'
-      + '<div style="display:flex;gap:8px;max-width:380px;margin:0 auto;">'
-      + '<input type="password" id="deep-dive-key-inp" class="login-input" placeholder="Paste optional custom key" style="flex:1;padding:0.6rem 0.85rem;" />'
-      + '<button class="btn-primary" onclick="saveKeyFromDeepDive()">Save Key</button>'
-      + '</div>'
+      + '<button class="btn-primary" onclick="openDeepDive()">Try Again</button>'
       + '</div>';
   });
 }
@@ -384,15 +380,6 @@ function openDeepDive() {
 function closeDeepDive() {
   var modal = document.getElementById('modal-deep-dive');
   if (modal) modal.classList.add('hidden');
-}
-
-function saveKeyFromDeepDive() {
-  var inp = document.getElementById('deep-dive-key-inp');
-  if (inp && inp.value && inp.value.trim()) {
-    localStorage.setItem('javaquest_gemini_key', inp.value.trim());
-    if (typeof toast === 'function') toast('Gemini Key saved!');
-    openDeepDive();
-  }
 }
 
 // ═════════════════════════════════════════════════════════════════════

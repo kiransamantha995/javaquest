@@ -2572,30 +2572,6 @@ document.addEventListener('DOMContentLoaded', function(){
   var sob=ge('signout-btn');        if(sob)sob.addEventListener('click',doSignOut);
   var rpb=ge('reset-progress-btn'); if(rpb)rpb.addEventListener('click',function(){showModal('modal-reset');});
 
-  var geminiKeyInput = ge('gemini-key-input');
-  var saveGeminiKeyBtn = ge('save-gemini-key-btn');
-  var clearGeminiKeyBtn = ge('clear-gemini-key-btn');
-  if (geminiKeyInput && typeof getGeminiKey === 'function') {
-    geminiKeyInput.value = getGeminiKey();
-  }
-  if (saveGeminiKeyBtn) {
-    saveGeminiKeyBtn.addEventListener('click', function(){
-      var val = geminiKeyInput ? geminiKeyInput.value.trim() : '';
-      if (!val) {
-        toast('Please enter a valid Gemini API key');
-        return;
-      }
-      localStorage.setItem('javaquest_gemini_key', val);
-      toast('Gemini API key saved!');
-    });
-  }
-  if (clearGeminiKeyBtn) {
-    clearGeminiKeyBtn.addEventListener('click', function(){
-      localStorage.removeItem('javaquest_gemini_key');
-      if (geminiKeyInput) geminiKeyInput.value = '';
-      toast('Gemini API key removed.');
-    });
-  }
 
   // ── MODALS ────────────────────────────────────────────────────
   var lvok=ge('levelup-ok-btn');         if(lvok)lvok.addEventListener('click',function(){hideModal('modal-levelup');});
