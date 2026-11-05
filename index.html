@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data:;">
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css?v=2.1"/>
 </head>
 <body>
 
@@ -238,9 +238,13 @@
         <div class="feedback-right">
           <div class="feedback-result" id="feedback-result">Correct!</div>
           <div class="feedback-explanation" id="feedback-explanation"></div>
+          <div class="feedback-ai-box hidden" id="feedback-ai-box"></div>
         </div>
       </div>
-      <button class="btn-primary" id="btn-next-question">Next Question →</button>
+      <div class="feedback-actions">
+        <button class="btn-secondary btn-sm hidden" id="btn-explain-mistake" onclick="explainMistakeWithAI()">🤖 Explain My Mistake</button>
+        <button class="btn-primary" id="btn-next-question">Next Question →</button>
+      </div>
     </div>
   </div>
 </section>
@@ -665,7 +669,28 @@
     <h2 id="challenge-result-title">Great Job! 💪</h2>
     <div class="xp-earned-tag" id="challenge-xp-earned">+100 XP</div>
     <div class="result-message" id="result-message"></div>
-    <button class="btn-primary" id="challenge-result-ok-btn">Back to Map 🗺️</button>
+    <div class="challenge-result-actions" style="display:flex;gap:0.75rem;margin-top:1.25rem;flex-wrap:wrap;justify-content:center;">
+      <button class="btn-primary" id="challenge-result-ok-btn">Back to Map 🗺️</button>
+      <button class="btn-secondary" id="challenge-result-ai-btn" onclick="startAIChallengeFromModal()">✨ Infinite Practice (AI)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== AI DEEP DIVE MODAL ====== -->
+<div class="modal-overlay hidden" id="modal-deep-dive">
+  <div class="modal-box deep-dive-modal">
+    <div class="deep-dive-header">
+      <div class="deep-dive-badge">🔬 UNDER THE HOOD</div>
+      <button class="modal-close-btn" onclick="closeDeepDive()">✕</button>
+    </div>
+    <h2 class="deep-dive-title" id="deep-dive-title">Topic Internals & Architecture</h2>
+    <div class="deep-dive-subtitle" id="deep-dive-subtitle">Deep technical breakdown powered by Gemini AI</div>
+    <div class="deep-dive-content" id="deep-dive-content">
+      <!-- Loading or content goes here -->
+    </div>
+    <div class="deep-dive-footer">
+      <button class="btn-primary" onclick="closeDeepDive()">Got it, continue learning →</button>
+    </div>
   </div>
 </div>
 <div class="modal-overlay hidden" id="modal-reset">
@@ -684,7 +709,7 @@
 <script src="curriculum.js"></script>
 <script src="animations.js"></script>
 <script src="supabase.js"></script>
-<script src="ai-tutor.js"></script>
-<script src="app.js"></script>
+<script src="ai-tutor.js?v=2.1"></script>
+<script src="app.js?v=2.1"></script>
 </body>
 </html>

@@ -1070,6 +1070,17 @@ function openModulePopup(modId) {
         startChallenge(this.getAttribute('data-mid'));
       });
       actDiv.appendChild(cbtn);
+
+      var aiBtn = document.createElement('button');
+      aiBtn.className = 'btn-secondary btn-ai-practice';
+      aiBtn.style.marginTop = '0.5rem';
+      aiBtn.innerHTML = '✨ Infinite Practice (AI Quiz)';
+      aiBtn.setAttribute('data-mid', mod.id);
+      aiBtn.addEventListener('click', function(){
+        closeModulePopup();
+        generateAIQuiz(this.getAttribute('data-mid'));
+      });
+      actDiv.appendChild(aiBtn);
     } else {
       var hint = document.createElement('p');
       hint.style.cssText = 'color:rgba(255,255,255,.5);font-size:.82rem;text-align:center;margin:.4rem 0';
@@ -1579,7 +1590,10 @@ function renderSlide() {
   var typeLabel={intro:'📖 Introduction',code:'💻 Code Example',tip:'💡 Pro Tip',visual:'🎯 Visualizer'}[slide.type]||'📄 Lesson';
   var html='<div class="slide slide-type-'+(slide.type||'intro')+'">'
     +'<div class="slide-inner">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
     +'<span class="slide-type-badge">'+typeLabel+'</span>'
+    +'<button class="btn-deep-dive" onclick="openDeepDive()">🔬 AI Deep Dive</button>'
+    +'</div>'
     +'<h2 class="slide-title">'+esc(slide.title)+'</h2>'
     +'<div class="slide-content">'+fmt(slide.content)+'</div>';
   if(slide.code) html+=buildCodeBlock(slide.code);
@@ -1675,7 +1689,25 @@ function checkAnswer() {
   if(correct){_hits++;addXP(12);}
   else{var p=STATE.player;if(p.hearts>0){p.hearts--;p.heartRefillTime=Date.now()+30*60*1000;renderHearts();localSave();}if(p.hearts===0)toast('No hearts! They refill in 30 min ❤️‍🩹');}
   var fb=ge('answer-feedback'),ca=ge('challenge-actions');
-  if(fb){fb.classList.remove('hidden','correct-fb','wrong-fb');fb.classList.add(correct?'correct-fb':'wrong-fb');setText('feedback-icon',correct?'✅':'❌');setText('feedback-result',correct?'Correct! 🎉':'Not quite...');setText('feedback-explanation',q.explanation||'');}
+  if(fb){
+    fb.classList.remove('hidden','correct-fb','wrong-fb');
+    fb.classList.add(correct?'correct-fb':'wrong-fb');
+    setText('feedback-icon',correct?'✅':'❌');
+    setText('feedback-result',correct?'Correct! 🎉':'Not quite...');
+    setText('feedback-explanation',q.explanation||'');
+    var aiBox = ge('feedback-ai-box');
+    if (aiBox) { aiBox.innerHTML = ''; aiBox.classList.add('hidden'); }
+    var explainBtn = ge('btn-explain-mistake');
+    if (explainBtn) {
+      if (!correct && typeof getGeminiKey === 'function' && getGeminiKey()) {
+        explainBtn.classList.remove('hidden');
+        explainBtn.disabled = false;
+        explainBtn.textContent = '🤖 Explain My Mistake';
+      } else {
+        explainBtn.classList.add('hidden');
+      }
+    }
+  }
   if(ca)ca.classList.add('hidden');
 }
 
@@ -1687,12 +1719,14 @@ function finishChallenge() {
   if(STATE.player.completedChallenges.indexOf(_cm.challenge.id)===-1){
     STATE.player.completedChallenges.push(_cm.challenge.id);
     addXP(xp);
-    var allL=true;for(var i=0;i<_cm.lessons.length;i++)if(STATE.player.completedLessons.indexOf(_cm.lessons[i].id)===-1){allL=false;break;}
-    if(allL&&STATE.player.completedModules.indexOf(_cm.id)===-1){
-      STATE.player.completedModules.push(_cm.id);
-      checkBadge('first_module'); checkBadge('module_'+_cm.id.replace('module-',''));
-      var allM=true;var mods=getModulesForDifficulty();for(var j=0;j<mods.length;j++)if(STATE.player.completedModules.indexOf(mods[j].id)===-1){allM=false;break;}
-      if(allM) checkBadge('all_modules');
+    if(_cm.lessons && Array.isArray(_cm.lessons)){
+      var allL=true;for(var i=0;i<_cm.lessons.length;i++)if(STATE.player.completedLessons.indexOf(_cm.lessons[i].id)===-1){allL=false;break;}
+      if(allL&&STATE.player.completedModules.indexOf(_cm.id)===-1){
+        STATE.player.completedModules.push(_cm.id);
+        checkBadge('first_module'); checkBadge('module_'+_cm.id.replace('module-',''));
+        var allM=true;var mods=getModulesForDifficulty();for(var j=0;j<mods.length;j++)if(STATE.player.completedModules.indexOf(mods[j].id)===-1){allM=false;break;}
+        if(allM) checkBadge('all_modules');
+      }
     }
     if(perfect) checkBadge('perfect_challenge');
     localSave();

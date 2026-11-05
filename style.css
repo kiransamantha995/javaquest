@@ -1886,6 +1886,180 @@ body {
   margin-top: 0.35rem;
   line-height: 1.45;
 }
+.feedback-ai-box {
+  background: #FEF9C3;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  margin-top: 0.85rem;
+  box-shadow: 3px 3px 0px var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.feedback-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ─── AI DEEP DIVE & PRACTICE ENHANCEMENTS ───────────────────── */
+.btn-deep-dive {
+  background: #EDE9FE;
+  color: #5B21B6;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 800;
+  box-shadow: 2px 2px 0px var(--ink);
+  cursor: pointer;
+  transition: all var(--t);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  user-select: none;
+}
+.btn-deep-dive:hover {
+  background: #DDD6FE;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--ink);
+}
+.btn-deep-dive:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+.deep-dive-modal {
+  max-width: 760px;
+  width: 92%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 3.5px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 8px 8px 0px var(--ink);
+  padding: 0;
+  text-align: left;
+}
+.deep-dive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem 0.5rem;
+}
+.deep-dive-badge {
+  background: var(--codedex-yellow);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--ink);
+  box-shadow: 2px 2px 0px var(--ink);
+  letter-spacing: 0.04em;
+}
+.modal-close-btn {
+  background: #F3F4F6;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--ink);
+  transition: all var(--t);
+}
+.modal-close-btn:hover {
+  background: #FEE2E2;
+  color: #991B1B;
+  transform: translate(-1px, -1px);
+}
+.deep-dive-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ink);
+  padding: 0 2rem;
+  margin-top: 0.25rem;
+  letter-spacing: -0.025em;
+}
+.deep-dive-subtitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 0.25rem 2rem 1rem;
+  border-bottom: 2.5px solid var(--ink);
+}
+.deep-dive-content {
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.deep-dive-body h3, .deep-dive-body .deep-dive-h3 {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 1.25rem 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.deep-dive-body h4, .deep-dive-body .deep-dive-h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 1.15rem 0 0.4rem;
+}
+.deep-dive-body p {
+  margin-bottom: 0.85rem;
+}
+.deep-dive-body ul, .deep-dive-body ol {
+  padding-left: 1.4rem;
+  margin-bottom: 1rem;
+}
+.deep-dive-body li {
+  margin-bottom: 0.4rem;
+}
+.deep-dive-body .inline-code {
+  background: #F3F4F6;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 0.15rem 0.45rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #C026D3;
+}
+.deep-dive-footer {
+  padding: 1rem 2rem;
+  border-top: 2.5px solid var(--ink);
+  background: #FAF5FF;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-ai-practice {
+  background: #F3E8FF !important;
+  color: #6B21A8 !important;
+  border-color: var(--ink) !important;
+  font-weight: 800 !important;
+}
+.btn-ai-practice:hover {
+  background: #E9D5FF !important;
+}
 
 /* ═══ COMPILER / PLAYGROUND SCREEN ═════════════════════════════ */
 .compiler-container { max-width: 1100px; margin: 0 auto; }

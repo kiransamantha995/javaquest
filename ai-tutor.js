@@ -288,3 +288,279 @@ function renderChatKeyPrompt() {
     };
   }
 }
+
+// ═════════════════════════════════════════════════════════════════════
+//  AI DYNAMIC QUIZ GENERATOR ("INFINITE PRACTICE")
+// ═════════════════════════════════════════════════════════════════════
+function generateAIQuiz(modId) {
+  var mod = typeof getMod === 'function' ? getMod(modId) : null;
+  if (!mod) {
+    if (typeof toast === 'function') toast('Module not found!');
+    return;
+  }
+
+  var apiKey = getGeminiKey();
+  if (!apiKey) {
+    if (typeof toast === 'function') toast('🔑 Gemini API Key required in Settings (⚙️) for AI Practice!');
+    if (typeof showScreen === 'function') showScreen('settings');
+    return;
+  }
+
+  if (typeof toast === 'function') toast('✨ Generating fresh AI questions for ' + mod.title + '…');
+
+  var prompt = 'You are a principal Java educator. Generate exactly 3 fresh, challenging, high-quality quiz questions for a Java learner studying the module: "'
+    + mod.title + ' - ' + (mod.subtitle || '') + '" at ' + (mod.level || 'beginner') + ' difficulty.\n'
+    + 'Question types MUST be one of: "mcq" (Multiple choice with 4 distinct options) or "output" (Predict output of a realistic Java code snippet with 4 options).\n'
+    + 'STRICT JSON OUTPUT FORMAT ONLY: Return a raw JSON array of objects with these exact keys:\n'
+    + '[\n'
+    + '  {\n'
+    + '    "type": "mcq",\n'
+    + '    "question": "Clear, precise question text?",\n'
+    + '    "code": "Optional Java code snippet (use \\n for linebreaks) or empty string",\n'
+    + '    "options": ["Option A text", "Option B text", "Option C text", "Option D text"],\n'
+    + '    "answer": 0,\n'
+    + '    "explanation": "Clear 1-2 sentence explanation of why the answer is correct."\n'
+    + '  }\n'
+    + ']\n'
+    + 'Do not include any text outside the JSON. Do not wrap in markdown fences.';
+
+  var payload = {
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 1400
+    }
+  };
+
+  callGemini('gemini-flash-lite-latest', apiKey, payload)
+    .then(function(res) {
+      var raw = '';
+      try {
+        raw = res.candidates[0].content.parts[0].text;
+      } catch(e) {
+        throw new Error('No content returned from AI');
+      }
+
+      // Strip markdown code fences if present
+      raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+      var questions = JSON.parse(raw);
+      if (!Array.isArray(questions) || questions.length === 0) {
+        throw new Error('AI returned an empty question list');
+      }
+
+      questions.forEach(function(q, idx) {
+        if (!q.type) q.type = 'mcq';
+        if (typeof q.answer !== 'number' || q.answer < 0 || q.answer >= (q.options ? q.options.length : 4)) q.answer = 0;
+        if (!Array.isArray(q.options) || q.options.length < 2) {
+          q.options = ['Option A', 'Option B', 'Option C', 'Option D'];
+        }
+      });
+
+      _cm = {
+        id: mod.id,
+        title: mod.title + ' [AI Practice]',
+        lessons: mod.lessons || [],
+        challenge: {
+          id: 'ai_' + mod.id + '_' + Date.now(),
+          xp: 25,
+          questions: questions
+        }
+      };
+      _qs = questions.slice();
+      _qi = 0;
+      _hits = 0;
+
+      if (typeof renderHearts === 'function') renderHearts();
+      if (typeof renderQuestion === 'function') renderQuestion();
+      if (typeof showScreen === 'function') showScreen('challenge');
+      if (typeof toast === 'function') toast('🎯 AI Practice Quiz Ready! (+25 XP)');
+    })
+    .catch(function(err) {
+      console.warn('AI Quiz generation fallback:', err);
+      if (typeof toast === 'function') toast('⚠️ AI Generation failed. Loading standard module quiz.');
+      if (typeof startChallenge === 'function') startChallenge(modId);
+    });
+}
+
+function startAIChallengeFromModal() {
+  if (typeof hideModal === 'function') hideModal('modal-challenge-result');
+  var modId = (_cm && _cm.id) ? _cm.id.replace('module-', '') : 'b1';
+  generateAIQuiz(modId);
+}
+
+// ═════════════════════════════════════════════════════════════════════
+//  AI LESSON DEEP DIVE ("UNDER THE HOOD")
+// ═════════════════════════════════════════════════════════════════════
+function openDeepDive() {
+  if (typeof _curLesson === 'undefined' || !_curLesson || !_curLesson.slides || !_curLesson.slides[_slideIdx]) {
+    if (typeof toast === 'function') toast('No active slide to analyze!');
+    return;
+  }
+  var slide = _curLesson.slides[_slideIdx];
+  var mod = (typeof _curMod !== 'undefined' && _curMod) ? _curMod : { title: 'Java' };
+
+  var modal = document.getElementById('modal-deep-dive');
+  var titleEl = document.getElementById('deep-dive-title');
+  var subEl = document.getElementById('deep-dive-subtitle');
+  var contentEl = document.getElementById('deep-dive-content');
+  if (!modal || !titleEl || !contentEl) return;
+
+  titleEl.textContent = slide.title;
+  if (subEl) subEl.textContent = 'Module: ' + mod.title + ' • Deep technical breakdown';
+  modal.classList.remove('hidden');
+
+  var apiKey = getGeminiKey();
+  if (!apiKey) {
+    contentEl.innerHTML = '<div style="text-align:center;padding:1.75rem 1rem;">'
+      + '<div style="font-size:2.8rem;margin-bottom:0.6rem">🔑</div>'
+      + '<h3 style="font-size:1.25rem;font-weight:800;color:var(--ink);margin-bottom:0.5rem">Gemini API Key Required</h3>'
+      + '<p style="color:var(--text-secondary);font-size:0.92rem;max-width:440px;margin:0 auto 1.25rem;">Deep Dives break down JVM memory allocation, bytecode execution, and production gotchas on-demand using Gemini Flash-Lite.</p>'
+      + '<div style="display:flex;gap:8px;max-width:380px;margin:0 auto;">'
+      + '<input type="password" id="deep-dive-key-inp" class="login-input" placeholder="Paste AIzaSy... key" style="flex:1;padding:0.6rem 0.85rem;" />'
+      + '<button class="btn-primary" onclick="saveKeyFromDeepDive()">Save Key</button>'
+      + '</div>'
+      + '<div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.75rem">Get your free key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" style="color:var(--ink);font-weight:800">Google AI Studio</a>.</div>'
+      + '</div>';
+    return;
+  }
+
+  contentEl.innerHTML = '<div style="text-align:center;padding:3rem 1rem;">'
+    + '<span class="run-spinner" style="width:28px;height:28px;margin-bottom:1.2rem;display:inline-block;"></span>'
+    + '<div style="font-size:1.1rem;font-weight:800;color:var(--ink);">Analyzing JVM Internals & Memory Architecture…</div>'
+    + '<div style="font-size:0.86rem;color:var(--text-secondary);margin-top:0.35rem;">Synthesizing HotSpot execution, bytecode behavior & production gotchas</div>'
+    + '</div>';
+
+  var prompt = 'You are a Principal JVM Engineer and Java Systems Architect.\n'
+    + 'Provide a rigorous, deep-dive technical breakdown for a learner studying this Java topic:\n'
+    + 'Topic: "' + slide.title + '" (Module: ' + mod.title + ')\n'
+    + 'Lesson Content: "' + slide.content + '"\n\n'
+    + 'Structure your response into these 3 distinct sections using markdown:\n'
+    + '### ⚙️ 1. Under The Hood (JVM & Memory Model)\n'
+    + 'Explain what happens at runtime: HotSpot, bytecode, stack frames vs heap, JIT compiler, or thread execution.\n\n'
+    + '### ⚠️ 2. Production Gotchas & Pitfalls\n'
+    + 'Explain 1-2 real-world bugs, performance bottlenecks, or concurrency edge cases senior engineers avoid.\n\n'
+    + '### 💡 3. The Senior Dev Mental Model\n'
+    + 'Give 1 high-signal rule of thumb or architectural intuition for writing clean, resilient code.\n\n'
+    + 'Include short, focused Java code snippets if helpful. Keep the entire response under 280 words, punchy, and highly informative.';
+
+  var payload = {
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: {
+      temperature: 0.3,
+      maxOutputTokens: 650
+    }
+  };
+
+  callGemini('gemini-flash-lite-latest', apiKey, payload)
+    .then(function(res) {
+      var text = '';
+      try {
+        text = res.candidates[0].content.parts[0].text;
+      } catch(e) {
+        text = 'Deep dive unavailable at this moment. Please try again!';
+      }
+      contentEl.innerHTML = '<div class="deep-dive-body">' + formatDeepDiveMarkdown(text) + '</div>';
+    })
+    .catch(function(err) {
+      contentEl.innerHTML = '<div style="color:#991B1B;padding:1.25rem;background:#FEE2E2;border:2px solid var(--ink);border-radius:12px;font-weight:700;">'
+        + '⚠️ Connection Error: ' + (err.message || 'Could not reach Gemini API') + '</div>';
+    });
+}
+
+function closeDeepDive() {
+  var modal = document.getElementById('modal-deep-dive');
+  if (modal) modal.classList.add('hidden');
+}
+
+function saveKeyFromDeepDive() {
+  var inp = document.getElementById('deep-dive-key-inp');
+  if (inp && inp.value && inp.value.trim()) {
+    localStorage.setItem('javaquest_gemini_key', inp.value.trim());
+    if (typeof toast === 'function') toast('Gemini Key saved! 🚀');
+    openDeepDive();
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════════
+//  AI MISTAKE EXPLAINER (CHALLENGE FEEDBACK)
+// ═════════════════════════════════════════════════════════════════════
+function explainMistakeWithAI() {
+  if (typeof _qs === 'undefined' || !_qs || typeof _qi === 'undefined' || !_qs[_qi]) return;
+  var q = _qs[_qi];
+  var btn = document.getElementById('btn-explain-mistake');
+  var aiBox = document.getElementById('feedback-ai-box');
+  if (!aiBox) return;
+
+  var chosen = '';
+  if (q.type === 'mcq' || q.type === 'output') {
+    chosen = (q.options && typeof _selMCQ !== 'undefined' && q.options[_selMCQ]) ? q.options[_selMCQ] : 'Option ' + _selMCQ;
+  } else if (q.type === 'true-false') {
+    chosen = String(typeof _selTF !== 'undefined' ? _selTF : '');
+  } else if (q.type === 'bug') {
+    chosen = 'Line ' + ((typeof _selBug !== 'undefined' ? _selBug : 0) + 1);
+  }
+
+  var correctAns = '';
+  if (q.type === 'mcq' || q.type === 'output') {
+    correctAns = (q.options && q.options[q.answer]) ? q.options[q.answer] : 'Option ' + q.answer;
+  } else if (q.type === 'true-false') {
+    correctAns = String(q.answer);
+  } else if (q.type === 'bug') {
+    correctAns = 'Line ' + (q.answer + 1);
+  }
+
+  var apiKey = getGeminiKey();
+  if (!apiKey) {
+    if (typeof toast === 'function') toast('🔑 Gemini key needed to explain mistakes');
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Diagnosing…'; }
+  aiBox.classList.remove('hidden');
+  aiBox.innerHTML = '<span class="run-spinner" style="width:14px;height:14px;margin-right:8px;display:inline-block;"></span> JavaBot is diagnosing why that answer was tempting…';
+
+  var prompt = 'A Java student answered a quiz question incorrectly.\n'
+    + 'Question: "' + q.question + '"\n'
+    + (q.code ? 'Code:\n```java\n' + q.code + '\n```\n' : '')
+    + 'Correct Answer: "' + correctAns + '"\n'
+    + 'Student Chose: "' + chosen + '"\n\n'
+    + 'In 2 friendly, highly educational sentences, explain why the student\'s choice is a common misconception in Java, and provide an intuitive rule of thumb to remember the correct concept. Keep response under 55 words.';
+
+  var payload = {
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: { maxOutputTokens: 130, temperature: 0.3 }
+  };
+
+  callGemini('gemini-flash-lite-latest', apiKey, payload)
+    .then(function(res) {
+      if (btn) btn.classList.add('hidden');
+      var reply = res.candidates[0].content.parts[0].text;
+      aiBox.innerHTML = '<strong>🤖 JavaBot Insight:</strong> ' + esc(reply);
+    })
+    .catch(function(e) {
+      if (btn) { btn.disabled = false; btn.textContent = '🤖 Explain My Mistake'; }
+      aiBox.innerHTML = '⚠️ Could not analyze mistake right now.';
+    });
+}
+
+// ═════════════════════════════════════════════════════════════════════
+//  MARKDOWN FORMATTER FOR DEEP DIVES
+// ═════════════════════════════════════════════════════════════════════
+function formatDeepDiveMarkdown(md) {
+  if (!md) return '';
+  return md
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/```(?:java)?\n?([\s\S]*?)```/g, function(_, code) {
+      var unesc = code.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+      return '<div class="code-block" style="margin:1rem 0;"><div class="code-block-header"><span class="code-lang-tag">Java</span></div><pre>'
+        + (typeof highlightSyntax === 'function' ? highlightSyntax(unesc.trim()) : unesc.trim())
+        + '</pre></div>';
+    })
+    .replace(/^### (.*$)/gim, '<h3 class="deep-dive-h3">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h3 class="deep-dive-h3">$1</h3>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+    .replace(/^\* (.*$)/gim, '<li>$1</li>')
+    .replace(/^- (.*$)/gim, '<li>$1</li>')
+    .replace(/\n\n/g, '<p></p>');
+}
