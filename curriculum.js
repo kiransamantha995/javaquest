@@ -3263,3 +3263,329 @@ const CURRICULUM = [
     }
   }
 ];
+
+const PROJECTS = [
+  {
+    "id": "proj-beginner",
+    "level": "beginner",
+    "title": "Personal Expense Tracker (Console)",
+    "description": "Build a modular console application to track daily income and expenses with categorized records, budget summaries, and robust input validation.",
+    "xpReward": 250,
+    "badgeId": "capstone-beginner",
+    "requirements": [
+      "Define an Expense class with fields (description, amount, category, date) and getter methods",
+      "Create an interactive console menu loop with choices: Add Expense, List All, View Summary, and Exit",
+      "Store expenses in an ArrayList<Expense> and compute total spent + category breakdowns",
+      "Validate user inputs using try-catch blocks to prevent negative numbers or invalid inputs",
+      "Format transaction output cleanly with currency formatting ($%.2f) and timestamps"
+    ],
+    "rubric": "Clean OOP class encapsulation, ArrayList usage, loops & conditionals, try-catch exception handling, and clean console output formatting.",
+    "starterCode": "// ===============================================================\n// 🏆 BEGINNER CAPSTONE: Personal Expense Tracker (Console)\n// Focus: OOP Class, Methods, ArrayList, Loops, Input Validation\n//\n// 💡 Instructions: Build your project by completing the TODOs below!\n//    If you have any doubts, open JavaBot 🤖 — it can see your code!\n// ===============================================================\nimport java.util.ArrayList;\nimport java.util.Scanner;\n\n// --- Milestone 1: Define the Expense Class ---\nclass Expense {\n    // TODO 1: Declare private fields: description (String), amount (double), category (String)\n\n    // TODO 2: Create a constructor that accepts (description, amount, category)\n\n    // TODO 3: Implement getter methods: getDescription(), getAmount(), getCategory()\n\n    // TODO 4: Override toString() to display formatted expense details\n    //         Hint: return String.format(\"[%-10s] %-20s : $%.2f\", category, description, amount);\n}\n\npublic class Main {\n    // TODO 5: Declare an ArrayList<Expense> to store user expenses\n    //         Hint: private static ArrayList<Expense> expenses = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\"💰 JavaQuest Personal Expense Tracker 💰\");\n        System.out.println(\"=========================================\");\n\n        // TODO 6: Call addExpense() with test data, or build a Scanner menu loop!\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 7: Implement addExpense(String desc, double amount, String category)\n    //         Validate that amount is positive! If negative, print an error message.\n\n    // TODO 8: Implement displayAll()\n    //         Loop through the expenses list and print each expense.\n\n    // TODO 9: Implement displaySummary()\n    //         Calculate the sum of all expenses and print total spending.\n}\n",
+    "featureIdeas": [
+      {
+        "icon": "📊",
+        "title": "Monthly Category Budget Alerts",
+        "concepts": "Conditionals & Arithmetic (Modules B2, B3)",
+        "description": "Define a spending limit per category (e.g. $200 for Food). Track running totals and print a prominent warning (⚠️ Alert: 85% of Food budget reached!) when nearing the limit."
+      },
+      {
+        "icon": "📁",
+        "title": "CSV File Exporter & Importer",
+        "concepts": "Strings, Formatting & File I/O (Modules B6, B8)",
+        "description": "Export expense logs into standard CSV format ('YYYY-MM-DD,Category,Amount') using PrintWriter or FileWriter so transactions can be imported into Excel or Google Sheets."
+      },
+      {
+        "icon": "🔍",
+        "title": "Keyword Search & Range Filtering",
+        "concepts": "ArrayList & String Methods (Modules B6, B8)",
+        "description": "Add search functionality to locate transactions by keyword (e.g. 'Coffee') or filter expenses within a dollar range (e.g. $20 to $100) using ArrayList iterations."
+      },
+      {
+        "icon": "🔁",
+        "title": "Recurring Subscriptions Tracker",
+        "concepts": "OOP Inheritance & Methods (Modules B5, B7)",
+        "description": "Create a RecurringExpense subclass that extends Expense with a frequency field (Weekly, Monthly, Yearly) to automatically project total annual recurring costs."
+      },
+      {
+        "icon": "🛡️",
+        "title": "Custom Exception Guardrails",
+        "concepts": "Custom Exceptions & Try-Catch (Module B8)",
+        "description": "Build an InvalidExpenseException class. Throw and handle it when negative numbers, empty descriptions, or unrecognized categories are entered."
+      }
+    ]
+  },
+  {
+    "id": "proj-intermediate",
+    "level": "intermediate",
+    "title": "Library / Inventory Management System",
+    "description": "Build a high-performance inventory or library system using generic repositories, Stream API data analytics, and thread-safe borrow mechanics.",
+    "xpReward": 350,
+    "badgeId": "capstone-intermediate",
+    "requirements": [
+      "Create generic Repository<T> interface and Book/Item record or model classes",
+      "Implement duplicate prevention and thread-safe borrow/return mechanics",
+      "Filter, sort, and aggregate catalog data using Java 8+ Streams and Lambdas",
+      "Persist data using JDBC PreparedStatement or in-memory structured persistence",
+      "Add automated unit assertions verifying availability checks and boundary conditions"
+    ],
+    "rubric": "Collections, Generics, Lambdas & Streams, JDBC/SQL, Concurrency, and unit testing practices.",
+    "starterCode": "// ===============================================================\n// 🏆 INTERMEDIATE CAPSTONE: Library / Inventory System\n// Focus: Generics, Streams, Records, Lambdas, Concurrency\n//\n// 💡 Instructions: Complete the TODOs below to build your system!\n//    If you need any hints, ask JavaBot 🤖 in the corner!\n// ===============================================================\nimport java.util.*;\nimport java.util.stream.Collectors;\n\n// --- Milestone 1: Define Book Record or Model ---\n// TODO 1: Create a Book record (or class) with fields:\n//         String id, String title, String author, String genre, boolean isAvailable\n\npublic class Main {\n    // TODO 2: Declare a List<Book> catalog to store library items\n    //         Hint: private static List<Book> catalog = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\"📚 JavaQuest Library Management System 📚\");\n        System.out.println(\"=========================================\");\n\n        // TODO 3: Seed your catalog with at least 4 test books\n\n        // TODO 4: Use Java 8+ Streams to filter only available books in the \"Tech\" genre\n\n        // TODO 5: Use Collectors.groupingBy() to count how many books exist per genre\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 6: Implement borrowBook(String bookId) with availability checking\n\n    // TODO 7: Implement returnBook(String bookId)\n}\n",
+    "featureIdeas": [
+      {
+        "icon": "⚡",
+        "title": "Thread-Safe Concurrent Borrowing",
+        "concepts": "Concurrency & Locks (Module I8)",
+        "description": "Simulate simultaneous users attempting to borrow the last available copy using ReentrantLock or AtomicInteger to prevent race conditions and double checkouts."
+      },
+      {
+        "icon": "📈",
+        "title": "Stream Analytics Dashboard",
+        "concepts": "Lambdas & Streams (Module I4)",
+        "description": "Use Collectors.groupingBy() and summarizingDouble() to generate instant reports on top borrowed authors, average ratings, and overdue counts."
+      },
+      {
+        "icon": "🗄️",
+        "title": "JDBC Transaction Rollbacks",
+        "concepts": "JDBC & SQL (Module I7)",
+        "description": "Wrap multi-table checkout operations (updating book status + logging borrower history) in a database transaction with setAutoCommit(false) and rollback on error."
+      },
+      {
+        "icon": "🧪",
+        "title": "Comprehensive Unit Test Suite",
+        "concepts": "JUnit 5 Testing (Module I6)",
+        "description": "Write automated test cases using @ParameterizedTest and assertThrows(BookUnavailableException.class) to test boundary and edge conditions."
+      }
+    ]
+  },
+  {
+    "id": "proj-advanced",
+    "level": "advanced",
+    "title": "Task Management REST API (Spring Boot)",
+    "description": "Design and deploy an enterprise-grade REST service with JWT security, JPA persistence, and Dockerized microservice architecture.",
+    "xpReward": 500,
+    "badgeId": "capstone-advanced",
+    "requirements": [
+      "Design RESTful endpoints for CRUD tasks (GET, POST, PUT, DELETE)",
+      "Implement JWT Authentication & Role-Based Access Control (Admin vs User)",
+      "Configure database persistence with Spring Data JPA and transactions",
+      "Add input validation (@NotNull, @Size), custom error handlers, and pagination",
+      "Write a production Dockerfile and Docker Compose setup"
+    ],
+    "rubric": "Spring Boot, REST architecture, JPA persistence, JWT security, virtual threads, and Docker CI/CD.",
+    "starterCode": "// ===============================================================\n// 🏆 ADVANCED CAPSTONE: Task Management REST API Simulator\n// Focus: REST Architecture, Enums, Maps, Lambdas, Virtual Threads\n//\n// 💡 Instructions: Complete the TODOs below to build your API simulator!\n//    If you need any hints, ask JavaBot 🤖 in the corner!\n// ===============================================================\nimport java.time.LocalDateTime;\nimport java.util.*;\n\nenum TaskStatus { TODO, IN_PROGRESS, COMPLETED }\n\n// --- Milestone 1: Task Model ---\nclass Task {\n    // TODO 1: Define fields: id (String), title (String), assignee (String),\n    //         status (TaskStatus), createdAt (LocalDateTime)\n\n    // TODO 2: Write constructor and getter/setter methods\n}\n\npublic class Main {\n    // TODO 3: Create an in-memory data store for tasks (e.g. Map<String, Task>)\n\n    public static void main(String[] args) {\n        System.out.println(\"==================================================\");\n        System.out.println(\"⚡ JavaQuest Task Management REST API Simulator ⚡\");\n        System.out.println(\"==================================================\");\n\n        // TODO 4: Simulate REST Controller endpoints:\n        //         - POST /api/tasks (Create a task)\n        //         - GET  /api/tasks (List all tasks)\n        //         - PUT  /api/tasks/{id}/status (Update status to COMPLETED)\n        //         - GET  /api/tasks?status=COMPLETED (Filter using Streams)\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 5: Implement postTask(String id, String title, String assignee)\n\n    // TODO 6: Implement updateTaskStatus(String id, TaskStatus status)\n\n    // TODO 7: Implement getTasksByStatus(TaskStatus status) using Java Streams\n}\n",
+    "featureIdeas": [
+      {
+        "icon": "🚀",
+        "title": "Java 21 Virtual Threads Engine",
+        "concepts": "Virtual Threads & Concurrency (Module A2)",
+        "description": "Configure Spring Boot 3 with virtual threads (spring.threads.virtual.enabled=true) to effortlessly handle 10,000+ concurrent API requests without thread starvation."
+      },
+      {
+        "icon": "⚡",
+        "title": "Redis Second-Level Caching",
+        "concepts": "Performance & Architecture (Module A4)",
+        "description": "Integrate Redis caching with @Cacheable on frequently requested task summaries and @CacheEvict on modifications to achieve sub-millisecond response times."
+      },
+      {
+        "icon": "🔐",
+        "title": "Refresh Token Rotation & OAuth2",
+        "concepts": "Security & Idempotency (Module A5)",
+        "description": "Implement short-lived JWT access tokens (15m) paired with database-backed refresh tokens and token reuse detection for enterprise-grade authentication."
+      },
+      {
+        "icon": "🐳",
+        "title": "Docker Compose Multi-Container Stack",
+        "concepts": "Docker & Observability (Modules A7, A8)",
+        "description": "Bundle the Spring Boot API, PostgreSQL database, Prometheus metrics collector, and Grafana dashboard into a single docker-compose.yml file."
+      }
+    ]
+  }
+];
+
+const BADGES = [
+  {
+    "id": "first-lesson",
+    "name": "First Steps",
+    "icon": "👶",
+    "description": "Completed your first lesson",
+    "condition": "first_lesson"
+  },
+  {
+    "id": "first-module",
+    "name": "Module Master",
+    "icon": "🎓",
+    "description": "Completed your first module challenge",
+    "condition": "first_module"
+  },
+  {
+    "id": "first-code",
+    "name": "Code Warrior",
+    "icon": "💻",
+    "description": "Solved your first coding question",
+    "condition": "first_code"
+  },
+  {
+    "id": "perfect-code",
+    "name": "Ace Coder",
+    "icon": "🎯",
+    "description": "Solved a coding question on 1st attempt",
+    "condition": "perfect_code"
+  },
+  {
+    "id": "capstone-beginner",
+    "name": "Expense Architect",
+    "icon": "🪙",
+    "description": "Completed Beginner Capstone: Personal Expense Tracker",
+    "condition": "capstone_beginner"
+  },
+  {
+    "id": "capstone-intermediate",
+    "name": "Inventory Maestro",
+    "icon": "📚",
+    "description": "Completed Intermediate Capstone: Library System",
+    "condition": "capstone_intermediate"
+  },
+  {
+    "id": "capstone-advanced",
+    "name": "Enterprise Architect",
+    "icon": "⚡",
+    "description": "Completed Advanced Capstone: Task REST API",
+    "condition": "capstone_advanced"
+  },
+  {
+    "id": "streak-3",
+    "name": "On Fire!",
+    "icon": "🔥",
+    "description": "3-day learning streak",
+    "condition": "streak_3"
+  },
+  {
+    "id": "streak-7",
+    "name": "Week Warrior",
+    "icon": "⚡",
+    "description": "7-day learning streak",
+    "condition": "streak_7"
+  },
+  {
+    "id": "perfect",
+    "name": "Perfectionist",
+    "icon": "💎",
+    "description": "Perfect score on a quiz challenge",
+    "condition": "perfect_challenge"
+  },
+  {
+    "id": "level-5",
+    "name": "Rising Engineer",
+    "icon": "🚀",
+    "description": "Reached Level 5",
+    "condition": "level_5"
+  },
+  {
+    "id": "level-10",
+    "name": "Java Grandmaster",
+    "icon": "👑",
+    "description": "Reached Level 10",
+    "condition": "level_10"
+  },
+  {
+    "id": "beginner-done",
+    "name": "Foundation Champion",
+    "icon": "🌱",
+    "description": "Completed all Beginner modules",
+    "condition": "beginner_complete"
+  },
+  {
+    "id": "inter-done",
+    "name": "Robust Developer",
+    "icon": "⚡",
+    "description": "Completed all Intermediate modules",
+    "condition": "inter_complete"
+  },
+  {
+    "id": "advanced-done",
+    "name": "Systems Architect",
+    "icon": "🏆",
+    "description": "Completed all Advanced modules",
+    "condition": "advanced_complete"
+  },
+  {
+    "id": "all-modules",
+    "name": "Java Legend",
+    "icon": "🥷",
+    "description": "Conquered the entire 24-module map",
+    "condition": "all_modules"
+  }
+];
+
+const LEVELS = [
+  {
+    "level": 1,
+    "name": "Novice",
+    "xpRequired": 0,
+    "icon": "🌱"
+  },
+  {
+    "level": 2,
+    "name": "Apprentice",
+    "xpRequired": 150,
+    "icon": "📖"
+  },
+  {
+    "level": 3,
+    "name": "Coder",
+    "xpRequired": 400,
+    "icon": "💻"
+  },
+  {
+    "level": 4,
+    "name": "Developer",
+    "xpRequired": 800,
+    "icon": "🔨"
+  },
+  {
+    "level": 5,
+    "name": "Engineer",
+    "xpRequired": 1400,
+    "icon": "⚙️"
+  },
+  {
+    "level": 6,
+    "name": "Architect",
+    "xpRequired": 2200,
+    "icon": "🏛️"
+  },
+  {
+    "level": 7,
+    "name": "Senior Dev",
+    "xpRequired": 3200,
+    "icon": "🎯"
+  },
+  {
+    "level": 8,
+    "name": "Tech Lead",
+    "xpRequired": 4500,
+    "icon": "🌟"
+  },
+  {
+    "level": 9,
+    "name": "Principal",
+    "xpRequired": 6000,
+    "icon": "💎"
+  },
+  {
+    "level": 10,
+    "name": "Java Grandmaster",
+    "xpRequired": 8000,
+    "icon": "👑"
+  }
+];
+
+if (typeof window !== 'undefined') {
+  window.CURRICULUM = CURRICULUM;
+  window.PROJECTS   = PROJECTS;
+  window.BADGES     = BADGES;
+  window.LEVELS     = LEVELS;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { CURRICULUM, PROJECTS, BADGES, LEVELS };
+}

@@ -533,9 +533,12 @@ function renderHome() {
 }
 
 function getModulesForDifficulty() {
-  if (!window.CURRICULUM) return [];
-  var limit = DIFFICULTY_LIMITS[STATE.player.difficulty] || 14;
-  return CURRICULUM.slice(0, limit);
+  var list = window.CURRICULUM || (typeof CURRICULUM !== 'undefined' ? CURRICULUM : []);
+  if (!list || !list.length) return [];
+  var diff = (STATE && STATE.player && STATE.player.difficulty) || 'beginner';
+  var limits = (typeof DIFFICULTY_LIMITS !== 'undefined') ? DIFFICULTY_LIMITS : { beginner: 8, intermediate: 16, advanced: 24 };
+  var limit = limits[diff] || list.length;
+  return list.slice(0, limit);
 }
 
 function renderContinueCard() {
@@ -609,9 +612,10 @@ function isLessonUnlocked(modId, lessonId) {
 }
 
 function getMod(id) {
-  if (!window.CURRICULUM) return null;
-  for (var i = 0; i < CURRICULUM.length; i++) {
-    if (CURRICULUM[i].id === id) return CURRICULUM[i];
+  var list = window.CURRICULUM || (typeof CURRICULUM !== 'undefined' ? CURRICULUM : []);
+  if (!list) return null;
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].id === id) return list[i];
   }
   return null;
 }
