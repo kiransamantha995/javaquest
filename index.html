@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data: https://images.unsplash.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data:;">
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=5.0"/>
+  <link rel="stylesheet" href="style.css?v=6.2"/>
 </head>
 <body>
 
@@ -27,6 +27,11 @@
     <button class="nav-btn" id="nav-settings"><span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span><span class="nav-label">Settings</span></button>
   </div>
   <div class="nav-stats">
+    <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Night Mode" aria-label="Toggle Night Mode">
+      <span id="theme-toggle-icon">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </span>
+    </button>
     <div class="stat-chip diff-chip" id="nav-diff-chip">Beginner</div>
     <div class="stat-chip level-chip"><span id="nav-level-icon" style="display:none"></span><span id="nav-level">Lv.1</span></div>
     <div class="stat-chip xp-chip"><div class="xp-bar-mini"><div class="xp-fill-mini" id="xp-fill-mini"></div></div><span id="nav-xp">0 XP</span></div>
@@ -89,7 +94,7 @@
         </div>
 
         <!-- Skin picker -->
-        <div class="login-skin-label">Pick your developer portrait:</div>
+        <div class="login-skin-label">Pick your Minecraft character:</div>
         <div class="login-skin-row" id="login-skin-row"></div>
 
         <div class="auth-error hidden" id="su-error"></div>
@@ -121,11 +126,10 @@
 <section class="screen" id="screen-home">
   <div class="home-container">
     <div class="home-hero glass-card">
-      <div class="hero-photo-banner" style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80')"></div>
       <div class="hero-content-row">
         <div class="hero-avatar-wrap" id="hero-avatar-wrap" title="Customize Avatar">
           <div class="avatar-display medium" id="avatar-display-home"></div>
-          <div class="hero-edit-hint">Edit Photo</div>
+          <div class="hero-edit-hint">Edit Avatar</div>
         </div>
         <div class="hero-info">
           <h1 class="hero-greeting" id="hero-greeting">Welcome back, JavaLearner!</h1>
@@ -181,8 +185,8 @@
     <div class="continue-section">
       <h2 class="section-title">Continue Learning</h2>
       <div class="continue-card glass-card" id="continue-card" style="cursor:pointer">
-        <div class="continue-module-thumb" id="continue-icon-wrap">
-          <img id="continue-img" src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=120&h=120&q=80" alt="Module"/>
+        <div class="continue-module-badge" id="continue-badge">
+          <span id="continue-badge-code">B1</span>
         </div>
         <div class="continue-info">
           <div class="continue-title" id="continue-title">Getting Started</div>
@@ -198,17 +202,29 @@
     <div class="quick-links">
       <h2 class="section-title">Quick Actions</h2>
       <div class="quick-grid">
-        <div class="quick-card with-photo" id="qc-map" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=400&q=80')">
+        <div class="quick-card" id="qc-map">
+          <div class="quick-card-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+          </div>
           <div class="quick-card-label">Learning Map</div>
         </div>
-        <div class="quick-card with-photo" id="qc-compiler" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80')">
+        <div class="quick-card" id="qc-compiler">
+          <div class="quick-card-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
           <div class="quick-card-label">Code Playground</div>
         </div>
-        <div class="quick-card with-photo" id="qc-badges" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=400&q=80')">
+        <div class="quick-card" id="qc-badges">
+          <div class="quick-card-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+          </div>
           <div class="quick-card-label">My Badges</div>
         </div>
-        <div class="quick-card with-photo" id="qc-avatar" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80')">
-          <div class="quick-card-label">Developer Portrait</div>
+        <div class="quick-card" id="qc-avatar">
+          <div class="quick-card-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="9" cy="9" r="2"></circle><circle cx="15" cy="9" r="2"></circle><line x1="8" y1="15" x2="16" y2="15"></line></svg>
+          </div>
+          <div class="quick-card-label">Pixel Avatar</div>
         </div>
       </div>
     </div>
@@ -460,8 +476,8 @@
 <section class="screen" id="screen-avatar">
   <div class="avatar-container">
     <div class="avatar-screen-header">
-      <h1>Developer Portrait Studio</h1>
-      <p>Choose an authentic developer portrait for your Java profile across JavaQuest.</p>
+      <h1>Minecraft Pixel Avatar Studio</h1>
+      <p>Choose an authentic 8-bit Minecraft character face for your Java profile across JavaQuest.</p>
     </div>
     <div class="avatar-editor">
       <div class="avatar-preview-col">
@@ -473,14 +489,14 @@
       </div>
       <div class="avatar-options-col">
         <div class="avatar-tabs">
-          <button class="avatar-tab active" id="tab-skin" data-tab="skin">Developer Portraits</button>
+          <button class="avatar-tab active" id="tab-skin" data-tab="skin">Minecraft Characters</button>
         </div>
         <div class="avatar-options-grid" id="avatar-options-grid"></div>
         <div class="name-input-row">
           <label class="name-label">Your Developer Handle</label>
           <input type="text" id="avatar-name-input" class="name-input" placeholder="Enter handle…" maxlength="30"/>
         </div>
-        <button class="btn-primary btn-save-avatar" id="save-avatar-btn">Save Portrait</button>
+        <button class="btn-primary btn-save-avatar" id="save-avatar-btn">Save Avatar</button>
       </div>
     </div>
   </div>
@@ -503,12 +519,20 @@
     <div class="settings-header"><h1>Settings</h1></div>
 
     <div class="settings-card glass-card">
+      <h3>Appearance &amp; Theme</h3>
+      <p>Toggle between Classic Parchment and High-Contrast Night Mode:</p>
+      <div style="margin-top:.75rem">
+        <button class="btn-secondary" id="settings-theme-toggle-btn" onclick="toggleTheme()">Switch to Night Mode</button>
+      </div>
+    </div>
+
+    <div class="settings-card glass-card">
       <h3>Account</h3>
       <p>Signed in as: <strong id="settings-email">—</strong></p>
       <p>Playing as: <strong id="settings-player-name">JavaLearner</strong></p>
       <p>Difficulty: <strong id="settings-difficulty">Beginner</strong></p>
       <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.75rem">
-        <button class="btn-secondary" id="edit-avatar-btn">Edit Portrait</button>
+        <button class="btn-secondary" id="edit-avatar-btn">Edit Avatar</button>
         <button class="btn-secondary" id="change-diff-btn">Change Difficulty</button>
         <button class="btn-danger" id="signout-btn">Sign Out</button>
       </div>
@@ -772,10 +796,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=5.0"></script>
-<script src="animations.js?v=5.0"></script>
-<script src="supabase.js?v=5.0"></script>
-<script src="ai-tutor.js?v=5.0"></script>
-<script src="app.js?v=5.0"></script>
+<script src="curriculum.js?v=6.2"></script>
+<script src="animations.js?v=6.2"></script>
+<script src="supabase.js?v=6.2"></script>
+<script src="ai-tutor.js?v=6.2"></script>
+<script src="app.js?v=6.2"></script>
 </body>
 </html>

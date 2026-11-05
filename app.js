@@ -22,6 +22,8 @@ function sanitizeState(state) {
   if (!p.name) p.name = 'JavaLearner';
   if (!p.difficulty || ['beginner','intermediate','advanced'].indexOf(p.difficulty) === -1) p.difficulty = 'beginner';
   if (!p.avatar || typeof p.avatar !== 'object') p.avatar = { skin: 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 };
+  if (!p.minecraftSkin) p.minecraftSkin = 'steve';
+  if (!p.theme) p.theme = (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light';
   if (!Array.isArray(p.completedLessons)) p.completedLessons = [];
   if (!Array.isArray(p.completedModules)) p.completedModules = [];
   if (!Array.isArray(p.completedChallenges)) p.completedChallenges = [];
@@ -39,9 +41,11 @@ function sanitizeState(state) {
 function freshState(name, diff, skin) {
   return sanitizeState({
     player: {
-      name:       name || 'JavaLearner',
-      difficulty: diff || 'beginner',
-      avatar:     { skin: skin || 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 },
+      name:          name || 'JavaLearner',
+      difficulty:    diff || 'beginner',
+      avatar:        { skin: skin || 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 },
+      minecraftSkin: 'steve',
+      theme:         (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light',
       xp: 0, level: 1, streak: 1, lastVisit: new Date().toDateString(),
       hearts: 3, heartRefillTime: null,
       badges: [], completedLessons: [], completedModules: [], completedChallenges: [],
@@ -102,6 +106,66 @@ function toast(msg) {
 function showModal(id){ var e=ge(id); if(e) e.classList.remove('hidden'); }
 function hideModal(id){ var e=ge(id); if(e) e.classList.add('hidden'); }
 
+/* ── NIGHT / DARK MODE THEME SYSTEM ── */
+var MOON_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+var SUN_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+
+function getSavedTheme() {
+  try {
+    if (STATE && STATE.player && STATE.player.theme) return STATE.player.theme;
+    if (typeof localStorage !== 'undefined') {
+      var saved = localStorage.getItem('javaquest_theme');
+      if (saved) return saved;
+    }
+  } catch(e) {}
+  return 'light';
+}
+
+function applyTheme(theme) {
+  var isDark = (theme === 'dark');
+  if (isDark) {
+    document.body.classList.add('dark-theme');
+  } else {
+    document.body.classList.remove('dark-theme');
+  }
+  if (STATE && STATE.player) {
+    STATE.player.theme = theme;
+  }
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('javaquest_theme', theme);
+    }
+  } catch(e) {}
+  updateThemeUI(isDark);
+}
+
+function updateThemeUI(isDark) {
+  var icon = ge('theme-toggle-icon');
+  if (icon) icon.innerHTML = isDark ? SUN_SVG : MOON_SVG;
+  var btn = ge('theme-toggle-btn');
+  if (btn) {
+    btn.title = isDark ? 'Switch to Light Mode' : 'Switch to Night Mode';
+    btn.setAttribute('aria-label', btn.title);
+  }
+  var setBtn = ge('settings-theme-toggle-btn');
+  if (setBtn) {
+    setBtn.textContent = isDark ? 'Switch to Day Mode' : 'Switch to Night Mode';
+  }
+}
+
+function toggleTheme() {
+  var current = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+  var next = (current === 'dark') ? 'light' : 'dark';
+  applyTheme(next);
+  if (typeof localSave === 'function') localSave();
+  toast(next === 'dark' ? 'Night mode activated!' : 'Day mode activated!');
+}
+
+function initTheme() {
+  var theme = getSavedTheme();
+  applyTheme(theme);
+}
+
 /* ═══════════════ SCREENS ════════════════════════════════════════ */
 var ALL_SCREENS = ['auth','home','map','lesson','challenge','coding','compiler','avatar','badges','settings'];
 
@@ -150,23 +214,28 @@ function showScreen(name) {
 /* ═══════════════ AUTH SCREENS ═══════════════════════════════════ */
 var _signupDiff = 'beginner';
 var _signupSkin = 0;
+var _signupMinecraftSkin = 'steve';
 var SKIN_COLORS = ['#FDBCB4','#EAA175','#D08B5B','#AE5D29','#3B1F1A'];
 
 function initAuthUI() {
-  // Skin buttons
+  // Skin buttons (Minecraft character previews)
   var row = ge('login-skin-row');
   if (row) {
     row.innerHTML = '';
-    SKIN_COLORS.forEach(function(c, i){
+    var skinKeys = ['steve', 'alex', 'diamond_knight', 'creeper', 'ender_coder', 'redstone', 'cyber_steve', 'golden_king'];
+    skinKeys.forEach(function(key, i){
+      var s = MINECRAFT_SKINS[key];
       var btn = document.createElement('button');
-      btn.className = 'login-skin-btn' + (i===0?' selected':'');
-      btn.style.background = c;
-      btn.setAttribute('data-skin', i);
+      btn.type = 'button';
+      btn.className = 'login-skin-btn minecraft-login-skin' + (i===0 ? ' selected' : '');
+      btn.setAttribute('data-skin', key);
+      btn.title = s.name;
+      btn.innerHTML = renderMinecraftSVG(s.grid);
       row.appendChild(btn);
     });
     row.addEventListener('click', function(e){
       var btn = e.target.closest('.login-skin-btn'); if(!btn) return;
-      _signupSkin = parseInt(btn.getAttribute('data-skin'));
+      _signupMinecraftSkin = btn.getAttribute('data-skin') || 'steve';
       qsa('.login-skin-btn').forEach(function(b){ b.classList.remove('selected'); });
       btn.classList.add('selected');
     });
@@ -242,6 +311,7 @@ function doGuestLogin() {
   } else {
     STATE = freshState(name, diff, skin);
   }
+  if (_signupMinecraftSkin) STATE.player.minecraftSkin = _signupMinecraftSkin;
   localSave();
   checkStreak();
   renderAllAvatars();
@@ -458,45 +528,176 @@ var _avTab    = 'skin';
 
 function mkEl(tag,css){ var e=document.createElement(tag); if(css) e.style.cssText=css; return e; }
 
-var DEV_PORTRAITS = [
-  { id: 'dev-1', name: 'Alex • Core Java Dev', url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-2', name: 'Sarah • Backend Engineer', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-3', name: 'Marcus • Staff Architect', url: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-4', name: 'Elena • Cloud Systems', url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-5', name: 'David • Full-Stack Pro', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-6', name: 'Maya • DevOps Lead', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-7', name: 'Liam • Security Engineer', url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: 'dev-8', name: 'Kai • Microservices Coder', url: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=200&h=200&q=80' }
-];
+var MINECRAFT_SKINS = {
+  steve: {
+    id: 'steve',
+    name: 'Steve • OG Crafter',
+    tag: 'Classic',
+    grid: [
+      ['#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18'],
+      ['#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18'],
+      ['#4A2E18','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#4A2E18'],
+      ['#C68B59','#FFFFFF','#2C3E82','#C68B59','#C68B59','#FFFFFF','#2C3E82','#C68B59'],
+      ['#C68B59','#C68B59','#C68B59','#A36637','#A36637','#C68B59','#C68B59','#C68B59'],
+      ['#C68B59','#C68B59','#512818','#512818','#512818','#512818','#C68B59','#C68B59'],
+      ['#4A2E18','#512818','#512818','#512818','#512818','#512818','#512818','#4A2E18'],
+      ['#4A2E18','#4A2E18','#512818','#512818','#512818','#512818','#4A2E18','#4A2E18']
+    ]
+  },
+  alex: {
+    id: 'alex',
+    name: 'Alex • Code Explorer',
+    tag: 'Adventurer',
+    grid: [
+      ['#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623'],
+      ['#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623'],
+      ['#AF5623','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#AF5623'],
+      ['#AF5623','#FFFFFF','#4C7837','#E5B28B','#E5B28B','#FFFFFF','#4C7837','#AF5623'],
+      ['#AF5623','#E5B28B','#E5B28B','#D99C74','#D99C74','#E5B28B','#E5B28B','#AF5623'],
+      ['#E5B28B','#E5B28B','#E5B28B','#BC7656','#BC7656','#E5B28B','#E5B28B','#E5B28B'],
+      ['#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B'],
+      ['#AF5623','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#AF5623']
+    ]
+  },
+  diamond_knight: {
+    id: 'diamond_knight',
+    name: 'Diamond Knight • Full Armor',
+    tag: 'Hero',
+    grid: [
+      ['#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8'],
+      ['#36B3A8','#4ECCC0','#4ECCC0','#36B3A8','#36B3A8','#4ECCC0','#4ECCC0','#36B3A8'],
+      ['#36B3A8','#4ECCC0','#1E1E24','#1E1E24','#1E1E24','#1E1E24','#4ECCC0','#36B3A8'],
+      ['#36B3A8','#26968D','#00F0FF','#1E1E24','#1E1E24','#00F0FF','#26968D','#36B3A8'],
+      ['#36B3A8','#4ECCC0','#C68B59','#C68B59','#C68B59','#C68B59','#4ECCC0','#36B3A8'],
+      ['#36B3A8','#36B3A8','#C68B59','#A36637','#A36637','#C68B59','#36B3A8','#36B3A8'],
+      ['#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8'],
+      ['#26968D','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#26968D']
+    ]
+  },
+  creeper: {
+    id: 'creeper',
+    name: 'Creeper Dev • Pixel Mascot',
+    tag: 'Mascot',
+    grid: [
+      ['#45A03A','#5EBA43','#45A03A','#5EBA43','#45A03A','#5EBA43','#45A03A','#5EBA43'],
+      ['#5EBA43','#45A03A','#5EBA43','#45A03A','#5EBA43','#45A03A','#5EBA43','#45A03A'],
+      ['#45A03A','#1E1E24','#1E1E24','#5EBA43','#5EBA43','#1E1E24','#1E1E24','#45A03A'],
+      ['#5EBA43','#1E1E24','#1E1E24','#45A03A','#45A03A','#1E1E24','#1E1E24','#5EBA43'],
+      ['#45A03A','#5EBA43','#45A03A','#1E1E24','#1E1E24','#45A03A','#5EBA43','#45A03A'],
+      ['#5EBA43','#45A03A','#1E1E24','#1E1E24','#1E1E24','#1E1E24','#45A03A','#5EBA43'],
+      ['#45A03A','#5EBA43','#1E1E24','#1E1E24','#1E1E24','#1E1E24','#5EBA43','#45A03A'],
+      ['#5EBA43','#45A03A','#1E1E24','#45A03A','#45A03A','#1E1E24','#45A03A','#5EBA43']
+    ]
+  },
+  ender_coder: {
+    id: 'ender_coder',
+    name: 'Ender Wizard • Void Coder',
+    tag: 'Mystic',
+    grid: [
+      ['#181424','#181424','#181424','#181424','#181424','#181424','#181424','#181424'],
+      ['#181424','#241D35','#241D35','#181424','#181424','#241D35','#241D35','#181424'],
+      ['#181424','#241D35','#181424','#181424','#181424','#181424','#241D35','#181424'],
+      ['#181424','#D634EB','#FA7DFF','#181424','#181424','#D634EB','#FA7DFF','#181424'],
+      ['#181424','#181424','#181424','#241D35','#241D35','#181424','#181424','#181424'],
+      ['#181424','#241D35','#181424','#181424','#181424','#181424','#241D35','#181424'],
+      ['#181424','#181424','#181424','#181424','#181424','#181424','#181424','#181424'],
+      ['#241D35','#181424','#181424','#181424','#181424','#181424','#181424','#241D35']
+    ]
+  },
+  redstone: {
+    id: 'redstone',
+    name: 'Redstone • Logic Architect',
+    tag: 'Engineer',
+    grid: [
+      ['#595959','#7F7F7F','#FFE600','#FFE600','#7F7F7F','#595959','#595959','#7F7F7F'],
+      ['#38210F','#38210F','#38210F','#38210F','#38210F','#38210F','#38210F','#38210F'],
+      ['#38210F','#E63946','#FF6B6B','#C68B59','#C68B59','#E63946','#FF6B6B','#38210F'],
+      ['#38210F','#E63946','#FFFFFF','#C68B59','#C68B59','#E63946','#FFFFFF','#38210F'],
+      ['#C68B59','#C68B59','#C68B59','#A36637','#A36637','#C68B59','#C68B59','#C68B59'],
+      ['#C68B59','#C68B59','#512818','#512818','#512818','#512818','#C68B59','#C68B59'],
+      ['#38210F','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#38210F'],
+      ['#38210F','#38210F','#38210F','#C68B59','#C68B59','#38210F','#38210F','#38210F']
+    ]
+  },
+  cyber_steve: {
+    id: 'cyber_steve',
+    name: 'Cyber Coder • Neon Visor',
+    tag: 'Cyber',
+    grid: [
+      ['#111116','#1E1E24','#111116','#1E1E24','#1E1E24','#111116','#1E1E24','#111116'],
+      ['#1E1E24','#111116','#1E1E24','#111116','#111116','#1E1E24','#111116','#1E1E24'],
+      ['#1E1E24','#00F0FF','#00F0FF','#00F0FF','#00F0FF','#00F0FF','#00F0FF','#1E1E24'],
+      ['#111116','#00B4D8','#00F0FF','#00F0FF','#00F0FF','#00F0FF','#00B4D8','#111116'],
+      ['#E5B28B','#E5B28B','#E5B28B','#D99C74','#D99C74','#E5B28B','#E5B28B','#E5B28B'],
+      ['#E5B28B','#E5B28B','#512818','#512818','#512818','#512818','#E5B28B','#E5B28B'],
+      ['#1E1E24','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#1E1E24'],
+      ['#111116','#1E1E24','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#1E1E24','#111116']
+    ]
+  },
+  golden_king: {
+    id: 'golden_king',
+    name: 'Golden King • Java Master',
+    tag: 'Master',
+    grid: [
+      ['#FFD700','#FFD700','#05D380','#FFD700','#FFD700','#05D380','#FFD700','#FFD700'],
+      ['#FFB703','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFB703'],
+      ['#2B1E16','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#2B1E16'],
+      ['#C68B59','#FFFFFF','#3A86FF','#C68B59','#C68B59','#FFFFFF','#3A86FF','#C68B59'],
+      ['#C68B59','#C68B59','#C68B59','#A36637','#A36637','#C68B59','#C68B59','#C68B59'],
+      ['#C68B59','#C68B59','#512818','#512818','#512818','#512818','#C68B59','#C68B59'],
+      ['#2B1E16','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#C68B59','#2B1E16'],
+      ['#FFD700','#2B1E16','#2B1E16','#2B1E16','#2B1E16','#2B1E16','#2B1E16','#FFD700']
+    ]
+  }
+};
+
+function renderMinecraftSVG(grid) {
+  var svg = '<svg viewBox="0 0 8 8" class="minecraft-pixel-face" style="width:100%;height:100%;shape-rendering:crispEdges;image-rendering:pixelated;display:block;">';
+  for (var r = 0; r < 8; r++) {
+    for (var c = 0; c < 8; c++) {
+      svg += '<rect x="' + c + '" y="' + r + '" width="1" height="1" fill="' + (grid[r][c] || '#000000') + '"/>';
+    }
+  }
+  svg += '</svg>';
+  return svg;
+}
 
 function drawAvatar(el, av) {
   if (!el) return;
-  var photoUrl = (STATE && STATE.player && STATE.player.avatarPhoto) || (av && av.photo) || DEV_PORTRAITS[0].url;
+  var skinId = (STATE && STATE.player && (STATE.player.minecraftSkin || STATE.player.avatarSkin)) || (av && (av.minecraftSkin || av.avatarSkin)) || 'steve';
+  var skinData = MINECRAFT_SKINS[skinId] || MINECRAFT_SKINS.steve;
   el.style.position = 'relative';
-  el.innerHTML = '<img src="' + photoUrl + '" class="avatar-photo-circle" alt="Developer Portrait" />';
+  el.innerHTML = '<div class="minecraft-avatar-box">' + renderMinecraftSVG(skinData.grid) + '</div>';
 }
 
 function renderAllAvatars() {
-  drawAvatar(ge('avatar-display-home'),   STATE&&STATE.player.avatar);
-  drawAvatar(ge('avatar-display-editor'), _avDraft||(STATE&&STATE.player.avatar));
+  drawAvatar(ge('avatar-display-home'),   STATE && STATE.player && STATE.player.avatar);
+  drawAvatar(ge('avatar-display-editor'), _avDraft || (STATE && STATE.player && STATE.player.avatar));
 }
 
 function switchAvatarTab(tab) {
   _avTab = 'skin';
   var grid = ge('avatar-options-grid'); if(!grid) return;
   grid.innerHTML = '';
-  var currentPhoto = (STATE && STATE.player && STATE.player.avatarPhoto) || (_avDraft && _avDraft.photo) || DEV_PORTRAITS[0].url;
-  DEV_PORTRAITS.forEach(function(dev, idx){
+  var currentSkin = (STATE && STATE.player && (STATE.player.minecraftSkin || STATE.player.avatarSkin)) || (_avDraft && _avDraft.minecraftSkin) || 'steve';
+  
+  Object.keys(MINECRAFT_SKINS).forEach(function(key){
+    var skin = MINECRAFT_SKINS[key];
     var card = document.createElement('div');
-    var isSel = (currentPhoto === dev.url);
-    card.className = 'portrait-option-card' + (isSel ? ' selected' : '');
-    card.innerHTML = '<div class="portrait-thumb-wrap"><img src="' + dev.url + '" class="portrait-thumb-img" alt="' + esc(dev.name) + '"/></div>'
-      + '<div class="portrait-option-name">' + esc(dev.name) + '</div>';
+    var isSel = (currentSkin === key);
+    card.className = 'minecraft-char-card' + (isSel ? ' selected' : '');
+    card.setAttribute('data-skin', key);
+    card.innerHTML = '<div class="minecraft-char-thumb">' + renderMinecraftSVG(skin.grid) + '</div>'
+      + '<span class="minecraft-char-tag">' + esc(skin.tag) + '</span>'
+      + '<div class="minecraft-char-name">' + esc(skin.name) + '</div>';
     card.addEventListener('click', function(){
       if (!_avDraft) _avDraft = {};
-      _avDraft.photo = dev.url;
-      if (STATE && STATE.player) STATE.player.avatarPhoto = dev.url;
-      qsa('.portrait-option-card').forEach(function(c){ c.classList.remove('selected'); });
+      _avDraft.minecraftSkin = key;
+      if (STATE && STATE.player) {
+        STATE.player.minecraftSkin = key;
+        STATE.player.avatarSkin = key;
+      }
+      qsa('.minecraft-char-card').forEach(function(c){ c.classList.remove('selected'); });
       card.classList.add('selected');
       drawAvatar(ge('avatar-display-editor'), _avDraft);
     });
@@ -507,9 +708,12 @@ function switchAvatarTab(tab) {
 function saveAvatar() {
   var inp = ge('avatar-name-input');
   if (inp && inp.value.trim()) STATE.player.name = inp.value.trim();
-  if (_avDraft && _avDraft.photo) STATE.player.avatarPhoto = _avDraft.photo;
+  if (_avDraft && _avDraft.minecraftSkin) {
+    STATE.player.minecraftSkin = _avDraft.minecraftSkin;
+    STATE.player.avatarSkin = _avDraft.minecraftSkin;
+  }
   localSave(); renderAllAvatars(); updateNav();
-  showScreen('home'); toast('Developer portrait saved!');
+  showScreen('home'); toast('Minecraft avatar saved!');
 }
 
 /* ═══════════════ HOME ═══════════════════════════════════════════ */
@@ -541,8 +745,9 @@ function renderContinueCard() {
   for (var i=0; i<mods.length; i++) {
     var mod=mods[i];
     if (STATE.player.completedModules.indexOf(mod.id)===-1) {
-      var imgEl = ge('continue-img');
-      if (imgEl && mod.image) imgEl.src = mod.image;
+      var badgeEl = ge('continue-badge');
+      if (badgeEl) badgeEl.style.backgroundColor = mod.color || '#FFE600';
+      setText('continue-badge-code', (mod.code || mod.id).toUpperCase());
       setText('continue-title', mod.title);
       var done=0;
       for(var j=0;j<mod.lessons.length;j++) if(STATE.player.completedLessons.indexOf(mod.lessons[j].id)!==-1) done++;
@@ -670,23 +875,23 @@ function renderMap() {
   path.innerHTML = '';
 
   var tracks = [
-    { key: 'beginner', title: 'Beginner Track — Foundations & Core Java', desc: 'Modules B1–B8 • Java syntax, control flow, methods, arrays & OOP fundamentals', projId: 'proj-beginner', banner: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80' },
-    { key: 'intermediate', title: 'Intermediate Track — OOP, Streams & Architecture', desc: 'Modules I1–I8 • Streams, Lambdas, JDBC, Concurrency, JUnit & Collections', projId: 'proj-intermediate', banner: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80' },
-    { key: 'advanced', title: 'Advanced Track — JVM Internals & Cloud Enterprise', desc: 'Modules A1–A8 • Virtual Threads, Spring Boot, Security & Microservices', projId: 'proj-advanced', banner: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80' }
+    { key: 'beginner', title: 'Beginner Track — Foundations & Core Java', desc: 'Modules B1–B8 • Java syntax, control flow, methods, arrays & OOP fundamentals', projId: 'proj-beginner', badge: 'TRACK 1 • BEGINNER' },
+    { key: 'intermediate', title: 'Intermediate Track — OOP, Streams & Architecture', desc: 'Modules I1–I8 • Streams, Lambdas, JDBC, Concurrency, JUnit & Collections', projId: 'proj-intermediate', badge: 'TRACK 2 • INTERMEDIATE' },
+    { key: 'advanced', title: 'Advanced Track — JVM Internals & Cloud Enterprise', desc: 'Modules A1–A8 • Virtual Threads, Spring Boot, Security & Microservices', projId: 'proj-advanced', badge: 'TRACK 3 • ADVANCED' }
   ];
 
   tracks.forEach(function(tr){
     var modsInTrack = allMods.filter(function(m){ return m.level === tr.key; });
     if (!modsInTrack.length) return;
 
-    // Track Section Header with Real Photo Banner
+    // Track Section Header Card (Neobrutalist, clean, NO photo)
     var header = document.createElement('div');
     header.className = 'track-section-header';
-    header.innerHTML = '<div class="track-header-banner" style="background-image:linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.7)), url(\'' + tr.banner + '\')">'
-      + '<div class="track-header-content">'
+    header.innerHTML = '<div class="track-header-card">'
+      + '<span class="track-header-badge">' + tr.badge + '</span>'
       + '<div class="track-header-title">' + esc(tr.title) + '</div>'
       + '<div class="track-header-desc">' + esc(tr.desc) + '</div>'
-      + '</div></div>';
+      + '</div>';
     path.appendChild(header);
 
     // Track Nodes Path Container
@@ -711,17 +916,15 @@ function renderMap() {
 
       var btn = document.createElement('div');
       btn.className = 'module-node-btn';
-      var modImg = mod.image || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=200&h=200&q=80';
 
       if (st === 'locked') {
-        btn.innerHTML = '<div class="module-node-photo" style="background-image:url(\'' + modImg + '\');filter:grayscale(1) opacity(0.35);"></div>'
-          + '<span class="lock-overlay"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>';
+        btn.innerHTML = '<span class="lock-overlay"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>';
       } else {
-        btn.innerHTML = '<div class="module-node-photo" style="background-image:url(\'' + modImg + '\');"></div>';
+        btn.innerHTML = '<span class="node-code-text">' + esc((mod.code || mod.id).toUpperCase()) + '</span>';
         if (completed) {
           var ck = document.createElement('div');
           ck.className = 'check-overlay';
-          ck.textContent = '✓';
+          ck.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
           btn.appendChild(ck);
         }
         btn.setAttribute('data-modid', mod.id);
@@ -744,7 +947,7 @@ function renderMap() {
 
     path.appendChild(trackNodes);
 
-    // Capstone Project Card at the end of each track with Photo Cover
+    // Capstone Project Card at the end of each track (NO photo banner)
     var proj = (window.PROJECTS || []).find(function(p){ return p.id === tr.projId; });
     if (proj) {
       var pState = (STATE && STATE.player && STATE.player.capstoneProjects) ? STATE.player.capstoneProjects[proj.id] : null;
@@ -754,7 +957,6 @@ function renderMap() {
         checkedCount = Object.keys(pState.tasks).filter(function(k){ return pState.tasks[k]; }).length;
       }
       var totalReqs = (proj.requirements || []).length;
-      var coverPhoto = proj.coverPhoto || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80';
 
       var pCard = document.createElement('div');
       var cardClasses = 'capstone-project-card glass-card';
@@ -776,18 +978,17 @@ function renderMap() {
         actionBtnText = 'Continue Project';
       }
 
-      pCard.innerHTML = '<div class="capstone-photo-banner" style="background-image:linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url(\'' + coverPhoto + '\')">'
-        + '<div class="capstone-banner-overlay">'
+      pCard.innerHTML = '<div class="capstone-header-row">'
         + '<span class="capstone-tag-pill">' + pillText + '</span>'
-        + '<h3 class="capstone-title">' + esc(proj.title) + '</h3>'
+        + '<span class="capstone-badge-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>'
         + '</div>'
-        + '</div>'
-        + '<div class="capstone-body">'
-        + '<p class="capstone-desc">' + esc(descText) + '</p>'
+        + '<h3 class="capstone-card-title">' + esc(proj.title) + '</h3>'
+        + '<p class="capstone-card-desc">' + esc(descText) + '</p>'
         + '<div class="capstone-progress-row">'
         + '<div class="capstone-prog-bar"><div class="capstone-prog-fill" style="width:' + (totalReqs ? Math.round(checkedCount/totalReqs*100) : 0) + '%"></div></div>'
         + '<span class="capstone-prog-label">' + checkedCount + '/' + totalReqs + ' Verified</span>'
         + '</div>'
+        + '<div class="capstone-action">'
         + '<button class="btn-primary btn-sm capstone-view-btn" data-projid="' + proj.id + '">' + actionBtnText + '</button>'
         + '</div>';
 
@@ -2047,17 +2248,19 @@ function awardBadgeDirect(badgeId){
 }
 
 function renderBadges(){
-  if(!window.BADGES)return;
-  var grid=ge('badges-grid');if(!grid)return;
-  grid.innerHTML='';setText('badges-earned-count',STATE.player.badges.length+' / '+BADGES.length+' badges earned');
+  if(!window.BADGES) return;
+  var grid=ge('badges-grid'); if(!grid) return;
+  grid.innerHTML=''; setText('badges-earned-count', STATE.player.badges.length+' / '+BADGES.length+' badges earned');
   BADGES.forEach(function(badge){
-    var unlocked=STATE.player.badges.indexOf(badge.id)!==-1;
-    var card=document.createElement('div');card.className='badge-card '+(unlocked?'unlocked':'locked');
-    var badgeImg = badge.image || 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80';
-    card.innerHTML='<div class="badge-photo-wrap"><img src="' + badgeImg + '" class="badge-photo-img ' + (unlocked ? '' : 'locked-badge-img') + '" alt="' + esc(badge.name) + '"/>'
-      + (!unlocked ? '<span class="badge-lock-overlay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>' : '')
+    var unlocked = STATE.player.badges.indexOf(badge.id) !== -1;
+    var card = document.createElement('div');
+    card.className = 'badge-card ' + (unlocked ? 'unlocked' : 'locked');
+    card.innerHTML = '<div class="badge-icon-box ' + (unlocked ? 'unlocked' : 'locked') + '">'
+      + (unlocked 
+          ? '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>'
+          : '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>')
       + '</div>'
-      + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked') + '</div>'
+      + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked Badge') + '</div>'
       + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete curriculum milestones to unlock.') + '</div>';
     grid.appendChild(card);
   });
@@ -2070,6 +2273,7 @@ function renderSettings(){
   setText('settings-email', u?u.email:'—');
   setText('settings-player-name',STATE.player.name);
   setText('settings-difficulty',DIFFICULTY_LABELS[STATE.player.difficulty]||'Beginner');
+  updateThemeUI(document.body.classList.contains('dark-theme'));
 }
 
 function refillHearts(){STATE.player.hearts=3;STATE.player.heartRefillTime=null;localSave();renderHearts();toast('Hearts refilled!');}
@@ -2309,6 +2513,11 @@ document.addEventListener('DOMContentLoaded', function(){
   initAuthUI();
   initDiffModal();
   initResizableWorkspaces();
+  initTheme();
+
+  // ── THEME TOGGLES ──
+  var ttb=ge('theme-toggle-btn');          if(ttb)ttb.addEventListener('click',toggleTheme);
+  var stb=ge('settings-theme-toggle-btn'); if(stb)stb.addEventListener('click',toggleTheme);
 
   // ── NAV ───────────────────────────────────────────────────────
   var nll=ge('nav-logo-btn');   if(nll) nll.addEventListener('click', function(){showScreen('home');});
@@ -2502,3 +2711,8 @@ document.addEventListener('DOMContentLoaded', function(){
     showScreen('auth');
   }
 });
+
+// Immediate theme initialization to prevent theme flicker on page load
+try {
+  initTheme();
+} catch(e) {}

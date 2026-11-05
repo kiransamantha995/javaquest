@@ -135,9 +135,8 @@ const CURRICULUM = [
         "Use System.out.println() twice.",
         "Make sure spelling, comma, and exclamation mark match exactly."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b2",
     "code": "B2",
@@ -266,9 +265,8 @@ const CURRICULUM = [
         "Calculate age + 1 for next year.",
         "Use string concatenation with +."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b3",
     "code": "B3",
@@ -401,9 +399,8 @@ const CURRICULUM = [
         "Multiply originalPrice by (1 - discountPercent / 100.0).",
         "Check if discounted > 100.0 and subtract 5.0."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b4",
     "code": "B4",
@@ -547,9 +544,8 @@ const CURRICULUM = [
         "Check for % 15 == 0 first before % 3 or % 5.",
         "Use if-else ladder."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b5",
     "code": "B5",
@@ -677,9 +673,8 @@ const CURRICULUM = [
       "hints": [
         "Use floating-point division 9.0 / 5.0, not 9 / 5."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b6",
     "code": "B6",
@@ -808,9 +803,8 @@ const CURRICULUM = [
         "Initialize min and max with marks[0].",
         "Cast sum to double when dividing by length."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b7",
     "code": "B7",
@@ -954,9 +948,8 @@ const CURRICULUM = [
         "Keep balance private.",
         "Deposit adds to balance; withdraw subtracts."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "b8",
     "code": "B8",
@@ -1084,9 +1077,8 @@ const CURRICULUM = [
         "HashSet automatically discards duplicate entries.",
         "Use unique.size() to get count."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i1",
     "code": "I1",
@@ -1239,9 +1231,8 @@ const CURRICULUM = [
         "Record field accessors use name() without \"get\" prefix.",
         "Use double 149.50."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i2",
     "code": "I2",
@@ -1391,9 +1382,8 @@ const CURRICULUM = [
         "Use LinkedHashMap to preserve insertion order.",
         "Use freq.getOrDefault(w, 0) + 1."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i3",
     "code": "I3",
@@ -1522,9 +1512,8 @@ const CURRICULUM = [
         "Wrap Integer.parseInt() in try-catch.",
         "Catch NumberFormatException and return fallback."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i4",
     "code": "I4",
@@ -1664,9 +1653,8 @@ const CURRICULUM = [
         "Use .map(n -> n * n)",
         "Use .forEach(System.out::println)"
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i5",
     "code": "I5",
@@ -1809,9 +1797,8 @@ const CURRICULUM = [
       "hints": [
         "Use String.matches() with regex pattern."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1526374870839-e155464bb9b2?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i6",
     "code": "I6",
@@ -1938,9 +1925,8 @@ const CURRICULUM = [
       "hints": [
         "Check both test conditions."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i7",
     "code": "I7",
@@ -2067,9 +2053,8 @@ const CURRICULUM = [
       "hints": [
         "Notice the question mark ? placeholder at the end."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "i8",
     "code": "I8",
@@ -2196,9 +2181,8 @@ const CURRICULUM = [
       "hints": [
         "Submit task, shutdown pool, and await termination."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a1",
     "code": "A1",
@@ -2325,9 +2309,8 @@ const CURRICULUM = [
       "hints": [
         "Use Runtime.getRuntime().totalMemory()."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a2",
     "code": "A2",
@@ -2454,9 +2437,8 @@ const CURRICULUM = [
       "hints": [
         "Use AtomicInteger.incrementAndGet()."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a3",
     "code": "A3",
@@ -2584,9 +2566,8 @@ const CURRICULUM = [
       "hints": [
         "Use pattern matching instanceof (obj instanceof String s)."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a4",
     "code": "A4",
@@ -2727,9 +2708,8 @@ const CURRICULUM = [
         "Each builder method sets field and returns this.",
         "build() instantiates HttpRequest."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a5",
     "code": "A5",
@@ -2873,9 +2853,8 @@ const CURRICULUM = [
       "hints": [
         "Use Math.min(delay, maxMs) to prevent unbounded backoff."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a6",
     "code": "A6",
@@ -3006,9 +2985,8 @@ const CURRICULUM = [
       "hints": [
         "Pass EmailService into the NotificationClient constructor."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a7",
     "code": "A7",
@@ -3135,9 +3113,8 @@ const CURRICULUM = [
       "hints": [
         "The third boolean argument `true` in LinkedHashMap constructor specifies access-order."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=200&h=200&q=80"
-  },
+    }
+},
   {
     "id": "a8",
     "code": "A8",
@@ -3283,9 +3260,8 @@ const CURRICULUM = [
       "hints": [
         "Check both parameters."
       ]
-    },
-    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&h=200&q=80"
-  }
+    }
+}
 ];
 
 const PROJECTS = [
@@ -3336,9 +3312,8 @@ const PROJECTS = [
         "concepts": "Custom Exceptions & Try-Catch (Module B8)",
         "description": "Build an InvalidExpenseException class. Throw and handle it when negative numbers, empty descriptions, or unrecognized categories are entered."
       }
-    ],
-    "coverPhoto": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80"
-  },
+    ]
+},
   {
     "id": "proj-intermediate",
     "level": "intermediate",
@@ -3380,9 +3355,8 @@ const PROJECTS = [
         "concepts": "JUnit 5 Testing (Module I6)",
         "description": "Write automated test cases using @ParameterizedTest and assertThrows(BookUnavailableException.class) to test boundary and edge conditions."
       }
-    ],
-    "coverPhoto": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=600&q=80"
-  },
+    ]
+},
   {
     "id": "proj-advanced",
     "level": "advanced",
@@ -3424,9 +3398,8 @@ const PROJECTS = [
         "concepts": "Docker & Observability (Modules A7, A8)",
         "description": "Bundle the Spring Boot API, PostgreSQL database, Prometheus metrics collector, and Grafana dashboard into a single docker-compose.yml file."
       }
-    ],
-    "coverPhoto": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80"
-  }
+    ]
+}
 ];
 
 const BADGES = [
@@ -3435,129 +3408,113 @@ const BADGES = [
     "name": "First Steps",
     "icon": "",
     "description": "Completed your first lesson",
-    "condition": "first_lesson",
-    "image": "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "first_lesson"
+},
   {
     "id": "first-module",
     "name": "Module Master",
     "icon": "",
     "description": "Completed your first module challenge",
-    "condition": "first_module",
-    "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "first_module"
+},
   {
     "id": "first-code",
     "name": "Code Warrior",
     "icon": "",
     "description": "Solved your first coding question",
-    "condition": "first_code",
-    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "first_code"
+},
   {
     "id": "perfect-code",
     "name": "Ace Coder",
     "icon": "",
     "description": "Solved a coding question on 1st attempt",
-    "condition": "perfect_code",
-    "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "perfect_code"
+},
   {
     "id": "capstone-beginner",
     "name": "Expense Architect",
     "icon": "",
     "description": "Completed Beginner Capstone: Personal Expense Tracker",
-    "condition": "capstone_beginner",
-    "image": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "capstone_beginner"
+},
   {
     "id": "capstone-intermediate",
     "name": "Inventory Maestro",
     "icon": "",
     "description": "Completed Intermediate Capstone: Library System",
-    "condition": "capstone_intermediate",
-    "image": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "capstone_intermediate"
+},
   {
     "id": "capstone-advanced",
     "name": "Enterprise Architect",
     "icon": "",
     "description": "Completed Advanced Capstone: Task REST API",
-    "condition": "capstone_advanced",
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "capstone_advanced"
+},
   {
     "id": "streak-3",
     "name": "On Fire!",
     "icon": "",
     "description": "3-day learning streak",
-    "condition": "streak_3",
-    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "streak_3"
+},
   {
     "id": "streak-7",
     "name": "Week Warrior",
     "icon": "",
     "description": "7-day learning streak",
-    "condition": "streak_7",
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "streak_7"
+},
   {
     "id": "perfect",
     "name": "Perfectionist",
     "icon": "",
     "description": "Perfect score on a quiz challenge",
-    "condition": "perfect_challenge",
-    "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "perfect_challenge"
+},
   {
     "id": "level-5",
     "name": "Rising Engineer",
     "icon": "",
     "description": "Reached Level 5",
-    "condition": "level_5",
-    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "level_5"
+},
   {
     "id": "level-10",
     "name": "Java Grandmaster",
     "icon": "",
     "description": "Reached Level 10",
-    "condition": "level_10",
-    "image": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "level_10"
+},
   {
     "id": "beginner-done",
     "name": "Foundation Champion",
     "icon": "",
     "description": "Completed all Beginner modules",
-    "condition": "beginner_complete",
-    "image": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "beginner_complete"
+},
   {
     "id": "inter-done",
     "name": "Robust Developer",
     "icon": "",
     "description": "Completed all Intermediate modules",
-    "condition": "inter_complete",
-    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "inter_complete"
+},
   {
     "id": "advanced-done",
     "name": "Systems Architect",
     "icon": "",
     "description": "Completed all Advanced modules",
-    "condition": "advanced_complete",
-    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=150&h=150&q=80"
-  },
+    "condition": "advanced_complete"
+},
   {
     "id": "all-modules",
     "name": "Java Legend",
     "icon": "",
     "description": "Conquered the entire 24-module map",
-    "condition": "all_modules",
-    "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80"
-  }
+    "condition": "all_modules"
+}
 ];
 
 const LEVELS = [

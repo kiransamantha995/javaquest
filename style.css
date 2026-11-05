@@ -1217,12 +1217,13 @@ body {
 
 .capstone-project-card {
   width: 100%;
-  max-width: 900px;
-  margin: 2rem auto 3rem;
+  max-width: 760px;
+  margin: 2.25rem auto 3rem;
   padding: 1.75rem 2rem;
   display: flex;
-  align-items: center;
-  gap: 1.75rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
   background: #FFFDF5;
   border: 3px solid var(--ink);
   border-radius: 20px;
@@ -1233,49 +1234,81 @@ body {
   text-align: left;
 }
 .capstone-project-card:hover {
-  transform: translate(-1px, -1px);
+  transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0px var(--ink);
   background: #FFFEEB;
 }
-.capstone-icon-col {
-  width: 64px; height: 64px;
-  border-radius: 16px;
-  background: #FEF3C7;
-  border: 2.5px solid var(--ink);
-  box-shadow: 3px 3px 0px var(--ink);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.2rem;
-  flex-shrink: 0;
+.capstone-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
 }
-.capstone-body { flex: 1; }
-.capstone-level-pill {
-  display: inline-block;
-  font-size: 0.74rem;
+.capstone-tag-pill {
+  background: var(--codedex-yellow);
+  color: var(--ink);
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #92400E;
-  background: #FEF3C7;
-  padding: 0.2rem 0.65rem;
+  font-size: 0.76rem;
+  padding: 0.25rem 0.65rem;
+  border: 2px solid var(--ink);
   border-radius: 8px;
-  border: 1.5px solid var(--ink);
-  box-shadow: 1.5px 1.5px 0px var(--ink);
-  margin-bottom: 0.45rem;
+  box-shadow: 2px 2px 0px var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-.capstone-title {
-  font-size: 1.25rem;
+.capstone-badge-icon {
+  color: #92400E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.capstone-card-title {
+  font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.025em;
   color: var(--ink);
-  margin-bottom: 0.25rem;
+  margin: 0;
+  line-height: 1.3;
 }
-.capstone-desc {
-  font-size: 0.88rem;
+.capstone-card-desc {
+  font-size: 0.92rem;
   color: var(--text-secondary);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5;
+  margin: 0;
 }
-.capstone-action { flex-shrink: 0; }
+.capstone-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+.capstone-prog-bar {
+  flex: 1;
+  height: 11px;
+  background: #E5E7EB;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.capstone-prog-fill {
+  height: 100%;
+  background: var(--codedex-green);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.capstone-prog-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.capstone-action {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 0.35rem;
+}
 .capstone-view-btn {
   background: var(--codedex-yellow) !important;
   color: var(--ink) !important;
@@ -3047,7 +3080,7 @@ body {
   position: fixed; inset: 0; background: rgba(0,0,0,0.55);
   backdrop-filter: blur(4px); z-index: 200;
 }
-.modal-box, .mod-popup-box, .project-modal-box {
+.modal-box, .mod-popup-box {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
   z-index: 201; width: min(520px, 92vw);
   background: #FFFFFF;
@@ -3090,12 +3123,31 @@ body {
 .lesson-item-xp { font-size: 0.8rem; font-weight: 800; color: #92400E; }
 .mod-popup-actions { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.25rem; }
 
-/* Capstone Project Modal Details */
+/* Capstone Project Modal Details - Large, Spacious, Clear */
 .project-modal-box {
-  max-width: 820px; max-height: 88vh; overflow-y: auto; text-align: left;
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  z-index: 201;
+  width: min(940px, 94vw) !important;
+  max-width: 940px !important;
+  max-height: 90vh !important;
+  overflow-y: auto;
+  text-align: left;
+  background: #FFFFFF;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  padding: 2.25rem 2.5rem !important;
+  box-shadow: 8px 8px 0px var(--ink);
+  animation: codexModalPop 0.25s cubic-bezier(0.2, 0, 0, 1);
+  color: var(--ink);
 }
 .project-modal-header {
   display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.25rem;
+  padding-right: 3.5rem;
+}
+#project-close-btn {
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
 }
 .project-modal-icon {
   font-size: 2.85rem; width: 68px; height: 68px;
@@ -3358,17 +3410,7 @@ body {
   color: var(--ink);
 }
 
-/* Hero Photo Cover */
-.hero-photo-banner {
-  width: 100%;
-  height: 160px;
-  border-radius: 14px;
-  background-size: cover;
-  background-position: center;
-  border: 2.5px solid var(--ink);
-  box-shadow: 3.5px 3.5px 0px var(--ink);
-  margin-bottom: 1.5rem;
-}
+/* Hero Content Row */
 .hero-content-row {
   display: flex;
   align-items: center;
@@ -3376,296 +3418,574 @@ body {
   width: 100%;
 }
 
-/* Continue Learning Thumbnail */
-.continue-module-thumb {
-  width: 76px;
-  height: 76px;
-  border-radius: 12px;
-  overflow: hidden;
+/* Continue Learning Module Badge Pill (No Photos) */
+.continue-module-badge {
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
   border: 2.5px solid var(--ink);
   box-shadow: 3px 3px 0px var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--ink);
   flex-shrink: 0;
-  background: #E5E7EB;
-}
-#continue-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  background: var(--codedex-yellow);
 }
 
-/* Quick Action Photo Cards */
-.quick-card.with-photo {
-  height: 130px;
-  background-size: cover;
-  background-position: center;
+/* Quick Actions Cards (Clean Vector Neobrutalist Cards - No Photos) */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.15rem;
+}
+.quick-card {
+  background: #FFFFFF;
   border: 2.5px solid var(--ink);
   border-radius: 16px;
   box-shadow: 4px 4px 0px var(--ink);
-  position: relative;
+  padding: 1.25rem 1rem;
   display: flex;
-  align-items: flex-end;
-  padding: 1rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
   cursor: pointer;
   transition: all var(--t);
-  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
 }
-.quick-card.with-photo:hover {
-  transform: translate(-3px, -3px);
+.quick-card:hover {
+  background: #FFFEEB;
+  transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0px var(--ink);
 }
-.quick-card.with-photo:active {
+.quick-card:active {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px var(--ink);
 }
+.quick-card-icon {
+  width: 48px;
+  height: 48px;
+  background: #FEF3C7;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 2px 2px 0px var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+}
 .quick-card-label {
-  background: rgba(18, 18, 18, 0.88);
-  color: #FFFFFF;
-  font-family: var(--font-ui);
-  font-weight: 800;
   font-size: 0.95rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  border: 1.5px solid #FFFFFF;
-  backdrop-filter: blur(4px);
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+  font-weight: 800;
+  color: var(--ink);
   letter-spacing: -0.01em;
 }
 
-/* Track Section Headers with Photo Banners */
+/* Track Section Headers (Clean Neobrutalist Banner - No Photos) */
 .track-section-header {
-  margin: 2.25rem 0 1.25rem 0;
+  margin: 2.5rem 0 1.5rem 0;
 }
-.track-header-banner {
+.track-header-card {
+  background: #FFFFFF;
   border: 3px solid var(--ink);
   border-radius: 18px;
   box-shadow: 5px 5px 0px var(--ink);
-  overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  position: relative;
+  padding: 1.5rem 1.85rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
-.track-header-content {
-  padding: 1.75rem 2rem;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, rgba(17,24,39,0.85) 0%, rgba(17,24,39,0.55) 100%);
+.track-header-badge {
+  align-self: flex-start;
+  background: var(--codedex-yellow);
+  color: var(--ink);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 1.5px 1.5px 0px var(--ink);
+  letter-spacing: 0.04em;
 }
 .track-header-title {
   font-size: 1.35rem;
   font-weight: 800;
-  letter-spacing: -0.025em;
-  margin-bottom: 0.35rem;
-  color: #FFFFFF;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 .track-header-desc {
   font-size: 0.92rem;
-  opacity: 0.92;
   font-weight: 500;
-  color: #F3F4F6;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
 }
 
-/* Module Node Thumbnails & SVG Locks */
-.module-node-photo {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  transition: transform 0.2s ease;
-}
-.module-node-btn:hover .module-node-photo {
-  transform: scale(1.06);
-}
-.module-node .lock-overlay {
-  position: absolute;
-  inset: 0;
+/* Module Nodes - Clean Vector SVG & Code Pill Styling */
+.module-node-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(18, 18, 18, 0.65);
-  border-radius: 50%;
-  color: #FFFFFF;
-}
-
-/* Capstone Project Cards with Photo Banner */
-.capstone-card {
-  background: #FFFFFF;
-  border: 3px solid var(--ink);
-  border-radius: 18px;
-  box-shadow: 6px 6px 0px var(--ink);
-  overflow: hidden;
-  margin: 1.75rem 0 2.5rem 0;
-  transition: all var(--t);
-  cursor: pointer;
-}
-.capstone-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px var(--ink);
-}
-.capstone-photo-banner {
-  height: 150px;
-  background-size: cover;
-  background-position: center;
   position: relative;
-  border-bottom: 2.5px solid var(--ink);
 }
-.capstone-banner-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
-  padding: 1.15rem 1.35rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.capstone-tag-pill {
-  align-self: flex-start;
-  background: var(--codedex-yellow);
-  color: var(--ink);
-  font-weight: 800;
-  font-size: 0.76rem;
-  padding: 0.25rem 0.65rem;
-  border: 2px solid var(--ink);
-  border-radius: 8px;
-  box-shadow: 2px 2px 0px var(--ink);
-  text-transform: uppercase;
-}
-.capstone-title {
-  color: #FFFFFF;
-  font-size: 1.3rem;
-  font-weight: 800;
-  margin: 0;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-  letter-spacing: -0.02em;
-}
-.capstone-body {
-  padding: 1.25rem 1.35rem;
-}
-.capstone-desc {
+.node-code-text {
+  font-family: var(--font-pixel);
   font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  font-weight: 900;
+  color: var(--ink);
 }
-.capstone-progress-row {
+.lock-overlay {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  justify-content: center;
+  color: #6B7280;
 }
-.capstone-prog-bar {
-  flex: 1;
-  height: 10px;
-  background: #E5E7EB;
+.check-overlay {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 24px;
+  height: 24px;
+  background: var(--codedex-green);
   border: 2px solid var(--ink);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.capstone-prog-fill {
-  height: 100%;
-  background: var(--codedex-yellow);
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
-.capstone-prog-label {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1.5px 1.5px 0px var(--ink);
 }
 
-/* Developer Portrait Studio */
-.avatar-photo-circle {
+/* Minecraft Pixel Avatar Studio & Skins */
+.minecraft-avatar-box {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.minecraft-pixel-face {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  shape-rendering: crispEdges;
 }
 .avatar-options-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.15rem;
   margin: 1.25rem 0;
 }
-.portrait-option-card {
+.minecraft-char-card {
+  background: #FFFFFF;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  padding: 1rem 0.85rem;
+  box-shadow: 3.5px 3.5px 0px var(--ink);
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 0.6rem;
-  padding: 0.9rem 0.6rem;
-  background: #FFFFFF;
-  border: 2px solid var(--ink);
-  border-radius: 14px;
-  box-shadow: 2.5px 2.5px 0px var(--ink);
-  cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--t);
+  position: relative;
   user-select: none;
 }
-.portrait-option-card:hover {
-  background: #FFFEEB;
+.minecraft-char-card:hover {
   transform: translate(-2px, -2px);
+  box-shadow: 5.5px 5.5px 0px var(--ink);
+  background: #FFFEEB;
+}
+.minecraft-char-card.selected {
+  background: #FEF3C7;
+  border-color: var(--ink);
   box-shadow: 4.5px 4.5px 0px var(--ink);
+  outline: 3.5px solid #F59E0B;
 }
-.portrait-option-card.selected {
-  background: var(--codedex-yellow);
-  box-shadow: 4px 4px 0px var(--ink);
-  transform: translate(-1px, -1px);
-}
-.portrait-thumb-wrap {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--ink);
-  box-shadow: 1.5px 1.5px 0px var(--ink);
-  background: #E5E7EB;
-}
-.portrait-thumb-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.portrait-option-name {
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: var(--ink);
-  text-align: center;
-  line-height: 1.3;
-}
-
-/* Badges Achievement Gallery Photos */
-.badge-photo-wrap {
+.minecraft-char-thumb {
   width: 72px;
   height: 72px;
-  border-radius: 16px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 2px 2px 0px var(--ink);
+  background: #1E1F24;
+}
+.minecraft-char-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #92400E;
+  background: #FEF3C7;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  text-transform: uppercase;
+}
+.minecraft-char-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.minecraft-login-skin {
+  width: 52px;
+  height: 52px;
+  padding: 3px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 2px 2px 0px var(--ink);
+  background: #1E1F24;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--t);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.minecraft-login-skin:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--ink);
+}
+.minecraft-login-skin.selected {
+  outline: 3px solid #F59E0B;
+  box-shadow: 3px 3px 0px var(--ink);
+  transform: scale(1.06);
+}
+
+/* Badges Achievement Gallery (Clean Vector SVGs - No Photos) */
+.badge-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
   border: 2.5px solid var(--ink);
-  box-shadow: 2.5px 2.5px 0px var(--ink);
-  position: relative;
-  margin: 0 auto 0.85rem auto;
-  background: #F3F4F6;
-}
-.badge-photo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.locked-badge-img {
-  filter: grayscale(1) opacity(0.35);
-}
-.badge-lock-overlay {
-  position: absolute;
-  inset: 0;
+  box-shadow: 3px 3px 0px var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(18, 18, 18, 0.45);
-  color: #FFFFFF;
+  margin: 0 auto 0.85rem auto;
+  transition: all var(--t);
+}
+.badge-icon-box.unlocked {
+  background: #FEF3C7;
+  color: #92400E;
+}
+.badge-icon-box.locked {
+  background: #E5E7EB;
+  color: #6B7280;
+}
+
+/* Navbar Theme Toggle Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--bg-surface);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 2.5px 2.5px 0px var(--ink);
+  cursor: pointer;
+  color: var(--ink);
+  transition: all var(--t);
+  padding: 0;
+  flex-shrink: 0;
+}
+.theme-toggle-btn:hover {
+  background: #FFFEEB;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--ink);
+}
+.theme-toggle-btn:active {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+/* ============================================================
+   NEOBRUTALIST NIGHT MODE SYSTEM (DARK THEME)
+   ============================================================ */
+body.dark-theme {
+  --bg-base:        #121316;
+  --bg-surface:     #1E1F24;
+  --bg-elevated:    #24262C;
+  --bg-secondary:   #18191D;
+  --bg-card:        #1E1F24;
+  --bg-card-hover:  #282A30;
+  --bg-input:       #18191D;
+  --text-1:         #F4F4F5;
+  --text-2:         #E4E4E7;
+  --text-3:         #A1A1AA;
+  --text-secondary: #A1A1AA;
+  --text-muted:     #71717A;
+  background-color: #121316;
+  color: #F4F4F5;
+  background-image: radial-gradient(#27272A 1.5px, transparent 1.5px);
+}
+
+body.dark-theme .navbar {
+  background: #18191D !important;
+  border-color: #000000 !important;
+  box-shadow: 0 4px 0px #000000 !important;
+}
+body.dark-theme .nav-tab {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+  box-shadow: 2.5px 2.5px 0px #000000 !important;
+}
+body.dark-theme .nav-tab:hover {
+  background: #282A30 !important;
+}
+body.dark-theme .nav-tab.active {
+  background: var(--codedex-yellow) !important;
+  color: #121316 !important;
+}
+body.dark-theme .stat-chip {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+body.dark-theme .theme-toggle-btn {
+  background: #24262C !important;
+  color: #FFE600 !important;
+  border-color: #000000 !important;
+  box-shadow: 2.5px 2.5px 0px #000000 !important;
+}
+body.dark-theme .theme-toggle-btn:hover {
+  background: #2E3038 !important;
+}
+body.dark-theme .glass-card,
+body.dark-theme .stat-card,
+body.dark-theme .quick-card,
+body.dark-theme .track-header-card,
+body.dark-theme .capstone-project-card,
+body.dark-theme .badge-card,
+body.dark-theme .minecraft-char-card,
+body.dark-theme .settings-card,
+body.dark-theme .modal-box,
+body.dark-theme .mod-popup-box,
+body.dark-theme .project-modal-box,
+body.dark-theme .chat-panel,
+body.dark-theme .lesson-box,
+body.dark-theme .coding-pane,
+body.dark-theme .login-card,
+body.dark-theme .avatar-preview-card {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+body.dark-theme .quick-card:hover,
+body.dark-theme .capstone-project-card:hover,
+body.dark-theme .minecraft-char-card:hover,
+body.dark-theme .continue-card:hover {
+  background: #262830 !important;
+}
+body.dark-theme .capstone-card-title,
+body.dark-theme .track-header-title,
+body.dark-theme .badge-name,
+body.dark-theme .minecraft-char-name,
+body.dark-theme .continue-title,
+body.dark-theme .hero-greeting,
+body.dark-theme .section-title,
+body.dark-theme .stat-value,
+body.dark-theme .mod-popup-title,
+body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4 {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .capstone-card-desc,
+body.dark-theme .track-header-desc,
+body.dark-theme .badge-desc,
+body.dark-theme .continue-sub,
+body.dark-theme .stat-label,
+body.dark-theme .daily-text,
+body.dark-theme .mod-popup-sub,
+body.dark-theme p {
+  color: #A1A1AA;
+}
+body.dark-theme .quick-card-icon,
+body.dark-theme .stat-icon-svg {
+  background: #282A30 !important;
+  color: var(--codedex-yellow) !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .quick-card-label {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .daily-card {
+  background: #202228 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .project-modal-section {
+  background: #18191D !important;
+  border-color: #000000 !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+}
+body.dark-theme .project-task-item,
+body.dark-theme .task-item {
+  background: #1E1F24 !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .project-task-item.checked,
+body.dark-theme .task-item.checked {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+}
+body.dark-theme .task-text {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .project-task-item.checked .task-text {
+  color: #A7F3D0 !important;
+}
+body.dark-theme .popup-lesson-item {
+  background: #18191D !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .popup-lesson-item:hover {
+  background: #262830 !important;
+}
+body.dark-theme .popup-lesson-item.completed {
+  background: #064E3B !important;
+}
+body.dark-theme .lesson-item-name {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .popup-close-btn {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .popup-close-btn:hover {
+  background: #7F1D1D !important;
+}
+body.dark-theme .question-area {
+  background: #1E1F24 !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .question-text {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .mcq-option,
+body.dark-theme .option-btn {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+  box-shadow: 3.5px 3.5px 0px #000000 !important;
+}
+body.dark-theme .mcq-option:hover,
+body.dark-theme .option-btn:hover {
+  background: #282A30 !important;
+}
+body.dark-theme .mcq-option.selected,
+body.dark-theme .option-btn.selected {
+  background: #FFE600 !important;
+  color: #121316 !important;
+}
+body.dark-theme .mcq-option.correct {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+}
+body.dark-theme .mcq-option.wrong {
+  background: #7F1D1D !important;
+  color: #FECACA !important;
+}
+body.dark-theme .mcq-letter {
+  background: #282A30;
+  color: #F4F4F5;
+  border-color: #000000;
+}
+body.dark-theme .match-item {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .blank-word-bank {
+  background: #18191D !important;
+}
+body.dark-theme .word-bank-chip {
+  background: #282A30 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .chat-input,
+body.dark-theme input[type="text"],
+body.dark-theme input[type="email"],
+body.dark-theme input[type="password"],
+body.dark-theme textarea,
+body.dark-theme select {
+  background: #18191D !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .chat-msg.bot {
+  background: #24262C !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .chat-msg.user {
+  background: #1E3A8A !important;
+  color: #DBEAFE !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .chat-panel-header {
+  background: #18191D !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .chat-input-row {
+  background: #18191D !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .btn-secondary {
+  background: #24262C !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+}
+body.dark-theme .btn-secondary:hover {
+  background: #2F323A !important;
+}
+body.dark-theme .btn-outline {
+  background: transparent !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .minecraft-char-card {
+  background: #1E1F24 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .minecraft-char-card.selected {
+  outline: 3px solid #FFE600 !important;
+  background: #282A30 !important;
+}
+body.dark-theme .minecraft-char-tag {
+  background: #3F2C0B !important;
+  color: #FDE68A !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .idea-card {
+  background: #1E1F24 !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .idea-card-title {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .idea-card-desc {
+  color: #A1A1AA !important;
 }
 
 @media (max-width: 640px) {
@@ -3674,10 +3994,13 @@ body {
     text-align: center;
     gap: 1rem;
   }
-  .track-header-content {
+  .track-header-card {
     padding: 1.25rem 1.25rem;
   }
   .track-header-title {
     font-size: 1.15rem;
+  }
+  .quick-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
