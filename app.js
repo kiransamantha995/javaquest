@@ -2670,12 +2670,19 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   // ── AI CHAT ───────────────────────────────────────────────────
-  var fab=ge('ai-chat-fab');     if(fab)fab.addEventListener('click',toggleChat);
-  var chc=ge('chat-close-btn'); if(chc)chc.addEventListener('click',toggleChat);
-  var clr=ge('chat-clear-btn'); if(clr)clr.addEventListener('click',clearChatHistory);
-  var chs=ge('chat-send-btn');  if(chs)chs.addEventListener('click',sendChatMessage);
+  var fab=ge('ai-chat-fab');     if(fab)fab.addEventListener('click',function(){ if(typeof toggleChat==='function') toggleChat(); });
+  var chc=ge('chat-close-btn'); if(chc)chc.addEventListener('click',function(){ if(typeof toggleChat==='function') toggleChat(); });
+  var clr=ge('chat-clear-btn'); if(clr)clr.addEventListener('click',function(){ if(typeof clearChat==='function') clearChat(); else if(typeof clearChatHistory==='function') clearChatHistory(); });
+  var chs=ge('chat-send-btn');  if(chs)chs.addEventListener('click',function(){ if(typeof sendChatMessage==='function') sendChatMessage(); });
   var chi=ge('chat-input');
-  if(chi)chi.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMessage();}});
+  if(chi){
+    chi.addEventListener('keydown',function(e){
+      if(e.key==='Enter'&&!e.shiftKey){
+        e.preventDefault();
+        if(typeof sendChatMessage==='function') sendChatMessage();
+      }
+    });
+  }
 
   var chipReview = ge('chip-review-code');
   if (chipReview) chipReview.addEventListener('click', function(){

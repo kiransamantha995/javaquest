@@ -260,7 +260,7 @@ Provide a 2-3 sentence diagnostic:
           parts: [{
             text: `You are JavaBot, the expert interactive AI Tutor inside JavaQuest.
 You are grounded in authoritative Java textbooks ("Core Java" by Cay Horstmann, "Effective Java" by Joshua Bloch, and "Java Concurrency in Practice" by Brian Goetz).
-Provide clear, friendly, technically rigorous Java guidance. Format code snippets cleanly in Java. Keep responses under 70 words.`
+Provide clear, friendly, technically rigorous Java guidance. Format code snippets cleanly in Java. Keep responses under 80 words.`
           }]
         },
         {
@@ -269,21 +269,37 @@ Provide clear, friendly, technically rigorous Java guidance. Format code snippet
         }
       ];
 
-      if (Array.isArray(messages)) {
-        messages.forEach(m => {
-          if (m && m.role && m.text) {
+      // Copy history excluding the latest turn if it already matches userMessage
+      const history = Array.isArray(messages) ? messages.slice() : [];
+      if (history.length > 0 && history[history.length - 1].role === 'user') {
+        history.pop();
+      }
+
+      history.forEach(m => {
+        if (m && m.role && m.text) {
+          const role = (m.role === 'model' || m.role === 'assistant') ? 'model' : 'user';
+          const lastTurn = formattedContents[formattedContents.length - 1];
+          if (lastTurn && lastTurn.role === role) {
+            lastTurn.parts[0].text += '\n' + String(m.text);
+          } else {
             formattedContents.push({
-              role: m.role === 'user' ? 'user' : 'model',
+              role: role,
               parts: [{ text: String(m.text) }]
             });
           }
+        }
+      });
+
+      // Append user's current message, ensuring strictly alternating turn
+      const lastTurn = formattedContents[formattedContents.length - 1];
+      if (lastTurn && lastTurn.role === 'user') {
+        lastTurn.parts[0].text += '\n' + String(userMessage);
+      } else {
+        formattedContents.push({
+          role: 'user',
+          parts: [{ text: String(userMessage) }]
         });
       }
-
-      formattedContents.push({
-        role: 'user',
-        parts: [{ text: userMessage }]
-      });
 
       const geminiPayload = {
         contents: formattedContents,

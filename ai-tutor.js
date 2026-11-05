@@ -175,6 +175,15 @@ function clearChat() {
   }
 }
 
+function clearChatHistory() {
+  clearChat();
+}
+
+window.clearChat = clearChat;
+window.clearChatHistory = clearChatHistory;
+window.toggleChat = toggleChat;
+window.sendChatMessage = sendChatMessage;
+
 function sendChatMessage() {
   var input = document.getElementById('chat-input');
   if (!input) return;
@@ -213,6 +222,20 @@ function sendChatMessage() {
       appendChatMsg('bot', err.message + '. You can also enter a custom Gemini key in Settings.');
     });
 }
+
+function sendPromptToChat(prompt) {
+  var panel = document.getElementById('chat-panel');
+  if (panel && panel.classList.contains('hidden')) {
+    toggleChat();
+  }
+  var input = document.getElementById('chat-input');
+  if (input) {
+    input.value = prompt;
+    sendChatMessage();
+  }
+}
+
+window.sendPromptToChat = sendPromptToChat;
 
 function appendChatMsg(role, text) {
   var container = document.getElementById('chat-messages');
