@@ -1,6 +1,6 @@
 // JavaQuest Curriculum — curriculum.js
 // 24 Modules (B1-B8, I1-I8, A1-A8) grounded in "Core Java" (Cay Horstmann) and "Effective Java" (Joshua Bloch)
-// Enhanced with interactive Neobrutalist visualizers (JVM, Stack/Heap, HashMap, Streams, Threads)
+// Enhanced with rich tech photography, real developer portraits, and interactive visualizers
 
 const CURRICULUM = [
   {
@@ -9,7 +9,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Java Orientation & Setup",
     "subtitle": "Source code, bytecode, JVM, JRE and JDK roles",
-    "icon": "☕",
+    "icon": "",
     "color": "#6C63FF",
     "lessons": [
       {
@@ -135,7 +135,8 @@ const CURRICULUM = [
         "Use System.out.println() twice.",
         "Make sure spelling, comma, and exclamation mark match exactly."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b2",
@@ -143,7 +144,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Variables, Data Types & Input",
     "subtitle": "Primitives, reference types, casting and Scanner input",
-    "icon": "📦",
+    "icon": "",
     "color": "#43D8C9",
     "lessons": [
       {
@@ -265,7 +266,8 @@ const CURRICULUM = [
         "Calculate age + 1 for next year.",
         "Use string concatenation with +."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b3",
@@ -273,7 +275,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Operators & Expressions",
     "subtitle": "Arithmetic, relational, logical operators and precedence",
-    "icon": "🔢",
+    "icon": "",
     "color": "#FFD166",
     "lessons": [
       {
@@ -399,7 +401,8 @@ const CURRICULUM = [
         "Multiply originalPrice by (1 - discountPercent / 100.0).",
         "Check if discounted > 100.0 and subtract 5.0."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b4",
@@ -407,7 +410,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Decision Making & Loops",
     "subtitle": "if/else, switch expressions, while, for and do-while loops",
-    "icon": "🔄",
+    "icon": "",
     "color": "#06D6A0",
     "lessons": [
       {
@@ -544,7 +547,8 @@ const CURRICULUM = [
         "Check for % 15 == 0 first before % 3 or % 5.",
         "Use if-else ladder."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b5",
@@ -552,7 +556,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Methods & Scope",
     "subtitle": "Parameters, return values, overloading and call stack",
-    "icon": "🛠️",
+    "icon": "️",
     "color": "#F72585",
     "lessons": [
       {
@@ -673,7 +677,8 @@ const CURRICULUM = [
       "hints": [
         "Use floating-point division 9.0 / 5.0, not 9 / 5."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b6",
@@ -681,7 +686,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Arrays & Strings",
     "subtitle": "1D/2D arrays, String immutability, StringBuilder",
-    "icon": "📊",
+    "icon": "",
     "color": "#4CC9F0",
     "lessons": [
       {
@@ -803,7 +808,8 @@ const CURRICULUM = [
         "Initialize min and max with marks[0].",
         "Cast sum to double when dividing by length."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b7",
@@ -811,7 +817,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "OOP Foundations",
     "subtitle": "Classes, objects, constructors, this, encapsulation and static",
-    "icon": "🏛️",
+    "icon": "️",
     "color": "#C084FC",
     "lessons": [
       {
@@ -948,7 +954,8 @@ const CURRICULUM = [
         "Keep balance private.",
         "Deposit adds to balance; withdraw subtracts."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "b8",
@@ -956,7 +963,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Exceptions & Collections Intro",
     "subtitle": "try/catch/finally, ArrayList, HashMap and HashSet",
-    "icon": "🛡️",
+    "icon": "️",
     "color": "#E63946",
     "lessons": [
       {
@@ -1077,7 +1084,8 @@ const CURRICULUM = [
         "HashSet automatically discards duplicate entries.",
         "Use unique.size() to get count."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i1",
@@ -1085,7 +1093,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "OOP Beyond the Basics",
     "subtitle": "SOLID principles, composition, records and sealed classes",
-    "icon": "💎",
+    "icon": "",
     "color": "#9B59B6",
     "lessons": [
       {
@@ -1231,7 +1239,8 @@ const CURRICULUM = [
         "Record field accessors use name() without \"get\" prefix.",
         "Use double 149.50."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i2",
@@ -1239,7 +1248,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Collections & Generics",
     "subtitle": "List, Set, Queue, Map, Iterator, Comparator and type safety",
-    "icon": "📚",
+    "icon": "",
     "color": "#3498DB",
     "lessons": [
       {
@@ -1382,7 +1391,8 @@ const CURRICULUM = [
         "Use LinkedHashMap to preserve insertion order.",
         "Use freq.getOrDefault(w, 0) + 1."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i3",
@@ -1390,7 +1400,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Exceptions, Files & I/O",
     "subtitle": "Try-with-resources, Path, Files, buffered streams and CSV",
-    "icon": "📂",
+    "icon": "",
     "color": "#1ABC9C",
     "lessons": [
       {
@@ -1512,7 +1522,8 @@ const CURRICULUM = [
         "Wrap Integer.parseInt() in try-catch.",
         "Catch NumberFormatException and return fallback."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i4",
@@ -1520,7 +1531,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Lambdas, Streams & Functional Java",
     "subtitle": "Stream pipeline: filter, map, sorted, reduce, collect and Optional",
-    "icon": "🌊",
+    "icon": "",
     "color": "#2ECC71",
     "lessons": [
       {
@@ -1653,7 +1664,8 @@ const CURRICULUM = [
         "Use .map(n -> n * n)",
         "Use .forEach(System.out::println)"
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i5",
@@ -1661,7 +1673,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Date/Time, Regex & Useful APIs",
     "subtitle": "java.time, LocalDate, Duration, Pattern/Matcher, BigDecimal",
-    "icon": "⏱️",
+    "icon": "️",
     "color": "#E67E22",
     "lessons": [
       {
@@ -1797,7 +1809,8 @@ const CURRICULUM = [
       "hints": [
         "Use String.matches() with regex pattern."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1526374870839-e155464bb9b2?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i6",
@@ -1805,7 +1818,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Testing & Debugging",
     "subtitle": "JUnit 5 basics, assertions, test lifecycle and edge cases",
-    "icon": "🧪",
+    "icon": "",
     "color": "#16A085",
     "lessons": [
       {
@@ -1925,7 +1938,8 @@ const CURRICULUM = [
       "hints": [
         "Check both test conditions."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i7",
@@ -1933,7 +1947,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Database Programming with JDBC",
     "subtitle": "SQL basics, PreparedStatement, ResultSet and transactions",
-    "icon": "🗄️",
+    "icon": "️",
     "color": "#27AE60",
     "lessons": [
       {
@@ -2053,7 +2067,8 @@ const CURRICULUM = [
       "hints": [
         "Notice the question mark ? placeholder at the end."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "i8",
@@ -2061,7 +2076,7 @@ const CURRICULUM = [
     "level": "intermediate",
     "title": "Concurrency Foundations & Tooling",
     "subtitle": "Thread, Runnable, ExecutorService, Maven build tools, Git",
-    "icon": "⚙️",
+    "icon": "️",
     "color": "#2980B9",
     "lessons": [
       {
@@ -2181,7 +2196,8 @@ const CURRICULUM = [
       "hints": [
         "Submit task, shutdown pool, and await termination."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a1",
@@ -2189,7 +2205,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "JVM & Memory Model",
     "subtitle": "Class loading, JIT compilation, Heap, Stack, Metaspace and GC",
-    "icon": "🧠",
+    "icon": "",
     "color": "#8E44AD",
     "lessons": [
       {
@@ -2309,7 +2325,8 @@ const CURRICULUM = [
       "hints": [
         "Use Runtime.getRuntime().totalMemory()."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a2",
@@ -2317,7 +2334,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Advanced Concurrency",
     "subtitle": "Java Memory Model, happens-before, locks, atomics and virtual threads",
-    "icon": "⚡",
+    "icon": "",
     "color": "#D35400",
     "lessons": [
       {
@@ -2437,7 +2454,8 @@ const CURRICULUM = [
       "hints": [
         "Use AtomicInteger.incrementAndGet()."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a3",
@@ -2445,7 +2463,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Advanced Language Features",
     "subtitle": "Generics in depth, type erasure, annotations, reflection, pattern matching",
-    "icon": "🧬",
+    "icon": "",
     "color": "#9B59B6",
     "lessons": [
       {
@@ -2566,7 +2584,8 @@ const CURRICULUM = [
       "hints": [
         "Use pattern matching instanceof (obj instanceof String s)."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a4",
@@ -2574,7 +2593,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Design & Architecture",
     "subtitle": "Builder, Factory, Strategy, Observer and Clean Architecture",
-    "icon": "🏛️",
+    "icon": "️",
     "color": "#16A085",
     "lessons": [
       {
@@ -2708,7 +2727,8 @@ const CURRICULUM = [
         "Each builder method sets field and returns this.",
         "build() instantiates HttpRequest."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a5",
@@ -2716,7 +2736,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Networking, Security & Reliability",
     "subtitle": "HTTP/REST, password hashing, TLS, timeouts and idempotency",
-    "icon": "🔒",
+    "icon": "",
     "color": "#C0392B",
     "lessons": [
       {
@@ -2853,7 +2873,8 @@ const CURRICULUM = [
       "hints": [
         "Use Math.min(delay, maxMs) to prevent unbounded backoff."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a6",
@@ -2861,7 +2882,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Spring Boot & Persistence",
     "subtitle": "Spring container, dependency injection, REST controllers, JPA and transactions",
-    "icon": "🍃",
+    "icon": "",
     "color": "#27AE60",
     "lessons": [
       {
@@ -2985,7 +3006,8 @@ const CURRICULUM = [
       "hints": [
         "Pass EmailService into the NotificationClient constructor."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a7",
@@ -2993,7 +3015,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Performance & Observability",
     "subtitle": "Profiling, CPU/allocation bottlenecks, structured logging, metrics and tracing",
-    "icon": "📈",
+    "icon": "",
     "color": "#2C3E50",
     "lessons": [
       {
@@ -3113,7 +3135,8 @@ const CURRICULUM = [
       "hints": [
         "The third boolean argument `true` in LinkedHashMap constructor specifies access-order."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=200&h=200&q=80"
   },
   {
     "id": "a8",
@@ -3121,7 +3144,7 @@ const CURRICULUM = [
     "level": "advanced",
     "title": "Deployment & Engineering Workflow",
     "subtitle": "Packaging, Docker fundamentals, CI/CD pipelines, production readiness and monitoring",
-    "icon": "🚀",
+    "icon": "",
     "color": "#1B4F72",
     "lessons": [
       {
@@ -3260,7 +3283,8 @@ const CURRICULUM = [
       "hints": [
         "Check both parameters."
       ]
-    }
+    },
+    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=200&h=200&q=80"
   }
 ];
 
@@ -3280,39 +3304,40 @@ const PROJECTS = [
       "Format transaction output cleanly with currency formatting ($%.2f) and timestamps"
     ],
     "rubric": "Clean OOP class encapsulation, ArrayList usage, loops & conditionals, try-catch exception handling, and clean console output formatting.",
-    "starterCode": "// ===============================================================\n// 🏆 BEGINNER CAPSTONE: Personal Expense Tracker (Console)\n// Focus: OOP Class, Methods, ArrayList, Loops, Input Validation\n//\n// 💡 Instructions: Build your project by completing the TODOs below!\n//    If you have any doubts, open JavaBot 🤖 — it can see your code!\n// ===============================================================\nimport java.util.ArrayList;\nimport java.util.Scanner;\n\n// --- Milestone 1: Define the Expense Class ---\nclass Expense {\n    // TODO 1: Declare private fields: description (String), amount (double), category (String)\n\n    // TODO 2: Create a constructor that accepts (description, amount, category)\n\n    // TODO 3: Implement getter methods: getDescription(), getAmount(), getCategory()\n\n    // TODO 4: Override toString() to display formatted expense details\n    //         Hint: return String.format(\"[%-10s] %-20s : $%.2f\", category, description, amount);\n}\n\npublic class Main {\n    // TODO 5: Declare an ArrayList<Expense> to store user expenses\n    //         Hint: private static ArrayList<Expense> expenses = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\"💰 JavaQuest Personal Expense Tracker 💰\");\n        System.out.println(\"=========================================\");\n\n        // TODO 6: Call addExpense() with test data, or build a Scanner menu loop!\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 7: Implement addExpense(String desc, double amount, String category)\n    //         Validate that amount is positive! If negative, print an error message.\n\n    // TODO 8: Implement displayAll()\n    //         Loop through the expenses list and print each expense.\n\n    // TODO 9: Implement displaySummary()\n    //         Calculate the sum of all expenses and print total spending.\n}\n",
+    "starterCode": "// ===============================================================\n//  BEGINNER CAPSTONE: Personal Expense Tracker (Console)\n// Focus: OOP Class, Methods, ArrayList, Loops, Input Validation\n//\n//  Instructions: Build your project by completing the TODOs below!\n//    If you have any doubts, open JavaBot  — it can see your code!\n// ===============================================================\nimport java.util.ArrayList;\nimport java.util.Scanner;\n\n// --- Milestone 1: Define the Expense Class ---\nclass Expense {\n    // TODO 1: Declare private fields: description (String), amount (double), category (String)\n\n    // TODO 2: Create a constructor that accepts (description, amount, category)\n\n    // TODO 3: Implement getter methods: getDescription(), getAmount(), getCategory()\n\n    // TODO 4: Override toString() to display formatted expense details\n    //         Hint: return String.format(\"[%-10s] %-20s : $%.2f\", category, description, amount);\n}\n\npublic class Main {\n    // TODO 5: Declare an ArrayList<Expense> to store user expenses\n    //         Hint: private static ArrayList<Expense> expenses = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\" JavaQuest Personal Expense Tracker \");\n        System.out.println(\"=========================================\");\n\n        // TODO 6: Call addExpense() with test data, or build a Scanner menu loop!\n\n        System.out.println(\" Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 7: Implement addExpense(String desc, double amount, String category)\n    //         Validate that amount is positive! If negative, print an error message.\n\n    // TODO 8: Implement displayAll()\n    //         Loop through the expenses list and print each expense.\n\n    // TODO 9: Implement displaySummary()\n    //         Calculate the sum of all expenses and print total spending.\n}\n",
     "featureIdeas": [
       {
-        "icon": "📊",
+        "icon": "",
         "title": "Monthly Category Budget Alerts",
         "concepts": "Conditionals & Arithmetic (Modules B2, B3)",
-        "description": "Define a spending limit per category (e.g. $200 for Food). Track running totals and print a prominent warning (⚠️ Alert: 85% of Food budget reached!) when nearing the limit."
+        "description": "Define a spending limit per category (e.g. $200 for Food). Track running totals and print a prominent warning (️ Alert: 85% of Food budget reached!) when nearing the limit."
       },
       {
-        "icon": "📁",
+        "icon": "",
         "title": "CSV File Exporter & Importer",
         "concepts": "Strings, Formatting & File I/O (Modules B6, B8)",
         "description": "Export expense logs into standard CSV format ('YYYY-MM-DD,Category,Amount') using PrintWriter or FileWriter so transactions can be imported into Excel or Google Sheets."
       },
       {
-        "icon": "🔍",
+        "icon": "",
         "title": "Keyword Search & Range Filtering",
         "concepts": "ArrayList & String Methods (Modules B6, B8)",
         "description": "Add search functionality to locate transactions by keyword (e.g. 'Coffee') or filter expenses within a dollar range (e.g. $20 to $100) using ArrayList iterations."
       },
       {
-        "icon": "🔁",
+        "icon": "",
         "title": "Recurring Subscriptions Tracker",
         "concepts": "OOP Inheritance & Methods (Modules B5, B7)",
         "description": "Create a RecurringExpense subclass that extends Expense with a frequency field (Weekly, Monthly, Yearly) to automatically project total annual recurring costs."
       },
       {
-        "icon": "🛡️",
+        "icon": "️",
         "title": "Custom Exception Guardrails",
         "concepts": "Custom Exceptions & Try-Catch (Module B8)",
         "description": "Build an InvalidExpenseException class. Throw and handle it when negative numbers, empty descriptions, or unrecognized categories are entered."
       }
-    ]
+    ],
+    "coverPhoto": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80"
   },
   {
     "id": "proj-intermediate",
@@ -3329,33 +3354,34 @@ const PROJECTS = [
       "Add automated unit assertions verifying availability checks and boundary conditions"
     ],
     "rubric": "Collections, Generics, Lambdas & Streams, JDBC/SQL, Concurrency, and unit testing practices.",
-    "starterCode": "// ===============================================================\n// 🏆 INTERMEDIATE CAPSTONE: Library / Inventory System\n// Focus: Generics, Streams, Records, Lambdas, Concurrency\n//\n// 💡 Instructions: Complete the TODOs below to build your system!\n//    If you need any hints, ask JavaBot 🤖 in the corner!\n// ===============================================================\nimport java.util.*;\nimport java.util.stream.Collectors;\n\n// --- Milestone 1: Define Book Record or Model ---\n// TODO 1: Create a Book record (or class) with fields:\n//         String id, String title, String author, String genre, boolean isAvailable\n\npublic class Main {\n    // TODO 2: Declare a List<Book> catalog to store library items\n    //         Hint: private static List<Book> catalog = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\"📚 JavaQuest Library Management System 📚\");\n        System.out.println(\"=========================================\");\n\n        // TODO 3: Seed your catalog with at least 4 test books\n\n        // TODO 4: Use Java 8+ Streams to filter only available books in the \"Tech\" genre\n\n        // TODO 5: Use Collectors.groupingBy() to count how many books exist per genre\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 6: Implement borrowBook(String bookId) with availability checking\n\n    // TODO 7: Implement returnBook(String bookId)\n}\n",
+    "starterCode": "// ===============================================================\n//  INTERMEDIATE CAPSTONE: Library / Inventory System\n// Focus: Generics, Streams, Records, Lambdas, Concurrency\n//\n//  Instructions: Complete the TODOs below to build your system!\n//    If you need any hints, ask JavaBot  in the corner!\n// ===============================================================\nimport java.util.*;\nimport java.util.stream.Collectors;\n\n// --- Milestone 1: Define Book Record or Model ---\n// TODO 1: Create a Book record (or class) with fields:\n//         String id, String title, String author, String genre, boolean isAvailable\n\npublic class Main {\n    // TODO 2: Declare a List<Book> catalog to store library items\n    //         Hint: private static List<Book> catalog = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\" JavaQuest Library Management System \");\n        System.out.println(\"=========================================\");\n\n        // TODO 3: Seed your catalog with at least 4 test books\n\n        // TODO 4: Use Java 8+ Streams to filter only available books in the \"Tech\" genre\n\n        // TODO 5: Use Collectors.groupingBy() to count how many books exist per genre\n\n        System.out.println(\" Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 6: Implement borrowBook(String bookId) with availability checking\n\n    // TODO 7: Implement returnBook(String bookId)\n}\n",
     "featureIdeas": [
       {
-        "icon": "⚡",
+        "icon": "",
         "title": "Thread-Safe Concurrent Borrowing",
         "concepts": "Concurrency & Locks (Module I8)",
         "description": "Simulate simultaneous users attempting to borrow the last available copy using ReentrantLock or AtomicInteger to prevent race conditions and double checkouts."
       },
       {
-        "icon": "📈",
+        "icon": "",
         "title": "Stream Analytics Dashboard",
         "concepts": "Lambdas & Streams (Module I4)",
         "description": "Use Collectors.groupingBy() and summarizingDouble() to generate instant reports on top borrowed authors, average ratings, and overdue counts."
       },
       {
-        "icon": "🗄️",
+        "icon": "️",
         "title": "JDBC Transaction Rollbacks",
         "concepts": "JDBC & SQL (Module I7)",
         "description": "Wrap multi-table checkout operations (updating book status + logging borrower history) in a database transaction with setAutoCommit(false) and rollback on error."
       },
       {
-        "icon": "🧪",
+        "icon": "",
         "title": "Comprehensive Unit Test Suite",
         "concepts": "JUnit 5 Testing (Module I6)",
         "description": "Write automated test cases using @ParameterizedTest and assertThrows(BookUnavailableException.class) to test boundary and edge conditions."
       }
-    ]
+    ],
+    "coverPhoto": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=600&q=80"
   },
   {
     "id": "proj-advanced",
@@ -3372,33 +3398,34 @@ const PROJECTS = [
       "Write a production Dockerfile and Docker Compose setup"
     ],
     "rubric": "Spring Boot, REST architecture, JPA persistence, JWT security, virtual threads, and Docker CI/CD.",
-    "starterCode": "// ===============================================================\n// 🏆 ADVANCED CAPSTONE: Task Management REST API Simulator\n// Focus: REST Architecture, Enums, Maps, Lambdas, Virtual Threads\n//\n// 💡 Instructions: Complete the TODOs below to build your API simulator!\n//    If you need any hints, ask JavaBot 🤖 in the corner!\n// ===============================================================\nimport java.time.LocalDateTime;\nimport java.util.*;\n\nenum TaskStatus { TODO, IN_PROGRESS, COMPLETED }\n\n// --- Milestone 1: Task Model ---\nclass Task {\n    // TODO 1: Define fields: id (String), title (String), assignee (String),\n    //         status (TaskStatus), createdAt (LocalDateTime)\n\n    // TODO 2: Write constructor and getter/setter methods\n}\n\npublic class Main {\n    // TODO 3: Create an in-memory data store for tasks (e.g. Map<String, Task>)\n\n    public static void main(String[] args) {\n        System.out.println(\"==================================================\");\n        System.out.println(\"⚡ JavaQuest Task Management REST API Simulator ⚡\");\n        System.out.println(\"==================================================\");\n\n        // TODO 4: Simulate REST Controller endpoints:\n        //         - POST /api/tasks (Create a task)\n        //         - GET  /api/tasks (List all tasks)\n        //         - PUT  /api/tasks/{id}/status (Update status to COMPLETED)\n        //         - GET  /api/tasks?status=COMPLETED (Filter using Streams)\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 5: Implement postTask(String id, String title, String assignee)\n\n    // TODO 6: Implement updateTaskStatus(String id, TaskStatus status)\n\n    // TODO 7: Implement getTasksByStatus(TaskStatus status) using Java Streams\n}\n",
+    "starterCode": "// ===============================================================\n//  ADVANCED CAPSTONE: Task Management REST API Simulator\n// Focus: REST Architecture, Enums, Maps, Lambdas, Virtual Threads\n//\n//  Instructions: Complete the TODOs below to build your API simulator!\n//    If you need any hints, ask JavaBot  in the corner!\n// ===============================================================\nimport java.time.LocalDateTime;\nimport java.util.*;\n\nenum TaskStatus { TODO, IN_PROGRESS, COMPLETED }\n\n// --- Milestone 1: Task Model ---\nclass Task {\n    // TODO 1: Define fields: id (String), title (String), assignee (String),\n    //         status (TaskStatus), createdAt (LocalDateTime)\n\n    // TODO 2: Write constructor and getter/setter methods\n}\n\npublic class Main {\n    // TODO 3: Create an in-memory data store for tasks (e.g. Map<String, Task>)\n\n    public static void main(String[] args) {\n        System.out.println(\"==================================================\");\n        System.out.println(\" JavaQuest Task Management REST API Simulator \");\n        System.out.println(\"==================================================\");\n\n        // TODO 4: Simulate REST Controller endpoints:\n        //         - POST /api/tasks (Create a task)\n        //         - GET  /api/tasks (List all tasks)\n        //         - PUT  /api/tasks/{id}/status (Update status to COMPLETED)\n        //         - GET  /api/tasks?status=COMPLETED (Filter using Streams)\n\n        System.out.println(\" Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 5: Implement postTask(String id, String title, String assignee)\n\n    // TODO 6: Implement updateTaskStatus(String id, TaskStatus status)\n\n    // TODO 7: Implement getTasksByStatus(TaskStatus status) using Java Streams\n}\n",
     "featureIdeas": [
       {
-        "icon": "🚀",
+        "icon": "",
         "title": "Java 21 Virtual Threads Engine",
         "concepts": "Virtual Threads & Concurrency (Module A2)",
         "description": "Configure Spring Boot 3 with virtual threads (spring.threads.virtual.enabled=true) to effortlessly handle 10,000+ concurrent API requests without thread starvation."
       },
       {
-        "icon": "⚡",
+        "icon": "",
         "title": "Redis Second-Level Caching",
         "concepts": "Performance & Architecture (Module A4)",
         "description": "Integrate Redis caching with @Cacheable on frequently requested task summaries and @CacheEvict on modifications to achieve sub-millisecond response times."
       },
       {
-        "icon": "🔐",
+        "icon": "",
         "title": "Refresh Token Rotation & OAuth2",
         "concepts": "Security & Idempotency (Module A5)",
         "description": "Implement short-lived JWT access tokens (15m) paired with database-backed refresh tokens and token reuse detection for enterprise-grade authentication."
       },
       {
-        "icon": "🐳",
+        "icon": "",
         "title": "Docker Compose Multi-Container Stack",
         "concepts": "Docker & Observability (Modules A7, A8)",
         "description": "Bundle the Spring Boot API, PostgreSQL database, Prometheus metrics collector, and Grafana dashboard into a single docker-compose.yml file."
       }
-    ]
+    ],
+    "coverPhoto": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80"
   }
 ];
 
@@ -3406,114 +3433,130 @@ const BADGES = [
   {
     "id": "first-lesson",
     "name": "First Steps",
-    "icon": "👶",
+    "icon": "",
     "description": "Completed your first lesson",
-    "condition": "first_lesson"
+    "condition": "first_lesson",
+    "image": "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "first-module",
     "name": "Module Master",
-    "icon": "🎓",
+    "icon": "",
     "description": "Completed your first module challenge",
-    "condition": "first_module"
+    "condition": "first_module",
+    "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "first-code",
     "name": "Code Warrior",
-    "icon": "💻",
+    "icon": "",
     "description": "Solved your first coding question",
-    "condition": "first_code"
+    "condition": "first_code",
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "perfect-code",
     "name": "Ace Coder",
-    "icon": "🎯",
+    "icon": "",
     "description": "Solved a coding question on 1st attempt",
-    "condition": "perfect_code"
+    "condition": "perfect_code",
+    "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "capstone-beginner",
     "name": "Expense Architect",
-    "icon": "🪙",
+    "icon": "",
     "description": "Completed Beginner Capstone: Personal Expense Tracker",
-    "condition": "capstone_beginner"
+    "condition": "capstone_beginner",
+    "image": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "capstone-intermediate",
     "name": "Inventory Maestro",
-    "icon": "📚",
+    "icon": "",
     "description": "Completed Intermediate Capstone: Library System",
-    "condition": "capstone_intermediate"
+    "condition": "capstone_intermediate",
+    "image": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "capstone-advanced",
     "name": "Enterprise Architect",
-    "icon": "⚡",
+    "icon": "",
     "description": "Completed Advanced Capstone: Task REST API",
-    "condition": "capstone_advanced"
+    "condition": "capstone_advanced",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "streak-3",
     "name": "On Fire!",
-    "icon": "🔥",
+    "icon": "",
     "description": "3-day learning streak",
-    "condition": "streak_3"
+    "condition": "streak_3",
+    "image": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "streak-7",
     "name": "Week Warrior",
-    "icon": "⚡",
+    "icon": "",
     "description": "7-day learning streak",
-    "condition": "streak_7"
+    "condition": "streak_7",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "perfect",
     "name": "Perfectionist",
-    "icon": "💎",
+    "icon": "",
     "description": "Perfect score on a quiz challenge",
-    "condition": "perfect_challenge"
+    "condition": "perfect_challenge",
+    "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "level-5",
     "name": "Rising Engineer",
-    "icon": "🚀",
+    "icon": "",
     "description": "Reached Level 5",
-    "condition": "level_5"
+    "condition": "level_5",
+    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "level-10",
     "name": "Java Grandmaster",
-    "icon": "👑",
+    "icon": "",
     "description": "Reached Level 10",
-    "condition": "level_10"
+    "condition": "level_10",
+    "image": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "beginner-done",
     "name": "Foundation Champion",
-    "icon": "🌱",
+    "icon": "",
     "description": "Completed all Beginner modules",
-    "condition": "beginner_complete"
+    "condition": "beginner_complete",
+    "image": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "inter-done",
     "name": "Robust Developer",
-    "icon": "⚡",
+    "icon": "",
     "description": "Completed all Intermediate modules",
-    "condition": "inter_complete"
+    "condition": "inter_complete",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "advanced-done",
     "name": "Systems Architect",
-    "icon": "🏆",
+    "icon": "",
     "description": "Completed all Advanced modules",
-    "condition": "advanced_complete"
+    "condition": "advanced_complete",
+    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=150&h=150&q=80"
   },
   {
     "id": "all-modules",
     "name": "Java Legend",
-    "icon": "🥷",
+    "icon": "",
     "description": "Conquered the entire 24-module map",
-    "condition": "all_modules"
+    "condition": "all_modules",
+    "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80"
   }
 ];
 
@@ -3522,61 +3565,61 @@ const LEVELS = [
     "level": 1,
     "name": "Novice",
     "xpRequired": 0,
-    "icon": "🌱"
+    "icon": ""
   },
   {
     "level": 2,
     "name": "Apprentice",
     "xpRequired": 150,
-    "icon": "📖"
+    "icon": ""
   },
   {
     "level": 3,
     "name": "Coder",
     "xpRequired": 400,
-    "icon": "💻"
+    "icon": ""
   },
   {
     "level": 4,
     "name": "Developer",
     "xpRequired": 800,
-    "icon": "🔨"
+    "icon": ""
   },
   {
     "level": 5,
     "name": "Engineer",
     "xpRequired": 1400,
-    "icon": "⚙️"
+    "icon": "️"
   },
   {
     "level": 6,
     "name": "Architect",
     "xpRequired": 2200,
-    "icon": "🏛️"
+    "icon": "️"
   },
   {
     "level": 7,
     "name": "Senior Dev",
     "xpRequired": 3200,
-    "icon": "🎯"
+    "icon": ""
   },
   {
     "level": 8,
     "name": "Tech Lead",
     "xpRequired": 4500,
-    "icon": "🌟"
+    "icon": ""
   },
   {
     "level": 9,
     "name": "Principal",
     "xpRequired": 6000,
-    "icon": "💎"
+    "icon": ""
   },
   {
     "level": 10,
     "name": "Java Grandmaster",
     "xpRequired": 8000,
-    "icon": "👑"
+    "icon": ""
   }
 ];
 

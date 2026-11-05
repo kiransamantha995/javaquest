@@ -121,7 +121,7 @@ function getCurrentUserCodeContext() {
 
   var recentErr = '';
   var outEl = document.getElementById('output-area');
-  if (outEl && outEl.textContent && !outEl.textContent.includes('Click ▶ Run Code')) {
+  if (outEl && outEl.textContent && !outEl.textContent.includes('Click Run Code')) {
     var t = outEl.textContent.trim();
     if (t) recentErr = t.substring(0, 350);
   }
@@ -171,7 +171,7 @@ function clearChat() {
   chatHistory = [];
   var msgs = document.getElementById('chat-messages');
   if (msgs) {
-    msgs.innerHTML = '<div class="chat-message bot"><div class="message-bubble">Chat cleared! What Java concept or code snippet can I help you understand? ☕</div></div>';
+    msgs.innerHTML = '<div class="chat-message bot"><div class="message-bubble">Chat cleared! What Java concept or code snippet can I help you understand?</div></div>';
   }
 }
 
@@ -210,7 +210,7 @@ function sendChatMessage() {
     })
     .catch(function(err) {
       if (typing) typing.classList.add('hidden');
-      appendChatMsg('bot', '⚠️ ' + err.message + '. You can also enter a custom Gemini key in Settings (⚙️).');
+      appendChatMsg('bot', err.message + '. You can also enter a custom Gemini key in Settings.');
     });
 }
 
@@ -252,7 +252,7 @@ function generateAIQuiz(modId) {
     return;
   }
 
-  if (typeof toast === 'function') toast('✨ Generating fresh AI questions for ' + mod.title + '…');
+  if (typeof toast === 'function') toast('Generating fresh AI questions for ' + mod.title + '…');
 
   callAI('quiz', {
     topic: mod.title + ' (' + (mod.subtitle || '') + ')',
@@ -293,11 +293,11 @@ function generateAIQuiz(modId) {
     if (typeof renderHearts === 'function') renderHearts();
     if (typeof renderQuestion === 'function') renderQuestion();
     if (typeof showScreen === 'function') showScreen('challenge');
-    if (typeof toast === 'function') toast('🎯 Fresh AI Practice Quiz Ready! (+25 XP)');
+    if (typeof toast === 'function') toast('Fresh AI Practice Quiz Ready! (+25 XP)');
   })
   .catch(function(err) {
     console.warn('AI Quiz generation fallback:', err);
-    if (typeof toast === 'function') toast('⚠️ AI Generation failed. Loading standard module quiz.');
+    if (typeof toast === 'function') toast('AI Generation failed. Loading standard module quiz.');
     if (typeof startChallenge === 'function') startChallenge(modId);
   });
 }
@@ -347,7 +347,7 @@ function openDeepDive() {
   })
   .catch(function(err) {
     contentEl.innerHTML = '<div style="text-align:center;padding:2rem 1rem;">'
-      + '<div style="font-size:2.5rem;margin-bottom:0.5rem">⚠️</div>'
+      + '<div style="font-size:2rem;font-weight:900;color:#DC2626;margin-bottom:0.5rem">!</div>'
       + '<h3 style="font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:0.5rem">Deep Dive Unavailable</h3>'
       + '<p style="color:var(--text-secondary);font-size:0.92rem;max-width:440px;margin:0 auto 1.25rem;">' + esc(err.message) + '</p>'
       + '<div style="display:flex;gap:8px;max-width:380px;margin:0 auto;">'
@@ -367,7 +367,7 @@ function saveKeyFromDeepDive() {
   var inp = document.getElementById('deep-dive-key-inp');
   if (inp && inp.value && inp.value.trim()) {
     localStorage.setItem('javaquest_gemini_key', inp.value.trim());
-    if (typeof toast === 'function') toast('Gemini Key saved! 🚀');
+    if (typeof toast === 'function') toast('Gemini Key saved!');
     openDeepDive();
   }
 }
@@ -412,11 +412,11 @@ function explainMistakeWithAI() {
   })
   .then(function(res) {
     if (btn) btn.classList.add('hidden');
-    aiBox.innerHTML = '<strong>🤖 JavaBot Insight:</strong> ' + esc(res.explanation);
+    aiBox.innerHTML = '<strong>JavaBot Insight:</strong> ' + esc(res.explanation);
   })
   .catch(function(e) {
-    if (btn) { btn.disabled = false; btn.textContent = '🤖 Explain My Mistake'; }
-    aiBox.innerHTML = '⚠️ Could not analyze mistake: ' + esc(e.message);
+    if (btn) { btn.disabled = false; btn.textContent = 'Explain My Mistake'; }
+    aiBox.innerHTML = 'Could not analyze mistake: ' + esc(e.message);
   });
 }
 

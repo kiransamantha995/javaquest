@@ -3,33 +3,38 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data: https://images.unsplash.com;">
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=4.1"/>
+  <link rel="stylesheet" href="style.css?v=5.0"/>
 </head>
 <body>
 
 <!-- ====== NAVBAR ====== -->
 <nav class="navbar" id="navbar" style="display:none">
   <div class="nav-logo" id="nav-logo-btn" style="cursor:pointer">
-    <span class="logo-icon">☕</span>
+    <span class="logo-icon">
+      <svg class="logo-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+    </span>
     <span class="logo-text">Java<span class="logo-accent">Quest</span></span>
   </div>
   <div class="nav-links">
-    <button class="nav-btn" id="nav-home">    <span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
-    <button class="nav-btn" id="nav-map">     <span class="nav-icon">🗺️</span><span class="nav-label">Map</span></button>
-    <button class="nav-btn" id="nav-compiler"><span class="nav-icon">💻</span><span class="nav-label">Code</span></button>
-    <button class="nav-btn" id="nav-badges">  <span class="nav-icon">🏆</span><span class="nav-label">Badges</span></button>
-    <button class="nav-btn" id="nav-avatar">  <span class="nav-icon">🎨</span><span class="nav-label">Avatar</span></button>
-    <button class="nav-btn" id="nav-settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    <button class="nav-btn" id="nav-home">    <span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span><span class="nav-label">Home</span></button>
+    <button class="nav-btn" id="nav-map">     <span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg></span><span class="nav-label">Map</span></button>
+    <button class="nav-btn" id="nav-compiler"><span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span><span class="nav-label">Code</span></button>
+    <button class="nav-btn" id="nav-badges">  <span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span><span class="nav-label">Badges</span></button>
+    <button class="nav-btn" id="nav-avatar">  <span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span><span class="nav-label">Avatar</span></button>
+    <button class="nav-btn" id="nav-settings"><span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span><span class="nav-label">Settings</span></button>
   </div>
   <div class="nav-stats">
-    <div class="stat-chip diff-chip" id="nav-diff-chip">🌱 Beginner</div>
-    <div class="stat-chip level-chip"><span id="nav-level-icon">🌱</span><span id="nav-level">Lv.1</span></div>
+    <div class="stat-chip diff-chip" id="nav-diff-chip">Beginner</div>
+    <div class="stat-chip level-chip"><span id="nav-level-icon" style="display:none"></span><span id="nav-level">Lv.1</span></div>
     <div class="stat-chip xp-chip"><div class="xp-bar-mini"><div class="xp-fill-mini" id="xp-fill-mini"></div></div><span id="nav-xp">0 XP</span></div>
-    <div class="stat-chip streak-chip"><span class="flame-anim">🔥</span><span id="nav-streak">0</span></div>
-    <div class="stat-chip hearts-chip"><span id="nav-hearts">❤️❤️❤️</span></div>
+    <div class="stat-chip streak-chip">
+      <svg class="flame-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2c-.6 1.4-1.2 2.7-1.2 4.1 0 2.3 1.8 3.9 1.8 5.9 0 3.3-2.7 6-6 6-1.1 0-2.1-.3-3-1 1.2 4 4.8 7 9.2 7 5.4 0 9.8-4.4 9.8-9.8 0-4.6-3.8-8.5-7.6-11.2-.8-.6-1.8-.7-3-1z"/></svg>
+      <span id="nav-streak">0</span>
+    </div>
+    <div class="stat-chip hearts-chip"><span id="nav-hearts" class="hearts-row"></span></div>
   </div>
 </nav>
 
@@ -39,12 +44,14 @@
 <section class="screen active" id="screen-auth">
   <div class="login-bg">
     <div class="login-card">
-      <div class="login-badge-pill">★ 100% FREE GAMIFIED CODING</div>
+      <div class="login-badge-pill">100% FREE GAMIFIED JAVA LEARNING</div>
       <div class="login-logo-wrap">
-        <span class="login-logo-icon">☕</span>
+        <span class="login-logo-icon">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+        </span>
       </div>
-      <h1 class="login-title" id="auth-title">Create an account to save your progress :)</h1>
-      <p class="login-subtitle" id="auth-subtitle">Join thousands of questers learning Java from zero to hero!</p>
+      <h1 class="login-title" id="auth-title">Create an account to save your progress</h1>
+      <p class="login-subtitle" id="auth-subtitle">Join thousands of developers mastering Java from core syntax to cloud architecture.</p>
 
       <!-- Tab switcher -->
       <div class="auth-tabs">
@@ -54,7 +61,7 @@
 
       <!-- Sign-up form (active by default to match codedex.io/signup) -->
       <div class="auth-form" id="form-signup">
-        <input type="text"     id="su-name"     class="login-input" placeholder="Your hero name (e.g. PixelKnight)" maxlength="30" autocomplete="username"/>
+        <input type="text"     id="su-name"     class="login-input" placeholder="Your developer handle (e.g. CodeArchitect)" maxlength="30" autocomplete="username"/>
         <input type="email"    id="su-email"    class="login-input" placeholder="your@email.com" autocomplete="email"/>
         <input type="password" id="su-password" class="login-input" placeholder="Password (min 6 chars)" autocomplete="new-password" minlength="6"/>
 
@@ -62,19 +69,19 @@
         <div class="diff-label">Choose your level:</div>
         <div class="diff-cards" id="diff-cards">
           <div class="diff-card selected" data-diff="beginner">
-            <div class="diff-icon">🌱</div>
+            <div class="diff-icon"><span class="track-code-badge">TRACK 1</span></div>
             <div class="diff-name">Beginner</div>
             <div class="diff-desc">New to Java — start from zero</div>
             <div class="diff-modules">Modules B1–B8 + Capstone 1</div>
           </div>
           <div class="diff-card" data-diff="intermediate">
-            <div class="diff-icon">🔥</div>
+            <div class="diff-icon"><span class="track-code-badge">TRACK 2</span></div>
             <div class="diff-name">Intermediate</div>
             <div class="diff-desc">OOP, Streams & Database</div>
             <div class="diff-modules">Modules B1–I8 + Capstone 2</div>
           </div>
           <div class="diff-card" data-diff="advanced">
-            <div class="diff-icon">⚡</div>
+            <div class="diff-icon"><span class="track-code-badge">TRACK 3</span></div>
             <div class="diff-name">Advanced</div>
             <div class="diff-desc">JVM, Virtual Threads & Spring Boot</div>
             <div class="diff-modules">All 24 Modules + Capstone 3</div>
@@ -82,14 +89,14 @@
         </div>
 
         <!-- Skin picker -->
-        <div class="login-skin-label">Pick your avatar skin:</div>
+        <div class="login-skin-label">Pick your developer portrait:</div>
         <div class="login-skin-row" id="login-skin-row"></div>
 
         <div class="auth-error hidden" id="su-error"></div>
-        <button class="btn-primary btn-login" id="su-btn">🚀 Create Account & Play!</button>
+        <button class="btn-primary btn-login" id="su-btn">Create Account & Start Learning</button>
         <div class="auth-switch-prompt">Already have an account? <button type="button" class="btn-link" id="link-to-si">Sign In</button></div>
         <div class="auth-divider"><span>or play without account</span></div>
-        <button type="button" class="btn-guest" id="guest-btn-su">🎮 Play as Guest (Local Mode)</button>
+        <button type="button" class="btn-guest" id="guest-btn-su">Continue as Guest (Local Mode)</button>
       </div>
 
       <!-- Sign-in form (hidden by default) -->
@@ -97,10 +104,10 @@
         <input type="email"    id="si-email"    class="login-input" placeholder="your@email.com" autocomplete="email"/>
         <input type="password" id="si-password" class="login-input" placeholder="Password" autocomplete="current-password"/>
         <div class="auth-error hidden" id="si-error"></div>
-        <button class="btn-primary btn-login" id="si-btn">🔑 Sign In</button>
-        <div class="auth-switch-prompt">Don't have an account? <button type="button" class="btn-link" id="link-to-su">Create an account :)</button></div>
+        <button class="btn-primary btn-login" id="si-btn">Sign In to JavaQuest</button>
+        <div class="auth-switch-prompt">Don't have an account? <button type="button" class="btn-link" id="link-to-su">Create an account</button></div>
         <div class="auth-divider"><span>or play without account</span></div>
-        <button type="button" class="btn-guest" id="guest-btn">🎮 Play as Guest (Local Mode)</button>
+        <button type="button" class="btn-guest" id="guest-btn">Continue as Guest (Local Mode)</button>
       </div>
 
       <div class="auth-loading hidden" id="auth-loading">
@@ -114,43 +121,72 @@
 <section class="screen" id="screen-home">
   <div class="home-container">
     <div class="home-hero glass-card">
-      <div class="hero-avatar-wrap" id="hero-avatar-wrap" title="Customize Avatar">
-        <div class="avatar-display medium" id="avatar-display-home"></div>
-        <div class="hero-edit-hint">✏️ Edit</div>
-      </div>
-      <div class="hero-info">
-        <h1 class="hero-greeting" id="hero-greeting">Hello, JavaLearner! 👋</h1>
-        <div class="diff-badge-home" id="diff-badge-home">🌱 Beginner Path</div>
-        <div class="xp-bar-container">
-          <div class="xp-label-row">
-            <span id="home-level-label">Level 1 — Novice 🌱</span>
-            <span id="home-xp-label">0 / 150 XP</span>
+      <div class="hero-photo-banner" style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80')"></div>
+      <div class="hero-content-row">
+        <div class="hero-avatar-wrap" id="hero-avatar-wrap" title="Customize Avatar">
+          <div class="avatar-display medium" id="avatar-display-home"></div>
+          <div class="hero-edit-hint">Edit Photo</div>
+        </div>
+        <div class="hero-info">
+          <h1 class="hero-greeting" id="hero-greeting">Welcome back, JavaLearner!</h1>
+          <div class="diff-badge-home" id="diff-badge-home">Beginner Track</div>
+          <div class="xp-bar-container">
+            <div class="xp-label-row">
+              <span id="home-level-label">Level 1 — Novice</span>
+              <span id="home-xp-label">0 / 150 XP</span>
+            </div>
+            <div class="xp-bar"><div class="xp-fill" id="xp-fill-home"></div></div>
           </div>
-          <div class="xp-bar"><div class="xp-fill" id="xp-fill-home"></div></div>
         </div>
       </div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value" id="home-streak">0</div><div class="stat-label">Day Streak</div></div>
-      <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="home-xp">0</div><div class="stat-label">Total XP</div></div>
-      <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-value" id="home-lessons">0</div><div class="stat-label">Lessons Done</div></div>
-      <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-value" id="home-badges">0</div><div class="stat-label">Badges</div></div>
+      <div class="stat-card">
+        <div class="stat-icon-svg">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-.6 1.4-1.2 2.7-1.2 4.1 0 2.3 1.8 3.9 1.8 5.9 0 3.3-2.7 6-6 6-1.1 0-2.1-.3-3-1 1.2 4 4.8 7 9.2 7 5.4 0 9.8-4.4 9.8-9.8 0-4.6-3.8-8.5-7.6-11.2-.8-.6-1.8-.7-3-1z"/></svg>
+        </div>
+        <div class="stat-value" id="home-streak">0</div>
+        <div class="stat-label">Day Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-svg">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="stat-value" id="home-xp">0</div>
+        <div class="stat-label">Total XP</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-svg">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+        </div>
+        <div class="stat-value" id="home-lessons">0</div>
+        <div class="stat-label">Lessons Done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-svg">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        </div>
+        <div class="stat-value" id="home-badges">0</div>
+        <div class="stat-label">Badges</div>
+      </div>
     </div>
     <div class="daily-card glass-card">
       <div class="daily-header">
-        <span class="daily-badge-tag">⚡ Daily Quest</span>
+        <span class="daily-badge-tag">DAILY OBJECTIVE</span>
         <span class="daily-reward-tag">+50 XP</span>
       </div>
-      <p class="daily-text">Complete any lesson or challenge today!</p>
-      <button class="btn-primary" id="daily-quest-btn">Start Daily Quest →</button>
+      <p class="daily-text">Complete any lesson or challenge today to extend your streak.</p>
+      <button class="btn-primary" id="daily-quest-btn">Start Daily Objective →</button>
     </div>
     <div class="continue-section">
       <h2 class="section-title">Continue Learning</h2>
       <div class="continue-card glass-card" id="continue-card" style="cursor:pointer">
-        <div class="continue-module-icon" id="continue-icon">☕</div>
+        <div class="continue-module-thumb" id="continue-icon-wrap">
+          <img id="continue-img" src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=120&h=120&q=80" alt="Module"/>
+        </div>
         <div class="continue-info">
           <div class="continue-title" id="continue-title">Getting Started</div>
-          <div class="continue-sub" id="continue-subtitle">Click to begin!</div>
+          <div class="continue-sub" id="continue-subtitle">Click to resume curriculum</div>
           <div class="mini-progress-row">
             <div class="mini-progress-bar"><div class="mini-progress-fill" id="continue-progress-fill"></div></div>
             <span id="continue-progress-label">0%</span>
@@ -162,10 +198,18 @@
     <div class="quick-links">
       <h2 class="section-title">Quick Actions</h2>
       <div class="quick-grid">
-        <div class="quick-card" id="qc-map"><span>🗺️</span><div>Learning Map</div></div>
-        <div class="quick-card" id="qc-compiler"><span>💻</span><div>Code Playground</div></div>
-        <div class="quick-card" id="qc-badges"><span>🏆</span><div>My Badges</div></div>
-        <div class="quick-card" id="qc-avatar"><span>🎨</span><div>My Avatar</div></div>
+        <div class="quick-card with-photo" id="qc-map" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=400&q=80')">
+          <div class="quick-card-label">Learning Map</div>
+        </div>
+        <div class="quick-card with-photo" id="qc-compiler" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80')">
+          <div class="quick-card-label">Code Playground</div>
+        </div>
+        <div class="quick-card with-photo" id="qc-badges" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=400&q=80')">
+          <div class="quick-card-label">My Badges</div>
+        </div>
+        <div class="quick-card with-photo" id="qc-avatar" style="background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80')">
+          <div class="quick-card-label">Developer Portrait</div>
+        </div>
       </div>
     </div>
   </div>
@@ -175,8 +219,8 @@
 <section class="screen" id="screen-map">
   <div class="map-container">
     <div class="map-header">
-      <h1>🗺️ Java Learning Map</h1>
-      <p id="map-subtext">Complete modules in order to unlock new adventures!</p>
+      <h1>Java Learning Map</h1>
+      <p id="map-subtext">Complete modules in sequence to master core Java, streams, concurrency, and architecture.</p>
     </div>
     <div class="diff-path-banner" id="diff-path-banner"></div>
     <div class="module-path" id="module-path"></div>
@@ -215,15 +259,15 @@
     <div class="challenge-header">
       <button class="btn-back" id="challenge-back-btn">← Back</button>
       <div class="challenge-title-block">
-        <span class="challenge-tag-badge">⚔️ Challenge</span>
+        <span class="challenge-tag-badge">Challenge Quiz</span>
         <h2 id="challenge-module-title">Challenge</h2>
       </div>
       <div style="display:flex;align-items:center;gap:0.75rem;">
-        <button class="btn-secondary btn-sm" id="challenge-refresh-ai-btn" onclick="startAIChallengeFromHeader()" title="Generate brand new AI questions">✨ New AI Quiz</button>
-        <div class="hearts-display">
-          <span class="heart" id="heart-1">❤️</span>
-          <span class="heart" id="heart-2">❤️</span>
-          <span class="heart" id="heart-3">❤️</span>
+        <button class="btn-secondary btn-sm" id="challenge-refresh-ai-btn" onclick="startAIChallengeFromHeader()" title="Generate brand new AI questions">New AI Quiz</button>
+        <div class="hearts-display" id="challenge-hearts-display">
+          <span class="heart" id="heart-1"><svg class="heart-svg" viewBox="0 0 24 24" width="18" height="18" fill="#E63946"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+          <span class="heart" id="heart-2"><svg class="heart-svg" viewBox="0 0 24 24" width="18" height="18" fill="#E63946"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+          <span class="heart" id="heart-3"><svg class="heart-svg" viewBox="0 0 24 24" width="18" height="18" fill="#E63946"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
         </div>
       </div>
     </div>
@@ -237,7 +281,7 @@
     </div>
     <div class="answer-feedback hidden" id="answer-feedback">
       <div class="feedback-inner">
-        <div class="feedback-icon" id="feedback-icon">✅</div>
+        <div class="feedback-icon" id="feedback-icon">✓</div>
         <div class="feedback-right">
           <div class="feedback-result" id="feedback-result">Correct!</div>
           <div class="feedback-explanation" id="feedback-explanation"></div>
@@ -245,7 +289,7 @@
         </div>
       </div>
       <div class="feedback-actions">
-        <button class="btn-secondary btn-sm hidden" id="btn-explain-mistake" onclick="explainMistakeWithAI()">🤖 Explain My Mistake</button>
+        <button class="btn-secondary btn-sm hidden" id="btn-explain-mistake" onclick="explainMistakeWithAI()">Explain Mistake</button>
         <button class="btn-primary" id="btn-next-question">Next Question →</button>
       </div>
     </div>
@@ -262,10 +306,12 @@
         <h2 id="coding-task-title">Task Title</h2>
       </div>
       <div style="display:flex;align-items:center;gap:0.75rem;margin-left:auto;">
-        <button class="btn-secondary btn-sm" id="coding-new-ai-btn" onclick="generateNewCodingChallenge()" title="Generate brand new challenge with AI">✨ New Challenge (AI)</button>
+        <button class="btn-secondary btn-sm" id="coding-new-ai-btn" onclick="generateNewCodingChallenge()" title="Generate brand new challenge with AI">New Challenge (AI)</button>
         <!-- Attempt Box -->
         <div class="attempt-badge" id="coding-attempt-badge">
-          <span class="attempt-icon">🎯</span>
+          <span class="attempt-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </span>
           <span id="coding-attempt-label">Attempt 1</span>
         </div>
       </div>
@@ -274,7 +320,7 @@
     <div class="coding-workspace" id="coding-workspace">
       <!-- Left: Instructions & Hints -->
       <div class="coding-instructions glass-card" id="coding-instructions">
-        <h3>📝 Problem Description</h3>
+        <h3>Problem Description</h3>
         <div class="coding-prompt" id="coding-prompt"></div>
 
         <div class="expected-box">
@@ -283,7 +329,7 @@
         </div>
 
         <div class="hint-section" id="coding-hint-section">
-          <button class="btn-hint" id="coding-hint-btn">💡 Need a Hint?</button>
+          <button class="btn-hint" id="coding-hint-btn">Need a Hint?</button>
           <div class="hint-box hidden" id="coding-hint-box"></div>
         </div>
       </div>
@@ -301,11 +347,11 @@
             <span class="mac-traffic-dot yellow"></span>
             <span class="mac-traffic-dot green"></span>
           </div>
-          <span class="editor-lang-badge">☕ Solution.java</span>
+          <span class="editor-lang-badge">Solution.java</span>
           <button class="btn-secondary btn-sm" id="coding-reset-btn">↺ Reset Code</button>
-          <button class="btn-secondary btn-sm" id="coding-expand-btn" title="Toggle tall editor view">⛶ Expand Editor</button>
+          <button class="btn-secondary btn-sm" id="coding-expand-btn" title="Toggle tall editor view">Expand Editor</button>
           <div style="flex:1"></div>
-          <button class="btn-run" id="coding-submit-btn">▶ Submit & Run Tests</button>
+          <button class="btn-run" id="coding-submit-btn">Submit & Run Tests</button>
         </div>
         <textarea id="coding-editor" class="code-editor" spellcheck="false"></textarea>
 
@@ -319,7 +365,7 @@
           <div class="test-results-header" id="test-results-toggle-header" style="cursor:pointer" title="Click to collapse or expand test results console">
             <div style="display:flex;align-items:center;gap:.5rem">
               <span id="test-collapse-icon">▼</span>
-              <span>🧪 Test Results</span>
+              <span>Test Results</span>
             </div>
             <span class="test-status-pill" id="test-overall-status">Not submitted</span>
           </div>
@@ -341,7 +387,7 @@
 <section class="screen" id="screen-compiler">
   <div class="compiler-container">
     <div class="compiler-header">
-      <h1>💻 Java Playground</h1>
+      <h1>Java Playground</h1>
       <p>Write and run real Java code instantly!</p>
     </div>
     <div class="compiler-templates">
@@ -359,14 +405,14 @@
     <!-- Capstone Project Context Banner -->
     <div class="capstone-editor-banner hidden" id="capstone-editor-banner">
       <div class="capstone-banner-left">
-        <span class="capstone-banner-badge" id="capstone-banner-badge">🏆 CAPSTONE PROJECT</span>
+        <span class="capstone-banner-badge" id="capstone-banner-badge">CAPSTONE PROJECT</span>
         <span class="capstone-banner-title" id="capstone-banner-title">Personal Expense Tracker</span>
-        <span class="capstone-save-status" id="capstone-save-status">💾 Auto-saved</span>
+        <span class="capstone-save-status" id="capstone-save-status">Auto-saved</span>
       </div>
       <div class="capstone-banner-actions">
-        <button class="btn-xs btn-outline-gold" id="capstone-view-checklist-btn">📋 Tasks & Feature Ideas</button>
+        <button class="btn-xs btn-outline-gold" id="capstone-view-checklist-btn">Tasks &amp; Feature Ideas</button>
         <button class="btn-xs btn-outline-gold" id="capstone-reset-template-btn" title="Reset editor to starter skeleton">↺ Reset to Starter</button>
-        <button class="btn-xs btn-primary-gold" id="capstone-save-code-btn">💾 Save Project Code</button>
+        <button class="btn-xs btn-primary-gold" id="capstone-save-code-btn">Save Project Code</button>
       </div>
     </div>
     <div class="compiler-layout" id="compiler-layout">
@@ -377,9 +423,9 @@
             <span class="mac-traffic-dot yellow"></span>
             <span class="mac-traffic-dot green"></span>
           </div>
-          <span class="editor-lang-badge">☕ Main.java</span>
+          <span class="editor-lang-badge">Main.java</span>
           <div style="flex:1"></div>
-          <button class="btn-run" id="run-btn">▶ Run Code</button>
+          <button class="btn-run" id="run-btn">Run Code</button>
         </div>
         <textarea id="code-editor" class="code-editor" spellcheck="false"></textarea>
       </div>
@@ -400,10 +446,10 @@
           <button class="btn-clear-out" id="clear-output-btn">Clear</button>
         </div>
         <div class="output-area" id="output-area">
-          <div class="output-placeholder">Click ▶ Run Code to execute your Java program</div>
+          <div class="output-placeholder">Click Run Code to execute your Java program</div>
         </div>
         <div class="compiler-tips">
-          <strong>💡 Tips:</strong> Class must be named <code>Main</code>. Use <code>System.out.println()</code>. Press <strong>Ctrl+Enter</strong> to run.
+          <strong>Tips:</strong> Class must be named <code>Main</code>. Use <code>System.out.println()</code>. Press <strong>Ctrl+Enter</strong> to run.
         </div>
       </div>
     </div>
@@ -414,8 +460,8 @@
 <section class="screen" id="screen-avatar">
   <div class="avatar-container">
     <div class="avatar-screen-header">
-      <h1>🎨 Customize Your Avatar</h1>
-      <p>Make your Java hero uniquely yours!</p>
+      <h1>Developer Portrait Studio</h1>
+      <p>Choose an authentic developer portrait for your Java profile across JavaQuest.</p>
     </div>
     <div class="avatar-editor">
       <div class="avatar-preview-col">
@@ -427,17 +473,14 @@
       </div>
       <div class="avatar-options-col">
         <div class="avatar-tabs">
-          <button class="avatar-tab active" id="tab-skin"      data-tab="skin">🎨 Skin</button>
-          <button class="avatar-tab"        id="tab-hair"      data-tab="hair">💇 Hair</button>
-          <button class="avatar-tab"        id="tab-outfit"    data-tab="outfit">👕 Outfit</button>
-          <button class="avatar-tab"        id="tab-accessory" data-tab="accessory">🕶️ Extra</button>
+          <button class="avatar-tab active" id="tab-skin" data-tab="skin">Developer Portraits</button>
         </div>
         <div class="avatar-options-grid" id="avatar-options-grid"></div>
         <div class="name-input-row">
-          <label class="name-label">Your Name</label>
-          <input type="text" id="avatar-name-input" class="name-input" placeholder="Enter your name…" maxlength="30"/>
+          <label class="name-label">Your Developer Handle</label>
+          <input type="text" id="avatar-name-input" class="name-input" placeholder="Enter handle…" maxlength="30"/>
         </div>
-        <button class="btn-primary btn-save-avatar" id="save-avatar-btn">💾 Save Avatar</button>
+        <button class="btn-primary btn-save-avatar" id="save-avatar-btn">Save Portrait</button>
       </div>
     </div>
   </div>
@@ -447,8 +490,8 @@
 <section class="screen" id="screen-badges">
   <div class="badges-container">
     <div class="badges-header">
-      <h1>🏆 Badge Gallery</h1>
-      <p id="badges-earned-count">Earn badges by completing modules and challenges</p>
+      <h1>Achievement Gallery</h1>
+      <p id="badges-earned-count">Earn achievement medals by completing curriculum modules and coding milestones.</p>
     </div>
     <div class="badges-grid" id="badges-grid"></div>
   </div>
@@ -457,46 +500,44 @@
 <!-- ====== SETTINGS SCREEN ====== -->
 <section class="screen" id="screen-settings">
   <div class="settings-container">
-    <div class="settings-header"><h1>⚙️ Settings</h1></div>
+    <div class="settings-header"><h1>Settings</h1></div>
 
     <div class="settings-card glass-card">
-      <div class="settings-card-icon">👤</div>
       <h3>Account</h3>
       <p>Signed in as: <strong id="settings-email">—</strong></p>
       <p>Playing as: <strong id="settings-player-name">JavaLearner</strong></p>
       <p>Difficulty: <strong id="settings-difficulty">Beginner</strong></p>
       <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.75rem">
-        <button class="btn-secondary" id="edit-avatar-btn">🎨 Edit Avatar</button>
-        <button class="btn-secondary" id="change-diff-btn">🎯 Change Difficulty</button>
-        <button class="btn-danger" id="signout-btn">🚪 Sign Out</button>
+        <button class="btn-secondary" id="edit-avatar-btn">Edit Portrait</button>
+        <button class="btn-secondary" id="change-diff-btn">Change Difficulty</button>
+        <button class="btn-danger" id="signout-btn">Sign Out</button>
       </div>
     </div>
 
     <div class="settings-card glass-card">
-      <div class="settings-card-icon">🤖</div>
       <h3>AI Tutor — JavaBot</h3>
-      <p>Powered by <strong>Gemini Flash-Lite</strong>. Enter your free Google Gemini API key to activate AI code hints and tutor dialogue:</p>
+      <p>Powered by <strong>Google Gemini</strong>. Enter your free Google Gemini API key to activate AI code hints and automated grading:</p>
       <div style="display:flex;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap">
         <input type="password" id="gemini-key-input" class="login-input" style="flex:1;min-width:240px;padding:0.6rem 0.9rem;font-size:0.9rem;" placeholder="Paste Gemini API key (AIzaSy...)" autocomplete="off"/>
-        <button class="btn-primary btn-sm" id="save-gemini-key-btn">💾 Save Key</button>
+        <button class="btn-primary btn-sm" id="save-gemini-key-btn">Save Key</button>
         <button class="btn-secondary btn-sm" id="clear-gemini-key-btn">Remove</button>
       </div>
       <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:0.5rem">Free from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" style="color:var(--ink);font-weight:800">Google AI Studio</a>. Saved locally in your browser.</p>
     </div>
 
     <div class="settings-card glass-card">
-      <div class="settings-card-icon">❤️</div>
       <h3>Hearts Auto-Refill</h3>
       <p>Hearts refill every 30 minutes.</p>
-      <button class="btn-secondary" id="refill-hearts-btn">❤️ Refill Hearts Now</button>
+      <button class="btn-secondary" id="refill-hearts-btn">Refill Hearts Now</button>
     </div>
 
     <div class="settings-card glass-card danger-card">
-      <div class="settings-card-icon">⚠️</div>
       <h3>Danger Zone</h3>
       <p>Reset all progress, XP, streaks, and badges. <strong>Cannot be undone!</strong></p>
-      <button class="btn-danger" id="reset-progress-btn">🗑️ Reset All Progress</button>
+      <button class="btn-danger" id="reset-progress-btn">Reset All Progress</button>
     </div>
+  </div>
+</section>
   </div>
 </section>
 
@@ -506,7 +547,7 @@
 <div class="mod-popup-bg hidden" id="mod-popup-bg"></div>
 <div class="mod-popup-box hidden" id="mod-popup-box">
   <button class="popup-close-btn" id="popup-close-btn">✕</button>
-  <div class="mod-popup-icon" id="mod-popup-icon">☕</div>
+  <div class="mod-popup-icon" id="mod-popup-icon"></div>
   <div class="mod-popup-title" id="mod-popup-title">Module</div>
   <div class="mod-popup-sub" id="mod-popup-sub">Subtitle</div>
   <div class="mod-popup-lessons" id="mod-popup-lessons"></div>
@@ -516,19 +557,19 @@
 <!-- ====== DIFFICULTY CHANGE MODAL ====== -->
 <div class="modal-overlay hidden" id="modal-diff">
   <div class="modal-box" style="max-width:520px">
-    <h2 style="margin-bottom:1rem">🎯 Change Difficulty</h2>
+    <h2 style="margin-bottom:1rem">Change Difficulty</h2>
     <p style="color:var(--text-2);margin-bottom:1.25rem">Your progress is saved. Switching difficulty changes which modules are available on the map.</p>
     <div class="diff-cards" id="modal-diff-cards">
       <div class="diff-card" data-diff="beginner">
-        <div class="diff-icon">🌱</div><div class="diff-name">Beginner</div>
+        <div class="diff-icon"><span class="track-code-badge">TRACK 1</span></div><div class="diff-name">Beginner</div>
         <div class="diff-desc">Modules B1–B8 + Capstone 1</div>
       </div>
       <div class="diff-card" data-diff="intermediate">
-        <div class="diff-icon">🔥</div><div class="diff-name">Intermediate</div>
+        <div class="diff-icon"><span class="track-code-badge">TRACK 2</span></div><div class="diff-name">Intermediate</div>
         <div class="diff-desc">Modules B1–I8 + Capstone 2</div>
       </div>
       <div class="diff-card" data-diff="advanced">
-        <div class="diff-icon">⚡</div><div class="diff-name">Advanced</div>
+        <div class="diff-icon"><span class="track-code-badge">TRACK 3</span></div><div class="diff-name">Advanced</div>
         <div class="diff-desc">All 24 Modules (B1–A8) + Capstone 3</div>
       </div>
     </div>
@@ -544,18 +585,20 @@
   <div class="modal-box project-modal-box">
     <button class="popup-close-btn" id="project-close-btn">✕</button>
     <div class="project-modal-header">
-      <div class="project-modal-icon" id="project-modal-icon">🏆</div>
+      <div class="project-modal-icon" id="project-modal-icon">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+      </div>
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
           <span class="project-level-badge" id="project-level-badge">Beginner Capstone</span>
-          <span class="project-status-pill not-started" id="project-status-pill">🎯 Not Started</span>
+          <span class="project-status-pill not-started" id="project-status-pill">Not Started</span>
         </div>
         <h2 id="project-modal-title">Personal Expense Tracker</h2>
       </div>
     </div>
     
     <div class="project-completion-banner hidden" id="project-completion-banner">
-      <span class="completion-banner-icon">🎉</span>
+      <span class="completion-banner-icon">✓</span>
       <div>
         <strong id="project-completion-title">Capstone Project Completed!</strong>
         <p id="project-completion-sub">Progress saved & verified. +250 XP earned!</p>
@@ -567,9 +610,9 @@
     <!-- Milestone Checklist with Live Progress Saving -->
     <div class="project-modal-section">
       <div class="project-section-header-row">
-        <h4>📋 Milestone Checklist (AI Verified)</h4>
+        <h4>Milestone Checklist (AI Verified)</h4>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="btn-sm btn-secondary" id="project-ai-eval-btn">🤖 AI Verify Code</button>
+          <button class="btn-sm btn-secondary" id="project-ai-eval-btn">AI Verify Code</button>
           <span class="project-progress-badge" id="project-progress-badge">0/5 Done (0%)</span>
         </div>
       </div>
@@ -581,24 +624,24 @@
 
     <!-- Evaluation Rubric -->
     <div class="project-modal-section">
-      <h4>🎯 Evaluation Rubric:</h4>
+      <h4>Evaluation Rubric:</h4>
       <p id="project-modal-rubric" class="project-rubric-text"></p>
     </div>
 
     <!-- Next Feature Ideas Based on What They Learned -->
     <div class="project-modal-section feature-ideas-section">
       <div class="project-section-header-row">
-        <h4>💡 Next Feature Ideas (Built on Your Java Foundation)</h4>
-        <button class="btn-xs btn-ask-ai-ideas" id="project-ask-ai-btn">🤖 Ask JavaBot for More</button>
+        <h4>Next Feature Ideas (Built on Your Java Foundation)</h4>
+        <button class="btn-xs btn-ask-ai-ideas" id="project-ask-ai-btn">Ask JavaBot for Ideas</button>
       </div>
       <p class="project-ideas-intro">Level up your project! Here are creative extensions designed specifically around the Java concepts you conquered in this track:</p>
       <div class="project-ideas-grid" id="project-modal-ideas"></div>
     </div>
 
     <div class="project-modal-actions">
-      <button class="btn-secondary" id="project-ai-eval-btn-main">🤖 AI Verify Tasks</button>
-      <button class="btn-primary" id="project-complete-btn">🎉 Complete Project & Claim XP</button>
-      <button class="btn-secondary" id="project-open-compiler-btn">💻 Open in Code Playground</button>
+      <button class="btn-secondary" id="project-ai-eval-btn-main">AI Verify Tasks</button>
+      <button class="btn-primary" id="project-complete-btn">Complete Project & Claim XP</button>
+      <button class="btn-secondary" id="project-open-compiler-btn">Open in Code Playground</button>
       <button class="btn-outline" id="project-close-action-btn">Close</button>
     </div>
   </div>
@@ -609,7 +652,9 @@
   <div class="chat-panel hidden" id="chat-panel">
     <div class="chat-panel-header">
       <div class="chat-bot-info">
-        <div class="chat-bot-avatar">🤖</div>
+        <div class="chat-bot-avatar">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
+        </div>
         <div>
           <div class="chat-bot-name">JavaBot</div>
           <div class="chat-bot-status" id="chat-bot-status">Your AI Java Tutor</div>
@@ -621,17 +666,19 @@
       </div>
     </div>
     <div class="chat-context-pill hidden" id="chat-context-pill">
-      <span class="context-icon">👁️</span>
+      <span class="context-icon">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      </span>
       <span class="context-text" id="chat-context-label">Watching Code Editor</span>
     </div>
     <div class="chat-messages" id="chat-messages">
-      <div class="chat-message bot"><div class="message-bubble">Hi! I'm JavaBot ☕🤖 Ask me anything about Java or your code!</div></div>
+      <div class="chat-message bot"><div class="message-bubble">Hi! I'm JavaBot. Ask me anything about Java or your code!</div></div>
     </div>
     <div class="chat-typing-indicator hidden" id="chat-typing"><span></span><span></span><span></span></div>
     <div class="chat-quick-chips" id="chat-quick-chips">
-      <button class="chat-chip" id="chip-review-code">🔍 Review My Code</button>
-      <button class="chat-chip" id="chip-explain-error">❓ Explain Error</button>
-      <button class="chat-chip" id="chip-next-step">💡 Hint for Next Step</button>
+      <button class="chat-chip" id="chip-review-code">Review My Code</button>
+      <button class="chat-chip" id="chip-explain-error">Explain Error</button>
+      <button class="chat-chip" id="chip-next-step">Hint for Next Step</button>
     </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" class="chat-input" placeholder="Ask JavaBot about your code…"/>
@@ -639,7 +686,10 @@
     </div>
   </div>
   <button class="ai-chat-fab" id="ai-chat-fab" title="Ask JavaBot">
-    <span class="fab-icon">🤖</span><span class="fab-label">Ask AI</span><span class="fab-pulse"></span>
+    <span class="fab-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
+    </span>
+    <span class="fab-label">Ask AI</span><span class="fab-pulse"></span>
   </button>
 </div>
 
@@ -647,41 +697,47 @@
 <div class="modal-overlay hidden" id="modal-levelup">
   <div class="modal-box levelup-modal">
     <div class="levelup-particles" id="levelup-particles"></div>
-    <div class="levelup-badge">⭐ LEVEL UP!</div>
+    <div class="levelup-badge">LEVEL UP</div>
     <div class="levelup-new-level" id="levelup-new-level">Level 2</div>
     <div class="levelup-rank" id="levelup-rank">Apprentice</div>
-    <div class="levelup-rank-icon" id="levelup-rank-icon">📖</div>
-    <button class="btn-primary" id="levelup-ok-btn">Awesome! 🎉</button>
+    <div class="levelup-rank-icon" id="levelup-rank-icon">
+      <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+    </div>
+    <button class="btn-primary" id="levelup-ok-btn">Continue</button>
   </div>
 </div>
 <div class="modal-overlay hidden" id="modal-badge">
   <div class="modal-box badge-modal">
     <div class="badge-modal-glow"></div>
-    <div class="badge-unlocked-icon" id="badge-unlocked-icon">🏆</div>
+    <div class="badge-unlocked-icon" id="badge-unlocked-icon">
+      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+    </div>
     <div class="badge-modal-label">Badge Unlocked!</div>
     <div class="badge-unlocked-name" id="badge-unlocked-name">Java Starter</div>
     <div class="badge-unlocked-desc" id="badge-unlocked-desc">Complete your first lesson</div>
-    <button class="btn-primary" id="badge-ok-btn">Claim! 🎊</button>
+    <button class="btn-primary" id="badge-ok-btn">Claim Reward</button>
   </div>
 </div>
 <div class="modal-overlay hidden" id="modal-complete">
   <div class="modal-box complete-modal">
-    <div class="complete-icon-big">🎓</div>
+    <div class="complete-icon-big">
+      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    </div>
     <h2>Module Complete!</h2>
     <div class="complete-module-name" id="complete-module-name">Getting Started</div>
     <div class="xp-earned-tag" id="complete-xp-earned">+150 XP Earned!</div>
-    <button class="btn-primary" id="complete-ok-btn">Back to Map 🗺️</button>
+    <button class="btn-primary" id="complete-ok-btn">Back to Map</button>
   </div>
 </div>
 <div class="modal-overlay hidden" id="modal-challenge-result">
   <div class="modal-box challenge-result-modal">
     <div class="score-circle" id="score-circle"><span id="score-text">5/5</span></div>
-    <h2 id="challenge-result-title">Great Job! 💪</h2>
+    <h2 id="challenge-result-title">Great Job!</h2>
     <div class="xp-earned-tag" id="challenge-xp-earned">+100 XP</div>
     <div class="result-message" id="result-message"></div>
     <div class="challenge-result-actions" style="display:flex;gap:0.75rem;margin-top:1.25rem;flex-wrap:wrap;justify-content:center;">
-      <button class="btn-primary" id="challenge-result-ok-btn">Back to Map 🗺️</button>
-      <button class="btn-secondary" id="challenge-result-ai-btn" onclick="startAIChallengeFromModal()">✨ Infinite Practice (AI)</button>
+      <button class="btn-primary" id="challenge-result-ok-btn">Back to Map</button>
+      <button class="btn-secondary" id="challenge-result-ai-btn" onclick="startAIChallengeFromModal()">Infinite Practice (AI)</button>
     </div>
   </div>
 </div>
@@ -690,7 +746,7 @@
 <div class="modal-overlay hidden" id="modal-deep-dive">
   <div class="modal-box deep-dive-modal">
     <div class="deep-dive-header">
-      <div class="deep-dive-badge">🔬 UNDER THE HOOD</div>
+      <div class="deep-dive-badge">UNDER THE HOOD</div>
       <button class="modal-close-btn" onclick="closeDeepDive()">✕</button>
     </div>
     <h2 class="deep-dive-title" id="deep-dive-title">Topic Internals & Architecture</h2>
@@ -705,7 +761,7 @@
 </div>
 <div class="modal-overlay hidden" id="modal-reset">
   <div class="modal-box">
-    <div style="font-size:3rem">⚠️</div>
+    <div style="font-size:2.8rem;line-height:1;margin-bottom:0.5rem;font-weight:900;color:#DC2626">!</div>
     <h2>Reset All Progress?</h2>
     <p style="color:var(--text-secondary);margin:.5rem 0 1.5rem">All XP, lessons, badges, and streaks will be lost forever.</p>
     <div style="display:flex;gap:1rem;justify-content:center">
@@ -716,10 +772,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=4.1"></script>
-<script src="animations.js?v=4.1"></script>
-<script src="supabase.js?v=4.1"></script>
-<script src="ai-tutor.js?v=4.1"></script>
-<script src="app.js?v=4.1"></script>
+<script src="curriculum.js?v=5.0"></script>
+<script src="animations.js?v=5.0"></script>
+<script src="supabase.js?v=5.0"></script>
+<script src="ai-tutor.js?v=5.0"></script>
+<script src="app.js?v=5.0"></script>
 </body>
 </html>

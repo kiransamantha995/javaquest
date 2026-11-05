@@ -8,9 +8,9 @@ var DIFFICULTY_LIMITS = {
   advanced:     24   // all 24 modules (B1–A8 + Capstone 3)
 };
 var DIFFICULTY_LABELS = {
-  beginner:     '🌱 Beginner',
-  intermediate: '🔥 Intermediate',
-  advanced:     '⚡ Advanced'
+  beginner:     'Beginner',
+  intermediate: 'Intermediate',
+  advanced:     'Advanced'
 };
 
 /* ═══════════════ STATE ══════════════════════════════════════════ */
@@ -247,7 +247,7 @@ function doGuestLogin() {
   renderAllAvatars();
   updateNav();
   showScreen('home');
-  setTimeout(function(){ toast('Playing in Guest Mode 🎮 (Progress saved locally)'); }, 400);
+  setTimeout(function(){ toast('Playing in Guest Mode (Progress saved locally)'); }, 400);
 }
 
 function showAuthLoading(show) {
@@ -355,13 +355,13 @@ function doSignUp() {
               }).then(function(){ return loadUserAndEnter(); });
             }
             showAuthLoading(false);
-            showAuthSuccess('su', '🎉 Account created! A confirmation email was sent to ' + email + '. Check your inbox to confirm, then click "Sign In" above. Or click "Play as Guest" below to start immediately!');
-            toast('Confirmation email sent to ' + email + ' 📬');
+            showAuthSuccess('su', 'Account created! A confirmation email was sent to ' + email + '. Check your inbox to confirm, then click "Sign In" above. Or click "Play as Guest" below to start immediately!');
+            toast('Confirmation email sent to ' + email + '');
           })
           .catch(function(siErr){
             showAuthLoading(false);
-            showAuthSuccess('su', '🎉 Account created! A confirmation email was sent to ' + email + '. Please check your inbox (or spam) to confirm, then click "Sign In" above. Or play in Guest Mode below!');
-            toast('Confirmation email sent to ' + email + ' 📬');
+            showAuthSuccess('su', 'Account created! A confirmation email was sent to ' + email + '. Please check your inbox (or spam) to confirm, then click "Sign In" above. Or play in Guest Mode below!');
+            toast('Confirmation email sent to ' + email + '');
           });
       }
     })
@@ -419,7 +419,7 @@ function loadUserAndEnter() {
       renderAllAvatars();
       updateNav();
       showScreen('home');
-      setTimeout(function(){ toast('Welcome, '+STATE.player.name+'! ☕🚀'); }, 500);
+      setTimeout(function(){ toast('Welcome, '+STATE.player.name+'!'); }, 500);
     })
     .catch(function(e){
       // Fallback: try local backup
@@ -427,7 +427,7 @@ function loadUserAndEnter() {
       if (local) {
         STATE = local;
         checkStreak(); renderAllAvatars(); updateNav(); showScreen('home');
-        toast('⚠️ Loaded local backup (offline mode)');
+        toast('Loaded local backup (offline mode)');
       } else {
         // Create minimal state from auth user
         var u = sbCurrentUser();
@@ -442,7 +442,7 @@ function doSignOut() {
     STATE = null;
     try { localStorage.removeItem('jq_local'); localStorage.removeItem('javaquest_session'); } catch(e){}
     showScreen('auth');
-    toast('Signed out. See you next time! 👋');
+    toast('Signed out. See you next time!');
   });
 }
 
@@ -451,70 +451,65 @@ var AV_SKIN   = ['#FDBCB4','#EAA175','#D08B5B','#AE5D29','#3B1F1A'];
 var AV_HAIRC  = ['#1a1a1a','#8B4513','#F5C518','#FF6B9D','#9B59B6','#E74C3C'];
 var AV_OUTFIT = ['#6C63FF','#FF6584','#43D8C9','#FFD166','#06D6A0','#F4845F','#4CC9F0','#E63946'];
 var AV_HAIR   = ['Bald','Short','Long','Curly','Spiky','Buns'];
-var AV_ACC_E  = ['','🕶️','🎓','🎩','👑','🎧'];
+var AV_ACC_E = ['','','','','',''];
 var AV_ACC_N  = ['None','Glasses','Grad Cap','Top Hat','Crown','Headphones'];
 var _avDraft  = null;
 var _avTab    = 'skin';
 
 function mkEl(tag,css){ var e=document.createElement(tag); if(css) e.style.cssText=css; return e; }
 
+var DEV_PORTRAITS = [
+  { id: 'dev-1', name: 'Alex • Core Java Dev', url: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-2', name: 'Sarah • Backend Engineer', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-3', name: 'Marcus • Staff Architect', url: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-4', name: 'Elena • Cloud Systems', url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-5', name: 'David • Full-Stack Pro', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-6', name: 'Maya • DevOps Lead', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-7', name: 'Liam • Security Engineer', url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: 'dev-8', name: 'Kai • Microservices Coder', url: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=200&h=200&q=80' }
+];
+
 function drawAvatar(el, av) {
-  if (!el||!av) return;
-  var W=el.offsetWidth||72, sc=W/72;
-  function px(n){ return Math.round(n*sc)+'px'; }
-  el.style.position='relative'; el.innerHTML='';
-  var skin=AV_SKIN[av.skin]||AV_SKIN[0];
-  var hairC=AV_HAIRC[av.hairColor]||'#1a1a1a';
-  var outfit=AV_OUTFIT[av.outfit]||AV_OUTFIT[0];
-  var accE=AV_ACC_E[av.accessory]||'';
-  el.appendChild(mkEl('div','position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:'+px(54)+';height:'+px(28)+';background:'+outfit+';border-radius:40% 40% 0 0'));
-  var face=mkEl('div','position:absolute;bottom:'+px(22)+';left:50%;transform:translateX(-50%);width:'+px(46)+';height:'+px(48)+';background:'+skin+';border-radius:50%;overflow:hidden');
-  var eyeRow=mkEl('div','position:absolute;top:'+px(16)+';left:50%;transform:translateX(-50%);width:'+px(30)+';display:flex;justify-content:space-between');
-  for(var i=0;i<2;i++) eyeRow.appendChild(mkEl('div','width:'+px(8)+';height:'+px(9)+';background:#1a1a2e;border-radius:50%'));
-  face.appendChild(eyeRow);
-  face.appendChild(mkEl('div','position:absolute;bottom:'+px(10)+';left:50%;transform:translateX(-50%);width:'+px(18)+';height:'+px(8)+';background:#cc4455;border-radius:0 0 '+px(18)+' '+px(18)));
-  el.appendChild(face);
-  if(av.hair>=1&&av.hair<=3){var hS=['','border-radius:50% 50% 0 0','border-radius:50% 50% 0 0','border-radius:50%'],hH=[0,18,28,28],hW=[0,46,50,52];el.appendChild(mkEl('div','position:absolute;bottom:'+px(62)+';left:50%;transform:translateX(-50%);width:'+px(hW[av.hair])+';height:'+px(hH[av.hair])+';background:'+hairC+';'+hS[av.hair]));}
-  else if(av.hair===4){el.appendChild(mkEl('div','position:absolute;bottom:'+px(62)+';left:50%;transform:translateX(-50%);width:'+px(10)+';height:'+px(28)+';background:'+hairC+';clip-path:polygon(50% 0%,100% 100%,0% 100%)'));}
-  else if(av.hair===5){[-1,1].forEach(function(s){el.appendChild(mkEl('div','position:absolute;bottom:'+px(62)+';left:calc(50% + '+Math.round(s*18*sc)+'px);transform:translateX(-50%);width:'+px(16)+';height:'+px(16)+';background:'+hairC+';border-radius:50%'));});}
-  if(accE){var aEl=mkEl('div','position:absolute;top:'+px(-6)+';left:50%;transform:translateX(-50%);font-size:'+px(20)+';text-align:center;line-height:1');aEl.textContent=accE;el.appendChild(aEl);}
+  if (!el) return;
+  var photoUrl = (STATE && STATE.player && STATE.player.avatarPhoto) || (av && av.photo) || DEV_PORTRAITS[0].url;
+  el.style.position = 'relative';
+  el.innerHTML = '<img src="' + photoUrl + '" class="avatar-photo-circle" alt="Developer Portrait" />';
 }
 
 function renderAllAvatars() {
   drawAvatar(ge('avatar-display-home'),   STATE&&STATE.player.avatar);
-  drawAvatar(ge('avatar-display-editor'), _avDraft||STATE&&STATE.player.avatar);
+  drawAvatar(ge('avatar-display-editor'), _avDraft||(STATE&&STATE.player.avatar));
 }
 
 function switchAvatarTab(tab) {
-  _avTab = tab;
-  qsa('.avatar-tab').forEach(function(t){ t.classList.remove('active'); });
-  var tabEl=ge('tab-'+tab); if(tabEl) tabEl.classList.add('active');
-  var grid=ge('avatar-options-grid'); if(!grid) return;
-  grid.innerHTML='';
-  var av=_avDraft;
-  function opt(html,sel,fn){
-    var d=document.createElement('div');
-    d.className='avatar-option'+(sel?' selected':'');
-    d.style.cssText='flex-direction:column;cursor:pointer';
-    d.innerHTML=html;
-    d.addEventListener('click',function(){ fn(); switchAvatarTab(_avTab); drawAvatar(ge('avatar-display-editor'),_avDraft); });
-    grid.appendChild(d);
-  }
-  if(tab==='skin') AV_SKIN.forEach(function(c,i){ opt('<div style="width:30px;height:30px;border-radius:50%;background:'+c+'"></div>',av.skin===i,function(){_avDraft.skin=i;}); });
-  if(tab==='hair'){
-    AV_HAIR.forEach(function(n,i){ opt('<div style="font-size:.85rem;font-weight:700">'+esc(n)+'</div>',av.hair===i,function(){_avDraft.hair=i;}); });
-    AV_HAIRC.forEach(function(c,i){ opt('<div style="width:24px;height:24px;border-radius:50%;background:'+c+'"></div>',av.hairColor===i,function(){_avDraft.hairColor=i;}); });
-  }
-  if(tab==='outfit') AV_OUTFIT.forEach(function(c,i){ opt('<div style="width:28px;height:28px;border-radius:6px;background:'+c+'"></div>',av.outfit===i,function(){_avDraft.outfit=i;}); });
-  if(tab==='accessory') AV_ACC_N.forEach(function(n,i){ opt(AV_ACC_E[i]?'<span style="font-size:1.75rem">'+AV_ACC_E[i]+'</span>':'<span style="color:rgba(255,255,255,.4);font-size:.8rem">None</span>',av.accessory===i,function(){_avDraft.accessory=i;}); });
+  _avTab = 'skin';
+  var grid = ge('avatar-options-grid'); if(!grid) return;
+  grid.innerHTML = '';
+  var currentPhoto = (STATE && STATE.player && STATE.player.avatarPhoto) || (_avDraft && _avDraft.photo) || DEV_PORTRAITS[0].url;
+  DEV_PORTRAITS.forEach(function(dev, idx){
+    var card = document.createElement('div');
+    var isSel = (currentPhoto === dev.url);
+    card.className = 'portrait-option-card' + (isSel ? ' selected' : '');
+    card.innerHTML = '<div class="portrait-thumb-wrap"><img src="' + dev.url + '" class="portrait-thumb-img" alt="' + esc(dev.name) + '"/></div>'
+      + '<div class="portrait-option-name">' + esc(dev.name) + '</div>';
+    card.addEventListener('click', function(){
+      if (!_avDraft) _avDraft = {};
+      _avDraft.photo = dev.url;
+      if (STATE && STATE.player) STATE.player.avatarPhoto = dev.url;
+      qsa('.portrait-option-card').forEach(function(c){ c.classList.remove('selected'); });
+      card.classList.add('selected');
+      drawAvatar(ge('avatar-display-editor'), _avDraft);
+    });
+    grid.appendChild(card);
+  });
 }
 
 function saveAvatar() {
-  var inp=ge('avatar-name-input');
-  if(inp&&inp.value.trim()) STATE.player.name=inp.value.trim();
-  if(_avDraft) STATE.player.avatar=Object.assign({},_avDraft);
+  var inp = ge('avatar-name-input');
+  if (inp && inp.value.trim()) STATE.player.name = inp.value.trim();
+  if (_avDraft && _avDraft.photo) STATE.player.avatarPhoto = _avDraft.photo;
   localSave(); renderAllAvatars(); updateNav();
-  showScreen('home'); toast('Avatar saved! 😎');
+  showScreen('home'); toast('Developer portrait saved!');
 }
 
 /* ═══════════════ HOME ═══════════════════════════════════════════ */
@@ -522,9 +517,9 @@ function renderHome() {
   var p=STATE.player, lv=getLv(), nx=getNextLv();
   var xs=lv.xpRequired, xe=nx?nx.xpRequired:xs+1000;
   var pct=Math.min(100,Math.round((p.xp-xs)/(xe-xs)*100));
-  setText('hero-greeting','Hello, '+p.name+'! 👋');
-  setText('diff-badge-home', DIFFICULTY_LABELS[p.difficulty]||'🌱 Beginner');
-  setText('home-level-label','Level '+p.level+' — '+lv.name+' '+lv.icon);
+  setText('hero-greeting','Welcome back, '+p.name+'!');
+  setText('diff-badge-home', (p.difficulty || 'beginner').toUpperCase() + ' TRACK');
+  setText('home-level-label','Level '+p.level+' — '+lv.name);
   setText('home-xp-label',(p.xp-xs)+' / '+(xe-xs)+' XP');
   setWidth('xp-fill-home',pct+'%'); setWidth('xp-fill-mini',pct+'%');
   setText('home-streak',p.streak); setText('home-xp',p.xp);
@@ -546,17 +541,20 @@ function renderContinueCard() {
   for (var i=0; i<mods.length; i++) {
     var mod=mods[i];
     if (STATE.player.completedModules.indexOf(mod.id)===-1) {
-      setText('continue-icon',mod.icon); setText('continue-title',mod.title);
+      var imgEl = ge('continue-img');
+      if (imgEl && mod.image) imgEl.src = mod.image;
+      setText('continue-title', mod.title);
       var done=0;
       for(var j=0;j<mod.lessons.length;j++) if(STATE.player.completedLessons.indexOf(mod.lessons[j].id)!==-1) done++;
       var total=mod.lessons.length, pct2=Math.round(done/total*100);
-      setText('continue-subtitle',done+' / '+total+' lessons complete');
-      setWidth('continue-progress-fill',pct2+'%'); setText('continue-progress-label',pct2+'%'); return;
+      setText('continue-subtitle', done+' / '+total+' lessons complete');
+      setWidth('continue-progress-fill', pct2+'%'); setText('continue-progress-label', pct2+'%');
+      return;
     }
   }
-  setText('continue-title','All Modules Complete! 🎉');
-  setText('continue-subtitle','You are a Java master!');
-  setWidth('continue-progress-fill','100%'); setText('continue-progress-label','100%');
+  setText('continue-title', 'All Modules Complete!');
+  setText('continue-subtitle', 'You have mastered this track.');
+  setWidth('continue-progress-fill', '100%'); setText('continue-progress-label', '100%');
 }
 
 function startDailyQuest() {
@@ -582,7 +580,7 @@ function startDailyQuest() {
       return;
     }
   }
-  toast('All content complete! You are a Java master! 🏆');
+  toast('All content complete! You are a Java master!');
 }
 
 /* ═══════════════ MAP & MODULE PROGRESS ═════════════════════════ */
@@ -662,7 +660,7 @@ function renderMap() {
   var banner = ge('diff-path-banner');
   if (banner) {
     var p = STATE.player;
-    banner.innerHTML = '<span class="diff-banner-tag">' + (DIFFICULTY_LABELS[p.difficulty] || '🌱 Beginner') + '</span> '
+    banner.innerHTML = '<span class="diff-banner-tag">' + (DIFFICULTY_LABELS[p.difficulty] || 'Beginner') + '</span> '
       + '<span class="diff-banner-info">' + allMods.length + ' modules available</span> — '
       + '<a class="diff-banner-link" id="map-change-diff">Change difficulty</a>';
     var cd = ge('map-change-diff');
@@ -672,20 +670,23 @@ function renderMap() {
   path.innerHTML = '';
 
   var tracks = [
-    { key: 'beginner', title: '🌱 Beginner Track — Foundations & Core Java', desc: 'Modules B1–B8 • Java syntax, loops, OOP & basic collections', projId: 'proj-beginner' },
-    { key: 'intermediate', title: '🔥 Intermediate Track — OOP, Streams & Architecture', desc: 'Modules I1–I8 • Streams, Lambdas, JDBC, Concurrency & JUnit', projId: 'proj-intermediate' },
-    { key: 'advanced', title: '⚡ Advanced Track — JVM Internals & Cloud Enterprise', desc: 'Modules A1–A8 • Virtual Threads, Spring Boot, Security & Docker', projId: 'proj-advanced' }
+    { key: 'beginner', title: 'Beginner Track — Foundations & Core Java', desc: 'Modules B1–B8 • Java syntax, control flow, methods, arrays & OOP fundamentals', projId: 'proj-beginner', banner: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80' },
+    { key: 'intermediate', title: 'Intermediate Track — OOP, Streams & Architecture', desc: 'Modules I1–I8 • Streams, Lambdas, JDBC, Concurrency, JUnit & Collections', projId: 'proj-intermediate', banner: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80' },
+    { key: 'advanced', title: 'Advanced Track — JVM Internals & Cloud Enterprise', desc: 'Modules A1–A8 • Virtual Threads, Spring Boot, Security & Microservices', projId: 'proj-advanced', banner: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80' }
   ];
 
   tracks.forEach(function(tr){
     var modsInTrack = allMods.filter(function(m){ return m.level === tr.key; });
     if (!modsInTrack.length) return;
 
-    // Track Section Header
+    // Track Section Header with Real Photo Banner
     var header = document.createElement('div');
     header.className = 'track-section-header';
-    header.innerHTML = '<div class="track-header-title">' + esc(tr.title) + '</div>'
-      + '<div class="track-header-desc">' + esc(tr.desc) + '</div>';
+    header.innerHTML = '<div class="track-header-banner" style="background-image:linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.7)), url(\'' + tr.banner + '\')">'
+      + '<div class="track-header-content">'
+      + '<div class="track-header-title">' + esc(tr.title) + '</div>'
+      + '<div class="track-header-desc">' + esc(tr.desc) + '</div>'
+      + '</div></div>';
     path.appendChild(header);
 
     // Track Nodes Path Container
@@ -710,10 +711,13 @@ function renderMap() {
 
       var btn = document.createElement('div');
       btn.className = 'module-node-btn';
+      var modImg = mod.image || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=200&h=200&q=80';
+
       if (st === 'locked') {
-        btn.innerHTML = '<span style="opacity:.35;font-size:1.8rem">' + esc(mod.icon) + '</span><span class="lock-overlay">🔒</span>';
+        btn.innerHTML = '<div class="module-node-photo" style="background-image:url(\'' + modImg + '\');filter:grayscale(1) opacity(0.35);"></div>'
+          + '<span class="lock-overlay"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>';
       } else {
-        btn.innerHTML = '<span style="font-size:1.8rem">' + esc(mod.icon) + '</span>';
+        btn.innerHTML = '<div class="module-node-photo" style="background-image:url(\'' + modImg + '\');"></div>';
         if (completed) {
           var ck = document.createElement('div');
           ck.className = 'check-overlay';
@@ -740,7 +744,7 @@ function renderMap() {
 
     path.appendChild(trackNodes);
 
-    // Capstone Project Card at the end of each track
+    // Capstone Project Card at the end of each track with Photo Cover
     var proj = (window.PROJECTS || []).find(function(p){ return p.id === tr.projId; });
     if (proj) {
       var pState = (STATE && STATE.player && STATE.player.capstoneProjects) ? STATE.player.capstoneProjects[proj.id] : null;
@@ -750,6 +754,7 @@ function renderMap() {
         checkedCount = Object.keys(pState.tasks).filter(function(k){ return pState.tasks[k]; }).length;
       }
       var totalReqs = (proj.requirements || []).length;
+      var coverPhoto = proj.coverPhoto || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80';
 
       var pCard = document.createElement('div');
       var cardClasses = 'capstone-project-card glass-card';
@@ -758,28 +763,34 @@ function renderMap() {
       pCard.className = cardClasses;
       pCard.setAttribute('data-projid', proj.id);
 
-      var pillText = '🌟 ' + tr.key.toUpperCase() + ' CAPSTONE PROJECT';
-      var actionBtnText = 'View Project 🚀';
+      var pillText = tr.key.toUpperCase() + ' CAPSTONE PROJECT';
+      var actionBtnText = 'View Project';
       var descText = proj.description;
 
       if (isCompleted) {
-        pillText = '🌟 ' + tr.key.toUpperCase() + ' CAPSTONE • ✅ COMPLETED (+' + (proj.xpReward || 250) + ' XP)';
-        actionBtnText = 'Review Project ⭐';
-        descText = '🎉 Milestone requirements completed! ' + (pState.completedAt ? 'Completed on ' + new Date(pState.completedAt).toLocaleDateString() : 'Claimed!');
+        pillText = tr.key.toUpperCase() + ' CAPSTONE • COMPLETED (+' + (proj.xpReward || 250) + ' XP)';
+        actionBtnText = 'Review Project';
+        descText = 'Milestone requirements verified! ' + (pState.completedAt ? 'Completed on ' + new Date(pState.completedAt).toLocaleDateString() : 'Claimed!');
       } else if (checkedCount > 0) {
-        pillText = '🌟 ' + tr.key.toUpperCase() + ' CAPSTONE • ⚡ IN PROGRESS (' + checkedCount + '/' + totalReqs + ' Tasks)';
-        actionBtnText = 'Continue Project 🚀';
+        pillText = tr.key.toUpperCase() + ' CAPSTONE • IN PROGRESS (' + checkedCount + '/' + totalReqs + ' Tasks)';
+        actionBtnText = 'Continue Project';
       }
 
-      pCard.innerHTML = '<div class="capstone-icon-col"><span class="capstone-icon">' + (isCompleted ? '👑' : '🏆') + '</span></div>'
-        + '<div class="capstone-body">'
-        + '<div class="capstone-level-pill">' + pillText + '</div>'
+      pCard.innerHTML = '<div class="capstone-photo-banner" style="background-image:linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url(\'' + coverPhoto + '\')">'
+        + '<div class="capstone-banner-overlay">'
+        + '<span class="capstone-tag-pill">' + pillText + '</span>'
         + '<h3 class="capstone-title">' + esc(proj.title) + '</h3>'
-        + '<p class="capstone-desc">' + esc(descText) + '</p>'
         + '</div>'
-        + '<div class="capstone-action">'
+        + '</div>'
+        + '<div class="capstone-body">'
+        + '<p class="capstone-desc">' + esc(descText) + '</p>'
+        + '<div class="capstone-progress-row">'
+        + '<div class="capstone-prog-bar"><div class="capstone-prog-fill" style="width:' + (totalReqs ? Math.round(checkedCount/totalReqs*100) : 0) + '%"></div></div>'
+        + '<span class="capstone-prog-label">' + checkedCount + '/' + totalReqs + ' Verified</span>'
+        + '</div>'
         + '<button class="btn-primary btn-sm capstone-view-btn" data-projid="' + proj.id + '">' + actionBtnText + '</button>'
         + '</div>';
+
       pCard.addEventListener('click', function(e){
         var pid = this.getAttribute('data-projid');
         openProjectModal(pid);
@@ -803,14 +814,14 @@ function saveCapstoneCode() {
     STATE.player.capstoneProjects[_activeCapstoneProj].code = ed.value;
     STATE.player.capstoneProjects[_activeCapstoneProj].lastSavedAt = new Date().toISOString();
     localSave();
-    setText('capstone-save-status', '💾 Saved ' + new Date().toLocaleTimeString());
-    toast('Project code saved to cloud! 💾☁️');
+    setText('capstone-save-status', 'Saved ' + new Date().toLocaleTimeString());
+    toast('Project code saved to cloud!');
   }
 }
 
 function handleEditorInput() {
   if (!_activeCapstoneProj || !STATE || !STATE.player) return;
-  setText('capstone-save-status', '⏳ Editing…');
+  setText('capstone-save-status', 'Editing…');
   clearTimeout(_capstoneAutoSaveTimer);
   _capstoneAutoSaveTimer = setTimeout(function(){
     var ed = ge('code-editor');
@@ -821,7 +832,7 @@ function handleEditorInput() {
       STATE.player.capstoneProjects[_activeCapstoneProj].code = ed.value;
       STATE.player.capstoneProjects[_activeCapstoneProj].lastSavedAt = new Date().toISOString();
       localSave();
-      setText('capstone-save-status', '💾 Auto-saved ' + new Date().toLocaleTimeString());
+      setText('capstone-save-status', 'Auto-saved ' + new Date().toLocaleTimeString());
     }
   }, 1200);
 }
@@ -841,10 +852,10 @@ function loadCapstoneCodeIntoPlayground(proj) {
   if (banner) {
     banner.classList.remove('hidden');
     setText('capstone-banner-title', proj.title);
-    setText('capstone-save-status', (pState && pState.lastSavedAt) ? '💾 Saved ' + new Date(pState.lastSavedAt).toLocaleTimeString() : '💾 Ready');
+    setText('capstone-save-status', (pState && pState.lastSavedAt) ? 'Saved ' + new Date(pState.lastSavedAt).toLocaleTimeString() : 'Ready');
   }
 
-  toast('Loaded ' + proj.title + ' in Playground! 💻');
+  toast('Loaded ' + proj.title + ' in Playground!');
 }
 
 function openProjectModal(projId) {
@@ -881,7 +892,7 @@ function openProjectModal(projId) {
     if (pState.completed) {
       if (statusPill) {
         statusPill.className = 'project-status-pill completed';
-        statusPill.textContent = '✅ Completed (+' + (proj.xpReward || 250) + ' XP)';
+        statusPill.textContent = 'Completed (+' + (proj.xpReward || 250) + ' XP)';
       }
       if (banner) {
         banner.classList.remove('hidden');
@@ -889,24 +900,24 @@ function openProjectModal(projId) {
         setText('project-completion-sub', 'Progress saved to cloud. Completed ' + dStr + ' • +' + (proj.xpReward || 250) + ' XP claimed & badge unlocked!');
       }
       if (completeBtn) {
-        completeBtn.textContent = '✅ Project Completed (XP Claimed)';
+        completeBtn.textContent = 'Project Completed (XP Claimed)';
         completeBtn.classList.remove('btn-primary');
         completeBtn.classList.add('btn-secondary');
       }
     } else {
       if (banner) banner.classList.add('hidden');
       if (completeBtn) {
-        completeBtn.textContent = (pct === 100) ? '🎉 Complete Project & Claim ' + (proj.xpReward || 250) + ' XP!' : '🎉 Mark Project Complete (+' + (proj.xpReward || 250) + ' XP)';
+        completeBtn.textContent = (pct === 100) ? 'Complete Project & Claim ' + (proj.xpReward || 250) + ' XP!' : 'Mark Project Complete (+' + (proj.xpReward || 250) + ' XP)';
         completeBtn.classList.remove('btn-secondary');
         completeBtn.classList.add('btn-primary');
       }
       if (statusPill) {
         if (checked > 0) {
           statusPill.className = 'project-status-pill in-progress';
-          statusPill.textContent = '⚡ In Progress (' + checked + '/' + reqs.length + ')';
+          statusPill.textContent = 'In Progress (' + checked + '/' + reqs.length + ')';
         } else {
           statusPill.className = 'project-status-pill not-started';
-          statusPill.textContent = '🎯 Not Started';
+          statusPill.textContent = 'Not Started';
         }
       }
     }
@@ -926,12 +937,12 @@ function openProjectModal(projId) {
       item.style.cursor = 'default';
       item.innerHTML = '<div class="task-check-circle">' + (isChecked ? '✓' : '') + '</div>'
         + '<div style="flex:1;"><div class="task-text">' + esc(reqText) + '</div>'
-        + (reason ? '<div class="task-eval-reason ' + (isChecked ? 'reason-pass' : 'reason-fail') + '">' + (isChecked ? '✅ ' : '⚠️ ') + esc(reason) + '</div>' : '')
+        + (reason ? '<div class="task-eval-reason ' + (isChecked ? 'reason-pass' : 'reason-fail') + '">' + (isChecked ? '✓ ' : 'Notice: ') + esc(reason) + '</div>' : '')
         + '</div>'
         + '<span class="task-badge-pill ' + (isChecked ? 'pill-done' : 'pill-pending') + '">' + (isChecked ? 'Verified ✓' : 'Needs Code') + '</span>';
 
       item.addEventListener('click', function(){
-        toast('🔒 Milestones are verified automatically by AI! Write code in the editor and click "🤖 AI Verify Tasks".');
+        toast('Milestones are verified automatically by AI! Write code in the editor and click "AI Verify Tasks".');
       });
       tasksContainer.appendChild(item);
     });
@@ -943,13 +954,13 @@ function openProjectModal(projId) {
     var ed = ge('code-editor');
     var code = (ed && ed.value && ed.value.trim()) ? ed.value.trim() : (pState.code || '');
     if (!code || code.length < 35 || code.includes('// Starter skeleton with milestones')) {
-      toast('⚠️ Please open the Code Playground and write your Java implementation first before verifying!');
+      toast('Please open the Code Playground and write your Java implementation first before verifying!');
       return;
     }
 
     var evalBtns = [ge('project-ai-eval-btn'), ge('project-ai-eval-btn-main')];
-    evalBtns.forEach(function(b){ if(b) { b.disabled = true; b.textContent = '⏳ AI Evaluating…'; } });
-    toast('🤖 JavaBot is analyzing your code against all milestones…');
+    evalBtns.forEach(function(b){ if(b) { b.disabled = true; b.textContent = 'AI Evaluating…'; } });
+    toast('JavaBot is analyzing your code against all milestones…');
 
     callAI('eval-project', {
       projectTitle: proj.title,
@@ -957,7 +968,7 @@ function openProjectModal(projId) {
       code: code
     })
     .then(function(res) {
-      evalBtns.forEach(function(b){ if(b) { b.disabled = false; b.textContent = '🤖 AI Verify Tasks'; } });
+      evalBtns.forEach(function(b){ if(b) { b.disabled = false; b.textContent = 'AI Verify Tasks'; } });
       if (!res || !Array.isArray(res.evaluations)) throw new Error('Invalid evaluation result from AI');
 
       pState.evalFeedback = pState.evalFeedback || {};
@@ -975,14 +986,14 @@ function openProjectModal(projId) {
 
       var total = (proj.requirements || []).length;
       if (passCount === total) {
-        toast('🎉 All ' + total + ' milestones verified by AI! You can now complete the project and claim your XP! 🏆');
+        toast('All ' + total + ' milestones verified by AI! You can now complete the project and claim your XP!');
       } else {
-        toast('📋 AI Evaluation: ' + passCount + '/' + total + ' milestones passed. Check notes above for what is missing.');
+        toast('AI Evaluation: ' + passCount + '/' + total + ' milestones passed. Check notes above for what is missing.');
       }
     })
     .catch(function(err) {
-      evalBtns.forEach(function(b){ if(b) { b.disabled = false; b.textContent = '🤖 AI Verify Tasks'; } });
-      toast('⚠️ AI Evaluation error: ' + (err.message || 'Please retry in a moment'));
+      evalBtns.forEach(function(b){ if(b) { b.disabled = false; b.textContent = 'AI Verify Tasks'; } });
+      toast('AI Evaluation error: ' + (err.message || 'Please retry in a moment'));
     });
   }
 
@@ -1000,7 +1011,7 @@ function openProjectModal(projId) {
       var card = document.createElement('div');
       card.className = 'project-idea-card';
       card.innerHTML = '<div class="idea-card-header">'
-        + '<span class="idea-card-icon">' + (idea.icon || '💡') + '</span>'
+        + '<span class="idea-card-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>'
         + '<span class="idea-card-title">' + esc(idea.title) + '</span>'
         + '</div>'
         + '<div class="idea-card-concepts">' + esc(idea.concepts || '') + '</div>'
@@ -1026,13 +1037,13 @@ function openProjectModal(projId) {
   if (completeBtn) {
     completeBtn.onclick = function(){
       if (pState.completed) {
-        toast('Project already completed! 🏆');
+        toast('Project already completed!');
         return;
       }
       var reqs = proj.requirements || [];
       var allVerified = reqs.every(function(_, i){ return !!pState.tasks[i]; });
       if (!allVerified) {
-        toast('⛔ Anti-Skip: All ' + reqs.length + ' milestones must be verified by AI before claiming completion! Write code and click "AI Verify Tasks".');
+        toast('Anti-Skip: All ' + reqs.length + ' milestones must be verified by AI before claiming completion! Write code and click "AI Verify Tasks".');
         if (pState.completed) {
           pState.completed = false;
           localSave();
@@ -1048,7 +1059,7 @@ function openProjectModal(projId) {
       localSave();
       updateStatusUI();
       renderMap();
-      toast('🏆 Capstone Verified & Completed! +' + (proj.xpReward || 250) + ' XP & Badge Awarded! 🌟');
+      toast('Capstone Verified & Completed! +' + (proj.xpReward || 250) + ' XP & Badge Awarded!');
     };
   }
 
@@ -1081,7 +1092,7 @@ function openModulePopup(modId) {
     var unlocked = isLessonUnlocked(mod.id, lesson.id);
     var item = document.createElement('div');
     item.className = 'popup-lesson-item' + (done ? ' completed' : '') + (!unlocked && !done ? ' locked-item' : '');
-    item.innerHTML = '<span class="lesson-check">' + (done ? '✅' : unlocked ? '📖' : '🔒') + '</span>'
+    item.innerHTML = '<span class="lesson-check">' + (done ? '✓' : unlocked ? '•' : '') + '</span>'
       + '<span class="lesson-item-name">' + esc(lesson.title) + '</span>'
       + '<span class="lesson-item-xp">+' + lesson.xp + ' XP</span>';
     if (unlocked || done) {
@@ -1114,7 +1125,7 @@ function openModulePopup(modId) {
     if (allDone || challDone) {
       var cbtn = document.createElement('button');
       cbtn.className = challDone ? 'btn-secondary' : 'btn-primary';
-      cbtn.textContent = challDone ? ('✅ Quiz Done (+' + mod.challenge.xp + ' XP)') : ('⚔️ Take Quiz Challenge (+' + mod.challenge.xp + ' XP)');
+      cbtn.textContent = challDone ? ('Quiz Done (+' + mod.challenge.xp + ' XP)') : ('Take Quiz Challenge (+' + mod.challenge.xp + ' XP)');
       cbtn.setAttribute('data-mid', mod.id);
       cbtn.addEventListener('click', function(){
         closeModulePopup();
@@ -1125,7 +1136,7 @@ function openModulePopup(modId) {
       var aiBtn = document.createElement('button');
       aiBtn.className = 'btn-secondary btn-ai-practice';
       aiBtn.style.marginTop = '0.5rem';
-      aiBtn.innerHTML = '✨ Infinite Practice (AI Quiz)';
+      aiBtn.innerHTML = 'Infinite Practice (AI Quiz)';
       aiBtn.setAttribute('data-mid', mod.id);
       aiBtn.addEventListener('click', function(){
         closeModulePopup();
@@ -1148,7 +1159,7 @@ function openModulePopup(modId) {
     cdBtn.className = codeDone ? 'btn-secondary btn-coding-popup' : 'btn-primary btn-coding-popup';
     cdBtn.style.marginTop = '0.5rem';
 
-    cdBtn.innerHTML = '💻 ' + (codeDone ? '✅ Coding Task Complete' : 'Coding Challenge');
+    cdBtn.innerHTML = '' + (codeDone ? 'Coding Task Complete' : 'Coding Challenge');
     cdBtn.setAttribute('data-mid', mod.id);
     cdBtn.addEventListener('click', function(){
       closeModulePopup();
@@ -1209,7 +1220,7 @@ function startCodingChallenge(modId) {
   if (hintBox) {
     hintBox.classList.add('hidden');
     hintBox.innerHTML = (task.hints && task.hints.length)
-      ? task.hints.map(function(h, i){ return '<div class="hint-item"><strong>💡 Hint ' + (i + 1) + ':</strong> ' + fmt(h) + '</div>'; }).join('')
+      ? task.hints.map(function(h, i){ return '<div class="hint-item"><strong>Hint ' + (i + 1) + ':</strong> ' + fmt(h) + '</div>'; }).join('')
       : '<div>Follow standard Java conventions and test each case thoroughly.</div>';
   }
 
@@ -1224,7 +1235,7 @@ function startCodingChallenge(modId) {
   if (overall) {
     overall.className = 'test-status-pill';
     var isDone = (STATE.player.completedCoding || []).indexOf(mod.id) !== -1;
-    overall.textContent = isDone ? 'Solved ✅' : 'Not submitted';
+    overall.textContent = isDone ? 'Solved' : 'Not submitted';
   }
 
   renderTestCasesList(task.testCases || []);
@@ -1241,15 +1252,15 @@ function generateNewCodingChallenge() {
     return;
   }
   var btn = ge('coding-new-ai-btn');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating Challenge…'; }
-  toast('✨ Asking Gemini to craft a brand new Java coding challenge for ' + _curCodingMod.title + '…');
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating Challenge…'; }
+  toast('Asking Gemini to craft a brand new Java coding challenge for ' + _curCodingMod.title + '…');
 
   callAI('generate-coding-task', {
     topic: _curCodingMod.title,
     level: _curCodingMod.level || 'intermediate'
   })
   .then(function(res) {
-    if (btn) { btn.disabled = false; btn.textContent = '✨ New Challenge (AI)'; }
+    if (btn) { btn.disabled = false; btn.textContent = 'New Challenge (AI)'; }
     if (!res || !res.task) throw new Error('No task generated by AI');
     var task = res.task;
 
@@ -1265,7 +1276,7 @@ function generateNewCodingChallenge() {
     var hintBox = ge('coding-hint-box');
     if (hintBox) {
       hintBox.innerHTML = (task.hints && task.hints.length)
-        ? task.hints.map(function(h, i){ return '<div class="hint-item"><strong>💡 Hint ' + (i + 1) + ':</strong> ' + fmt(h) + '</div>'; }).join('')
+        ? task.hints.map(function(h, i){ return '<div class="hint-item"><strong>Hint ' + (i + 1) + ':</strong> ' + fmt(h) + '</div>'; }).join('')
         : '<div>Follow standard Java conventions and test each case thoroughly.</div>';
     }
 
@@ -1281,11 +1292,11 @@ function generateNewCodingChallenge() {
       overall.className = 'test-status-pill';
       overall.textContent = 'Not submitted';
     }
-    toast('🎯 Fresh Dynamic Coding Challenge Loaded! (+50 XP)');
+    toast('Fresh Dynamic Coding Challenge Loaded! (+50 XP)');
   })
   .catch(function(err) {
-    if (btn) { btn.disabled = false; btn.textContent = '✨ New Challenge (AI)'; }
-    toast('⚠️ AI Challenge generation error: ' + (err.message || 'Please try again'));
+    if (btn) { btn.disabled = false; btn.textContent = 'New Challenge (AI)'; }
+    toast('AI Challenge generation error: ' + (err.message || 'Please try again'));
   });
 }
 
@@ -1471,7 +1482,7 @@ function runCodingTests() {
   var testCases = task.testCases || [{ input: '', expected: task.expectedOutput || '' }];
 
   _isExecutingTests = true;
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Running Tests…'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Running Tests…'; }
   if (overall) { overall.className = 'test-status-pill running'; overall.textContent = 'Evaluating…'; }
 
   var testPanel = ge('test-results-panel');
@@ -1568,7 +1579,7 @@ function runCodingTests() {
 function finalizeCodingResults(passed, reason) {
   _isExecutingTests = false;
   var btn = ge('coding-submit-btn');
-  if (btn) { btn.disabled = false; btn.textContent = '▶ Submit & Run Tests'; }
+  if (btn) { btn.disabled = false; btn.textContent = 'Submit & Run Tests'; }
 
   var overall = ge('test-overall-status');
   var fb = ge('test-feedback-box');
@@ -1577,7 +1588,7 @@ function finalizeCodingResults(passed, reason) {
   var contBtn = ge('coding-continue-btn');
 
   if (passed) {
-    if (overall) { overall.className = 'test-status-pill passed'; overall.textContent = 'All Tests Passed! 🎉'; }
+    if (overall) { overall.className = 'test-status-pill passed'; overall.textContent = 'All Tests Passed!'; }
 
     var isNew = (STATE.player.completedCoding || []).indexOf(_curCodingMod.id) === -1;
     if (isNew) {
@@ -1592,18 +1603,18 @@ function finalizeCodingResults(passed, reason) {
       fb.classList.add('feedback-success');
     }
     if (titleEl) {
-      titleEl.textContent = '🎉 Solved in ' + _codingAttempt + ' ' + (_codingAttempt === 1 ? 'try' : 'tries') + '!';
+      titleEl.textContent = 'Solved in ' + _codingAttempt + ' ' + (_codingAttempt === 1 ? 'try' : 'tries') + '!';
     }
     if (descEl) {
       descEl.textContent = 'All test cases matched! Challenge complete.';
     }
     if (contBtn) {
-      contBtn.textContent = 'Back to Map 🗺️';
+      contBtn.textContent = 'Back to Map';
       contBtn.onclick = function(){ showScreen('map'); };
     }
 
     burstParticles('levelup-particles');
-    toast('Coding Challenge Complete! ☕');
+    toast('Coding Challenge Complete!');
   } else {
     if (overall) { overall.className = 'test-status-pill failed'; overall.textContent = 'Tests Failed'; }
 
@@ -1619,14 +1630,14 @@ function finalizeCodingResults(passed, reason) {
       fb.classList.add('feedback-error');
     }
     if (titleEl) {
-      titleEl.textContent = '❌ Test Not Passed (Attempt ' + (_codingAttempt - 1) + ')';
+      titleEl.textContent = 'Test Not Passed (Attempt ' + (_codingAttempt - 1) + ')';
     }
     if (descEl) {
       descEl.innerHTML = esc(reason || 'Output did not match expected test case.')
-        + '<br><span style="color:#FFD166;font-weight:600;margin-top:.4rem;display:inline-block">💡 Hint: Review your code and submit again.</span>';
+        + '<br><span style="color:#FFD166;font-weight:600;margin-top:.4rem;display:inline-block">Hint: Review your code and submit again.</span>';
     }
     if (contBtn) {
-      contBtn.textContent = '💡 View Hint';
+      contBtn.textContent = 'View Hint';
       contBtn.onclick = function(){
         var hb = ge('coding-hint-box');
         if (hb) hb.classList.remove('hidden');
@@ -1692,17 +1703,17 @@ function renderSlide() {
   if(prev) prev.style.visibility=(_slideIdx===0?'hidden':'visible');
   if(next) next.textContent=(_slideIdx===total-1?'Finish Lesson ✓':'Next →');
   var area=ge('slide-area'); if(!area) return;
-  var typeLabel={intro:'📖 Introduction',code:'💻 Code Example',tip:'💡 Pro Tip',visual:'🎯 Visualizer'}[slide.type]||'📄 Lesson';
+  var typeLabel={intro:'Introduction',code:'Code Example',tip:'Pro Tip',visual:'Visualizer'}[slide.type]||'Lesson';
   var html='<div class="slide slide-type-'+(slide.type||'intro')+'">'
     +'<div class="slide-inner">'
     +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
     +'<span class="slide-type-badge">'+typeLabel+'</span>'
-    +'<button class="btn-deep-dive" onclick="openDeepDive()">🔬 AI Deep Dive</button>'
+    +'<button class="btn-deep-dive" onclick="openDeepDive()">AI Deep Dive</button>'
     +'</div>'
     +'<h2 class="slide-title">'+esc(slide.title)+'</h2>'
     +'<div class="slide-content">'+fmt(slide.content)+'</div>';
   if(slide.code) html+=buildCodeBlock(slide.code);
-  if(slide.type==='tip') html+='<div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text">'+fmt(slide.content)+'</div></div>';
+  if(slide.type==='tip') html+='<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">'+fmt(slide.content)+'</div></div>';
   html+='</div>';
   if(slide.visual) html+='<div class="visual-area" id="vis-now"></div>';
   html+='</div>';
@@ -1719,8 +1730,7 @@ function renderVis(slide) {
   else if (slide.visual==='flowchart') renderFlowchart(c,slide.visualData||{});
   else if (slide.visual==='class-diagram'&&slide.visualData) renderClassDiagram(c,slide.visualData);
   else {
-    var icons = { memory: '🗃️', loop: '🔄', flowchart: '🔀', 'class-diagram': '🏗️', jvm: '⚙️', hashmap: '📦', stream: '🌊', thread: '🧵' };
-    c.innerHTML = '<div style="text-align:center;padding:1.5rem"><div style="font-size:3rem">' + (icons[slide.visual]||'👁️') + '</div></div>';
+    c.innerHTML = '<div style="text-align:center;padding:1.5rem;font-weight:700;color:var(--text-secondary)">Interactive Diagram</div>';
   }
 }
 
@@ -1739,10 +1749,10 @@ function finishLesson() {
       var mt=_curMod.title,lx=_curLesson.xp;
       setTimeout(function(){setText('complete-module-name',mt);setText('complete-xp-earned','+'+lx+' XP earned!');showModal('modal-complete');},600);
     } else {
-      toast('Lesson complete! +'+_curLesson.xp+' XP 🎉');
+      toast('Lesson complete! +'+_curLesson.xp+' XP');
       setTimeout(function(){showScreen('map');},700);
     }
-  } else { toast('Already completed 👍'); showScreen('map'); }
+  } else { toast('Already completed '); showScreen('map'); }
 }
 
 /* ═══════════════ CHALLENGE ENGINE ══════════════════════════════ */
@@ -1820,7 +1830,7 @@ function renderQuestion() {
   var fb=ge('answer-feedback'),ca=ge('challenge-actions');
   if(fb)fb.classList.add('hidden'); if(ca)ca.classList.remove('hidden');
   var chk=ge('btn-check-answer');if(chk){chk.disabled=false;chk.textContent='Check Answer ✓';}
-  var labels={mcq:'🔘 Multiple Choice','true-false':'✅ True or False',output:'💬 Output Prediction','fill-blank':'📝 Fill in the Blank',arrange:'🔀 Arrange the Code',bug:'🐛 Spot the Bug',match:'🔗 Match Pairs'};
+  var labels={mcq:'Multiple Choice','true-false':'True or False',output:'Output Prediction','fill-blank':'Fill in the Blank',arrange:'Arrange the Code',bug:'Spot the Bug',match:'Match Pairs'};
   var area=ge('question-area'); if(!area) return;
   area.innerHTML='<span class="question-type-tag">'+(labels[q.type]||q.type)+'</span><div class="question-text">'+esc(q.question)+'</div>';
   if(q.code&&q.type!=='fill-blank'&&q.type!=='bug') area.innerHTML+=buildCodeBlock(q.code);
@@ -1833,7 +1843,7 @@ function renderQuestion() {
 }
 
 function rMCQ(q,area){var opts=document.createElement('div');opts.className='mcq-options';q.options.forEach(function(opt,i){var d=document.createElement('div');d.className='mcq-option';var l=document.createElement('span');l.className='mcq-letter';l.textContent='ABCD'[i];var t=document.createElement('span');t.className='mcq-text';t.textContent=opt;d.appendChild(l);d.appendChild(t);d.setAttribute('data-i',i);d.addEventListener('click',function(){_selMCQ=parseInt(this.getAttribute('data-i'));qsa('.mcq-option').forEach(function(o){o.classList.remove('selected');});this.classList.add('selected');});opts.appendChild(d);});area.appendChild(opts);}
-function rTF(q,area){if(q.code){var cd=document.createElement('div');cd.innerHTML=buildCodeBlock(q.code);area.appendChild(cd);}var c=document.createElement('div');c.className='tf-container';['True ✅','False ❌'].forEach(function(label,i){var b=document.createElement('button');b.className='tf-btn '+(i===0?'true-btn':'false-btn');b.id='tf-b-'+i;b.textContent=label;b.setAttribute('data-v',i===0?'true':'false');b.addEventListener('click',function(){_selTF=(this.getAttribute('data-v')==='true');qsa('.tf-btn').forEach(function(x){x.classList.remove('selected');});this.classList.add('selected');});c.appendChild(b);});area.appendChild(c);}
+function rTF(q,area){if(q.code){var cd=document.createElement('div');cd.innerHTML=buildCodeBlock(q.code);area.appendChild(cd);}var c=document.createElement('div');c.className='tf-container';['True','False'].forEach(function(label,i){var b=document.createElement('button');b.className='tf-btn '+(i===0?'true-btn':'false-btn');b.id='tf-b-'+i;b.textContent=label;b.setAttribute('data-v',i===0?'true':'false');b.addEventListener('click',function(){_selTF=(this.getAttribute('data-v')==='true');qsa('.tf-btn').forEach(function(x){x.classList.remove('selected');});this.classList.add('selected');});c.appendChild(b);});area.appendChild(c);}
 function rFill(q,area){var parts=q.codeTemplate.split('___');_blanks=[];for(var x=0;x<parts.length-1;x++)_blanks.push(null);_activeB=0;var wrap=document.createElement('div');wrap.className='code-block';var hdr=document.createElement('div');hdr.className='code-block-header';hdr.innerHTML='<span class="code-lang-tag">Java</span>';wrap.appendChild(hdr);var pre=document.createElement('pre');parts.forEach(function(part,i){var sp=document.createElement('span');sp.innerHTML=highlightSyntax(part);pre.appendChild(sp);if(i<parts.length-1){var blank=document.createElement('span');blank.className='blank-input';blank.id='bl-'+i;blank.innerHTML='&nbsp;&nbsp;&nbsp;&nbsp;';blank.setAttribute('data-i',i);blank.addEventListener('click',function(){activateBlank(parseInt(this.getAttribute('data-i')));});pre.appendChild(blank);}});wrap.appendChild(pre);area.appendChild(wrap);var bank=document.createElement('div');bank.className='blank-word-bank';bank.innerHTML='<div style="font-size:.78rem;color:rgba(255,255,255,.4);width:100%;margin-bottom:.4rem;font-weight:600">Word Bank — click word then click blank:</div>';q.options.forEach(function(word){var chip=document.createElement('div');chip.className='word-bank-chip';chip.textContent=word;chip.setAttribute('data-word',word);chip.addEventListener('click',function(){fillBlank(this.getAttribute('data-word'));});bank.appendChild(chip);});area.appendChild(bank);setTimeout(function(){activateBlank(0);},50);}
 function activateBlank(idx){_activeB=idx;qsa('.blank-input').forEach(function(el,i){el.style.boxShadow=(i===idx)?'0 0 0 2px #6C63FF':'none';});}
 function fillBlank(word){if(_activeB<0)return;_blanks[_activeB]=word;var el=ge('bl-'+_activeB);if(el){el.textContent=word;el.classList.add('filled');}var next=-1;for(var i=_activeB+1;i<_blanks.length;i++)if(_blanks[i]===null){next=i;break;}if(next>=0)activateBlank(next);else _activeB=-1;}
@@ -1851,13 +1861,13 @@ function checkAnswer() {
   else if(q.type==='bug'){if(_selBug<0){toast('Select an option first!');return;}correct=(_selBug===q.answer);if(q.options){qsa('.mcq-option').forEach(function(el,i){if(i===q.answer)el.classList.add('correct');else if(i===_selBug&&!correct)el.classList.add('wrong');});}}
   else if(q.type==='match'){if(Object.keys(_mPairs).length<q.pairs.length){toast('Match all pairs first!');return;}correct=true;for(var k=0;k<q.pairs.length;k++)if(_mPairs[k]!==k){correct=false;break;}}
   if(correct){_hits++;addXP(12);}
-  else{var p=STATE.player;if(p.hearts>0){p.hearts--;p.heartRefillTime=Date.now()+30*60*1000;renderHearts();localSave();}if(p.hearts===0)toast('No hearts! They refill in 30 min ❤️‍🩹');}
+  else{var p=STATE.player;if(p.hearts>0){p.hearts--;p.heartRefillTime=Date.now()+30*60*1000;renderHearts();localSave();}if(p.hearts===0)toast('No hearts! They refill in 30 min');}
   var fb=ge('answer-feedback'),ca=ge('challenge-actions');
   if(fb){
     fb.classList.remove('hidden','correct-fb','wrong-fb');
     fb.classList.add(correct?'correct-fb':'wrong-fb');
-    setText('feedback-icon',correct?'✅':'❌');
-    setText('feedback-result',correct?'Correct! 🎉':'Not quite...');
+    setText('feedback-icon',correct?'✓':'✕');
+    setText('feedback-result',correct?'Correct!':'Not quite...');
     setText('feedback-explanation',q.explanation||'');
     var aiBox = ge('feedback-ai-box');
     if (aiBox) { aiBox.innerHTML = ''; aiBox.classList.add('hidden'); }
@@ -1866,7 +1876,7 @@ function checkAnswer() {
       if (!correct && typeof explainMistakeWithAI === 'function') {
         explainBtn.classList.remove('hidden');
         explainBtn.disabled = false;
-        explainBtn.textContent = '🤖 Explain My Mistake';
+        explainBtn.textContent = 'Explain My Mistake';
       } else {
         explainBtn.classList.add('hidden');
       }
@@ -1896,7 +1906,7 @@ function finishChallenge() {
     localSave();
   }
   setText('score-text',_hits+'/'+total);
-  setText('challenge-result-title',perfect?'Perfect Score! 🎉':pct>=70?'Great Job! 💪':'Keep Practicing! 📚');
+  setText('challenge-result-title',perfect?'Perfect Score!':pct>=70?'Great Job!':'Keep Practicing!');
   setText('challenge-xp-earned','+'+xp+' XP Earned!');
   setText('result-message',perfect?'Flawless! Bonus XP earned!':pct+'% correct!');
   var sc=ge('score-circle');if(sc)sc.style.borderColor=perfect?'#06D6A0':pct>=70?'#FFD166':'#E63946';
@@ -1905,14 +1915,28 @@ function finishChallenge() {
 }
 
 function renderHearts(){
-  var h=STATE.player.hearts;
-  for(var i=1;i<=3;i++){var e=ge('heart-'+i);if(e)e.classList.toggle('lost',i>h);}
-  var s='';for(var a=0;a<h;a++)s+='❤️';for(var b=0;b<3-h;b++)s+='🤍';setText('nav-hearts',s);
+  var h = (STATE && STATE.player) ? STATE.player.hearts : 3;
+  for(var i=1;i<=3;i++){
+    var e=ge('heart-'+i);
+    if(e) {
+      e.classList.toggle('lost', i>h);
+      e.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="' + (i<=h ? '#E63946' : '#D1D5DB') + '"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+    }
+  }
+  var container = ge('nav-hearts');
+  if (container) {
+    var svgHearts = '';
+    for (var a = 0; a < 3; a++) {
+      var filled = (a < h);
+      svgHearts += '<svg class="heart-svg" viewBox="0 0 24 24" width="16" height="16" fill="' + (filled ? '#E63946' : '#9CA3AF') + '"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+    }
+    container.innerHTML = svgHearts;
+  }
 }
 
 /* ═══════════════ COMPILER ═══════════════════════════════════════ */
 var TEMPLATES = {
-  hello:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("I am learning Java with JavaQuest! ☕");\n    }\n}',
+  hello:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("I am learning Java with JavaQuest!");\n    }\n}',
   variables:'public class Main {\n    public static void main(String[] args) {\n        int age = 20;\n        double price = 9.99;\n        boolean isLearning = true;\n        String name = "JavaLearner";\n        char grade = \'A\';\n        System.out.println("Name: " + name);\n        System.out.println("Age: " + age);\n        System.out.println("Learning: " + isLearning);\n    }\n}',
   ifelse:'public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        if (score >= 90) System.out.println("Grade: A");\n        else if (score >= 80) System.out.println("Grade: B");\n        else System.out.println("Grade: C or below");\n        String status = score >= 60 ? "Passed" : "Failed";\n        System.out.println("Status: " + status);\n    }\n}',
   loops:'public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) System.out.println("Step " + i);\n        int count = 0;\n        while (count < 3) { System.out.println("Count: " + count); count++; }\n        int[] nums = {10, 20, 30};\n        for (int num : nums) System.out.println(num);\n    }\n}',
@@ -1931,12 +1955,12 @@ function runCode() {
   var code = ed.value.trim(); if (!code) { toast('Write some code first!'); return; }
   if (_activeCapstoneProj) saveCapstoneCode();
   var outEl = ge('output-area'); if (!outEl) return;
-  var runBtn = ge('run-btn'); if (runBtn) { runBtn.disabled = true; runBtn.textContent = '⏳ Running…'; }
+  var runBtn = ge('run-btn'); if (runBtn) { runBtn.disabled = true; runBtn.textContent = 'Running…'; }
   outEl.innerHTML = '<div class="output-running"><span class="run-spinner"></span>Compiling and running Java…</div>';
 
   executeJava(code, '')
     .then(function(data){
-      if (runBtn) { runBtn.disabled = false; runBtn.textContent = '▶ Run Code'; }
+      if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Run Code'; }
       var out = '', hasErr = false;
       if (data.compile && data.compile.stderr) {
         out = '[Compilation Error]\n' + data.compile.stderr;
@@ -1956,11 +1980,11 @@ function runCode() {
       outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '">' + esc(out) + '</pre>';
     })
     .catch(function(err){
-      if (runBtn) { runBtn.disabled = false; runBtn.textContent = '▶ Run Code'; }
+      if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Run Code'; }
       outEl.innerHTML = '<div class="output-error"><pre>[Execution Error]\n' + esc(err.message) + '</pre></div>';
     });
 }
-function clearOutput(){ var o=ge('output-area'); if(o)o.innerHTML='<div class="output-placeholder">Click ▶ Run Code to execute your Java program</div>'; }
+function clearOutput(){ var o=ge('output-area'); if(o)o.innerHTML='<div class="output-placeholder">Click Run Code to execute your Java program</div>'; }
 
 /* ═══════════════ XP / LEVELS ════════════════════════════════════ */
 function addXP(amount) {
@@ -1972,19 +1996,20 @@ function addXP(amount) {
   updateNav(); localSave();
 }
 function triggerLevelUp(){var lv=getLv();setText('levelup-new-level','Level '+STATE.player.level);setText('levelup-rank',lv.name);setText('levelup-rank-icon',lv.icon);checkBadge('level_5');checkBadge('level_10');burstParticles('levelup-particles');setTimeout(function(){showModal('modal-levelup');},300);}
-function getLv(){if(!window.LEVELS)return{level:1,name:'Novice',xpRequired:0,icon:'🌱'};var r=LEVELS[0];for(var i=0;i<LEVELS.length;i++)if(STATE.player.xp>=LEVELS[i].xpRequired)r=LEVELS[i];return r;}
+function getLv(){if(!window.LEVELS)return{level:1,name:'Novice',xpRequired:0,icon:''};var r=LEVELS[0];for(var i=0;i<LEVELS.length;i++)if(STATE.player.xp>=LEVELS[i].xpRequired)r=LEVELS[i];return r;}
 function getNextLv(){if(!window.LEVELS)return null;var cur=getLv();for(var i=0;i<LEVELS.length;i++)if(LEVELS[i].level===cur.level+1)return LEVELS[i];return null;}
 
 function updateNav() {
+  if (!STATE || !STATE.player) return;
   var p=STATE.player,lv=getLv(),nx=getNextLv();
   var xs=lv.xpRequired,xe=nx?nx.xpRequired:xs+999;
   var pct=Math.min(100,Math.round((p.xp-xs)/(xe-xs)*100));
-  setText('nav-level','Lv.'+p.level);setText('nav-level-icon',lv.icon);
+  setText('nav-level','Lv.'+p.level);
   setText('nav-xp',p.xp+' XP');setWidth('xp-fill-mini',pct+'%');
   setText('nav-streak',p.streak);renderHearts();
   // Difficulty chip
   var dc=ge('nav-diff-chip');
-  if(dc) dc.textContent=DIFFICULTY_LABELS[p.difficulty]||'🌱 Beginner';
+  if(dc) dc.textContent=(p.difficulty || 'beginner').toUpperCase();
 }
 
 /* ═══════════════ STREAK ══════════════════════════════════════════ */
@@ -1993,7 +2018,7 @@ function checkStreak(){
   if(!p.lastVisit){p.streak=1;}
   else{var last=new Date(p.lastVisit).toDateString(),yest=new Date();yest.setDate(yest.getDate()-1);
     if(last===today){}
-    else if(last===yest.toDateString()){p.streak++;checkBadge('streak_3');checkBadge('streak_7');setTimeout(function(){toast('Day '+p.streak+' streak! 🔥');},800);}
+    else if(last===yest.toDateString()){p.streak++;checkBadge('streak_3');checkBadge('streak_7');setTimeout(function(){toast('Day '+p.streak+' streak!');},800);}
     else p.streak=1;}
   p.lastVisit=today; localSave(); updateNav();
 }
@@ -2028,10 +2053,12 @@ function renderBadges(){
   BADGES.forEach(function(badge){
     var unlocked=STATE.player.badges.indexOf(badge.id)!==-1;
     var card=document.createElement('div');card.className='badge-card '+(unlocked?'unlocked':'locked');
-    card.innerHTML='<div class="badge-icon">'+(unlocked?badge.icon:'❓')+'</div>'
-      +'<div class="badge-name">'+(unlocked?esc(badge.name):'???')+'</div>'
-      +'<div class="badge-desc">'+(unlocked?esc(badge.description):'Keep playing!')+'</div>'
-      +(!unlocked?'<span class="badge-lock-icon">🔒</span>':'');
+    var badgeImg = badge.image || 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=150&h=150&q=80';
+    card.innerHTML='<div class="badge-photo-wrap"><img src="' + badgeImg + '" class="badge-photo-img ' + (unlocked ? '' : 'locked-badge-img') + '" alt="' + esc(badge.name) + '"/>'
+      + (!unlocked ? '<span class="badge-lock-overlay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>' : '')
+      + '</div>'
+      + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked') + '</div>'
+      + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete curriculum milestones to unlock.') + '</div>';
     grid.appendChild(card);
   });
 }
@@ -2045,13 +2072,13 @@ function renderSettings(){
   setText('settings-difficulty',DIFFICULTY_LABELS[STATE.player.difficulty]||'Beginner');
 }
 
-function refillHearts(){STATE.player.hearts=3;STATE.player.heartRefillTime=null;localSave();renderHearts();toast('Hearts refilled! ❤️');}
+function refillHearts(){STATE.player.hearts=3;STATE.player.heartRefillTime=null;localSave();renderHearts();toast('Hearts refilled!');}
 
 function resetProgress(){
   var name=STATE.player.name, diff=STATE.player.difficulty;
   STATE=freshState(name,diff,0);
   localSave();hideModal('modal-reset');renderAllAvatars();updateNav();showScreen('home');
-  toast('Progress reset. Fresh start! 🌱');
+  toast('Progress reset. Fresh start!');
 }
 
 /* ═══════════════ RESIZABLE WORKSPACES (LEETCODE / IDE STYLE) ════ */
@@ -2131,12 +2158,12 @@ function initResizableWorkspaces() {
     var isTall = localStorage.getItem('jq_coding_editor_tall') === 'true';
     if (isTall) {
       codingEditor.classList.add('editor-tall');
-      codingExpandBtn.textContent = '⛶ Standard View';
+      codingExpandBtn.textContent = 'Standard View';
     }
 
     codingExpandBtn.addEventListener('click', function(){
       var nowTall = codingEditor.classList.toggle('editor-tall');
-      codingExpandBtn.textContent = nowTall ? '⛶ Standard View' : '⛶ Expand Editor';
+      codingExpandBtn.textContent = nowTall ? 'Standard View' : 'Expand Editor';
       try { localStorage.setItem('jq_coding_editor_tall', nowTall); } catch(e){}
     });
   }
@@ -2165,7 +2192,7 @@ function initResizableWorkspaces() {
       codingGutterV.classList.add('dragging');
       if (codingEditor.classList.contains('editor-tall')) {
         codingEditor.classList.remove('editor-tall');
-        if (codingExpandBtn) codingExpandBtn.textContent = '⛶ Expand Editor';
+        if (codingExpandBtn) codingExpandBtn.textContent = 'Expand Editor';
         try { localStorage.setItem('jq_coding_editor_tall', false); } catch(e){}
       }
       var startY = clientY;
@@ -2346,11 +2373,11 @@ document.addEventListener('DOMContentLoaded', function(){
     saveGeminiKeyBtn.addEventListener('click', function(){
       var val = geminiKeyInput ? geminiKeyInput.value.trim() : '';
       if (!val) {
-        toast('Please enter a valid Gemini API key 🔑');
+        toast('Please enter a valid Gemini API key');
         return;
       }
       localStorage.setItem('javaquest_gemini_key', val);
-      toast('Gemini API key saved! 🤖');
+      toast('Gemini API key saved!');
     });
   }
   if (clearGeminiKeyBtn) {
@@ -2422,7 +2449,7 @@ document.addEventListener('DOMContentLoaded', function(){
         STATE.player.capstoneProjects[_activeCapstoneProj].lastSavedAt = new Date().toISOString();
         localSave();
       }
-      setText('capstone-save-status', '💾 Reset to starter skeleton');
+      setText('capstone-save-status', 'Reset to starter skeleton');
       toast('Reset editor to starter skeleton! ↺');
     }
   });
