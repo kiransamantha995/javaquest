@@ -147,6 +147,13 @@ function updateThemeUI(isDark) {
     btn.title = isDark ? 'Switch to Light Mode' : 'Switch to Night Mode';
     btn.setAttribute('aria-label', btn.title);
   }
+  var authIcon = ge('auth-theme-toggle-icon');
+  if (authIcon) authIcon.innerHTML = isDark ? SUN_SVG : MOON_SVG;
+  var authBtn = ge('auth-theme-toggle-btn');
+  if (authBtn) {
+    authBtn.title = isDark ? 'Switch to Light Mode' : 'Switch to Night Mode';
+    authBtn.setAttribute('aria-label', authBtn.title);
+  }
   var setBtn = ge('settings-theme-toggle-btn');
   if (setBtn) {
     setBtn.textContent = isDark ? 'Switch to Day Mode' : 'Switch to Night Mode';

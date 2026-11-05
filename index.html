@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data:;">
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=6.6"/>
+  <link rel="stylesheet" href="style.css?v=6.7"/>
 </head>
 <body>
 
@@ -49,6 +49,11 @@
 <section class="screen active" id="screen-auth">
   <div class="login-bg">
     <div class="login-card">
+      <button class="theme-toggle-btn login-theme-toggle" id="auth-theme-toggle-btn" title="Toggle Night Mode" aria-label="Toggle Night Mode" onclick="toggleTheme()">
+        <span id="auth-theme-toggle-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </span>
+      </button>
       <div class="login-badge-pill">100% FREE GAMIFIED JAVA LEARNING</div>
       <div class="login-logo-wrap">
         <span class="login-logo-icon">
@@ -551,8 +556,6 @@
     </div>
   </div>
 </section>
-  </div>
-</section>
 
 </main>
 
@@ -785,10 +788,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=6.6"></script>
-<script src="animations.js?v=6.6"></script>
-<script src="supabase.js?v=6.6"></script>
-<script src="ai-tutor.js?v=6.6"></script>
-<script src="app.js?v=6.6"></script>
+<script src="curriculum.js?v=6.7"></script>
+<script src="animations.js?v=6.7"></script>
+<script src="supabase.js?v=6.7"></script>
+<script src="ai-tutor.js?v=6.7"></script>
+<script src="app.js?v=6.7"></script>
 </body>
 </html>
