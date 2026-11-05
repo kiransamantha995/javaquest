@@ -1095,11 +1095,14 @@ body {
 /* Winding Quest Path */
 .module-path {
   position: relative;
-  padding: 2rem 0 4rem;
+  padding: 1.5rem 0 4rem;
 }
 .module-path::before {
   content: '';
-  position: absolute; top: 0; bottom: 0; left: 50%;
+  position: absolute;
+  top: 75px;
+  bottom: 0;
+  left: 50%;
   width: 4px;
   background: repeating-linear-gradient(to bottom, #18181B 0px, #18181B 12px, transparent 12px, transparent 20px);
   transform: translateX(-50%);
@@ -1192,29 +1195,6 @@ body {
 }
 
 /* Track Header & Capstone Cards */
-.track-header-card {
-  max-width: 900px;
-  margin: 2.5rem auto 1.5rem;
-  padding: 1.35rem 1.85rem;
-  background: #FFFFFF;
-  border: 2.5px solid var(--ink);
-  border-radius: 16px;
-  box-shadow: 4px 4px 0px var(--ink);
-  text-align: left;
-}
-.track-header-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--ink);
-  display: flex; align-items: center; gap: 0.6rem;
-}
-.track-header-desc {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-top: 0.35rem;
-}
-
 .capstone-project-card {
   width: 100%;
   max-width: 760px;
@@ -1231,6 +1211,7 @@ body {
   cursor: pointer;
   transition: all var(--t);
   position: relative;
+  z-index: 5;
   text-align: left;
 }
 .capstone-project-card:hover {
@@ -3486,11 +3467,15 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* Track Section Headers (Clean Neobrutalist Banner - No Photos) */
+/* Track Section Headers (Clean Neobrutalist Banner - Elevated above dashed line) */
 .track-section-header {
+  position: relative;
+  z-index: 5;
   margin: 2.5rem 0 1.5rem 0;
 }
 .track-header-card {
+  position: relative;
+  z-index: 5;
   background: #FFFFFF;
   border: 3px solid var(--ink);
   border-radius: 18px;
@@ -3779,7 +3764,12 @@ body.dark-theme .chat-panel,
 body.dark-theme .lesson-box,
 body.dark-theme .coding-pane,
 body.dark-theme .login-card,
-body.dark-theme .avatar-preview-card {
+body.dark-theme .avatar-preview-card,
+body.dark-theme .continue-card,
+body.dark-theme .diff-path-banner,
+body.dark-theme .slide-inner,
+body.dark-theme .question-area,
+body.dark-theme .question-card {
   background: #1E1F24 !important;
   color: #F4F4F5 !important;
   border-color: #000000 !important;
@@ -3791,6 +3781,13 @@ body.dark-theme .minecraft-char-card:hover,
 body.dark-theme .continue-card:hover {
   background: #262830 !important;
 }
+
+/* Winding Quest Path in Dark Mode */
+body.dark-theme .module-path::before {
+  background: repeating-linear-gradient(to bottom, #3F3F46 0px, #3F3F46 12px, transparent 12px, transparent 20px) !important;
+}
+
+/* High-Contrast Headings & Titles */
 body.dark-theme .capstone-card-title,
 body.dark-theme .track-header-title,
 body.dark-theme .badge-name,
@@ -3800,9 +3797,31 @@ body.dark-theme .hero-greeting,
 body.dark-theme .section-title,
 body.dark-theme .stat-value,
 body.dark-theme .mod-popup-title,
+body.dark-theme .slide-title,
+body.dark-theme .question-text,
+body.dark-theme .challenge-title-block h2,
+body.dark-theme .compiler-header h1,
+body.dark-theme .settings-header h1,
+body.dark-theme .badges-header h1,
+body.dark-theme .map-header h1,
+body.dark-theme .settings-card h3,
+body.dark-theme .settings-card p strong,
+body.dark-theme .name-label,
+body.dark-theme .diff-banner-info,
+body.dark-theme .module-node-label,
+body.dark-theme .node-code-text,
+body.dark-theme .capstone-prog-label,
+body.dark-theme .capstone-banner-title,
+body.dark-theme .question-counter,
+body.dark-theme .match-col-label,
+body.dark-theme .xp-label-row,
+body.dark-theme #home-level-label,
+body.dark-theme #home-xp-label,
 body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4 {
   color: #F4F4F5 !important;
 }
+
+/* Secondary & Muted Labels */
 body.dark-theme .capstone-card-desc,
 body.dark-theme .track-header-desc,
 body.dark-theme .badge-desc,
@@ -3810,9 +3829,81 @@ body.dark-theme .continue-sub,
 body.dark-theme .stat-label,
 body.dark-theme .daily-text,
 body.dark-theme .mod-popup-sub,
+body.dark-theme .project-modal-desc,
+body.dark-theme .compiler-header p,
+body.dark-theme .badges-header p,
+body.dark-theme #badges-earned-count,
+body.dark-theme #map-subtext,
+body.dark-theme .settings-card p,
+body.dark-theme .continue-prog-label,
+body.dark-theme .template-label,
+body.dark-theme .idea-card-desc,
+body.dark-theme .slide-content p,
+body.dark-theme .slide-content li,
 body.dark-theme p {
-  color: #A1A1AA;
+  color: #A1A1AA !important;
 }
+
+/* Links & Badges */
+body.dark-theme .diff-banner-link {
+  color: #FFE600 !important;
+}
+body.dark-theme .diff-badge-home,
+body.dark-theme .diff-banner-tag {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+  border-color: #000000 !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+body.dark-theme .hero-avatar-btn {
+  background: #24262C !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+body.dark-theme .hero-avatar-btn:hover {
+  background: #2E323A !important;
+}
+
+/* XP Bars & Progress Bars */
+body.dark-theme .xp-bar,
+body.dark-theme .continue-prog-bar,
+body.dark-theme .capstone-prog-bar,
+body.dark-theme .lesson-progress-bar,
+body.dark-theme .challenge-progress-bar,
+body.dark-theme .project-progress-bar-wrap {
+  background: #141518 !important;
+  border-color: #000000 !important;
+}
+
+/* Daily Card */
+body.dark-theme .daily-card {
+  background: #202228 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .daily-tag {
+  background: #FFE600 !important;
+  color: #121316 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .daily-xp-pill {
+  background: #282A30 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+
+/* Continue Card */
+body.dark-theme .continue-module-icon {
+  background: #282A30 !important;
+  color: #FFE600 !important;
+  border-color: #000000 !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+body.dark-theme .continue-arrow {
+  color: #F4F4F5 !important;
+}
+
+/* Quick Actions & Stats */
 body.dark-theme .quick-card-icon,
 body.dark-theme .stat-icon-svg {
   background: #282A30 !important;
@@ -3822,45 +3913,196 @@ body.dark-theme .stat-icon-svg {
 body.dark-theme .quick-card-label {
   color: #F4F4F5 !important;
 }
-body.dark-theme .daily-card {
-  background: #202228 !important;
+
+/* Module Nodes */
+body.dark-theme .module-node.locked .module-node-label {
+  color: #71717A !important;
+}
+body.dark-theme .module-code-pill {
+  background: #FFE600 !important;
+  color: #121316 !important;
+  border-color: #000000 !important;
+}
+
+/* Capstone Project Cards & Modal */
+body.dark-theme .capstone-tag-pill {
+  background: #FFE600 !important;
+  color: #121316 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .capstone-badge-icon {
+  color: #FBBF24 !important;
+}
+body.dark-theme .project-level-badge {
+  background: #3B2A10 !important;
+  color: #FDE68A !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .project-modal-icon {
+  background: #282A30 !important;
+  color: #FFE600 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .project-status-pill.not-started {
+  background: #24262C !important;
+  color: #A1A1AA !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .task-badge-pill {
+  background: #282A30 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .task-badge-pill.pending,
+body.dark-theme .task-badge-pill.pill-pending {
+  background: #450A0A !important;
+  color: #FCA5A5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .task-badge-pill.pill-done {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .task-check-circle {
+  background: #1E1F24 !important;
+  border-color: #3F3F46 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .task-eval-reason.reason-pass {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .task-eval-reason.reason-fail {
+  background: #451A03 !important;
+  color: #FDE68A !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .project-idea-card,
+body.dark-theme .idea-card {
+  background: #18191D !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .idea-card-title {
+  color: #F4F4F5 !important;
+}
+body.dark-theme .idea-card-desc {
+  color: #A1A1AA !important;
+}
+
+/* Lesson Popups & Lesson Screen */
+body.dark-theme .lesson-item-xp {
+  color: #FBBF24 !important;
+}
+body.dark-theme .slide-type-badge {
+  background: #3B2A10 !important;
+  color: #FDE68A !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .tip-box {
+  background: #24221A !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .tip-text {
+  color: #FDE68A !important;
+}
+body.dark-theme .visual-area {
+  background: #18191D !important;
+  border-color: #000000 !important;
+  color: #F4F4F5 !important;
+}
+body.dark-theme .lesson-module-tag {
+  background: #1E1B4B !important;
+  color: #C7D2FE !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .code-block {
+  border-color: #000000 !important;
+}
+body.dark-theme .code-block-header {
+  border-bottom-color: #000000 !important;
+}
+body.dark-theme .code-copy-btn {
+  background: #282A30 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .slide-dot {
+  background: #24262C !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .slide-dot.active {
+  background: var(--codedex-yellow) !important;
+}
+
+/* Challenge Questions & Elements */
+body.dark-theme .challenge-tag-badge {
+  background: #450A0A !important;
+  color: #FCA5A5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .hearts-display {
+  background: #18191D !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .question-type-tag {
+  background: #1E1B4B !important;
+  color: #C7D2FE !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .tf-btn {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .blank-input {
+  background: #141518 !important;
+  color: #F4F4F5 !important;
+  border-color: #3F3F46 !important;
+}
+body.dark-theme .blank-input.filled {
+  background: #3B2A10 !important;
+  color: #FDE68A !important;
+  border-color: #FFE600 !important;
+}
+
+/* Compiler Screen */
+body.dark-theme .capstone-editor-banner {
+  background: #1E1F24 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .capstone-save-status {
+  color: #86EFAC !important;
+}
+body.dark-theme .template-btn {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .template-btn:hover {
+  background: #282A30 !important;
+}
+
+/* Settings, Badges & Danger */
+body.dark-theme .danger-card {
+  background: #2D1515 !important;
+  border-color: #EF4444 !important;
+}
+body.dark-theme .badge-card.locked {
+  background: #18191D !important;
+  border-color: #000000 !important;
+}
+body.dark-theme .avatar-option {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
   border-color: #000000 !important;
 }
 body.dark-theme .project-modal-section {
   background: #18191D !important;
   border-color: #000000 !important;
   box-shadow: 3px 3px 0px #000000 !important;
-}
-body.dark-theme .project-task-item,
-body.dark-theme .task-item {
-  background: #1E1F24 !important;
-  border-color: #000000 !important;
-  color: #F4F4F5 !important;
-}
-body.dark-theme .project-task-item.checked,
-body.dark-theme .task-item.checked {
-  background: #064E3B !important;
-  color: #A7F3D0 !important;
-}
-body.dark-theme .task-text {
-  color: #F4F4F5 !important;
-}
-body.dark-theme .project-task-item.checked .task-text {
-  color: #A7F3D0 !important;
-}
-body.dark-theme .popup-lesson-item {
-  background: #18191D !important;
-  border-color: #000000 !important;
-  color: #F4F4F5 !important;
-}
-body.dark-theme .popup-lesson-item:hover {
-  background: #262830 !important;
-}
-body.dark-theme .popup-lesson-item.completed {
-  background: #064E3B !important;
-}
-body.dark-theme .lesson-item-name {
-  color: #F4F4F5 !important;
 }
 body.dark-theme .popup-close-btn {
   background: #1E1F24 !important;
@@ -3869,14 +4111,6 @@ body.dark-theme .popup-close-btn {
 }
 body.dark-theme .popup-close-btn:hover {
   background: #7F1D1D !important;
-}
-body.dark-theme .question-area {
-  background: #1E1F24 !important;
-  border-color: #000000 !important;
-  color: #F4F4F5 !important;
-}
-body.dark-theme .question-text {
-  color: #F4F4F5 !important;
 }
 body.dark-theme .mcq-option,
 body.dark-theme .option-btn {
