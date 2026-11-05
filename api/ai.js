@@ -1,67 +1,73 @@
 // JavaQuest Serverless AI Engine — api/ai.js
 // Runs on Vercel Node.js Serverless Runtime
-// Securely proxies requests to Gemini Flash-Lite using process.env.GEMINI_API_KEY
+// Securely proxies requests to Gemini using process.env.GEMINI_API_KEY
 // Zero client-side API key leakage; handles Quiz Generation, Deep Dives, Mistake Diagnostics & Chat
+// Features multi-model fallback (gemini-flash-lite-latest -> gemini-3.5-flash-lite -> gemini-flash-latest -> gemini-2.5-flash)
 
 const https = require('https');
+
+const CANDIDATE_MODELS = [
+  'gemini-flash-lite-latest',
+  'gemini-flash-latest',
+  'gemini-3.5-flash',
+  'gemini-3.8-flash'
+];
 
 function getApiKey(reqBody) {
   return process.env.GEMINI_API_KEY || (reqBody && reqBody.apiKey) || '';
 }
 
-function callGeminiAPI(apiKey, model, payload) {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify(payload);
-    const targetModel = model || 'gemini-flash-lite-latest';
-    const path = `/v1beta/models/${targetModel}:generateContent?key=${apiKey}`;
-
-    const options = {
-      hostname: 'generativelanguage.googleapis.com',
-      port: 443,
-      path: path,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
-      },
-      timeout: 25000
-    };
-
-    const req = https.request(options, (res) => {
-      let body = '';
-      res.setEncoding('utf8');
-      res.on('data', chunk => body += chunk);
-      res.on('end', () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          try {
-            resolve(JSON.parse(body));
-          } catch(e) {
-            reject(new Error('Invalid JSON response from Gemini'));
-          }
-        } else {
-          try {
-            const errObj = JSON.parse(body);
-            reject(new Error((errObj.error && errObj.error.message) || `Gemini API error ${res.statusCode}`));
-          } catch(e) {
-            reject(new Error(`Gemini API error ${res.statusCode}: ${body.slice(0, 100)}`));
-          }
-        }
-      });
-    });
-
-    req.on('error', err => reject(err));
-    req.on('timeout', () => {
-      req.destroy();
-      reject(new Error('Request to Gemini API timed out (25s)'));
-    });
-
-    req.write(data);
-    req.end();
+async function callGeminiSingle(apiKey, model, payload) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(28000)
   });
+
+  const bodyText = await response.text();
+  let json;
+  try {
+    json = JSON.parse(bodyText);
+  } catch(e) {
+    throw new Error(`Invalid JSON from Gemini: ${bodyText.slice(0, 100)}`);
+  }
+
+  if (!response.ok) {
+    const errMessage = (json.error && json.error.message) || `Gemini API error ${response.status}`;
+    throw new Error(errMessage);
+  }
+
+  return json;
+}
+
+async function callGeminiWithFallback(apiKey, payload) {
+  let lastErr = null;
+  for (const model of CANDIDATE_MODELS) {
+    try {
+      const res = await callGeminiSingle(apiKey, model, payload);
+      return res;
+    } catch(err) {
+      lastErr = err;
+      console.warn(`[AI Proxy] Model ${model} failed (${err.message}). Trying fallback...`);
+      continue;
+    }
+  }
+  throw lastErr || new Error('All AI models are currently busy. Please retry in a few seconds.');
+}
+
+function extractCandidateText(result) {
+  const parts = (result && result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts) || [];
+  let txt = '';
+  for (const p of parts) {
+    if (p.text && !p.thought) txt += p.text;
+  }
+  if (!txt && parts.length > 0) txt = parts[0].text || '';
+  return txt;
 }
 
 module.exports = async function handler(req, res) {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -103,58 +109,50 @@ module.exports = async function handler(req, res) {
       const count = Math.min(Math.max(parseInt(body.count || 3, 10), 1), 5);
       const seed = Math.floor(Math.random() * 1000000);
 
-      const prompt = `You are an expert Java educator and technical author referencing "Core Java" by Cay Horstmann and "Effective Java" by Joshua Bloch.
-Generate exactly ${count} completely distinct, challenging, highly educational quiz questions for a Java learner studying: "${topic}" (${level} level).
-Random seed variation: ${seed}.
-Focus on real Java runtime behavior, memory implications, subtle syntax rules, and practical production code.
+      const prompt = `You are a principal Java educator and author of "Core Java" and "Effective Java".
+Generate exactly ${count} completely fresh, unique, challenging quiz questions for a Java learner studying: "${topic}" (${level} level).
+Seed: ${seed}.
+Focus on runtime behavior, memory layout, subtle language specification rules, and production pitfalls.
 
-Each question MUST be one of these types:
-- "mcq" (Multiple choice concept question with 4 options)
+Each question MUST be one of:
+- "mcq" (Multiple choice with 4 distinct options)
 - "output" (Predict output of a realistic Java snippet with 4 options)
-- "bug" (Find the bug in a snippet with 4 options explaining the root cause)
+- "bug" (Spot the subtle bug with 4 explanation options)
 
-STRICT FORMAT: Return ONLY a raw JSON array of objects. No markdown, no triple backticks (\`\`\`json).
-Format:
+STRICT FORMAT: Return ONLY a raw JSON array of objects. No markdown formatting, no code fences.
 [
   {
     "type": "mcq",
-    "question": "Clear, precise question?",
-    "code": "Optional Java code snippet (use \\n for line breaks) or empty string",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "question": "Question text?",
+    "code": "Optional snippet or empty string",
+    "options": ["A", "B", "C", "D"],
     "answer": 0,
-    "explanation": "Clear explanation referencing JVM/Java language specification rules."
+    "explanation": "Clear explanation referencing JVM/JLS rules."
   }
 ]`;
 
       const geminiPayload = {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
+          response_mime_type: 'application/json',
           temperature: 0.85,
           topP: 0.95,
           maxOutputTokens: 2048
         }
       };
 
-      const result = await callGeminiAPI(apiKey, 'gemini-flash-lite-latest', geminiPayload);
-      let rawText = '';
-      try {
-        rawText = result.candidates[0].content.parts[0].text;
-      } catch(e) {
-        throw new Error('Gemini returned an empty candidate');
-      }
-
-      // Clean markdown code blocks if present
+      const result = await callGeminiWithFallback(apiKey, geminiPayload);
+      let rawText = extractCandidateText(result);
       rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
       let questions;
       try {
         questions = JSON.parse(rawText);
       } catch(e) {
-        // If wrapped or partial, extract JSON array
         const match = rawText.match(/\[\s*\{[\s\S]*\}\s*\]/);
         if (match) {
           questions = JSON.parse(match[0]);
         } else {
-          throw new Error('Could not parse questions JSON from AI');
+          throw new Error('Could not parse questions JSON from AI: ' + rawText.slice(0, 150));
         }
       }
 
@@ -162,7 +160,6 @@ Format:
         throw new Error('AI generated an empty questions list');
       }
 
-      // Sanitize question items
       questions = questions.map((q, idx) => ({
         type: q.type || 'mcq',
         question: q.question || `Question ${idx + 1}`,
@@ -185,7 +182,7 @@ Format:
       const slideTitle = body.slideTitle || '';
       const slideContent = body.slideContent || '';
 
-      const prompt = `You are a principal Java architect and JVM engineer writing a technical "Under the Hood" guide for a student studying:
+      const prompt = `You are a Principal JVM Engineer and Java Systems Architect writing a technical "Under the Hood" guide for a student studying:
 Module: "${topic}"
 Lesson: "${lessonTitle}"
 Current Slide: "${slideTitle}"
@@ -193,15 +190,13 @@ Context: "${slideContent.slice(0, 350)}"
 
 Provide an authoritative, in-depth technical deep dive (350-500 words) formatted in clean Markdown with:
 1. ### ⚙️ JVM Internals & Memory Layout
-   - How this exact concept is represented in the JVM (Stack frame, Heap layout, Metaspace, or Bytecode instructions like \`invokevirtual\` vs \`invokestatic\`).
+   - How this exact concept is represented in the JVM (Stack frame, Heap layout, Metaspace, or Bytecode instructions).
 2. ### 🚀 HotSpot JIT & Compiler Optimizations
-   - How the HotSpot C1/C2 compiler optimizes this (e.g. escape analysis, inlining, monomorphic call site devirtualization).
+   - How HotSpot optimizes this (escape analysis, monomorphic call site inlining, etc.).
 3. ### ⚠️ Production Gotchas & Effective Java Rule
-   - Specific pitfall or gotcha that senior developers avoid, referencing best practices from Joshua Bloch's "Effective Java".
+   - Specific pitfall or gotcha referencing Joshua Bloch's "Effective Java".
 4. ### 💻 Bytecode or Low-Level Snippet
-   - A short, illustrative code snippet or bytecode breakdown.
-
-Keep tone high-energy, authoritative, crystal clear, and educational.`;
+   - A short, illustrative code snippet or bytecode breakdown.`;
 
       const geminiPayload = {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -211,8 +206,8 @@ Keep tone high-energy, authoritative, crystal clear, and educational.`;
         }
       };
 
-      const result = await callGeminiAPI(apiKey, 'gemini-flash-lite-latest', geminiPayload);
-      const text = result.candidates[0].content.parts[0].text;
+      const result = await callGeminiWithFallback(apiKey, geminiPayload);
+      const text = extractCandidateText(result);
       res.status(200).json({ success: true, markdown: text });
       return;
     }
@@ -245,8 +240,8 @@ Provide a 2-3 sentence diagnostic:
         }
       };
 
-      const result = await callGeminiAPI(apiKey, 'gemini-flash-lite-latest', geminiPayload);
-      const text = result.candidates[0].content.parts[0].text;
+      const result = await callGeminiWithFallback(apiKey, geminiPayload);
+      const text = extractCandidateText(result);
       res.status(200).json({ success: true, explanation: text });
       return;
     }
@@ -258,27 +253,21 @@ Provide a 2-3 sentence diagnostic:
       const messages = body.messages || [];
       const userMessage = body.message || 'Help me understand Java.';
 
-      // Transform history
       const formattedContents = [
         {
           role: 'user',
           parts: [{
             text: `You are JavaBot, the expert interactive AI Tutor inside JavaQuest.
 You are grounded in authoritative Java textbooks ("Core Java" by Cay Horstmann, "Effective Java" by Joshua Bloch, and "Java Concurrency in Practice" by Brian Goetz).
-Your mission:
-- Provide clear, friendly, technically rigorous Java guidance.
-- Explain "why" things work under the hood (JVM, memory model, bytecode, heap/stack).
-- Format code snippets cleanly in Java.
-- Keep responses concise, structured, and encouraging.`
+Provide clear, friendly, technically rigorous Java guidance. Format code snippets cleanly in Java. Keep responses under 70 words.`
           }]
         },
         {
           role: 'model',
-          parts: [{ text: "Hello! I am JavaBot, your JavaQuest mentor. What Java concept, code snippet, or JVM internal can I help you master today?" }]
+          parts: [{ text: "Hello! I am JavaBot, your JavaQuest mentor. What Java concept or code snippet can I help you master today?" }]
         }
       ];
 
-      // Add conversation turns if supplied
       if (Array.isArray(messages)) {
         messages.forEach(m => {
           if (m && m.role && m.text) {
@@ -303,8 +292,8 @@ Your mission:
         }
       };
 
-      const result = await callGeminiAPI(apiKey, 'gemini-flash-lite-latest', geminiPayload);
-      const text = result.candidates[0].content.parts[0].text;
+      const result = await callGeminiWithFallback(apiKey, geminiPayload);
+      const text = extractCandidateText(result);
       res.status(200).json({ success: true, reply: text });
       return;
     }
