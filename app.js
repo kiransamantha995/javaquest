@@ -2995,7 +2995,7 @@ document.addEventListener('DOMContentLoaded', function(){
   var fab=ge('ai-chat-fab');     if(fab)fab.addEventListener('click',function(){ if(typeof toggleChat==='function') toggleChat(); });
   var chc=ge('chat-close-btn'); if(chc)chc.addEventListener('click',function(){ if(typeof toggleChat==='function') toggleChat(); });
   var clr=ge('chat-clear-btn'); if(clr)clr.addEventListener('click',function(){ if(typeof clearChat==='function') clearChat(); else if(typeof clearChatHistory==='function') clearChatHistory(); });
-  var chs=ge('chat-send-btn');  if(chs)chs.addEventListener('click',function(){ if(typeof sendChatMessage==='function') sendChatMessage(); });
+  var chs=ge('chat-send-btn');  if(chs)chs.addEventListener('click',function(e){ e.preventDefault(); if(typeof sendChatMessage==='function') sendChatMessage(); });
   var chi=ge('chat-input');
   if(chi){
     chi.addEventListener('keydown',function(e){
@@ -3007,15 +3007,21 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   var chipReview = ge('chip-review-code');
-  if (chipReview) chipReview.addEventListener('click', function(){
+  if (chipReview) chipReview.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     sendPromptToChat("Can you review the code I wrote in the editor? Check for errors, syntax issues, or bad practices and tell me how to improve it!");
   });
   var chipError = ge('chip-explain-error');
-  if (chipError) chipError.addEventListener('click', function(){
+  if (chipError) chipError.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     sendPromptToChat("I am getting an error or unexpected output with my current code. Can you explain what went wrong and how to fix it?");
   });
   var chipNext = ge('chip-next-step');
-  if (chipNext) chipNext.addEventListener('click', function(){
+  if (chipNext) chipNext.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     sendPromptToChat("Based on my current code and TODOs, what should I implement next? Give me a helpful hint to get started!");
   });
 

@@ -7,7 +7,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
-  <link rel="stylesheet" href="style.css?v=6.8"/>
+  <link rel="stylesheet" href="style.css?v=6.9"/>
 </head>
 <body>
 
@@ -693,13 +693,13 @@
     </div>
     <div class="chat-typing-indicator hidden" id="chat-typing"><span></span><span></span><span></span></div>
     <div class="chat-quick-chips" id="chat-quick-chips">
-      <button class="chat-chip" id="chip-review-code" onclick="sendPromptToChat('Can you review the code I wrote in the editor? Check for errors, syntax issues, or bad practices and tell me how to improve it!')">Review My Code</button>
-      <button class="chat-chip" id="chip-explain-error" onclick="sendPromptToChat('I am getting an error or unexpected output with my current code. Can you explain what went wrong and how to fix it!')">Explain Error</button>
-      <button class="chat-chip" id="chip-next-step" onclick="sendPromptToChat('Based on my current code and TODOs, what should I implement next? Give me a helpful hint to get started!')">Hint for Next Step</button>
+      <button class="chat-chip" id="chip-review-code" type="button">Review My Code</button>
+      <button class="chat-chip" id="chip-explain-error" type="button">Explain Error</button>
+      <button class="chat-chip" id="chip-next-step" type="button">Hint for Next Step</button>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chat-input" class="chat-input" placeholder="Ask JavaBot about your code…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}"/>
-      <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMessage()" title="Send Message">➤</button>
+      <input type="text" id="chat-input" class="chat-input" placeholder="Ask JavaBot about your code…"/>
+      <button class="chat-send-btn" id="chat-send-btn" type="button" title="Send Message">➤</button>
     </div>
   </div>
   <button class="ai-chat-fab" id="ai-chat-fab" title="Ask JavaBot">
@@ -789,10 +789,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=6.8"></script>
-<script src="animations.js?v=6.8"></script>
-<script src="supabase.js?v=6.8"></script>
-<script src="ai-tutor.js?v=6.8"></script>
-<script src="app.js?v=6.8"></script>
+<script src="curriculum.js?v=6.9"></script>
+<script src="animations.js?v=6.9"></script>
+<script src="supabase.js?v=6.9"></script>
+<script src="ai-tutor.js?v=6.9"></script>
+<script src="app.js?v=6.9"></script>
 </body>
 </html>

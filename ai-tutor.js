@@ -183,13 +183,46 @@ window.clearChatHistory = clearChatHistory;
 window.toggleChat = toggleChat;
 window.sendChatMessage = sendChatMessage;
 
+var _isSendingChat = false;
+var _lastChatSendTime = 0;
+
 function sendChatMessage() {
+  var now = Date.now();
+  if (_isSendingChat || (now - _lastChatSendTime < 600)) {
+    return;
+  }
+
   var input = document.getElementById('chat-input');
   if (!input) return;
   var msg = input.value.trim();
   if (!msg) return;
+
+  _isSendingChat = true;
+  _lastChatSendTime = now;
   input.value = '';
   appendChatMsg('user', msg);
+
+  // Disable send button and quick chips while waiting for AI response
+  var sendBtn = document.getElementById('chat-send-btn');
+  if (sendBtn) sendBtn.disabled = true;
+  var chips = document.querySelectorAll('.chat-chip');
+  if (chips) {
+    for (var i = 0; i < chips.length; i++) {
+      chips[i].style.pointerEvents = 'none';
+      chips[i].style.opacity = '0.6';
+    }
+  }
+
+  function resetChatControls() {
+    _isSendingChat = false;
+    if (sendBtn) sendBtn.disabled = false;
+    if (chips) {
+      for (var j = 0; j < chips.length; j++) {
+        chips[j].style.pointerEvents = '';
+        chips[j].style.opacity = '';
+      }
+    }
+  }
 
   updateChatContextPill();
   chatHistory.push({ role: 'user', text: msg });
@@ -215,10 +248,12 @@ function sendChatMessage() {
       var reply = res.reply || 'I am ready to help with your Java questions!';
       chatHistory.push({ role: 'model', text: reply });
       appendChatMsg('bot', reply);
+      resetChatControls();
     })
     .catch(function(err) {
       if (typing) typing.classList.add('hidden');
       appendChatMsg('bot', 'Sorry, I encountered an issue: ' + err.message + '. Please try again in a moment!');
+      resetChatControls();
     });
 }
 
