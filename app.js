@@ -666,12 +666,309 @@ function renderMinecraftSVG(grid) {
   var svg = '<svg viewBox="0 0 8 8" class="minecraft-pixel-face" style="width:100%;height:100%;shape-rendering:crispEdges;image-rendering:pixelated;display:block;">';
   for (var r = 0; r < 8; r++) {
     for (var c = 0; c < 8; c++) {
-      svg += '<rect x="' + c + '" y="' + r + '" width="1" height="1" fill="' + (grid[r][c] || '#000000') + '"/>';
+      var color = (grid && grid[r] && grid[r][c]) || '';
+      if (color && color !== 'transparent') {
+        svg += '<rect x="' + c + '" y="' + r + '" width="1" height="1" fill="' + color + '"/>';
+      }
     }
   }
   svg += '</svg>';
   return svg;
 }
+
+var MINECRAFT_BADGES = {
+  wooden_pickaxe: {
+    id: 'wooden_pickaxe',
+    name: 'Wooden Pickaxe',
+    rarity: 'COMMON',
+    rarityColor: '#10B981',
+    grid: [
+      ['transparent', '#8B5A2B', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#8B5A2B', 'transparent'],
+      ['#8B5A2B', '#CD853F', 'transparent', 'transparent', '#5C3A21', 'transparent', 'transparent', '#8B5A2B'],
+      ['transparent', 'transparent', 'transparent', '#6E4720', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#6E4720', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#6E4720', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['#5C3A21', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  crafting_table: {
+    id: 'crafting_table',
+    name: 'Crafting Table',
+    rarity: 'COMMON',
+    rarityColor: '#10B981',
+    grid: [
+      ['#4A2E18','#A06535','#C68B59','#A06535','#A06535','#C68B59','#A06535','#4A2E18'],
+      ['#A06535','#C68B59','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#C68B59','#A06535'],
+      ['#C68B59','#4A2E18','#8B5A2B','#8B5A2B','#8B5A2B','#8B5A2B','#4A2E18','#C68B59'],
+      ['#A06535','#4A2E18','#8B5A2B','#A06535','#A06535','#8B5A2B','#4A2E18','#A06535'],
+      ['#A06535','#4A2E18','#8B5A2B','#A06535','#A06535','#8B5A2B','#4A2E18','#A06535'],
+      ['#C68B59','#4A2E18','#8B5A2B','#8B5A2B','#8B5A2B','#8B5A2B','#4A2E18','#C68B59'],
+      ['#A06535','#C68B59','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#C68B59','#A06535'],
+      ['#4A2E18','#A06535','#C68B59','#A06535','#A06535','#C68B59','#A06535','#4A2E18']
+    ]
+  },
+  iron_sword: {
+    id: 'iron_sword',
+    name: 'Iron Sword',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', '#FFFFFF', '#D1D5DB'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', '#FFFFFF', '#D1D5DB', '#9CA3AF'],
+      ['transparent', 'transparent', 'transparent', 'transparent', '#FFFFFF', '#D1D5DB', '#9CA3AF', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#FFFFFF', '#D1D5DB', '#9CA3AF', 'transparent', 'transparent'],
+      ['transparent', '#374151', '#4B5563', '#9CA3AF', '#374151', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#6E4720', '#374151', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['#5C3A21', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  bow_arrow: {
+    id: 'bow_arrow',
+    name: 'Target Bow',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['transparent', 'transparent', '#6E4720', '#8B5A2B', '#8B5A2B', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#6E4720', 'transparent', 'transparent', 'transparent', '#E5E7EB', 'transparent', 'transparent'],
+      ['#6E4720', 'transparent', 'transparent', '#9CA3AF', 'transparent', 'transparent', '#E5E7EB', 'transparent'],
+      ['#8B5A2B', 'transparent', '#8B5A2B', '#E5E7EB', '#9CA3AF', 'transparent', 'transparent', '#E5E7EB'],
+      ['#8B5A2B', 'transparent', 'transparent', '#E5E7EB', 'transparent', '#8B5A2B', 'transparent', '#E5E7EB'],
+      ['#6E4720', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', '#E5E7EB', 'transparent'],
+      ['transparent', '#6E4720', 'transparent', 'transparent', 'transparent', '#E5E7EB', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#6E4720', '#8B5A2B', '#8B5A2B', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  chest: {
+    id: 'chest',
+    name: 'Storage Chest',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['#38210F', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#38210F'],
+      ['#8B5A2B', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#8B5A2B'],
+      ['#8B5A2B', '#CD853F', '#CD853F', '#D1D5DB', '#D1D5DB', '#CD853F', '#CD853F', '#8B5A2B'],
+      ['#38210F', '#38210F', '#38210F', '#9CA3AF', '#9CA3AF', '#38210F', '#38210F', '#38210F'],
+      ['#8B5A2B', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#8B5A2B'],
+      ['#8B5A2B', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#8B5A2B'],
+      ['#8B5A2B', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#CD853F', '#8B5A2B'],
+      ['#38210F', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#8B5A2B', '#38210F']
+    ]
+  },
+  enchanted_book: {
+    id: 'enchanted_book',
+    name: 'Enchanted Book',
+    rarity: 'EPIC',
+    rarityColor: '#A855F7',
+    grid: [
+      ['transparent', '#7E22CE', '#9333EA', '#A855F7', '#A855F7', '#9333EA', '#7E22CE', 'transparent'],
+      ['#7E22CE', '#9333EA', '#F5F5DC', '#F5F5DC', '#F5F5DC', '#F5F5DC', '#FF0055', '#7E22CE'],
+      ['#9333EA', '#F5F5DC', '#00F0FF', '#F5F5DC', '#F5F5DC', '#00F0FF', '#FF0055', '#9333EA'],
+      ['#9333EA', '#F5F5DC', '#F5F5DC', '#00F0FF', '#00F0FF', '#F5F5DC', '#FF0055', '#9333EA'],
+      ['#9333EA', '#F5F5DC', '#00F0FF', '#F5F5DC', '#F5F5DC', '#00F0FF', '#FF0055', '#9333EA'],
+      ['#7E22CE', '#9333EA', '#F5F5DC', '#F5F5DC', '#F5F5DC', '#F5F5DC', '#FF0055', '#7E22CE'],
+      ['transparent', '#7E22CE', '#9333EA', '#A855F7', '#A855F7', '#9333EA', '#7E22CE', 'transparent'],
+      ['transparent', 'transparent', '#581C87', '#581C87', '#581C87', '#581C87', 'transparent', 'transparent']
+    ]
+  },
+  beacon: {
+    id: 'beacon',
+    name: 'Beacon of Power',
+    rarity: 'LEGENDARY',
+    rarityColor: '#F59E0B',
+    grid: [
+      ['transparent', '#A5F3FC', '#67E8F9', '#67E8F9', '#67E8F9', '#67E8F9', '#A5F3FC', 'transparent'],
+      ['#A5F3FC', '#FFFFFF', '#06B6D4', '#0891B2', '#0891B2', '#06B6D4', '#FFFFFF', '#A5F3FC'],
+      ['#67E8F9', '#06B6D4', '#FFFFFF', '#22D3EE', '#22D3EE', '#FFFFFF', '#06B6D4', '#67E8F9'],
+      ['#67E8F9', '#0891B2', '#22D3EE', '#FFFFFF', '#FFFFFF', '#22D3EE', '#0891B2', '#67E8F9'],
+      ['#67E8F9', '#0891B2', '#22D3EE', '#FFFFFF', '#FFFFFF', '#22D3EE', '#0891B2', '#67E8F9'],
+      ['#67E8F9', '#06B6D4', '#FFFFFF', '#22D3EE', '#22D3EE', '#FFFFFF', '#06B6D4', '#67E8F9'],
+      ['#18181B', '#27272A', '#3F3F46', '#3F3F46', '#3F3F46', '#3F3F46', '#27272A', '#18181B'],
+      ['#09090B', '#18181B', '#27272A', '#27272A', '#27272A', '#27272A', '#18181B', '#09090B']
+    ]
+  },
+  redstone_torch: {
+    id: 'redstone_torch',
+    name: 'Redstone Torch',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['transparent', 'transparent', 'transparent', '#FFAAA5', '#FF3B30', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#FF3B30', '#FF1744', '#FF5252', '#FF3B30', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#D50000', '#FF1744', '#FF1744', '#D50000', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#8B5A2B', '#6E4720', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#8B5A2B', '#6E4720', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#8B5A2B', '#6E4720', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#5C3A21', '#5C3A21', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  blaze_rod: {
+    id: 'blaze_rod',
+    name: 'Blaze Rod',
+    rarity: 'EPIC',
+    rarityColor: '#A855F7',
+    grid: [
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', '#FFFBEB', '#FDE047', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', '#FFFBEB', '#FDE047', '#EAB308', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#FFFBEB', '#FDE047', '#EAB308', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#FFFBEB', '#FDE047', '#EAB308', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#FFFBEB', '#FDE047', '#EAB308', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['#FFFBEB', '#FDE047', '#EAB308', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['#FDE047', '#CA8A04', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  golden_apple: {
+    id: 'golden_apple',
+    name: 'Golden Apple',
+    rarity: 'EPIC',
+    rarityColor: '#A855F7',
+    grid: [
+      ['transparent', 'transparent', 'transparent', '#6E4720', '#4A2E18', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#FDE047', '#FACC15', '#6E4720', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#FEF08A', '#FDE047', '#FACC15', '#EAB308', '#CA8A04', '#CA8A04', 'transparent'],
+      ['#FEF08A', '#FFFFFF', '#FEF08A', '#FDE047', '#FACC15', '#EAB308', '#CA8A04', '#A16207'],
+      ['#FEF08A', '#FEF08A', '#FDE047', '#FACC15', '#EAB308', '#CA8A04', '#A16207', '#A16207'],
+      ['#FDE047', '#FDE047', '#FACC15', '#EAB308', '#CA8A04', '#A16207', '#A16207', '#713F12'],
+      ['transparent', '#FACC15', '#EAB308', '#CA8A04', '#A16207', '#713F12', '#713F12', 'transparent'],
+      ['transparent', 'transparent', '#CA8A04', '#A16207', '#713F12', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  redstone_dust: {
+    id: 'redstone_dust',
+    name: 'Redstone Dust',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['transparent', 'transparent', '#FF3B30', 'transparent', 'transparent', '#FF1744', 'transparent', 'transparent'],
+      ['transparent', '#FF1744', '#FF5252', '#FF1744', 'transparent', '#FF5252', '#D50000', 'transparent'],
+      ['#D50000', '#FF3B30', '#FFFFFF', '#FF1744', '#D50000', '#FF1744', '#FF3B30', '#B71C1C'],
+      ['transparent', '#D50000', '#FF1744', '#B71C1C', '#FF3B30', '#D50000', '#B71C1C', 'transparent'],
+      ['transparent', 'transparent', '#B71C1C', '#FF1744', '#FF5252', '#D50000', 'transparent', 'transparent'],
+      ['transparent', '#D50000', '#FF5252', '#FFFFFF', '#FF1744', '#B71C1C', '#D50000', 'transparent'],
+      ['#B71C1C', '#FF1744', '#D50000', '#B71C1C', '#D50000', '#FF1744', '#B71C1C', 'transparent'],
+      ['transparent', 'transparent', '#B71C1C', 'transparent', 'transparent', '#B71C1C', 'transparent', 'transparent']
+    ]
+  },
+  diamond_pickaxe: {
+    id: 'diamond_pickaxe',
+    name: 'Diamond Pickaxe',
+    rarity: 'LEGENDARY',
+    rarityColor: '#F59E0B',
+    grid: [
+      ['transparent', '#00F0FF', '#38BDF8', '#38BDF8', '#38BDF8', '#38BDF8', '#00F0FF', 'transparent'],
+      ['#00F0FF', '#38BDF8', 'transparent', 'transparent', '#6E4720', 'transparent', 'transparent', '#00F0FF'],
+      ['transparent', 'transparent', 'transparent', '#8B5A2B', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#8B5A2B', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#8B5A2B', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['#5C3A21', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  iron_ingot: {
+    id: 'iron_ingot',
+    name: 'Iron Ingot',
+    rarity: 'COMMON',
+    rarityColor: '#10B981',
+    grid: [
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#FFFFFF', '#F3F4F6', '#E5E7EB', '#E5E7EB', '#D1D5DB', 'transparent', 'transparent'],
+      ['#FFFFFF', '#FFFFFF', '#F3F4F6', '#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', 'transparent'],
+      ['#F3F4F6', '#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#4B5563', '#374151', 'transparent'],
+      ['transparent', '#9CA3AF', '#6B7280', '#4B5563', '#374151', '#1F2937', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  diamond_sword: {
+    id: 'diamond_sword',
+    name: 'Diamond Sword',
+    rarity: 'LEGENDARY',
+    rarityColor: '#F59E0B',
+    grid: [
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', '#E0F2FE', '#38BDF8'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', '#E0F2FE', '#38BDF8', '#0284C7'],
+      ['transparent', 'transparent', 'transparent', 'transparent', '#E0F2FE', '#38BDF8', '#0284C7', 'transparent'],
+      ['transparent', 'transparent', 'transparent', '#E0F2FE', '#38BDF8', '#0284C7', 'transparent', 'transparent'],
+      ['transparent', '#0369A1', '#0284C7', '#38BDF8', '#0369A1', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#6E4720', '#0369A1', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['#5C3A21', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  netherite_ingot: {
+    id: 'netherite_ingot',
+    name: 'Netherite Ingot',
+    rarity: 'LEGENDARY',
+    rarityColor: '#F59E0B',
+    grid: [
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', '#645E5E', '#4A4444', '#3D3838', '#3D3838', '#2D2828', 'transparent', 'transparent'],
+      ['#645E5E', '#78716C', '#4A4444', '#3D3838', '#2D2828', '#1C1917', '#171413', 'transparent'],
+      ['#4A4444', '#3D3838', '#2D2828', '#1C1917', '#171413', '#0C0A09', '#78350F', 'transparent'],
+      ['transparent', '#2D2828', '#1C1917', '#171413', '#78350F', '#451A03', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent'],
+      ['transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent', 'transparent']
+    ]
+  },
+  totem_undying: {
+    id: 'totem_undying',
+    name: 'Totem of Undying',
+    rarity: 'MYTHIC',
+    rarityColor: '#EC4899',
+    grid: [
+      ['transparent', 'transparent', '#FDE047', '#FDE047', '#FDE047', '#FDE047', 'transparent', 'transparent'],
+      ['transparent', '#FDE047', '#10B981', '#FACC15', '#FACC15', '#10B981', '#FDE047', 'transparent'],
+      ['#FDE047', '#FACC15', '#FACC15', '#CA8A04', '#CA8A04', '#FACC15', '#FACC15', '#FDE047'],
+      ['#FDE047', '#FDE047', '#EAB308', '#F59E0B', '#F59E0B', '#EAB308', '#FDE047', '#FDE047'],
+      ['transparent', 'transparent', '#F59E0B', '#B45309', '#B45309', '#F59E0B', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#FBBF24', '#D97706', '#D97706', '#FBBF24', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#F59E0B', '#B45309', '#B45309', '#F59E0B', 'transparent', 'transparent'],
+      ['transparent', 'transparent', '#D97706', 'transparent', 'transparent', '#D97706', 'transparent', 'transparent']
+    ]
+  },
+  bedrock_locked: {
+    id: 'bedrock_locked',
+    name: 'Locked Bedrock',
+    rarity: 'LOCKED',
+    rarityColor: '#71717A',
+    grid: [
+      ['#18181B', '#3F3F46', '#27272A', '#18181B', '#52525B', '#27272A', '#18181B', '#3F3F46'],
+      ['#27272A', '#18181B', '#52525B', '#3F3F46', '#18181B', '#3F3F46', '#52525B', '#18181B'],
+      ['#52525B', '#3F3F46', '#18181B', '#27272A', '#3F3F46', '#18181B', '#27272A', '#3F3F46'],
+      ['#18181B', '#27272A', '#3F3F46', '#52525B', '#18181B', '#52525B', '#3F3F46', '#18181B'],
+      ['#3F3F46', '#52525B', '#18181B', '#27272A', '#3F3F46', '#27272A', '#18181B', '#27272A'],
+      ['#27272A', '#18181B', '#3F3F46', '#18181B', '#52525B', '#18181B', '#3F3F46', '#52525B'],
+      ['#18181B', '#3F3F46', '#52525B', '#27272A', '#18181B', '#27272A', '#52525B', '#18181B'],
+      ['#3F3F46', '#27272A', '#18181B', '#3F3F46', '#27272A', '#3F3F46', '#18181B', '#27272A']
+    ]
+  }
+};
+
+var BADGE_MINECRAFT_MAP = {
+  'first-lesson': 'wooden_pickaxe',
+  'first-module': 'crafting_table',
+  'first-code': 'iron_sword',
+  'perfect-code': 'bow_arrow',
+  'capstone-beginner': 'chest',
+  'capstone-intermediate': 'enchanted_book',
+  'capstone-advanced': 'beacon',
+  'streak-3': 'redstone_torch',
+  'streak-7': 'blaze_rod',
+  'perfect': 'golden_apple',
+  'level-5': 'redstone_dust',
+  'level-10': 'diamond_pickaxe',
+  'beginner-done': 'iron_ingot',
+  'inter-done': 'diamond_sword',
+  'advanced-done': 'netherite_ingot',
+  'all-modules': 'totem_undying'
+};
 
 function drawAvatar(el, av) {
   if (!el) return;
@@ -2235,44 +2532,82 @@ function checkStreak(){
   p.lastVisit=today; localSave(); updateNav();
 }
 
-/* ═══════════════ BADGES ══════════════════════════════════════════ */
+/* ═══════════════ BADGES (Minecraft Themed) ══════════════════════ */
 function checkBadge(condition){
-  if(!window.BADGES)return;
-  var badge=null;for(var i=0;i<BADGES.length;i++)if(BADGES[i].condition===condition){badge=BADGES[i];break;}
-  if(!badge||STATE.player.badges.indexOf(badge.id)!==-1)return;
-  STATE.player.badges.push(badge.id);
-  sbQueueBadge(badge.id);
-  localSave();
-  var b=badge;
-  setTimeout(function(){setText('badge-unlocked-icon',b.icon);setText('badge-unlocked-name',b.name);setText('badge-unlocked-desc',b.description);showModal('modal-badge');},900);
-}
-
-function awardBadgeDirect(badgeId){
-  if(!window.BADGES || !STATE || !STATE.player) return;
-  var badge=null;for(var i=0;i<BADGES.length;i++)if(BADGES[i].id===badgeId){badge=BADGES[i];break;}
+  if(!window.BADGES) return;
+  var badge=null; for(var i=0;i<BADGES.length;i++) if(BADGES[i].condition===condition){badge=BADGES[i];break;}
   if(!badge||STATE.player.badges.indexOf(badge.id)!==-1) return;
   STATE.player.badges.push(badge.id);
   sbQueueBadge(badge.id);
   localSave();
   var b=badge;
-  setTimeout(function(){setText('badge-unlocked-icon',b.icon);setText('badge-unlocked-name',b.name);setText('badge-unlocked-desc',b.description);showModal('modal-badge');},600);
+  var itemKey = BADGE_MINECRAFT_MAP[b.id] || 'wooden_pickaxe';
+  var item = MINECRAFT_BADGES[itemKey];
+  setTimeout(function(){
+    var iconEl = ge('badge-unlocked-icon');
+    if (iconEl && item) {
+      iconEl.innerHTML = '<div class="modal-minecraft-badge-wrap">' + renderMinecraftSVG(item.grid) + '</div>';
+    }
+    setText('badge-unlocked-name', b.name + ' • ' + (item ? item.name : ''));
+    setText('badge-unlocked-desc', b.description);
+    showModal('modal-badge');
+  }, 900);
+}
+
+function awardBadgeDirect(badgeId){
+  if(!window.BADGES || !STATE || !STATE.player) return;
+  var badge=null; for(var i=0;i<BADGES.length;i++) if(BADGES[i].id===badgeId){badge=BADGES[i];break;}
+  if(!badge||STATE.player.badges.indexOf(badge.id)!==-1) return;
+  STATE.player.badges.push(badge.id);
+  sbQueueBadge(badge.id);
+  localSave();
+  var b=badge;
+  var itemKey = BADGE_MINECRAFT_MAP[b.id] || 'wooden_pickaxe';
+  var item = MINECRAFT_BADGES[itemKey];
+  setTimeout(function(){
+    var iconEl = ge('badge-unlocked-icon');
+    if (iconEl && item) {
+      iconEl.innerHTML = '<div class="modal-minecraft-badge-wrap">' + renderMinecraftSVG(item.grid) + '</div>';
+    }
+    setText('badge-unlocked-name', b.name + ' • ' + (item ? item.name : ''));
+    setText('badge-unlocked-desc', b.description);
+    showModal('modal-badge');
+  }, 600);
 }
 
 function renderBadges(){
   if(!window.BADGES) return;
   var grid=ge('badges-grid'); if(!grid) return;
-  grid.innerHTML=''; setText('badges-earned-count', STATE.player.badges.length+' / '+BADGES.length+' badges earned');
+  grid.innerHTML=''; 
+  setText('badges-earned-count', STATE.player.badges.length+' / '+BADGES.length+' Minecraft Medals Unlocked');
+  
   BADGES.forEach(function(badge){
     var unlocked = STATE.player.badges.indexOf(badge.id) !== -1;
+    var itemKey = BADGE_MINECRAFT_MAP[badge.id] || 'wooden_pickaxe';
+    var item = MINECRAFT_BADGES[itemKey] || MINECRAFT_BADGES.wooden_pickaxe;
+    
     var card = document.createElement('div');
     card.className = 'badge-card ' + (unlocked ? 'unlocked' : 'locked');
-    card.innerHTML = '<div class="badge-icon-box ' + (unlocked ? 'unlocked' : 'locked') + '">'
-      + (unlocked 
-          ? '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>'
-          : '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>')
+    
+    var iconInner = unlocked 
+      ? renderMinecraftSVG(item.grid) 
+      : '<div class="minecraft-bedrock-lock">' 
+          + renderMinecraftSVG(MINECRAFT_BADGES.bedrock_locked.grid) 
+          + '<span class="bedrock-lock-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>'
+        + '</div>';
+        
+    var rarityHtml = unlocked
+      ? '<span class="badge-rarity-pill pill-' + item.rarity.toLowerCase() + '">' + item.rarity + '</span>'
+      : '<span class="badge-rarity-pill locked">LOCKED</span>';
+      
+    card.innerHTML = '<div class="badge-card-top">' + rarityHtml + '</div>'
+      + '<div class="badge-icon-box ' + (unlocked ? 'unlocked' : 'locked') + '">'
+      + '<div class="badge-minecraft-pixel-wrap">' + iconInner + '</div>'
       + '</div>'
-      + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked Badge') + '</div>'
-      + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete curriculum milestones to unlock.') + '</div>';
+      + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked Item') + '</div>'
+      + '<div class="badge-item-sub">' + (unlocked ? '⛏ ' + esc(item.name) : 'Mystery Block') + '</div>'
+      + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete curriculum milestones to unlock this Minecraft medal.') + '</div>';
+      
     grid.appendChild(card);
   });
 }

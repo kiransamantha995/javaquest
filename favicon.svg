@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Neobrutalist Rounded Canvas -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#FFE600" stroke="#18181B" stroke-width="4"/>
+  <!-- Drop Shadow inside Favicon -->
+  <rect x="7" y="7" width="50" height="50" rx="10" fill="none" stroke="#FFE600" stroke-width="2"/>
+  
+  <!-- Steam Lines -->
+  <path d="M22 13c-1.5 3 1.5 5 0 8" fill="none" stroke="#18181B" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M30 11c-1.5 3 1.5 5 0 8" fill="none" stroke="#18181B" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M38 13c-1.5 3 1.5 5 0 8" fill="none" stroke="#18181B" stroke-width="3.5" stroke-linecap="round"/>
+  
+  <!-- Coffee Cup Handle -->
+  <path d="M42 27h5a5 5 0 0 1 0 10h-5" fill="none" stroke="#18181B" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Coffee Cup Body -->
+  <path d="M15 25h27v14a11 11 0 0 1-11 11H26a11 11 0 0 1-11-11V25z" fill="#FFFFFF" stroke="#18181B" stroke-width="4.5" stroke-linejoin="round"/>
+  
+  <!-- Coffee Brew Surface Line -->
+  <line x1="17" y1="29" x2="40" y2="29" stroke="#6F4E37" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
