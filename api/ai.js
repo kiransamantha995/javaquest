@@ -7,10 +7,11 @@
 const https = require('https');
 
 const CANDIDATE_MODELS = [
-  'gemini-flash-lite-latest',
-  'gemini-flash-latest',
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3-flash-preview',
   'gemini-3.5-flash',
-  'gemini-3.8-flash'
+  'gemini-flash-lite-latest',
+  'gemini-flash-latest'
 ];
 
 function getApiKey(reqBody) {
