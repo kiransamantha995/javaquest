@@ -52,7 +52,8 @@ window._sbSession = null;
 function sbSignUp(email, password, metadata) {
   var body = { email: email, password: password };
   if (metadata) body.data = metadata;
-  return sbFetch('/auth/v1/signup', {
+  var origin = (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'https://javaquest-ashen.vercel.app';
+  return sbFetch('/auth/v1/signup?redirect_to=' + encodeURIComponent(origin), {
     method: 'POST',
     body: JSON.stringify(body)
   }).then(function(data) {

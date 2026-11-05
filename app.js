@@ -424,14 +424,18 @@ function doSignUp() {
                 last_visit: new Date().toDateString()
               }).then(function(){ return loadUserAndEnter(); });
             }
+            var siEmail = ge('si-email'); if (siEmail) siEmail.value = email;
+            var siPass = ge('si-password'); if (siPass) siPass.value = pass;
             showAuthLoading(false);
             showAuthSuccess('su', 'Account created! A confirmation email was sent to ' + email + '. Check your inbox to confirm, then click "Sign In" above. Or click "Play as Guest" below to start immediately!');
-            toast('Confirmation email sent to ' + email + '');
+            toast('Confirmation email sent to ' + email);
           })
           .catch(function(siErr){
+            var siEmail = ge('si-email'); if (siEmail) siEmail.value = email;
+            var siPass = ge('si-password'); if (siPass) siPass.value = pass;
             showAuthLoading(false);
             showAuthSuccess('su', 'Account created! A confirmation email was sent to ' + email + '. Please check your inbox (or spam) to confirm, then click "Sign In" above. Or play in Guest Mode below!');
-            toast('Confirmation email sent to ' + email + '');
+            toast('Confirmation email sent to ' + email);
           });
       }
     })
