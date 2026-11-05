@@ -299,6 +299,127 @@ Provide clear, friendly, technically rigorous Java guidance. Format code snippet
       return;
     }
 
+    // ─────────────────────────────────────────────────────────────────
+    // 5. AUTOMATED AI PROJECT CODE EVALUATOR
+    // ─────────────────────────────────────────────────────────────────
+    if (action === 'eval-project') {
+      const projectTitle = body.projectTitle || 'Capstone Project';
+      const requirements = Array.isArray(body.requirements) ? body.requirements : [];
+      const code = body.code || '';
+
+      if (!code.trim()) {
+        res.status(400).json({ error: 'Please write code in the editor before verifying.' });
+        return;
+      }
+
+      const prompt = `You are an automated grading engine for Java Capstone Projects in JavaQuest.
+Project: "${projectTitle}"
+
+Requirements to Verify:
+${requirements.map((r, i) => `[Task ${i}]: ${r}`).join('\n')}
+
+Student Code in Editor:
+\`\`\`java
+${code.slice(0, 4500)}
+\`\`\`
+
+Strict Grading Rules:
+1. Carefully inspect the student's code to check if each requirement is genuinely implemented.
+2. If a requirement is only partially done, contains placeholder comments without logic, or is completely missing, mark passed: false.
+3. If properly implemented, mark passed: true with a short positive confirmation.
+4. Output strict JSON array of objects:
+[
+  {
+    "index": 0,
+    "passed": true,
+    "reason": "1 short sentence explaining status."
+  }
+]`;
+
+      const geminiPayload = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          response_mime_type: 'application/json',
+          temperature: 0.2,
+          maxOutputTokens: 1200
+        }
+      };
+
+      const result = await callGeminiWithFallback(apiKey, geminiPayload);
+      let rawText = extractCandidateText(result).trim();
+      rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+
+      let evaluations;
+      try {
+        evaluations = JSON.parse(rawText);
+      } catch(e) {
+        const match = rawText.match(/\[\s*\{[\s\S]*\}\s*\]/);
+        if (match) evaluations = JSON.parse(match[0]);
+        else throw new Error('Could not parse evaluations JSON from AI');
+      }
+
+      res.status(200).json({ success: true, evaluations });
+      return;
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 6. DYNAMIC CODING CHALLENGE GENERATOR
+    // ─────────────────────────────────────────────────────────────────
+    if (action === 'generate-coding-task') {
+      const topic = body.topic || 'Java Programming';
+      const level = body.level || 'intermediate';
+      const seed = Math.floor(Math.random() * 1000000);
+
+      const prompt = `You are a principal Java educator creating a fresh, dynamic Java coding task for a student studying:
+Topic: "${topic}" (${level} level).
+Seed: ${seed}.
+
+Requirements:
+1. Provide a clear, practical problem statement in Markdown.
+2. DO NOT include the solved logic in the starterCode! Provide only a clean class skeleton with method signatures and "// TODO: Write your solution here" comments.
+3. Define exact expected output.
+4. Provide 2 unit test cases.
+5. Provide 2 helpful hints.
+
+STRICT JSON OUTPUT FORMAT:
+{
+  "title": "Short descriptive title",
+  "prompt": "Clear task description with input/output rules in Markdown",
+  "starterCode": "public class Main {\\n    public static void main(String[] args) {\\n        // TODO: implement your logic here\\n    }\\n}",
+  "expectedOutput": "Exact expected terminal output",
+  "testCases": [
+    { "name": "Primary case", "expected": "Exact string" },
+    { "name": "Edge case", "expected": "Exact string" }
+  ],
+  "hints": ["First actionable hint", "Second actionable hint"]
+}`;
+
+      const geminiPayload = {
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          response_mime_type: 'application/json',
+          temperature: 0.75,
+          maxOutputTokens: 1600
+        }
+      };
+
+      const result = await callGeminiWithFallback(apiKey, geminiPayload);
+      let rawText = extractCandidateText(result).trim();
+      rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+
+      let task;
+      try {
+        task = JSON.parse(rawText);
+      } catch(e) {
+        const match = rawText.match(/\{\s*"title"[\s\S]*\}/);
+        if (match) task = JSON.parse(match[0]);
+        else throw new Error('Could not parse task JSON from AI');
+      }
+
+      res.status(200).json({ success: true, task });
+      return;
+    }
+
     res.status(400).json({ error: `Unknown action: "${action}"` });
 
   } catch(err) {

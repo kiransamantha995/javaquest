@@ -3167,7 +3167,27 @@ body {
   font-size: 0.7rem; font-weight: 800; background: #FEF3C7; border: 1.5px solid var(--ink);
   border-radius: 6px; padding: 0.1rem 0.45rem;
 }
-.task-badge-pill.pending { background: #F4F4F5; color: #71717A; }
+.task-badge-pill.pending, .task-badge-pill.pill-pending { background: #FEE2E2; color: #991B1B; }
+.task-badge-pill.pill-done { background: #DCFCE7; color: #166534; }
+
+.task-eval-reason {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink);
+  display: inline-block;
+  line-height: 1.35;
+}
+.task-eval-reason.reason-pass {
+  background: #DCFCE7;
+  color: #166534;
+}
+.task-eval-reason.reason-fail {
+  background: #FFFBEB;
+  color: #B45309;
+}
 
 /* Feature Ideas Grid */
 .feature-ideas-section { margin-top: 1.5rem; }

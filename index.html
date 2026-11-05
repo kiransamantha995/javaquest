@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data:;">
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=3.0"/>
+  <link rel="stylesheet" href="style.css?v=4.0"/>
 </head>
 <body>
 
@@ -218,10 +218,13 @@
         <span class="challenge-tag-badge">⚔️ Challenge</span>
         <h2 id="challenge-module-title">Challenge</h2>
       </div>
-      <div class="hearts-display">
-        <span class="heart" id="heart-1">❤️</span>
-        <span class="heart" id="heart-2">❤️</span>
-        <span class="heart" id="heart-3">❤️</span>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <button class="btn-secondary btn-sm" id="challenge-refresh-ai-btn" onclick="startAIChallengeFromHeader()" title="Generate brand new AI questions">✨ New AI Quiz</button>
+        <div class="hearts-display">
+          <span class="heart" id="heart-1">❤️</span>
+          <span class="heart" id="heart-2">❤️</span>
+          <span class="heart" id="heart-3">❤️</span>
+        </div>
       </div>
     </div>
     <div class="challenge-prog-wrap">
@@ -258,10 +261,13 @@
         <span class="code-level-tag" id="coding-module-tag">B1 • Coding Challenge</span>
         <h2 id="coding-task-title">Task Title</h2>
       </div>
-      <!-- Attempt Box -->
-      <div class="attempt-badge" id="coding-attempt-badge">
-        <span class="attempt-icon">🎯</span>
-        <span id="coding-attempt-label">Attempt 1</span>
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-left:auto;">
+        <button class="btn-secondary btn-sm" id="coding-new-ai-btn" onclick="generateNewCodingChallenge()" title="Generate brand new challenge with AI">✨ New Challenge (AI)</button>
+        <!-- Attempt Box -->
+        <div class="attempt-badge" id="coding-attempt-badge">
+          <span class="attempt-icon">🎯</span>
+          <span id="coding-attempt-label">Attempt 1</span>
+        </div>
       </div>
     </div>
 
@@ -561,8 +567,11 @@
     <!-- Milestone Checklist with Live Progress Saving -->
     <div class="project-modal-section">
       <div class="project-section-header-row">
-        <h4>📋 Milestone Checklist</h4>
-        <span class="project-progress-badge" id="project-progress-badge">0/5 Done (0%)</span>
+        <h4>📋 Milestone Checklist (AI Verified)</h4>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-sm btn-secondary" id="project-ai-eval-btn">🤖 AI Verify Code</button>
+          <span class="project-progress-badge" id="project-progress-badge">0/5 Done (0%)</span>
+        </div>
       </div>
       <div class="project-progress-bar-wrap">
         <div class="project-progress-bar-fill" id="project-progress-bar-fill" style="width: 0%"></div>
@@ -587,6 +596,7 @@
     </div>
 
     <div class="project-modal-actions">
+      <button class="btn-secondary" id="project-ai-eval-btn-main">🤖 AI Verify Tasks</button>
       <button class="btn-primary" id="project-complete-btn">🎉 Complete Project & Claim XP</button>
       <button class="btn-secondary" id="project-open-compiler-btn">💻 Open in Code Playground</button>
       <button class="btn-outline" id="project-close-action-btn">Close</button>
@@ -706,10 +716,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=3.0"></script>
-<script src="animations.js?v=3.0"></script>
-<script src="supabase.js"></script>
-<script src="ai-tutor.js?v=3.0"></script>
-<script src="app.js?v=3.0"></script>
+<script src="curriculum.js?v=4.0"></script>
+<script src="animations.js?v=4.0"></script>
+<script src="supabase.js?v=4.0"></script>
+<script src="ai-tutor.js?v=4.0"></script>
+<script src="app.js?v=4.0"></script>
 </body>
 </html>

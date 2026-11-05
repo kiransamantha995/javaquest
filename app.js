@@ -908,38 +908,84 @@ function openProjectModal(projId) {
     }
   }
 
-  // Render Interactive Task Checklist
+  // Render Automated Task Checklist (Read-Only to prevent cheating; Verified by AI)
   var tasksContainer = ge('project-modal-tasks');
-  if (tasksContainer) {
+  function renderTaskList() {
+    if (!tasksContainer) return;
     tasksContainer.innerHTML = '';
     (proj.requirements || []).forEach(function(reqText, idx){
       var isChecked = !!pState.tasks[idx];
+      var reason = (pState.evalFeedback && pState.evalFeedback[idx]) ? pState.evalFeedback[idx] : '';
       var item = document.createElement('div');
       item.className = 'project-task-item' + (isChecked ? ' checked' : '');
       item.setAttribute('data-idx', idx);
+      item.style.cursor = 'default';
       item.innerHTML = '<div class="task-check-circle">' + (isChecked ? '✓' : '') + '</div>'
-        + '<div class="task-text">' + esc(reqText) + '</div>'
-        + '<span class="task-badge-pill">' + (isChecked ? 'Done' : 'Pending') + '</span>';
+        + '<div style="flex:1;"><div class="task-text">' + esc(reqText) + '</div>'
+        + (reason ? '<div class="task-eval-reason ' + (isChecked ? 'reason-pass' : 'reason-fail') + '">' + (isChecked ? '✅ ' : '⚠️ ') + esc(reason) + '</div>' : '')
+        + '</div>'
+        + '<span class="task-badge-pill ' + (isChecked ? 'pill-done' : 'pill-pending') + '">' + (isChecked ? 'Verified ✓' : 'Needs Code') + '</span>';
 
       item.addEventListener('click', function(){
-        var cur = !!pState.tasks[idx];
-        pState.tasks[idx] = !cur;
-        localSave();
-        updateStatusUI();
-        if (pState.tasks[idx]) {
-          item.classList.add('checked');
-          item.querySelector('.task-check-circle').textContent = '✓';
-          item.querySelector('.task-badge-pill').textContent = 'Done';
-          toast('Milestone ' + (idx + 1) + ' checked! 🎯');
-        } else {
-          item.classList.remove('checked');
-          item.querySelector('.task-check-circle').textContent = '';
-          item.querySelector('.task-badge-pill').textContent = 'Pending';
-        }
+        toast('🔒 Milestones are verified automatically by AI! Write code in the editor and click "🤖 AI Verify Tasks".');
       });
       tasksContainer.appendChild(item);
     });
   }
+  renderTaskList();
+
+  // Wire Automated AI Code Evaluation
+  function evaluateProjectWithAI() {
+    var ed = ge('code-editor');
+    var code = (ed && ed.value && ed.value.trim()) ? ed.value.trim() : (pState.code || '');
+    if (!code || code.length < 35 || code.includes('// Starter skeleton with milestones')) {
+      toast('⚠️ Please open the Code Playground and write your Java implementation first before verifying!');
+      return;
+    }
+
+    var evalBtns = [ge('project-ai-eval-btn'), ge('project-ai-eval-btn-main')];
+    evalBtns.forEach(function(b){ if(b) { b.disabled = true; b.textContent = '⏳ AI Evaluating…'; } });
+    toast('🤖 JavaBot is analyzing your code against all milestones…');
+
+    callAI('eval-project', {
+      projectTitle: proj.title,
+      requirements: proj.requirements || [],
+      code: code
+    })
+    .then(function(res) {
+      evalBtns.forEach(function(b){ if(b) { b.disabled = false; b.textContent = '🤖 AI Verify Tasks'; } });
+      if (!res || !Array.isArray(res.evaluations)) throw new Error('Invalid evaluation result from AI');
+
+      pState.evalFeedback = pState.evalFeedback || {};
+      var passCount = 0;
+      res.evaluations.forEach(function(ev) {
+        pState.tasks[ev.index] = !!ev.passed;
+        pState.evalFeedback[ev.index] = ev.reason || '';
+        if (ev.passed) passCount++;
+      });
+
+      pState.code = code;
+      localSave();
+      renderTaskList();
+      updateStatusUI();
+
+      var total = (proj.requirements || []).length;
+      if (passCount === total) {
+        toast('🎉 All ' + total + ' milestones verified by AI! You can now complete the project and claim your XP! 🏆');
+      } else {
+        toast('📋 AI Evaluation: ' + passCount + '/' + total + ' milestones passed. Check notes above for what is missing.');
+      }
+    })
+    .catch(function(err) {
+      evalBtns.forEach(function(b){ if(b) { b.disabled = false; b.textContent = '🤖 AI Verify Tasks'; } });
+      toast('⚠️ AI Evaluation error: ' + (err.message || 'Please retry in a moment'));
+    });
+  }
+
+  var evalBtn1 = ge('project-ai-eval-btn');
+  if (evalBtn1) evalBtn1.onclick = evaluateProjectWithAI;
+  var evalBtn2 = ge('project-ai-eval-btn-main');
+  if (evalBtn2) evalBtn2.onclick = evaluateProjectWithAI;
 
   // Render Feature Ideas Section
   var ideasContainer = ge('project-modal-ideas');
@@ -972,7 +1018,7 @@ function openProjectModal(projId) {
     };
   }
 
-  // Wire "Complete Project & Claim XP" Button
+  // Strict Anti-Skip & Point Protection
   if (completeBtn) {
     completeBtn.onclick = function(){
       if (pState.completed) {
@@ -980,13 +1026,14 @@ function openProjectModal(projId) {
         return;
       }
       var reqs = proj.requirements || [];
-      var checked = 0;
-      reqs.forEach(function(_, i){ if (pState.tasks[i]) checked++; });
-      if (checked < reqs.length) {
-        if (!confirm('You have checked ' + checked + ' of ' + reqs.length + ' milestones. Mark this capstone project as fully completed anyway and claim ' + (proj.xpReward || 250) + ' XP?')) {
-          return;
+      var allVerified = reqs.every(function(_, i){ return !!pState.tasks[i]; });
+      if (!allVerified) {
+        toast('⛔ Anti-Skip: All ' + reqs.length + ' milestones must be verified by AI before claiming completion! Write code and click "AI Verify Tasks".');
+        if (pState.completed) {
+          pState.completed = false;
+          localSave();
         }
-        reqs.forEach(function(_, i){ pState.tasks[i] = true; });
+        return;
       }
 
       pState.completed = true;
@@ -997,7 +1044,7 @@ function openProjectModal(projId) {
       localSave();
       updateStatusUI();
       renderMap();
-      toast('🏆 Capstone Completed! +' + (proj.xpReward || 250) + ' XP & Badge Awarded! 🌟');
+      toast('🏆 Capstone Verified & Completed! +' + (proj.xpReward || 250) + ' XP & Badge Awarded! 🌟');
     };
   }
 
@@ -1182,6 +1229,60 @@ function startCodingChallenge(modId) {
   if (fb) fb.classList.add('hidden');
 
   showScreen('coding');
+}
+
+function generateNewCodingChallenge() {
+  if (!_curCodingMod) {
+    toast('No active module found!');
+    return;
+  }
+  var btn = ge('coding-new-ai-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating Challenge…'; }
+  toast('✨ Asking Gemini to craft a brand new Java coding challenge for ' + _curCodingMod.title + '…');
+
+  callAI('generate-coding-task', {
+    topic: _curCodingMod.title,
+    level: _curCodingMod.level || 'intermediate'
+  })
+  .then(function(res) {
+    if (btn) { btn.disabled = false; btn.textContent = '✨ New Challenge (AI)'; }
+    if (!res || !res.task) throw new Error('No task generated by AI');
+    var task = res.task;
+
+    _curCodingMod.codingTask = task;
+    setText('coding-task-title', task.title);
+
+    var promptEl = ge('coding-prompt');
+    if (promptEl) promptEl.innerHTML = fmt(task.prompt);
+
+    var expectedEl = ge('coding-expected-output');
+    if (expectedEl) expectedEl.textContent = task.expectedOutput || '(Matches test cases)';
+
+    var hintBox = ge('coding-hint-box');
+    if (hintBox) {
+      hintBox.innerHTML = (task.hints && task.hints.length)
+        ? task.hints.map(function(h, i){ return '<div class="hint-item"><strong>💡 Hint ' + (i + 1) + ':</strong> ' + fmt(h) + '</div>'; }).join('')
+        : '<div>Follow standard Java conventions and test each case thoroughly.</div>';
+    }
+
+    var editor = ge('coding-editor');
+    if (editor) {
+      editor.value = task.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // TODO: Write your solution here\n    }\n}\n';
+      editor.focus();
+    }
+
+    renderTestCasesList(task.testCases || []);
+    var overall = ge('test-overall-status');
+    if (overall) {
+      overall.className = 'test-status-pill';
+      overall.textContent = 'Not submitted';
+    }
+    toast('🎯 Fresh Dynamic Coding Challenge Loaded! (+50 XP)');
+  })
+  .catch(function(err) {
+    if (btn) { btn.disabled = false; btn.textContent = '✨ New Challenge (AI)'; }
+    toast('⚠️ AI Challenge generation error: ' + (err.message || 'Please try again'));
+  });
 }
 
 function renderTestCasesList(testCases) {
@@ -1644,13 +1745,67 @@ function finishLesson() {
 var _cm=null,_qs=[],_qi=0,_hits=0;
 var _selMCQ=-1,_selTF=null,_blanks=[],_activeB=-1,_mSel=null,_mPairs={},_selBug=-1;
 
-function startChallenge(modId) {
-  var mod=getMod(modId); if(!mod){toast('Module not found!');return;}
-  _cm=mod;_qs=mod.challenge.questions.slice();_qi=0;_hits=0;
-  var p=STATE.player;
-  if(p.hearts<3&&p.heartRefillTime&&Date.now()>p.heartRefillTime){p.hearts=3;p.heartRefillTime=null;localSave();}
-  setText('challenge-module-title',mod.title+' — Challenge');
+function shuffleQuestionOptions(q) {
+  if (!q) return q;
+  if (Array.isArray(q.options) && q.options.length >= 2 && typeof q.answer === 'number' && q.answer >= 0 && q.answer < q.options.length) {
+    var items = q.options.map(function(opt, idx) {
+      return { text: opt, isCorrect: idx === q.answer };
+    });
+    for (var i = items.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = items[i];
+      items[i] = items[j];
+      items[j] = tmp;
+    }
+    q.options = items.map(function(x) { return x.text; });
+    q.answer = items.findIndex(function(x) { return x.isCorrect; });
+  }
+  return q;
+}
+
+function startChallenge(modId, forceAI) {
+  var mod = getMod(modId); if(!mod){toast('Module not found!');return;}
+  _cm = mod;
+
+  // If user has already completed the module or explicitly requests fresh questions, generate with AI!
+  var isDone = (STATE.player.completedChallenges || []).indexOf(mod.challenge ? mod.challenge.id : '') !== -1;
+  if (forceAI || isDone) {
+    if (typeof generateAIQuiz === 'function') {
+      generateAIQuiz(modId);
+      return;
+    }
+  }
+
+  // Clone questions and randomize options so the answer is never fixed to C
+  var rawQs = (mod.challenge && Array.isArray(mod.challenge.questions)) ? mod.challenge.questions : [];
+  _qs = rawQs.map(function(q){
+    var clone = JSON.parse(JSON.stringify(q));
+    return shuffleQuestionOptions(clone);
+  });
+
+  // Fisher-Yates shuffle the question order
+  for (var i = _qs.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = _qs[i];
+    _qs[i] = _qs[j];
+    _qs[j] = tmp;
+  }
+
+  _qi = 0; _hits = 0;
+  var p = STATE.player;
+  if (p.hearts < 3 && p.heartRefillTime && Date.now() > p.heartRefillTime) {
+    p.hearts = 3; p.heartRefillTime = null; localSave();
+  }
+  setText('challenge-module-title', mod.title + ' — Challenge');
   renderHearts(); renderQuestion(); showScreen('challenge');
+}
+
+function startAIChallengeFromHeader() {
+  if (!_cm) return;
+  var mid = (_cm.id || '').replace('module-', '').replace('ai_', '').split('_')[0] || 'b1';
+  if (typeof generateAIQuiz === 'function') {
+    generateAIQuiz(mid);
+  }
 }
 
 function renderQuestion() {

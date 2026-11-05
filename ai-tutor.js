@@ -271,6 +271,9 @@ function generateAIQuiz(modId) {
       if (!Array.isArray(q.options) || q.options.length < 2) {
         q.options = ['Option A', 'Option B', 'Option C', 'Option D'];
       }
+      if (typeof shuffleQuestionOptions === 'function') {
+        shuffleQuestionOptions(q);
+      }
     });
 
     _cm = {

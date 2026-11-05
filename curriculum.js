@@ -119,7 +119,7 @@ const CURRICULUM = [
       "id": "code-b1",
       "title": "B1: Hello JavaQuest Console",
       "prompt": "Write a Java program in the `Main` class that prints:\nLine 1: `Hello, JavaQuest!`\nLine 2: `Java 21 Ready`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // Print Hello, JavaQuest! on first line\n        // Print Java 21 Ready on second line\n    }\n}",
+      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print \"Hello, JavaQuest!\" on line 1\n        // TODO: Print \"Java 21 Ready\" on line 2\n    }\n}",
       "expectedOutput": "Hello, JavaQuest!\nJava 21 Ready",
       "testCases": [
         {
@@ -253,7 +253,7 @@ const CURRICULUM = [
       "id": "code-b2",
       "title": "B2: User Profile Formatter",
       "prompt": "Declare variables:\n- `String name = \"Alex\";`\n- `int age = 20;`\n- `double gpa = 3.75;`\nPrint the profile in this exact format:\n`Name: Alex | Age: 21 next year | GPA: 3.75`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        String name = \"Alex\";\n        int age = 20;\n        double gpa = 3.75;\n        \n        // Print: Name: Alex | Age: 21 next year | GPA: 3.75\n    }\n}",
+      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO 1: Declare String name = \"Alex\";\n        // TODO 2: Declare int age = 20;\n        // TODO 3: Declare double gpa = 3.75;\n        \n        // TODO 4: Print: Name: Alex | Age: 21 next year | GPA: 3.75\n    }\n}",
       "expectedOutput": "Name: Alex | Age: 21 next year | GPA: 3.75",
       "testCases": [
         {
@@ -387,7 +387,7 @@ const CURRICULUM = [
       "id": "code-b3",
       "title": "B3: Discount Calculator",
       "prompt": "Write a program with `double originalPrice = 120.0;` and `double discountPercent = 15.0;`\n1. Calculate discounted price: `originalPrice * (1 - discountPercent / 100)`\n2. If discounted price is over 100, apply an extra $5 coupon: `price - 5.0`\n3. Print: `Final Price: $97.0` (format with 1 decimal).",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        double originalPrice = 120.0;\n        double discountPercent = 15.0;\n        \n        double discounted = originalPrice * (1 - discountPercent / 100.0);\n        if (discounted > 100.0) {\n            discounted -= 5.0;\n        }\n        System.out.println(\"Final Price: $\" + discounted);\n    }\n}",
+      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        double originalPrice = 120.0;\n        double discountPercent = 15.0;\n        \n        // TODO 1: Calculate discounted price: originalPrice * (1 - discountPercent / 100.0)\n        // TODO 2: If discounted price > 100.0, subtract $5 coupon\n        // TODO 3: Print: Final Price: $ + discounted (e.g. Final Price: $97.0)\n    }\n}",
       "expectedOutput": "Final Price: $97.0",
       "testCases": [
         {
@@ -532,7 +532,7 @@ const CURRICULUM = [
       "id": "code-b4",
       "title": "B4: FizzBuzz Counter",
       "prompt": "Write a loop from 1 to 15. For each number:\n- If divisible by both 3 and 5, print `FizzBuzz`\n- Else if divisible by 3, print `Fizz`\n- Else if divisible by 5, print `Buzz`\n- Otherwise, print the number\n(Each on a new line)",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 15; i++) {\n            if (i % 15 == 0) System.out.println(\"FizzBuzz\");\n            else if (i % 3 == 0) System.out.println(\"Fizz\");\n            else if (i % 5 == 0) System.out.println(\"Buzz\");\n            else System.out.println(i);\n        }\n    }\n}",
+      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Write a loop from 1 to 15.\n        // - If divisible by both 3 and 5, print \"FizzBuzz\"\n        // - Else if divisible by 3, print \"Fizz\"\n        // - Else if divisible by 5, print \"Buzz\"\n        // - Otherwise, print the number\n    }\n}",
       "expectedOutput": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz",
       "testCases": [
         {
@@ -662,7 +662,7 @@ const CURRICULUM = [
       "id": "code-b5",
       "title": "B5: Temperature Converter Method",
       "prompt": "Implement a static method `celsiusToFahrenheit(double c)` that computes:\n`F = (c * 9.0 / 5.0) + 32.0`\nIn main, call it with 25.0 and print: `25.0 C = 77.0 F`",
-      "starterCode": "public class Main {\n    public static double celsiusToFahrenheit(double c) {\n        return (c * 9.0 / 5.0) + 32.0;\n    }\n    public static void main(String[] args) {\n        double c = 25.0;\n        double f = celsiusToFahrenheit(c);\n        System.out.println(c + \" C = \" + f + \" F\");\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement static method celsiusToFahrenheit(double c)\n    // Formula: (c * 9.0 / 5.0) + 32.0\n    public static double celsiusToFahrenheit(double c) {\n        // Your code here\n        return 0.0;\n    }\n\n    public static void main(String[] args) {\n        double c = 25.0;\n        // TODO 2: Call celsiusToFahrenheit and print: 25.0 C = 77.0 F\n    }\n}",
       "expectedOutput": "25.0 C = 77.0 F",
       "testCases": [
         {
@@ -791,7 +791,7 @@ const CURRICULUM = [
       "id": "code-b6",
       "title": "B6: Marks Analyser",
       "prompt": "Given an array `int[] marks = {85, 92, 78, 90, 65};`\nWrite a program to compute:\n- Highest mark\n- Lowest mark\n- Average mark (as double)\nPrint:\n`Highest: 92\nLowest: 65\nAverage: 82.0`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int[] marks = {85, 92, 78, 90, 65};\n        int min = marks[0];\n        int max = marks[0];\n        int sum = 0;\n        for (int m : marks) {\n            if (m < min) min = m;\n            if (m > max) max = m;\n            sum += m;\n        }\n        double avg = (double) sum / marks.length;\n        System.out.println(\"Highest: \" + max);\n        System.out.println(\"Lowest: \" + min);\n        System.out.println(\"Average: \" + avg);\n    }\n}",
+      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int[] marks = {85, 92, 78, 90, 65};\n        \n        // TODO 1: Find the highest mark\n        // TODO 2: Find the lowest mark\n        // TODO 3: Calculate the average mark (as double)\n        \n        // TODO 4: Print:\n        // Highest: 92\n        // Lowest: 65\n        // Average: 82.0\n    }\n}",
       "expectedOutput": "Highest: 92\nLowest: 65\nAverage: 82.0",
       "testCases": [
         {
@@ -936,7 +936,7 @@ const CURRICULUM = [
       "id": "code-b7",
       "title": "B7: BankAccount Class",
       "prompt": "Complete the `BankAccount` class with:\n- `private double balance;`\n- Constructor `BankAccount(double initial)`\n- `public void deposit(double amount)`\n- `public void withdraw(double amount)` (only if balance >= amount)\n- `public double getBalance()`\nIn `main`: start with 100, deposit 50, withdraw 30, and print `Balance: $120.0`",
-      "starterCode": "class BankAccount {\n    private double balance;\n    public BankAccount(double initial) {\n        this.balance = initial;\n    }\n    public void deposit(double amount) {\n        if (amount > 0) balance += amount;\n    }\n    public void withdraw(double amount) {\n        if (amount > 0 && balance >= amount) balance -= amount;\n    }\n    public double getBalance() {\n        return balance;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        BankAccount acc = new BankAccount(100.0);\n        acc.deposit(50.0);\n        acc.withdraw(30.0);\n        System.out.println(\"Balance: $\" + acc.getBalance());\n    }\n}",
+      "starterCode": "class BankAccount {\n    private double balance;\n\n    // TODO 1: Initialize balance in constructor\n    public BankAccount(double initial) {\n        // Your code here\n    }\n\n    // TODO 2: Increase balance by amount if amount > 0\n    public void deposit(double amount) {\n        // Your code here\n    }\n\n    // TODO 3: Decrease balance if amount > 0 and balance >= amount\n    public void withdraw(double amount) {\n        // Your code here\n    }\n\n    // TODO 4: Return current balance\n    public double getBalance() {\n        return 0.0;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 5: Create BankAccount with 100, deposit 50, withdraw 30, and print: Balance: $120.0\n    }\n}",
       "expectedOutput": "Balance: $120.0",
       "testCases": [
         {
@@ -1065,7 +1065,7 @@ const CURRICULUM = [
       "id": "code-b8",
       "title": "B8: Unique Names Counter",
       "prompt": "Given an array with duplicate names:\n`String[] names = {\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\"};`\nUse a `HashSet<String>` to collect unique names.\nPrint:\n`Total Unique: 3`",
-      "starterCode": "import java.util.HashSet;\n\npublic class Main {\n    public static void main(String[] args) {\n        String[] names = {\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\"};\n        HashSet<String> unique = new HashSet<>();\n        for (String n : names) {\n            unique.add(n);\n        }\n        System.out.println(\"Total Unique: \" + unique.size());\n    }\n}",
+      "starterCode": "abstract class Shape {\n    abstract double area();\n}\n\n// TODO 1: Implement Circle with radius field and area() = Math.PI * radius * radius\nclass Circle extends Shape {\n    private double radius;\n    public Circle(double r) {\n        this.radius = r;\n    }\n    @Override\n    double area() {\n        return 0.0;\n    }\n}\n\n// TODO 2: Implement Rectangle with width and height fields and area() = width * height\nclass Rectangle extends Shape {\n    private double width, height;\n    public Rectangle(double w, double h) {\n        this.width = w;\n        this.height = h;\n    }\n    @Override\n    double area() {\n        return 0.0;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Shape c = new Circle(5.0);\n        Shape r = new Rectangle(4.0, 6.0);\n        \n        // TODO 3: Print circle area (1 decimal) and rectangle area:\n        // Circle Area: 78.5\n        // Rectangle Area: 24.0\n    }\n}",
       "expectedOutput": "Total Unique: 3",
       "testCases": [
         {
@@ -1219,7 +1219,7 @@ const CURRICULUM = [
       "id": "code-i1",
       "title": "I1: Immutable Order Record",
       "prompt": "Define a Java Record `record Order(String id, double amount, boolean isDelivered) {}`\nIn `Main`, create an order with id `\"ORD-99\"`, amount `149.50`, delivered `true`.\nPrint: `Order ORD-99: $149.5 | Delivered: true`",
-      "starterCode": "record Order(String id, double amount, boolean isDelivered) {}\n\npublic class Main {\n    public static void main(String[] args) {\n        Order o = new Order(\"ORD-99\", 149.50, true);\n        System.out.println(\"Order \" + o.id() + \": $\" + o.amount() + \" | Delivered: \" + o.isDelivered());\n    }\n}",
+      "starterCode": "// TODO 1: Define a record Order with fields: String id, double amount, boolean isDelivered\nrecord Order(String id, double amount, boolean isDelivered) {}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 2: Instantiate an Order with id \"ORD-99\", amount 149.50, and delivered true\n        // TODO 3: Print: Order ORD-99: $149.5 | Delivered: true\n    }\n}",
       "expectedOutput": "Order ORD-99: $149.5 | Delivered: true",
       "testCases": [
         {
@@ -1370,7 +1370,7 @@ const CURRICULUM = [
       "id": "code-i2",
       "title": "I2: Word Frequency Counter",
       "prompt": "Given: `String[] words = {\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\", \"apple\"};`\nUse a `HashMap<String, Integer>` to count frequencies.\nPrint:\n`apple: 3\nbanana: 2\ncherry: 1`",
-      "starterCode": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        String[] words = {\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\", \"apple\"};\n        Map<String, Integer> freq = new LinkedHashMap<>();\n        for (String w : words) {\n            freq.put(w, freq.getOrDefault(w, 0) + 1);\n        }\n        for (Map.Entry<String, Integer> e : freq.entrySet()) {\n            System.out.println(e.getKey() + \": \" + e.getValue());\n        }\n    }\n}",
+      "starterCode": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        String[] words = {\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\", \"apple\"};\n        \n        // TODO 1: Create a Map<String, Integer> to count word frequencies\n        \n        // TODO 2: Iterate over words and count occurrences\n        \n        // TODO 3: Print each word and count (e.g. apple: 3, banana: 2, cherry: 1)\n    }\n}",
       "expectedOutput": "apple: 3\nbanana: 2\ncherry: 1",
       "testCases": [
         {
@@ -1500,7 +1500,7 @@ const CURRICULUM = [
       "id": "code-i3",
       "title": "I3: Safe Integer Parser",
       "prompt": "Write a static method `public static int parseSafe(String s, int fallback)`\nIf `s` is a valid integer, return it. If it throws `NumberFormatException`, return `fallback`.\nIn `main`, test with:\n`\"42\"` (fallback 0) -> print `42`\n`\"xyz\"` (fallback -1) -> print `-1`",
-      "starterCode": "public class Main {\n    public static int parseSafe(String s, int fallback) {\n        try {\n            return Integer.parseInt(s);\n        } catch (NumberFormatException e) {\n            return fallback;\n        }\n    }\n    public static void main(String[] args) {\n        System.out.println(parseSafe(\"42\", 0));\n        System.out.println(parseSafe(\"xyz\", -1));\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement parseSafe(String s, int fallback)\n    // If s parses to integer, return it. If NumberFormatException is thrown, return fallback.\n    public static int parseSafe(String s, int fallback) {\n        // Your code here\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Test with (\"42\", 0) -> prints 42\n        // Test with (\"xyz\", -1) -> prints -1\n    }\n}",
       "expectedOutput": "42\n-1",
       "testCases": [
         {
@@ -1640,7 +1640,7 @@ const CURRICULUM = [
       "id": "code-i4",
       "title": "I4: Stream Square Evens",
       "prompt": "Given: `List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);`\nUsing the Stream API:\n1. Filter only even numbers (`n % 2 == 0`)\n2. Map each even number to its square (`n * n`)\n3. Print each result on a new line\nOutput should be:\n`4\n16\n36`",
-      "starterCode": "import java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);\n        numbers.stream()\n            .filter(n -> n % 2 == 0)\n            .map(n -> n * n)\n            .forEach(System.out::println);\n    }\n}",
+      "starterCode": "import java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);\n        \n        // TODO: Use Java Stream API to:\n        // 1. Filter only even numbers (n % 2 == 0)\n        // 2. Map each even number to its square (n * n)\n        // 3. Print each result on a new line\n    }\n}",
       "expectedOutput": "4\n16\n36",
       "testCases": [
         {
@@ -1786,7 +1786,7 @@ const CURRICULUM = [
       "id": "code-i5",
       "title": "I5: Simple Email Validator",
       "prompt": "Write a method `public static boolean isValidEmail(String email)`\nUse regex to check that email contains characters, followed by `@`, followed by domain name, a dot, and extension (e.g. `^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$`)\nIn main, validate `\"hero@javaquest.com\"` and `\"invalid-email\"` and print:\n`hero@javaquest.com: true\ninvalid-email: false`",
-      "starterCode": "public class Main {\n    public static boolean isValidEmail(String email) {\n        return email != null && email.matches(\"^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]+$\");\n    }\n    public static void main(String[] args) {\n        System.out.println(\"hero@javaquest.com: \" + isValidEmail(\"hero@javaquest.com\"));\n        System.out.println(\"invalid-email: \" + isValidEmail(\"invalid-email\"));\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement isValidEmail(String email) using regex\n    public static boolean isValidEmail(String email) {\n        // Your code here\n        return false;\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Test \"hero@javaquest.com\" (prints true)\n        // Test \"invalid-email\" (prints false)\n    }\n}",
       "expectedOutput": "hero@javaquest.com: true\ninvalid-email: false",
       "testCases": [
         {
@@ -1914,7 +1914,7 @@ const CURRICULUM = [
       "id": "code-i6",
       "title": "I6: Unit Test Simulator",
       "prompt": "Write a small test runner that verifies `add(a, b)`:\nIf `add(2, 3) == 5`, print `TEST 1: PASS`\nIf `add(-1, 1) == 0`, print `TEST 2: PASS`\nIf all pass, print `ALL TESTS PASSED`",
-      "starterCode": "public class Main {\n    static int add(int a, int b) { return a + b; }\n    public static void main(String[] args) {\n        boolean t1 = add(2, 3) == 5;\n        boolean t2 = add(-1, 1) == 0;\n        System.out.println(\"TEST 1: \" + (t1 ? \"PASS\" : \"FAIL\"));\n        System.out.println(\"TEST 2: \" + (t2 ? \"PASS\" : \"FAIL\"));\n        if (t1 && t2) System.out.println(\"ALL TESTS PASSED\");\n    }\n}",
+      "starterCode": "public class Main {\n    static int add(int a, int b) { return a + b; }\n\n    public static void main(String[] args) {\n        // TODO 1: Test if add(2, 3) == 5 -> print \"TEST 1: PASS\"\n        // TODO 2: Test if add(-1, 1) == 0 -> print \"TEST 2: PASS\"\n        // TODO 3: If both pass, print \"ALL TESTS PASSED\"\n    }\n}",
       "expectedOutput": "TEST 1: PASS\nTEST 2: PASS\nALL TESTS PASSED",
       "testCases": [
         {
@@ -2042,7 +2042,7 @@ const CURRICULUM = [
       "id": "code-i7",
       "title": "I7: Parameterized SQL Query Builder",
       "prompt": "Implement a helper method `public static String buildUserQuery(String table, String column)`\nIt should return: `SELECT * FROM ` + table + ` WHERE ` + column + ` = ?`\nIn main, call with `\"accounts\"` and `\"user_id\"`, and print the query string.",
-      "starterCode": "public class Main {\n    public static String buildUserQuery(String table, String column) {\n        return \"SELECT * FROM \" + table + \" WHERE \" + column + \" = ?\";\n    }\n    public static void main(String[] args) {\n        String q = buildUserQuery(\"accounts\", \"user_id\");\n        System.out.println(q);\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement buildUserQuery(String table, String column)\n    // Should return \"SELECT * FROM <table> WHERE <column> = ?\"\n    public static String buildUserQuery(String table, String column) {\n        // Your code here\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Call buildUserQuery(\"accounts\", \"user_id\") and print result\n    }\n}",
       "expectedOutput": "SELECT * FROM accounts WHERE user_id = ?",
       "testCases": [
         {
@@ -2170,7 +2170,7 @@ const CURRICULUM = [
       "id": "code-i8",
       "title": "I8: Asynchronous Task Runner",
       "prompt": "Write a program using `ExecutorService` with 1 thread:\nSubmit a Runnable task that prints `Async Task Completed!`\nCall `pool.shutdown()` and `pool.awaitTermination(1, TimeUnit.SECONDS);`\nIn main after termination, print `All Done!`",
-      "starterCode": "import java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        ExecutorService pool = Executors.newSingleThreadExecutor();\n        pool.submit(() -> {\n            System.out.println(\"Async Task Completed!\");\n        });\n        pool.shutdown();\n        pool.awaitTermination(2, TimeUnit.SECONDS);\n        System.out.println(\"All Done!\");\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement thread-safe Counter using synchronized or AtomicInteger\n    static class Counter {\n        private int count = 0;\n        public synchronized void increment() {\n            // Your code here\n        }\n        public synchronized int get() {\n            return count;\n        }\n    }\n\n    public static void main(String[] args) throws InterruptedException {\n        Counter c = new Counter();\n        // TODO 2: Start 2 threads incrementing 500 times each, join them, and print \"Final Count: 1000\"\n    }\n}",
       "expectedOutput": "Async Task Completed!\nAll Done!",
       "testCases": [
         {
@@ -2298,7 +2298,7 @@ const CURRICULUM = [
       "id": "code-a1",
       "title": "A1: Runtime Memory Inspector",
       "prompt": "Write a program that uses `Runtime.getRuntime()` to query the JVM:\n1. Check `Runtime.getRuntime().totalMemory() > 0`\n2. Check `Runtime.getRuntime().freeMemory() > 0`\n3. Print: `JVM Memory: ACTIVE`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        Runtime rt = Runtime.getRuntime();\n        if (rt.totalMemory() > 0 && rt.freeMemory() > 0) {\n            System.out.println(\"JVM Memory: ACTIVE\");\n        }\n    }\n}",
+      "starterCode": "public class Main {\n    // Sealed hierarchy:\n    // TODO 1: Make Payment sealed permitting CreditCard, Crypto\n    sealed interface Payment permits CreditCard, Crypto {}\n    record CreditCard(String cardNum) implements Payment {}\n    record Crypto(String wallet) implements Payment {}\n\n    // TODO 2: Use pattern matching switch on payment\n    public static String processPayment(Payment p) {\n        // Return \"Paid via Card: ...\" or \"Paid via Crypto: ...\"\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 3: Test with CreditCard(\"****1234\") and print result\n    }\n}",
       "expectedOutput": "JVM Memory: ACTIVE",
       "testCases": [
         {
@@ -2426,7 +2426,7 @@ const CURRICULUM = [
       "id": "code-a2",
       "title": "A2: Lock-Free Atomic Counter",
       "prompt": "Use `AtomicInteger` to increment a counter 1000 times across 2 parallel tasks in `CompletableFuture`.\nThen print: `Atomic Count: 1000`",
-      "starterCode": "import java.util.concurrent.atomic.AtomicInteger;\nimport java.util.concurrent.CompletableFuture;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        AtomicInteger counter = new AtomicInteger(0);\n        CompletableFuture<Void> cf1 = CompletableFuture.runAsync(() -> {\n            for (int i = 0; i < 500; i++) counter.incrementAndGet();\n        });\n        CompletableFuture<Void> cf2 = CompletableFuture.runAsync(() -> {\n            for (int i = 0; i < 500; i++) counter.incrementAndGet();\n        });\n        CompletableFuture.allOf(cf1, cf2).join();\n        System.out.println(\"Atomic Count: \" + counter.get());\n    }\n}",
+      "starterCode": "import java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        // TODO 1: Use ExecutorService to run a task on a background or virtual thread\n        // Print \"Virtual Thread Task Executed!\"\n    }\n}",
       "expectedOutput": "Atomic Count: 1000",
       "testCases": [
         {
@@ -2555,7 +2555,7 @@ const CURRICULUM = [
       "id": "code-a3",
       "title": "A3: Pattern Matching Evaluator",
       "prompt": "Write a static method `public static String describe(Object obj)` that uses pattern matching:\n- If `obj instanceof String s` -> return `\"String: \" + s.toUpperCase()`\n- If `obj instanceof Integer i` -> return `\"Integer: \" + (i * 2)`\n- Else -> return `\"Unknown\"`\nIn main, print `describe(\"java\")` and `describe(50)`:\n`String: JAVA\nInteger: 100`",
-      "starterCode": "public class Main {\n    public static String describe(Object obj) {\n        if (obj instanceof String s) return \"String: \" + s.toUpperCase();\n        if (obj instanceof Integer i) return \"Integer: \" + (i * 2);\n        return \"Unknown\";\n    }\n    public static void main(String[] args) {\n        System.out.println(describe(\"java\"));\n        System.out.println(describe(50));\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement describe(Object obj) using pattern matching switch:\n    // - Integer i when i > 100 -> \"Large Integer: \" + i\n    // - Integer i -> \"Small Integer: \" + i\n    // - String s -> \"String of length \" + s.length()\n    // - default -> \"Unknown\"\n    public static String describe(Object obj) {\n        // Your code here\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Test with 150, \"JavaQuest\", and 50 and print results\n    }\n}",
       "expectedOutput": "String: JAVA\nInteger: 100",
       "testCases": [
         {
@@ -2696,7 +2696,7 @@ const CURRICULUM = [
       "id": "code-a4",
       "title": "A4: Fluent Builder Pattern",
       "prompt": "Implement a `HttpRequest` class with a static `Builder`:\nFields: `url`, `method` (defaults to \"GET\"), `timeoutMs` (defaults to 3000).\nInclude fluent methods: `.url(...)`, `.method(...)`, `.timeout(...)`, `.build()`\nIn main, construct and print:\n`HttpRequest[url=https://api.javaquest.com, method=POST, timeoutMs=5000]`",
-      "starterCode": "class HttpRequest {\n    final String url;\n    final String method;\n    final int timeoutMs;\n    private HttpRequest(Builder b) {\n        this.url = b.url;\n        this.method = b.method;\n        this.timeoutMs = b.timeoutMs;\n    }\n    public static class Builder {\n        String url;\n        String method = \"GET\";\n        int timeoutMs = 3000;\n        public Builder url(String u) { this.url = u; return this; }\n        public Builder method(String m) { this.method = m; return this; }\n        public Builder timeout(int t) { this.timeoutMs = t; return this; }\n        public HttpRequest build() { return new HttpRequest(this); }\n    }\n    public String toString() {\n        return \"HttpRequest[url=\" + url + \", method=\" + method + \", timeoutMs=\" + timeoutMs + \"]\";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        HttpRequest req = new HttpRequest.Builder()\n            .url(\"https://api.javaquest.com\")\n            .method(\"POST\")\n            .timeout(5000)\n            .build();\n        System.out.println(req);\n    }\n}",
+      "starterCode": "class HttpRequest {\n    final String url;\n    final String method;\n    final int timeoutMs;\n\n    private HttpRequest(Builder b) {\n        this.url = b.url;\n        this.method = b.method;\n        this.timeoutMs = b.timeoutMs;\n    }\n\n    // TODO 1: Implement Builder class with fluent methods .url(), .method(), .timeout(), and .build()\n    public static class Builder {\n        String url;\n        String method = \"GET\";\n        int timeoutMs = 3000;\n\n        public Builder url(String u) {\n            // Your code here\n            return this;\n        }\n        public Builder method(String m) {\n            // Your code here\n            return this;\n        }\n        public Builder timeout(int t) {\n            // Your code here\n            return this;\n        }\n        public HttpRequest build() {\n            // Your code here\n            return new HttpRequest(this);\n        }\n    }\n\n    public String toString() {\n        return \"HttpRequest[url=\" + url + \", method=\" + method + \", timeoutMs=\" + timeoutMs + \"]\";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 2: Build HttpRequest with url \"https://api.javaquest.com\", method \"POST\", timeout 5000, and print it\n    }\n}",
       "expectedOutput": "HttpRequest[url=https://api.javaquest.com, method=POST, timeoutMs=5000]",
       "testCases": [
         {
@@ -2842,7 +2842,7 @@ const CURRICULUM = [
       "id": "code-a5",
       "title": "A5: Exponential Backoff Calculator",
       "prompt": "Implement a helper `public static int getBackoffDelay(int attempt, int baseMs, int maxMs)`\nFormula: `int delay = baseMs * (1 << (attempt - 1));` capped at `maxMs`.\nIn main, print delays for attempts 1, 2, 3 with base 100ms and max 1000ms:\n`Attempt 1: 100ms\nAttempt 2: 200ms\nAttempt 3: 400ms`",
-      "starterCode": "public class Main {\n    public static int getBackoffDelay(int attempt, int baseMs, int maxMs) {\n        int delay = baseMs * (1 << (attempt - 1));\n        return Math.min(delay, maxMs);\n    }\n    public static void main(String[] args) {\n        System.out.println(\"Attempt 1: \" + getBackoffDelay(1, 100, 1000) + \"ms\");\n        System.out.println(\"Attempt 2: \" + getBackoffDelay(2, 100, 1000) + \"ms\");\n        System.out.println(\"Attempt 3: \" + getBackoffDelay(3, 100, 1000) + \"ms\");\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement getBackoffDelay(int attempt, int baseMs, int maxMs)\n    // Formula: baseMs * (1 << (attempt - 1)), capped at maxMs\n    public static int getBackoffDelay(int attempt, int baseMs, int maxMs) {\n        // Your code here\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Print backoff delays for attempts 1, 2, 3 with base 100 and max 1000:\n        // Attempt 1: 100ms\n        // Attempt 2: 200ms\n        // Attempt 3: 400ms\n    }\n}",
       "expectedOutput": "Attempt 1: 100ms\nAttempt 2: 200ms\nAttempt 3: 400ms",
       "testCases": [
         {
@@ -2974,7 +2974,7 @@ const CURRICULUM = [
       "id": "code-a6",
       "title": "A6: Simulated DI Container",
       "prompt": "Implement a tiny Dependency Injection container simulation:\n`interface MessageService { String getMessage(); }`\n`class EmailService implements MessageService { public String getMessage() { return \"Spring DI Ready\"; } }`\n`class NotificationClient { private final MessageService svc; public NotificationClient(MessageService s) { this.svc = s; } public void send() { System.out.println(svc.getMessage()); } }`\nIn main, inject EmailService and call `send()`.",
-      "starterCode": "interface MessageService { String getMessage(); }\nclass EmailService implements MessageService {\n    public String getMessage() { return \"Spring DI Ready\"; }\n}\nclass NotificationClient {\n    private final MessageService svc;\n    public NotificationClient(MessageService s) { this.svc = s; }\n    public void send() { System.out.println(svc.getMessage()); }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        MessageService service = new EmailService();\n        NotificationClient client = new NotificationClient(service);\n        client.send();\n    }\n}",
+      "starterCode": "interface MessageService { String getMessage(); }\n\n// TODO 1: Implement EmailService returning \"Spring DI Ready\"\nclass EmailService implements MessageService {\n    public String getMessage() {\n        return \"\";\n    }\n}\n\n// TODO 2: Implement NotificationClient with constructor injection\nclass NotificationClient {\n    private final MessageService svc;\n    public NotificationClient(MessageService s) {\n        this.svc = s;\n    }\n    public void send() {\n        // Print svc.getMessage()\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 3: Wire EmailService into NotificationClient and call send()\n    }\n}",
       "expectedOutput": "Spring DI Ready",
       "testCases": [
         {
@@ -3102,7 +3102,7 @@ const CURRICULUM = [
       "id": "code-a7",
       "title": "A7: Simple LRU Cache Simulation",
       "prompt": "Implement a cache using `LinkedHashMap<String, String>` configured for access order:\n`LinkedHashMap<String, String> cache = new LinkedHashMap<>(4, 0.75f, true)`\nAdd keys \"A\", \"B\", \"C\". Access \"A\" with `cache.get(\"A\")`.\nPrint cache keys: `[B, C, A]` (notice \"A\" moved to the end as most recently used!).",
-      "starterCode": "import java.util.LinkedHashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        LinkedHashMap<String, String> cache = new LinkedHashMap<>(4, 0.75f, true);\n        cache.put(\"A\", \"Alpha\");\n        cache.put(\"B\", \"Beta\");\n        cache.put(\"C\", \"Gamma\");\n        cache.get(\"A\"); // access moves to end\n        System.out.println(cache.keySet());\n    }\n}",
+      "starterCode": "import java.util.LinkedHashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 1: Create LinkedHashMap<String, String> with access-order set to true\n        // TODO 2: Put \"A\", \"B\", \"C\"\n        // TODO 3: Access \"A\" to move it to the end\n        // TODO 4: Print cache.keySet() -> [B, C, A]\n    }\n}",
       "expectedOutput": "[B, C, A]",
       "testCases": [
         {
@@ -3249,7 +3249,7 @@ const CURRICULUM = [
       "id": "code-a8",
       "title": "A8: Application Health Indicator",
       "prompt": "Write a class that reports application status:\nIf database is connected and disk space > 100MB, return `\"STATUS: UP\"`\nIn main, print:\n`STATUS: UP`",
-      "starterCode": "public class Main {\n    public static String getHealthStatus(boolean dbOk, long freeDiskMb) {\n        if (dbOk && freeDiskMb > 100) return \"STATUS: UP\";\n        return \"STATUS: DOWN\";\n    }\n    public static void main(String[] args) {\n        System.out.println(getHealthStatus(true, 500));\n    }\n}",
+      "starterCode": "public class Main {\n    // TODO 1: Implement getHealthStatus(boolean dbOk, long freeDiskMb)\n    // If dbOk and freeDiskMb > 100, return \"STATUS: UP\", else \"STATUS: DOWN\"\n    public static String getHealthStatus(boolean dbOk, long freeDiskMb) {\n        // Your code here\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Call getHealthStatus(true, 500) and print result\n    }\n}",
       "expectedOutput": "STATUS: UP",
       "testCases": [
         {
@@ -3263,329 +3263,3 @@ const CURRICULUM = [
     }
   }
 ];
-
-const PROJECTS = [
-  {
-    "id": "proj-beginner",
-    "level": "beginner",
-    "title": "Personal Expense Tracker (Console)",
-    "description": "Build a modular console application to track daily income and expenses with categorized records, budget summaries, and robust input validation.",
-    "xpReward": 250,
-    "badgeId": "capstone-beginner",
-    "requirements": [
-      "Define an Expense class with fields (description, amount, category, date) and getter methods",
-      "Create an interactive console menu loop with choices: Add Expense, List All, View Summary, and Exit",
-      "Store expenses in an ArrayList<Expense> and compute total spent + category breakdowns",
-      "Validate user inputs using try-catch blocks to prevent negative numbers or invalid inputs",
-      "Format transaction output cleanly with currency formatting ($%.2f) and timestamps"
-    ],
-    "rubric": "Clean OOP class encapsulation, ArrayList usage, loops & conditionals, try-catch exception handling, and clean console output formatting.",
-    "starterCode": "// ===============================================================\n// 🏆 BEGINNER CAPSTONE: Personal Expense Tracker (Console)\n// Focus: OOP Class, Methods, ArrayList, Loops, Input Validation\n//\n// 💡 Instructions: Build your project by completing the TODOs below!\n//    If you have any doubts, open JavaBot 🤖 — it can see your code!\n// ===============================================================\nimport java.util.ArrayList;\nimport java.util.Scanner;\n\n// --- Milestone 1: Define the Expense Class ---\nclass Expense {\n    // TODO 1: Declare private fields: description (String), amount (double), category (String)\n\n    // TODO 2: Create a constructor that accepts (description, amount, category)\n\n    // TODO 3: Implement getter methods: getDescription(), getAmount(), getCategory()\n\n    // TODO 4: Override toString() to display formatted expense details\n    //         Hint: return String.format(\"[%-10s] %-20s : $%.2f\", category, description, amount);\n}\n\npublic class Main {\n    // TODO 5: Declare an ArrayList<Expense> to store user expenses\n    //         Hint: private static ArrayList<Expense> expenses = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\"💰 JavaQuest Personal Expense Tracker 💰\");\n        System.out.println(\"=========================================\");\n\n        // TODO 6: Call addExpense() with test data, or build a Scanner menu loop!\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 7: Implement addExpense(String desc, double amount, String category)\n    //         Validate that amount is positive! If negative, print an error message.\n\n    // TODO 8: Implement displayAll()\n    //         Loop through the expenses list and print each expense.\n\n    // TODO 9: Implement displaySummary()\n    //         Calculate the sum of all expenses and print total spending.\n}\n",
-    "featureIdeas": [
-      {
-        "icon": "📊",
-        "title": "Monthly Category Budget Alerts",
-        "concepts": "Conditionals & Arithmetic (Modules B2, B3)",
-        "description": "Define a spending limit per category (e.g. $200 for Food). Track running totals and print a prominent warning (⚠️ Alert: 85% of Food budget reached!) when nearing the limit."
-      },
-      {
-        "icon": "📁",
-        "title": "CSV File Exporter & Importer",
-        "concepts": "Strings, Formatting & File I/O (Modules B6, B8)",
-        "description": "Export expense logs into standard CSV format ('YYYY-MM-DD,Category,Amount') using PrintWriter or FileWriter so transactions can be imported into Excel or Google Sheets."
-      },
-      {
-        "icon": "🔍",
-        "title": "Keyword Search & Range Filtering",
-        "concepts": "ArrayList & String Methods (Modules B6, B8)",
-        "description": "Add search functionality to locate transactions by keyword (e.g. 'Coffee') or filter expenses within a dollar range (e.g. $20 to $100) using ArrayList iterations."
-      },
-      {
-        "icon": "🔁",
-        "title": "Recurring Subscriptions Tracker",
-        "concepts": "OOP Inheritance & Methods (Modules B5, B7)",
-        "description": "Create a RecurringExpense subclass that extends Expense with a frequency field (Weekly, Monthly, Yearly) to automatically project total annual recurring costs."
-      },
-      {
-        "icon": "🛡️",
-        "title": "Custom Exception Guardrails",
-        "concepts": "Custom Exceptions & Try-Catch (Module B8)",
-        "description": "Build an InvalidExpenseException class. Throw and handle it when negative numbers, empty descriptions, or unrecognized categories are entered."
-      }
-    ]
-  },
-  {
-    "id": "proj-intermediate",
-    "level": "intermediate",
-    "title": "Library / Inventory Management System",
-    "description": "Build a high-performance inventory or library system using generic repositories, Stream API data analytics, and thread-safe borrow mechanics.",
-    "xpReward": 350,
-    "badgeId": "capstone-intermediate",
-    "requirements": [
-      "Create generic Repository<T> interface and Book/Item record or model classes",
-      "Implement duplicate prevention and thread-safe borrow/return mechanics",
-      "Filter, sort, and aggregate catalog data using Java 8+ Streams and Lambdas",
-      "Persist data using JDBC PreparedStatement or in-memory structured persistence",
-      "Add automated unit assertions verifying availability checks and boundary conditions"
-    ],
-    "rubric": "Collections, Generics, Lambdas & Streams, JDBC/SQL, Concurrency, and unit testing practices.",
-    "starterCode": "// ===============================================================\n// 🏆 INTERMEDIATE CAPSTONE: Library / Inventory System\n// Focus: Generics, Streams, Records, Lambdas, Concurrency\n//\n// 💡 Instructions: Complete the TODOs below to build your system!\n//    If you need any hints, ask JavaBot 🤖 in the corner!\n// ===============================================================\nimport java.util.*;\nimport java.util.stream.Collectors;\n\n// --- Milestone 1: Define Book Record or Model ---\n// TODO 1: Create a Book record (or class) with fields:\n//         String id, String title, String author, String genre, boolean isAvailable\n\npublic class Main {\n    // TODO 2: Declare a List<Book> catalog to store library items\n    //         Hint: private static List<Book> catalog = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\"📚 JavaQuest Library Management System 📚\");\n        System.out.println(\"=========================================\");\n\n        // TODO 3: Seed your catalog with at least 4 test books\n\n        // TODO 4: Use Java 8+ Streams to filter only available books in the \"Tech\" genre\n\n        // TODO 5: Use Collectors.groupingBy() to count how many books exist per genre\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 6: Implement borrowBook(String bookId) with availability checking\n\n    // TODO 7: Implement returnBook(String bookId)\n}\n",
-    "featureIdeas": [
-      {
-        "icon": "⚡",
-        "title": "Thread-Safe Concurrent Borrowing",
-        "concepts": "Concurrency & Locks (Module I8)",
-        "description": "Simulate simultaneous users attempting to borrow the last available copy using ReentrantLock or AtomicInteger to prevent race conditions and double checkouts."
-      },
-      {
-        "icon": "📈",
-        "title": "Stream Analytics Dashboard",
-        "concepts": "Lambdas & Streams (Module I4)",
-        "description": "Use Collectors.groupingBy() and summarizingDouble() to generate instant reports on top borrowed authors, average ratings, and overdue counts."
-      },
-      {
-        "icon": "🗄️",
-        "title": "JDBC Transaction Rollbacks",
-        "concepts": "JDBC & SQL (Module I7)",
-        "description": "Wrap multi-table checkout operations (updating book status + logging borrower history) in a database transaction with setAutoCommit(false) and rollback on error."
-      },
-      {
-        "icon": "🧪",
-        "title": "Comprehensive Unit Test Suite",
-        "concepts": "JUnit 5 Testing (Module I6)",
-        "description": "Write automated test cases using @ParameterizedTest and assertThrows(BookUnavailableException.class) to test boundary and edge conditions."
-      }
-    ]
-  },
-  {
-    "id": "proj-advanced",
-    "level": "advanced",
-    "title": "Task Management REST API (Spring Boot)",
-    "description": "Design and deploy an enterprise-grade REST service with JWT security, JPA persistence, and Dockerized microservice architecture.",
-    "xpReward": 500,
-    "badgeId": "capstone-advanced",
-    "requirements": [
-      "Design RESTful endpoints for CRUD tasks (GET, POST, PUT, DELETE)",
-      "Implement JWT Authentication & Role-Based Access Control (Admin vs User)",
-      "Configure database persistence with Spring Data JPA and transactions",
-      "Add input validation (@NotNull, @Size), custom error handlers, and pagination",
-      "Write a production Dockerfile and Docker Compose setup"
-    ],
-    "rubric": "Spring Boot, REST architecture, JPA persistence, JWT security, virtual threads, and Docker CI/CD.",
-    "starterCode": "// ===============================================================\n// 🏆 ADVANCED CAPSTONE: Task Management REST API Simulator\n// Focus: REST Architecture, Enums, Maps, Lambdas, Virtual Threads\n//\n// 💡 Instructions: Complete the TODOs below to build your API simulator!\n//    If you need any hints, ask JavaBot 🤖 in the corner!\n// ===============================================================\nimport java.time.LocalDateTime;\nimport java.util.*;\n\nenum TaskStatus { TODO, IN_PROGRESS, COMPLETED }\n\n// --- Milestone 1: Task Model ---\nclass Task {\n    // TODO 1: Define fields: id (String), title (String), assignee (String),\n    //         status (TaskStatus), createdAt (LocalDateTime)\n\n    // TODO 2: Write constructor and getter/setter methods\n}\n\npublic class Main {\n    // TODO 3: Create an in-memory data store for tasks (e.g. Map<String, Task>)\n\n    public static void main(String[] args) {\n        System.out.println(\"==================================================\");\n        System.out.println(\"⚡ JavaQuest Task Management REST API Simulator ⚡\");\n        System.out.println(\"==================================================\");\n\n        // TODO 4: Simulate REST Controller endpoints:\n        //         - POST /api/tasks (Create a task)\n        //         - GET  /api/tasks (List all tasks)\n        //         - PUT  /api/tasks/{id}/status (Update status to COMPLETED)\n        //         - GET  /api/tasks?status=COMPLETED (Filter using Streams)\n\n        System.out.println(\"⚡ Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 5: Implement postTask(String id, String title, String assignee)\n\n    // TODO 6: Implement updateTaskStatus(String id, TaskStatus status)\n\n    // TODO 7: Implement getTasksByStatus(TaskStatus status) using Java Streams\n}\n",
-    "featureIdeas": [
-      {
-        "icon": "🚀",
-        "title": "Java 21 Virtual Threads Engine",
-        "concepts": "Virtual Threads & Concurrency (Module A2)",
-        "description": "Configure Spring Boot 3 with virtual threads (spring.threads.virtual.enabled=true) to effortlessly handle 10,000+ concurrent API requests without thread starvation."
-      },
-      {
-        "icon": "⚡",
-        "title": "Redis Second-Level Caching",
-        "concepts": "Performance & Architecture (Module A4)",
-        "description": "Integrate Redis caching with @Cacheable on frequently requested task summaries and @CacheEvict on modifications to achieve sub-millisecond response times."
-      },
-      {
-        "icon": "🔐",
-        "title": "Refresh Token Rotation & OAuth2",
-        "concepts": "Security & Idempotency (Module A5)",
-        "description": "Implement short-lived JWT access tokens (15m) paired with database-backed refresh tokens and token reuse detection for enterprise-grade authentication."
-      },
-      {
-        "icon": "🐳",
-        "title": "Docker Compose Multi-Container Stack",
-        "concepts": "Docker & Observability (Modules A7, A8)",
-        "description": "Bundle the Spring Boot API, PostgreSQL database, Prometheus metrics collector, and Grafana dashboard into a single docker-compose.yml file."
-      }
-    ]
-  }
-];
-
-const BADGES = [
-  {
-    "id": "first-lesson",
-    "name": "First Steps",
-    "icon": "👶",
-    "description": "Completed your first lesson",
-    "condition": "first_lesson"
-  },
-  {
-    "id": "first-module",
-    "name": "Module Master",
-    "icon": "🎓",
-    "description": "Completed your first module challenge",
-    "condition": "first_module"
-  },
-  {
-    "id": "first-code",
-    "name": "Code Warrior",
-    "icon": "💻",
-    "description": "Solved your first coding question",
-    "condition": "first_code"
-  },
-  {
-    "id": "perfect-code",
-    "name": "Ace Coder",
-    "icon": "🎯",
-    "description": "Solved a coding question on 1st attempt",
-    "condition": "perfect_code"
-  },
-  {
-    "id": "capstone-beginner",
-    "name": "Expense Architect",
-    "icon": "🪙",
-    "description": "Completed Beginner Capstone: Personal Expense Tracker",
-    "condition": "capstone_beginner"
-  },
-  {
-    "id": "capstone-intermediate",
-    "name": "Inventory Maestro",
-    "icon": "📚",
-    "description": "Completed Intermediate Capstone: Library System",
-    "condition": "capstone_intermediate"
-  },
-  {
-    "id": "capstone-advanced",
-    "name": "Enterprise Architect",
-    "icon": "⚡",
-    "description": "Completed Advanced Capstone: Task REST API",
-    "condition": "capstone_advanced"
-  },
-  {
-    "id": "streak-3",
-    "name": "On Fire!",
-    "icon": "🔥",
-    "description": "3-day learning streak",
-    "condition": "streak_3"
-  },
-  {
-    "id": "streak-7",
-    "name": "Week Warrior",
-    "icon": "⚡",
-    "description": "7-day learning streak",
-    "condition": "streak_7"
-  },
-  {
-    "id": "perfect",
-    "name": "Perfectionist",
-    "icon": "💎",
-    "description": "Perfect score on a quiz challenge",
-    "condition": "perfect_challenge"
-  },
-  {
-    "id": "level-5",
-    "name": "Rising Engineer",
-    "icon": "🚀",
-    "description": "Reached Level 5",
-    "condition": "level_5"
-  },
-  {
-    "id": "level-10",
-    "name": "Java Grandmaster",
-    "icon": "👑",
-    "description": "Reached Level 10",
-    "condition": "level_10"
-  },
-  {
-    "id": "beginner-done",
-    "name": "Foundation Champion",
-    "icon": "🌱",
-    "description": "Completed all Beginner modules",
-    "condition": "beginner_complete"
-  },
-  {
-    "id": "inter-done",
-    "name": "Robust Developer",
-    "icon": "⚡",
-    "description": "Completed all Intermediate modules",
-    "condition": "inter_complete"
-  },
-  {
-    "id": "advanced-done",
-    "name": "Systems Architect",
-    "icon": "🏆",
-    "description": "Completed all Advanced modules",
-    "condition": "advanced_complete"
-  },
-  {
-    "id": "all-modules",
-    "name": "Java Legend",
-    "icon": "🥷",
-    "description": "Conquered the entire 24-module map",
-    "condition": "all_modules"
-  }
-];
-
-const LEVELS = [
-  {
-    "level": 1,
-    "name": "Novice",
-    "xpRequired": 0,
-    "icon": "🌱"
-  },
-  {
-    "level": 2,
-    "name": "Apprentice",
-    "xpRequired": 150,
-    "icon": "📖"
-  },
-  {
-    "level": 3,
-    "name": "Coder",
-    "xpRequired": 400,
-    "icon": "💻"
-  },
-  {
-    "level": 4,
-    "name": "Developer",
-    "xpRequired": 800,
-    "icon": "🔨"
-  },
-  {
-    "level": 5,
-    "name": "Engineer",
-    "xpRequired": 1400,
-    "icon": "⚙️"
-  },
-  {
-    "level": 6,
-    "name": "Architect",
-    "xpRequired": 2200,
-    "icon": "🏛️"
-  },
-  {
-    "level": 7,
-    "name": "Senior Dev",
-    "xpRequired": 3200,
-    "icon": "🎯"
-  },
-  {
-    "level": 8,
-    "name": "Tech Lead",
-    "xpRequired": 4500,
-    "icon": "🌟"
-  },
-  {
-    "level": 9,
-    "name": "Principal",
-    "xpRequired": 6000,
-    "icon": "💎"
-  },
-  {
-    "level": 10,
-    "name": "Java Grandmaster",
-    "xpRequired": 8000,
-    "icon": "👑"
-  }
-];
-
-if (typeof window !== 'undefined') {
-  window.CURRICULUM = CURRICULUM;
-  window.PROJECTS   = PROJECTS;
-  window.BADGES     = BADGES;
-  window.LEVELS     = LEVELS;
-}
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { CURRICULUM, PROJECTS, BADGES, LEVELS };
-}
