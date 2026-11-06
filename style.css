@@ -2669,6 +2669,36 @@ body {
 }
 .btn-clear-out:hover { background: #3F3F46; }
 
+/* Compiler Standard Input (stdin) Panel */
+.btn-toggle-stdin {
+  background: #27272A; border: 1.5px solid #3F3F46; color: #FFE600;
+  border-radius: 6px; padding: 0.2rem 0.65rem; font-size: 0.76rem; font-weight: 700;
+  cursor: pointer; margin-right: 0.5rem; transition: all var(--t);
+  display: inline-flex; align-items: center; gap: 0.35rem;
+}
+.btn-toggle-stdin:hover { background: #3F3F46; border-color: #FFE600; }
+.btn-toggle-stdin.active { background: #FFE600; color: #121316; border-color: #FFE600; }
+
+.compiler-stdin-box {
+  background: #141418; border-bottom: 2px solid #27272A;
+  padding: 0.65rem 1rem; display: flex; flex-direction: column;
+  gap: 0.35rem; transition: all 0.2s ease;
+}
+.compiler-stdin-box.collapsed { display: none; }
+.stdin-header { display: flex; align-items: center; justify-content: space-between; }
+.stdin-title {
+  font-size: 0.74rem; font-weight: 800; color: #FFE600;
+  text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-code);
+}
+.stdin-hint { font-size: 0.72rem; color: #A1A1AA; }
+.compiler-stdin-textarea {
+  width: 100%; min-height: 60px; max-height: 120px;
+  background: #0D0D10; color: #F4F4F5; border: 1.5px solid #27272A;
+  border-radius: 8px; padding: 0.5rem 0.75rem; font-family: var(--font-code);
+  font-size: 0.82rem; line-height: 1.5; resize: vertical; outline: none;
+}
+.compiler-stdin-textarea:focus { border-color: #FFE600; }
+
 /* ═══ CODING CHALLENGE SCREEN ══════════════════════════════════ */
 .coding-screen-container { max-width: 1200px; margin: 0 auto; }
 .coding-header {
@@ -3612,12 +3642,13 @@ body {
 /* Track Section Headers (Clean Neobrutalist Banner - Elevated above dashed line) */
 .track-section-header {
   position: relative;
-  z-index: 5;
+  z-index: 10;
   margin: 2.5rem 0 1.5rem 0;
+  isolation: isolate;
 }
 .track-header-card {
   position: relative;
-  z-index: 5;
+  z-index: 10;
   background: #FFFFFF;
   border: 3px solid var(--ink);
   border-radius: 18px;
@@ -3627,6 +3658,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  isolation: isolate;
 }
 .track-header-badge {
   align-self: flex-start;

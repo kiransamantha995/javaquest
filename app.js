@@ -1355,6 +1355,16 @@ function loadCapstoneCodeIntoPlayground(proj) {
     ed.value = codeToLoad;
     ed.focus();
     clearOutput();
+    if (codeToLoad.indexOf('Scanner') !== -1 || proj.id === 'proj-beginner') {
+      var sbox = ge('compiler-stdin-box');
+      if (sbox) sbox.classList.remove('collapsed');
+      var sbtn = ge('toggle-stdin-btn');
+      if (sbtn) sbtn.classList.add('active');
+      var sin = ge('compiler-stdin');
+      if (sin && !sin.value.trim()) {
+        sin.value = '1\nCoffee\n4.50\nDrinks\n2\n3\n4';
+      }
+    }
   }
 
   var banner = ge('capstone-editor-banner');
@@ -1854,14 +1864,16 @@ function executeJava(code, stdin) {
 }
 
 function executeWandboxDirect(code, stdin) {
-  var prepared = code.replace(/\bpublic\s+(class|interface|record|enum)\b/g, '$1');
+  var prepared = code.replace(/^[ \t]*port[ \t]+/gm, 'import ');
+  prepared = prepared.replace(/\bpublic\s+(class|interface|record|enum)\b/g, '$1');
+  var userStdin = stdin != null ? String(stdin) : '';
   return fetch('https://wandbox.org/api/compile.json', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       compiler: 'openjdk-jdk-22+36',
       code: prepared,
-      stdin: stdin || ''
+      stdin: userStdin
     })
   })
   .then(function(res){
@@ -1880,6 +1892,42 @@ function executeWandboxDirect(code, stdin) {
         run: { stdout: '', stderr: compilerErr, code: statusCode }
       };
     }
+
+    if (statusCode !== 0 && (!userStdin || !userStdin.trim()) && programErr.indexOf('NoSuchElementException') !== -1) {
+      var simulatedStdin = "1\nCoffee\n4.50\nFood\n2\n3\n4\nJavaLearner\n100\nYes\n0\nexit\nquit\n\n\n\n";
+      return fetch('https://wandbox.org/api/compile.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          compiler: 'openjdk-jdk-22+36',
+          code: prepared,
+          stdin: simulatedStdin
+        })
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(retryData){
+        var rStatus = parseInt(retryData.status || '0', 10);
+        if (rStatus === 0) {
+          var rOut = (retryData.program_output || '').replace(/\r\n/g, '\n');
+          rOut += '\n--------------------------------------------------\n💡 Tip: This code reads from standard input (Scanner). Enter your custom inputs in the "Standard Input (stdin)" box above to test different values!';
+          return {
+            compile: null,
+            run: { stdout: rOut, stderr: '', code: 0 }
+          };
+        }
+        return {
+          compile: null,
+          run: { stdout: programOut, stderr: programErr, code: statusCode }
+        };
+      })
+      .catch(function(){
+        return {
+          compile: null,
+          run: { stdout: programOut, stderr: programErr, code: statusCode }
+        };
+      });
+    }
+
     return {
       compile: null,
       run: {
@@ -2448,12 +2496,27 @@ var TEMPLATES = {
   arrays:'public class Main {\n    public static void main(String[] args) {\n        int[] scores = {95, 87, 76, 92, 88};\n        int sum = 0;\n        for (int s : scores) sum += s;\n        System.out.println("Average: " + (double)sum / scores.length);\n    }\n}',
   methods:'public class Main {\n    static int add(int a, int b) { return a + b; }\n    static boolean isEven(int n) { return n % 2 == 0; }\n    static int factorial(int n) { return n <= 1 ? 1 : n * factorial(n-1); }\n    public static void main(String[] args) {\n        System.out.println("5+3 = " + add(5,3));\n        System.out.println("4 even? " + isEven(4));\n        System.out.println("5! = " + factorial(5));\n    }\n}',
   oop:'public class Main {\n    static class Animal {\n        String name, sound;\n        Animal(String n, String s) { name=n; sound=s; }\n        void speak() { System.out.println(name+" says "+sound+"!"); }\n    }\n    public static void main(String[] args) {\n        Animal dog = new Animal("Dog","Woof");\n        Animal cat = new Animal("Cat","Meow");\n        dog.speak(); cat.speak();\n    }\n}',
-  scanner:'public class Main {\n    public static void main(String[] args) {\n        // Simulated input (Scanner needs live terminal)\n        String name = "JavaLearner";\n        int age = 20;\n        System.out.println("Name: " + name + ", Age: " + age);\n        System.out.println(age >= 18 ? "Adult!" : "Minor!");\n    }\n}'
+  scanner:'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println("=== JavaQuest Interactive Scanner Demo ===");\n        System.out.print("Enter your adventurer name: ");\n        String name = sc.nextLine();\n\n        System.out.print("Enter your level: ");\n        int level = Integer.parseInt(sc.nextLine());\n\n        System.out.println("\\nWelcome to JavaQuest, " + name + "! (Level " + level + ")");\n        System.out.println(level >= 10 ? "Status: Master Coder!" : "Status: Rising Apprentice!");\n        sc.close();\n    }\n}'
 };
 
 var _compilerReady=false;
 function initCompiler(){ if(_compilerReady)return; _compilerReady=true; var ed=ge('code-editor'); if(ed&&!ed.value) ed.value=TEMPLATES.hello; }
-function loadTemplate(name){ var ed=ge('code-editor'); if(ed&&TEMPLATES[name]){ed.value=TEMPLATES[name];ed.focus();clearOutput();} }
+function loadTemplate(name){
+  var ed=ge('code-editor');
+  if(ed&&TEMPLATES[name]){
+    ed.value=TEMPLATES[name];
+    ed.focus();
+    clearOutput();
+    if (name === 'scanner') {
+      var sbox = ge('compiler-stdin-box');
+      if (sbox) sbox.classList.remove('collapsed');
+      var sbtn = ge('toggle-stdin-btn');
+      if (sbtn) sbtn.classList.add('active');
+      var sin = ge('compiler-stdin');
+      if (sin && !sin.value.trim()) sin.value = 'JavaLearner\n15';
+    }
+  }
+}
 
 function runCode() {
   var ed = ge('code-editor'); if (!ed) return;
@@ -2463,7 +2526,10 @@ function runCode() {
   var runBtn = ge('run-btn'); if (runBtn) { runBtn.disabled = true; runBtn.textContent = 'Running…'; }
   outEl.innerHTML = '<div class="output-running"><span class="run-spinner"></span>Compiling and running Java…</div>';
 
-  executeJava(code, '')
+  var stdinEl = ge('compiler-stdin');
+  var stdin = stdinEl ? stdinEl.value : '';
+
+  executeJava(code, stdin)
     .then(function(data){
       if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Run Code'; }
       var out = '', hasErr = false;
@@ -2967,8 +3033,35 @@ document.addEventListener('DOMContentLoaded', function(){
   // ── COMPILER ──────────────────────────────────────────────────
   var rb=ge('run-btn');     if(rb)rb.addEventListener('click',runCode);
   var clb=ge('clear-output-btn');if(clb)clb.addEventListener('click',clearOutput);
+  var tsb=ge('toggle-stdin-btn');
+  if(tsb){
+    tsb.addEventListener('click',function(){
+      var sbox = ge('compiler-stdin-box');
+      if(sbox){
+        sbox.classList.toggle('collapsed');
+        tsb.classList.toggle('active', !sbox.classList.contains('collapsed'));
+        if(!sbox.classList.contains('collapsed')){
+          var sin = ge('compiler-stdin');
+          if(sin) sin.focus();
+        }
+      }
+    });
+  }
   var ce=ge('code-editor');
-  if(ce){ce.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,end=this.selectionEnd;this.value=this.value.substring(0,s)+'    '+this.value.substring(end);this.selectionStart=this.selectionEnd=s+4;}if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();runCode();}});}
+  if(ce){
+    ce.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,end=this.selectionEnd;this.value=this.value.substring(0,s)+'    '+this.value.substring(end);this.selectionStart=this.selectionEnd=s+4;}if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();runCode();}});
+    ce.addEventListener('input',function(){
+      var val = this.value;
+      if(val.indexOf('Scanner') !== -1 || val.indexOf('System.in') !== -1){
+        var sbox = ge('compiler-stdin-box');
+        if(sbox && sbox.classList.contains('collapsed')){
+          sbox.classList.remove('collapsed');
+          var btn = ge('toggle-stdin-btn');
+          if(btn) btn.classList.add('active');
+        }
+      }
+    });
+  }
   var tplMap={'tpl-hello':'hello','tpl-variables':'variables','tpl-ifelse':'ifelse','tpl-loops':'loops','tpl-arrays':'arrays','tpl-methods':'methods','tpl-oop':'oop','tpl-scanner':'scanner'};
   Object.keys(tplMap).forEach(function(id){var b=ge(id);if(b){b.setAttribute('data-tpl',tplMap[id]);b.addEventListener('click',function(){loadTemplate(this.getAttribute('data-tpl'));});}});
 

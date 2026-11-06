@@ -6,8 +6,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://wandbox.org https://emkc.org https://generativelanguage.googleapis.com; img-src 'self' data:;">
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
-  <link rel="stylesheet" href="style.css?v=7.1"/>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.2"/>
+  <link rel="stylesheet" href="style.css?v=7.2"/>
 </head>
 <body>
 
@@ -465,13 +465,22 @@
             <span class="mac-traffic-dot green"></span>
           </div>
           <span>Console Output</span>
+          <div style="flex:1"></div>
+          <button class="btn-toggle-stdin" id="toggle-stdin-btn" title="Toggle Standard Input for Scanner / System.in">⌨ Stdin</button>
           <button class="btn-clear-out" id="clear-output-btn">Clear</button>
+        </div>
+        <div class="compiler-stdin-box" id="compiler-stdin-box">
+          <div class="stdin-header">
+            <span class="stdin-title">Standard Input (stdin)</span>
+            <span class="stdin-hint">For Scanner &amp; user input (one value per line)</span>
+          </div>
+          <textarea id="compiler-stdin" class="compiler-stdin-textarea" placeholder="Type inputs for Scanner here (one per line)...&#10;e.g.:&#10;1&#10;Coffee&#10;4.50&#10;Drinks&#10;4" spellcheck="false" rows="3"></textarea>
         </div>
         <div class="output-area" id="output-area">
           <div class="output-placeholder">Click Run Code to execute your Java program</div>
         </div>
         <div class="compiler-tips">
-          <strong>Tips:</strong> Class must be named <code>Main</code>. Use <code>System.out.println()</code>. Press <strong>Ctrl+Enter</strong> to run.
+          <strong>Tips:</strong> Supports <code>Scanner</code>, modern OOP &amp; libraries. Press <strong>Ctrl+Enter</strong> to run.
         </div>
       </div>
     </div>
@@ -815,10 +824,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=7.1"></script>
-<script src="animations.js?v=7.1"></script>
-<script src="supabase.js?v=7.1"></script>
-<script src="ai-tutor.js?v=7.1"></script>
-<script src="app.js?v=7.1"></script>
+<script src="curriculum.js?v=7.2"></script>
+<script src="animations.js?v=7.2"></script>
+<script src="supabase.js?v=7.2"></script>
+<script src="ai-tutor.js?v=7.2"></script>
+<script src="app.js?v=7.2"></script>
 </body>
 </html>
