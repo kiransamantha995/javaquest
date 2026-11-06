@@ -60,41 +60,19 @@ async function runWandbox(code, stdin) {
     };
   }
 
-  // Smart Scanner Resilience:
-  // If the program crashed with NoSuchElementException (Scanner.nextLine / next on empty stdin)
-  // and the user did not supply stdin, retry automatically with simulated sample inputs so the code executes!
-  if (statusCode !== 0 && (!userStdin || !userStdin.trim()) && programErr.includes('NoSuchElementException')) {
-    try {
-      const simulatedStdin = "1\nCoffee\n4.50\nFood\n2\n3\n4\nJavaLearner\n100\nYes\n0\nexit\nquit\n\n\n\n";
-      const retryResp = await fetch('https://wandbox.org/api/compile.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          compiler: 'openjdk-jdk-22+36',
-          code: prepared,
-          stdin: simulatedStdin
-        }),
-        signal: AbortSignal.timeout(18000)
-      });
-      if (retryResp.ok) {
-        const retryData = await retryResp.json();
-        const retryStatus = parseInt(retryData.status || '0', 10);
-        if (retryStatus === 0) {
-          let retryOut = (retryData.program_output || '').replace(/\r\n/g, '\n');
-          retryOut += '\n--------------------------------------------------\n💡 Tip: This code reads from standard input (Scanner). Enter your own custom inputs in the "Standard Input (stdin)" box above to test different values!';
-          return {
-            compile: null,
-            run: {
-              stdout: retryOut,
-              stderr: '',
-              code: 0
-            }
-          };
-        }
+  // Live Interactive Scanner Detection:
+  // When programErr contains NoSuchElementException, the Java code reached a Scanner input statement
+  // and is waiting for the user to provide standard input in the console!
+  if (statusCode !== 0 && programErr.includes('NoSuchElementException')) {
+    return {
+      compile: null,
+      run: {
+        stdout: programOut,
+        stderr: '',
+        code: 0,
+        waitingForInput: true
       }
-    } catch(retryErr) {
-      // Continue with original error if retry fails
-    }
+    };
   }
 
   return {
@@ -102,7 +80,8 @@ async function runWandbox(code, stdin) {
     run: {
       stdout: programOut,
       stderr: programErr,
-      code: statusCode
+      code: statusCode,
+      waitingForInput: false
     }
   };
 }

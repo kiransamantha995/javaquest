@@ -2699,6 +2699,52 @@ body {
 }
 .compiler-stdin-textarea:focus { border-color: #FFE600; }
 
+/* Live Interactive Console Terminal Bar */
+.terminal-interactive-bar {
+  display: flex; align-items: center; gap: 0.65rem;
+  background: #18181D; border-top: 2px solid #27272A;
+  padding: 0.65rem 1rem; position: relative; z-index: 5;
+}
+.terminal-prompt-sym {
+  color: #FFE600; font-family: var(--font-code); font-weight: 800;
+  font-size: 1.15rem; line-height: 1; user-select: none;
+  animation: promptPulse 1.8s infinite ease-in-out;
+}
+@keyframes promptPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.1); }
+}
+.terminal-input {
+  flex: 1; background: #0D0D10; border: 1.5px solid #3F3F46;
+  border-radius: 8px; color: #00F59B; font-family: var(--font-code);
+  font-size: 0.92rem; font-weight: 600; padding: 0.55rem 0.85rem;
+  outline: none; transition: all var(--t);
+}
+.terminal-input:focus {
+  border-color: #FFE600; box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.25);
+  background: #121216;
+}
+.terminal-input::placeholder { color: #71717A; font-weight: 400; font-size: 0.82rem; }
+.terminal-submit-btn {
+  background: #FFE600; color: #121316; border: 2px solid #18181B;
+  border-radius: 8px; font-family: var(--font-code); font-size: 0.82rem;
+  font-weight: 800; padding: 0.55rem 0.95rem; cursor: pointer;
+  box-shadow: 2px 2px 0px #000000; transition: all var(--t);
+  white-space: nowrap;
+}
+.terminal-submit-btn:hover {
+  background: #FFF04D; transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
+}
+.terminal-submit-btn:active {
+  transform: translate(1px, 1px); box-shadow: 1px 1px 0px #000000;
+}
+.terminal-user-echo {
+  color: #FFE600 !important; font-weight: 700;
+  background: rgba(255, 230, 0, 0.12);
+  padding: 0.05rem 0.35rem; border-radius: 4px;
+}
+
 /* ═══ CODING CHALLENGE SCREEN ══════════════════════════════════ */
 .coding-screen-container { max-width: 1200px; margin: 0 auto; }
 .coding-header {

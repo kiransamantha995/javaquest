@@ -1355,16 +1355,6 @@ function loadCapstoneCodeIntoPlayground(proj) {
     ed.value = codeToLoad;
     ed.focus();
     clearOutput();
-    if (codeToLoad.indexOf('Scanner') !== -1 || proj.id === 'proj-beginner') {
-      var sbox = ge('compiler-stdin-box');
-      if (sbox) sbox.classList.remove('collapsed');
-      var sbtn = ge('toggle-stdin-btn');
-      if (sbtn) sbtn.classList.add('active');
-      var sin = ge('compiler-stdin');
-      if (sin && !sin.value.trim()) {
-        sin.value = '1\nCoffee\n4.50\nDrinks\n2\n3\n4';
-      }
-    }
   }
 
   var banner = ge('capstone-editor-banner');
@@ -1893,39 +1883,16 @@ function executeWandboxDirect(code, stdin) {
       };
     }
 
-    if (statusCode !== 0 && (!userStdin || !userStdin.trim()) && programErr.indexOf('NoSuchElementException') !== -1) {
-      var simulatedStdin = "1\nCoffee\n4.50\nFood\n2\n3\n4\nJavaLearner\n100\nYes\n0\nexit\nquit\n\n\n\n";
-      return fetch('https://wandbox.org/api/compile.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          compiler: 'openjdk-jdk-22+36',
-          code: prepared,
-          stdin: simulatedStdin
-        })
-      })
-      .then(function(r){ return r.json(); })
-      .then(function(retryData){
-        var rStatus = parseInt(retryData.status || '0', 10);
-        if (rStatus === 0) {
-          var rOut = (retryData.program_output || '').replace(/\r\n/g, '\n');
-          rOut += '\n--------------------------------------------------\n💡 Tip: This code reads from standard input (Scanner). Enter your custom inputs in the "Standard Input (stdin)" box above to test different values!';
-          return {
-            compile: null,
-            run: { stdout: rOut, stderr: '', code: 0 }
-          };
+    if (statusCode !== 0 && programErr.indexOf('NoSuchElementException') !== -1) {
+      return {
+        compile: null,
+        run: {
+          stdout: programOut,
+          stderr: '',
+          code: 0,
+          waitingForInput: true
         }
-        return {
-          compile: null,
-          run: { stdout: programOut, stderr: programErr, code: statusCode }
-        };
-      })
-      .catch(function(){
-        return {
-          compile: null,
-          run: { stdout: programOut, stderr: programErr, code: statusCode }
-        };
-      });
+      };
     }
 
     return {
@@ -2507,15 +2474,28 @@ function loadTemplate(name){
     ed.value=TEMPLATES[name];
     ed.focus();
     clearOutput();
-    if (name === 'scanner') {
-      var sbox = ge('compiler-stdin-box');
-      if (sbox) sbox.classList.remove('collapsed');
-      var sbtn = ge('toggle-stdin-btn');
-      if (sbtn) sbtn.classList.add('active');
-      var sin = ge('compiler-stdin');
-      if (sin && !sin.value.trim()) sin.value = 'JavaLearner\n15';
-    }
   }
+}
+
+var _interactiveSession = {
+  active: false,
+  code: '',
+  inputs: [],
+  history: [],
+  lastRawStdout: '',
+  isExecuting: false
+};
+
+function clearOutput() {
+  _interactiveSession.active = false;
+  _interactiveSession.isExecuting = false;
+  _interactiveSession.inputs = [];
+  _interactiveSession.history = [];
+  _interactiveSession.lastRawStdout = '';
+  var bar = ge('terminal-interactive-bar');
+  if (bar) bar.style.display = 'none';
+  var o = ge('output-area');
+  if (o) o.innerHTML = '<div class="output-placeholder">Click Run Code to execute your Java program</div>';
 }
 
 function runCode() {
@@ -2523,39 +2503,161 @@ function runCode() {
   var code = ed.value.trim(); if (!code) { toast('Write some code first!'); return; }
   if (_activeCapstoneProj) saveCapstoneCode();
   var outEl = ge('output-area'); if (!outEl) return;
-  var runBtn = ge('run-btn'); if (runBtn) { runBtn.disabled = true; runBtn.textContent = 'Running…'; }
+  var bar = ge('terminal-interactive-bar'); if (bar) bar.style.display = 'none';
+
+  _interactiveSession.active = true;
+  _interactiveSession.code = code;
+  _interactiveSession.inputs = [];
+  _interactiveSession.history = [];
+  _interactiveSession.lastRawStdout = '';
+
+  // If user entered batch inputs in the batch textarea, initialize inputs array with them
+  var batchEl = ge('compiler-stdin');
+  var batchVal = (batchEl && batchEl.value.trim()) ? batchEl.value : '';
+  if (batchVal) {
+    _interactiveSession.inputs = batchVal.split(/\r?\n/);
+  }
+
   outEl.innerHTML = '<div class="output-running"><span class="run-spinner"></span>Compiling and running Java…</div>';
+  executeInteractiveStep();
+}
 
-  var stdinEl = ge('compiler-stdin');
-  var stdin = stdinEl ? stdinEl.value : '';
+function executeInteractiveStep() {
+  var runBtn = ge('run-btn');
+  if (runBtn) { runBtn.disabled = true; runBtn.textContent = 'Running…'; }
+  _interactiveSession.isExecuting = true;
 
-  executeJava(code, stdin)
+  var stdinPayload = _interactiveSession.inputs.join('\n');
+  if (_interactiveSession.inputs.length > 0) stdinPayload += '\n';
+
+  executeJava(_interactiveSession.code, stdinPayload)
     .then(function(data){
       if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Run Code'; }
-      var out = '', hasErr = false;
+      _interactiveSession.isExecuting = false;
+
+      var outEl = ge('output-area');
+      var bar = ge('terminal-interactive-bar');
+      var tInput = ge('terminal-input');
+
+      // 1. Compilation Error
       if (data.compile && data.compile.stderr) {
-        out = '[Compilation Error]\n' + data.compile.stderr;
-        hasErr = true;
-      } else if (data.run) {
-        if (data.run.stdout) out += data.run.stdout;
-        if (data.run.stderr) { out += (out ? '\n' : '') + data.run.stderr; hasErr = true; }
-        if (!data.run.stdout && !data.run.stderr) {
-          out = '(Program executed successfully with no output.\nUse System.out.println() to print results.)';
+        _interactiveSession.active = false;
+        if (bar) bar.style.display = 'none';
+        if (outEl) {
+          outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
         }
-      } else if (data.error) {
-        out = '[Error]\n' + data.error;
-        hasErr = true;
-      } else {
-        out = '(No output)';
+        return;
       }
-      outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '">' + esc(out) + '</pre>';
+
+      // 2. Execution / Service Error
+      if (data.error) {
+        _interactiveSession.active = false;
+        if (bar) bar.style.display = 'none';
+        if (outEl) {
+          outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Execution Error]\n' + esc(data.error) + '</pre>';
+        }
+        return;
+      }
+
+      var runData = data.run || {};
+      var rawStdout = runData.stdout || '';
+      var rawStderr = runData.stderr || '';
+      var isWaiting = !!runData.waitingForInput;
+      var exitCode = typeof runData.code === 'number' ? runData.code : 0;
+
+      _interactiveSession.lastRawStdout = rawStdout;
+
+      renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode);
+
+      if (isWaiting) {
+        if (bar) {
+          bar.style.display = 'flex';
+          if (tInput) {
+            tInput.value = '';
+            tInput.disabled = false;
+            setTimeout(function(){ tInput.focus(); }, 50);
+          }
+        }
+      } else {
+        _interactiveSession.active = false;
+        if (bar) bar.style.display = 'none';
+      }
+
+      if (outEl) outEl.scrollTop = outEl.scrollHeight;
     })
     .catch(function(err){
       if (runBtn) { runBtn.disabled = false; runBtn.textContent = 'Run Code'; }
-      outEl.innerHTML = '<div class="output-error"><pre>[Execution Error]\n' + esc(err.message) + '</pre></div>';
+      _interactiveSession.isExecuting = false;
+      _interactiveSession.active = false;
+      var bar = ge('terminal-interactive-bar');
+      if (bar) bar.style.display = 'none';
+      var outEl = ge('output-area');
+      if (outEl) {
+        outEl.innerHTML = '<div class="output-error"><pre style="margin:0;white-space:pre-wrap;word-break:break-all;">[Execution Error]\n' + esc(err.message) + '</pre></div>';
+      }
     });
 }
-function clearOutput(){ var o=ge('output-area'); if(o)o.innerHTML='<div class="output-placeholder">Click Run Code to execute your Java program</div>'; }
+
+function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
+  var outEl = ge('output-area');
+  if (!outEl) return;
+
+  var history = _interactiveSession.history;
+  var html = '';
+  var lastIdx = 0;
+
+  for (var i = 0; i < history.length; i++) {
+    var item = history[i];
+    if (item.prefixLen <= rawStdout.length) {
+      html += esc(rawStdout.substring(lastIdx, item.prefixLen));
+      html += '<span class="terminal-user-echo">' + esc(item.input) + '</span>\n';
+      lastIdx = item.prefixLen;
+    }
+  }
+
+  html += esc(rawStdout.substring(lastIdx));
+
+  if (rawStderr) {
+    html += (html ? '\n' : '') + '<span class="output-error">' + esc(rawStderr) + '</span>';
+  }
+
+  if (!rawStdout.trim() && !rawStderr.trim() && !isWaiting) {
+    html = '(Program executed successfully with no output.\nUse System.out.println() to print results.)';
+  } else if (!isWaiting) {
+    html += '\n<span style="color:#71717A;font-style:italic;">\n[Program finished with exit code ' + exitCode + ']</span>';
+  }
+
+  var hasErr = !!rawStderr && exitCode !== 0;
+  outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>';
+}
+
+function submitTerminalInput() {
+  if (!_interactiveSession.active || _interactiveSession.isExecuting) return;
+  var tInput = ge('terminal-input');
+  if (!tInput) return;
+  var val = tInput.value;
+
+  var currentStdout = _interactiveSession.lastRawStdout || '';
+  _interactiveSession.history.push({
+    prefixLen: currentStdout.length,
+    input: val
+  });
+  _interactiveSession.inputs.push(val);
+
+  tInput.value = '';
+  tInput.disabled = true;
+
+  var outEl = ge('output-area');
+  if (outEl) {
+    var pre = outEl.querySelector('pre');
+    if (pre) {
+      pre.innerHTML += '<span class="terminal-user-echo">' + esc(val) + '</span>\n<span class="run-spinner"></span>';
+      outEl.scrollTop = outEl.scrollHeight;
+    }
+  }
+
+  executeInteractiveStep();
+}
 
 /* ═══════════════ XP / LEVELS ════════════════════════════════════ */
 function addXP(amount) {
@@ -3050,20 +3152,37 @@ document.addEventListener('DOMContentLoaded', function(){
   var ce=ge('code-editor');
   if(ce){
     ce.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,end=this.selectionEnd;this.value=this.value.substring(0,s)+'    '+this.value.substring(end);this.selectionStart=this.selectionEnd=s+4;}if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();runCode();}});
-    ce.addEventListener('input',function(){
-      var val = this.value;
-      if(val.indexOf('Scanner') !== -1 || val.indexOf('System.in') !== -1){
-        var sbox = ge('compiler-stdin-box');
-        if(sbox && sbox.classList.contains('collapsed')){
-          sbox.classList.remove('collapsed');
-          var btn = ge('toggle-stdin-btn');
-          if(btn) btn.classList.add('active');
-        }
-      }
-    });
   }
   var tplMap={'tpl-hello':'hello','tpl-variables':'variables','tpl-ifelse':'ifelse','tpl-loops':'loops','tpl-arrays':'arrays','tpl-methods':'methods','tpl-oop':'oop','tpl-scanner':'scanner'};
   Object.keys(tplMap).forEach(function(id){var b=ge(id);if(b){b.setAttribute('data-tpl',tplMap[id]);b.addEventListener('click',function(){loadTemplate(this.getAttribute('data-tpl'));});}});
+
+  // Live Interactive Console Terminal Listeners
+  var termInp = ge('terminal-input');
+  if (termInp) {
+    termInp.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitTerminalInput();
+      }
+    });
+  }
+  var termBtn = ge('terminal-submit-btn');
+  if (termBtn) {
+    termBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      submitTerminalInput();
+    });
+  }
+  var outArea = ge('output-area');
+  if (outArea) {
+    outArea.addEventListener('click', function(){
+      var bar = ge('terminal-interactive-bar');
+      if (bar && bar.style.display !== 'none') {
+        var inp = ge('terminal-input');
+        if (inp && !inp.disabled) inp.focus();
+      }
+    });
+  }
 
   // ── AVATAR ────────────────────────────────────────────────────
   qsa('.avatar-tab').forEach(function(t){t.addEventListener('click',function(){switchAvatarTab(this.getAttribute('data-tab'));});});
