@@ -2603,39 +2603,90 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
   if (!outEl) return;
 
   var history = _interactiveSession.history;
-  var html = '';
-  var lastIdx = 0;
 
-  for (var i = 0; i < history.length; i++) {
-    var item = history[i];
-    if (item.prefixLen <= rawStdout.length) {
-      html += esc(rawStdout.substring(lastIdx, item.prefixLen));
-      html += '<span class="terminal-user-echo">' + esc(item.input) + '</span>\n';
-      lastIdx = item.prefixLen;
+  if (isWaiting) {
+    // Separate body from active prompt line
+    var lastNl = rawStdout.lastIndexOf('\n');
+    var bodyText = lastNl !== -1 ? rawStdout.substring(0, lastNl + 1) : '';
+    var promptText = lastNl !== -1 ? rawStdout.substring(lastNl + 1) : rawStdout;
+    _interactiveSession.lastPrompt = promptText;
+
+    var interleavedBody = '';
+    var lastIdx = 0;
+    for (var i = 0; i < history.length; i++) {
+      var item = history[i];
+      if (item.prefixLen <= bodyText.length) {
+        interleavedBody += esc(bodyText.substring(lastIdx, item.prefixLen));
+        interleavedBody += '<span class="terminal-user-echo">' + esc(item.input) + '</span>\n';
+        lastIdx = item.prefixLen;
+      }
     }
+    interleavedBody += esc(bodyText.substring(lastIdx));
+
+    var activeLineHtml = '<div class="terminal-active-line" id="terminal-active-line">'
+      + '<span class="terminal-active-prompt">' + esc(promptText || '❯ ') + '</span>'
+      + '<input type="text" id="terminal-inline-input" class="terminal-inline-input" autofocus autocomplete="off" spellcheck="false" placeholder="Type input here and press Enter ↵..." />'
+      + '<button id="terminal-inline-btn" class="terminal-inline-btn" title="Send Input (Enter)">↵ Send</button>'
+      + '</div>';
+
+    outEl.innerHTML = (interleavedBody ? '<pre class="output-success" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + interleavedBody + '</pre>' : '')
+      + activeLineHtml;
+
+    // Wire up inline input listeners
+    var inlineInp = ge('terminal-inline-input');
+    if (inlineInp) {
+      inlineInp.addEventListener('keydown', function(e){
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitTerminalInput(this.value);
+        }
+      });
+      setTimeout(function(){
+        if (inlineInp) inlineInp.focus();
+      }, 40);
+    }
+    var inlineBtn = ge('terminal-inline-btn');
+    if (inlineBtn) {
+      inlineBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        var inp = ge('terminal-inline-input');
+        submitTerminalInput(inp ? inp.value : '');
+      });
+    }
+  } else {
+    // Finished run (not waiting)
+    var html = '';
+    var lastIdx = 0;
+    for (var i = 0; i < history.length; i++) {
+      var item = history[i];
+      if (item.prefixLen <= rawStdout.length) {
+        html += esc(rawStdout.substring(lastIdx, item.prefixLen));
+        html += '<span class="terminal-user-echo">' + esc(item.input) + '</span>\n';
+        lastIdx = item.prefixLen;
+      }
+    }
+    html += esc(rawStdout.substring(lastIdx));
+
+    if (rawStderr) {
+      html += (html ? '\n' : '') + '<span class="output-error">' + esc(rawStderr) + '</span>';
+    }
+
+    if (!rawStdout.trim() && !rawStderr.trim()) {
+      html = '(Program executed successfully with no output.\nUse System.out.println() to print results.)';
+    } else {
+      html += '\n<span style="color:#71717A;font-style:italic;">\n[Program finished with exit code ' + exitCode + ']</span>';
+    }
+
+    var hasErr = !!rawStderr && exitCode !== 0;
+    outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>';
   }
-
-  html += esc(rawStdout.substring(lastIdx));
-
-  if (rawStderr) {
-    html += (html ? '\n' : '') + '<span class="output-error">' + esc(rawStderr) + '</span>';
-  }
-
-  if (!rawStdout.trim() && !rawStderr.trim() && !isWaiting) {
-    html = '(Program executed successfully with no output.\nUse System.out.println() to print results.)';
-  } else if (!isWaiting) {
-    html += '\n<span style="color:#71717A;font-style:italic;">\n[Program finished with exit code ' + exitCode + ']</span>';
-  }
-
-  var hasErr = !!rawStderr && exitCode !== 0;
-  outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>';
 }
 
-function submitTerminalInput() {
+function submitTerminalInput(overrideVal) {
   if (!_interactiveSession.active || _interactiveSession.isExecuting) return;
-  var tInput = ge('terminal-input');
-  if (!tInput) return;
-  var val = tInput.value;
+  var inlineInp = ge('terminal-inline-input');
+  var bottomInp = ge('terminal-input');
+  var val = (overrideVal !== undefined) ? overrideVal : (inlineInp ? inlineInp.value : (bottomInp ? bottomInp.value : ''));
 
   var currentStdout = _interactiveSession.lastRawStdout || '';
   _interactiveSession.history.push({
@@ -2644,17 +2695,18 @@ function submitTerminalInput() {
   });
   _interactiveSession.inputs.push(val);
 
-  tInput.value = '';
-  tInput.disabled = true;
+  if (inlineInp) { inlineInp.value = ''; inlineInp.disabled = true; }
+  if (bottomInp) { bottomInp.value = ''; bottomInp.disabled = true; }
+
+  var activeLine = ge('terminal-active-line');
+  if (activeLine) {
+    activeLine.innerHTML = '<span class="terminal-active-prompt">' + esc(_interactiveSession.lastPrompt || '❯ ') + '</span> '
+      + '<span class="terminal-user-echo">' + esc(val) + '</span> '
+      + '<span class="run-spinner" style="margin-left:0.5rem"></span>';
+  }
 
   var outEl = ge('output-area');
-  if (outEl) {
-    var pre = outEl.querySelector('pre');
-    if (pre) {
-      pre.innerHTML += '<span class="terminal-user-echo">' + esc(val) + '</span>\n<span class="run-spinner"></span>';
-      outEl.scrollTop = outEl.scrollHeight;
-    }
-  }
+  if (outEl) outEl.scrollTop = outEl.scrollHeight;
 
   executeInteractiveStep();
 }
@@ -3176,6 +3228,11 @@ document.addEventListener('DOMContentLoaded', function(){
   var outArea = ge('output-area');
   if (outArea) {
     outArea.addEventListener('click', function(){
+      var inlineInp = ge('terminal-inline-input');
+      if (inlineInp && !inlineInp.disabled) {
+        inlineInp.focus();
+        return;
+      }
       var bar = ge('terminal-interactive-bar');
       if (bar && bar.style.display !== 'none') {
         var inp = ge('terminal-input');

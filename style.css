@@ -2739,6 +2739,42 @@ body {
 .terminal-submit-btn:active {
   transform: translate(1px, 1px); box-shadow: 1px 1px 0px #000000;
 }
+
+/* Inline Terminal Active Line (Inside the Console Output Text) */
+.terminal-active-line {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 0.4rem; margin-top: 0.35rem; padding: 0.2rem 0;
+  font-family: var(--font-code); font-size: 0.88rem; line-height: 1.6;
+}
+.terminal-active-prompt {
+  color: #00F59B; font-family: var(--font-code); font-weight: 700;
+  white-space: pre-wrap;
+}
+.terminal-inline-input {
+  flex: 1; min-width: 120px;
+  background: rgba(255, 230, 0, 0.08);
+  border: 1.5px solid #FFE600;
+  border-radius: 6px; color: #FFE600;
+  font-family: var(--font-code); font-size: 0.92rem; font-weight: 700;
+  padding: 0.25rem 0.65rem; outline: none; caret-color: #FFE600;
+  box-shadow: 0 0 8px rgba(255, 230, 0, 0.25); transition: all var(--t);
+}
+.terminal-inline-input:focus {
+  background: rgba(0, 245, 155, 0.1);
+  border-color: #00F59B; caret-color: #00F59B; color: #00F59B;
+  box-shadow: 0 0 12px rgba(0, 245, 155, 0.35);
+}
+.terminal-inline-input::placeholder {
+  color: #71717A; font-weight: 400; font-size: 0.8rem;
+}
+.terminal-inline-btn {
+  background: #FFE600; color: #121316; border: 1.5px solid #18181B;
+  border-radius: 6px; font-family: var(--font-code); font-size: 0.76rem;
+  font-weight: 800; padding: 0.25rem 0.65rem; cursor: pointer;
+  box-shadow: 2px 2px 0px #000000; transition: all var(--t); white-space: nowrap;
+}
+.terminal-inline-btn:hover { background: #FFF04D; transform: translate(-1px, -1px); }
+.terminal-inline-btn:active { transform: translate(1px, 1px); box-shadow: none; }
 .terminal-user-echo {
   color: #FFE600 !important; font-weight: 700;
   background: rgba(255, 230, 0, 0.12);
