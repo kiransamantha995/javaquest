@@ -33,7 +33,7 @@ async function runWandbox(code, stdin) {
       code: prepared,
       stdin: userStdin
     }),
-    signal: AbortSignal.timeout(18000)
+    signal: AbortSignal.timeout(25000)
   });
 
   if (!response.ok) {
@@ -63,7 +63,7 @@ async function runWandbox(code, stdin) {
   // Live Interactive Scanner Detection:
   // When programErr contains NoSuchElementException, the Java code reached a Scanner input statement
   // and is waiting for the user to provide standard input in the console!
-  if (statusCode !== 0 && programErr.includes('NoSuchElementException')) {
+  if (statusCode !== 0 && (programErr.includes('NoSuchElementException') || programErr.includes('No line found') || programErr.includes('NoSuchElement'))) {
     return {
       compile: null,
       run: {
@@ -97,7 +97,12 @@ Java Code:
 ${prepared}
 \`\`\`
 
-If the code uses Scanner(System.in) or BufferedReader and stdin is empty or insufficient, simulate a realistic user interaction session so the program demonstrates its logic and completes cleanly.
+Interactive Scanner Rules:
+If the Java code reads from System.in (via Scanner, BufferedReader, System.console, etc.) and the provided Standard Input (stdin) is empty or does NOT have enough lines for the next input statement:
+1. STOP program execution at that exact point where input is expected.
+2. Return only the stdout printed up to that exact prompt.
+3. Set waitingForInput to true!
+4. Do NOT fake or simulate future user inputs. Do NOT run the rest of the program.
 
 Evaluate compilation and execution. Return ONLY a single raw JSON object matching this schema with NO markdown ticks or extra prose:
 {
@@ -106,12 +111,13 @@ Evaluate compilation and execution. Return ONLY a single raw JSON object matchin
     "stderr": ""
   },
   "run": {
-    "stdout": "full exact standard output here",
+    "stdout": "exact standard output printed up to this moment",
     "stderr": "runtime exceptions or empty string",
-    "code": 0
+    "code": 0,
+    "waitingForInput": false
   }
 }
-If there are genuine compilation errors (syntax error, type mismatch, missing semicolon, undeclared identifier, etc.), set compile.code to 1, compile.stderr to the realistic javac error message, and run.stdout to "".`;
+If there are genuine compilation errors (syntax error, type mismatch, missing semicolon, undeclared identifier, etc.), set compile.code to 1, compile.stderr to the realistic javac error message, run.stdout to "", and waitingForInput to false.`;
 
   let lastErr = null;
   for (const model of CANDIDATE_MODELS) {
@@ -138,6 +144,9 @@ If there are genuine compilation errors (syntax error, type mismatch, missing se
 
       const clean = text.replace(/```(?:json)?/g, '').trim();
       const parsed = JSON.parse(clean);
+      if (parsed.run && parsed.waitingForInput !== undefined && parsed.run.waitingForInput === undefined) {
+        parsed.run.waitingForInput = !!parsed.waitingForInput;
+      }
       return parsed;
     } catch(e) {
       lastErr = e;

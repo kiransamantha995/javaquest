@@ -4,6 +4,11 @@
   "buildCommand": "node build.js",
   "outputDirectory": ".",
   "cleanUrls": true,
+  "functions": {
+    "api/run.js": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
       "source": "/((?!api/|.*\\.[\\w]+$).*)",

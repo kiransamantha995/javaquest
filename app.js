@@ -2483,6 +2483,7 @@ var _interactiveSession = {
   inputs: [],
   history: [],
   lastRawStdout: '',
+  lastPrompt: '',
   isExecuting: false
 };
 
@@ -2492,10 +2493,16 @@ function clearOutput() {
   _interactiveSession.inputs = [];
   _interactiveSession.history = [];
   _interactiveSession.lastRawStdout = '';
+  _interactiveSession.lastPrompt = '';
   var bar = ge('terminal-interactive-bar');
   if (bar) bar.style.display = 'none';
   var o = ge('output-area');
-  if (o) o.innerHTML = '<div class="output-placeholder">Click Run Code to execute your Java program</div>';
+  if (o) {
+    o.innerHTML = '<div class="terminal-idle-state" id="terminal-idle-prompt">'
+      + '<span class="terminal-idle-icon">❯</span> '
+      + '<span class="terminal-idle-text">Java Terminal Ready. Click <button class="terminal-run-pill" onclick="runCode()">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>'
+      + '</div>';
+  }
 }
 
 function runCode() {
@@ -2510,15 +2517,18 @@ function runCode() {
   _interactiveSession.inputs = [];
   _interactiveSession.history = [];
   _interactiveSession.lastRawStdout = '';
+  _interactiveSession.lastPrompt = '';
 
-  // If user entered batch inputs in the batch textarea, initialize inputs array with them
+  // Only use batch inputs if the user explicitly opened the batch drawer
+  var batchBox = ge('compiler-stdin-box');
+  var isBatchOpen = batchBox && !batchBox.classList.contains('collapsed');
   var batchEl = ge('compiler-stdin');
-  var batchVal = (batchEl && batchEl.value.trim()) ? batchEl.value : '';
+  var batchVal = (isBatchOpen && batchEl && batchEl.value.trim()) ? batchEl.value : '';
   if (batchVal) {
     _interactiveSession.inputs = batchVal.split(/\r?\n/);
   }
 
-  outEl.innerHTML = '<div class="output-running"><span class="run-spinner"></span>Compiling and running Java…</div>';
+  outEl.innerHTML = '<div class="output-running"><span class="run-spinner"></span>Compiling with OpenJDK 22 and running…</div>';
   executeInteractiveStep();
 }
 
@@ -2537,12 +2547,11 @@ function executeInteractiveStep() {
 
       var outEl = ge('output-area');
       var bar = ge('terminal-interactive-bar');
-      var tInput = ge('terminal-input');
+      if (bar) bar.style.display = 'none';
 
       // 1. Compilation Error
       if (data.compile && data.compile.stderr) {
         _interactiveSession.active = false;
-        if (bar) bar.style.display = 'none';
         if (outEl) {
           outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
         }
@@ -2552,7 +2561,6 @@ function executeInteractiveStep() {
       // 2. Execution / Service Error
       if (data.error) {
         _interactiveSession.active = false;
-        if (bar) bar.style.display = 'none';
         if (outEl) {
           outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Execution Error]\n' + esc(data.error) + '</pre>';
         }
@@ -2569,18 +2577,8 @@ function executeInteractiveStep() {
 
       renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode);
 
-      if (isWaiting) {
-        if (bar) {
-          bar.style.display = 'flex';
-          if (tInput) {
-            tInput.value = '';
-            tInput.disabled = false;
-            setTimeout(function(){ tInput.focus(); }, 50);
-          }
-        }
-      } else {
+      if (!isWaiting) {
         _interactiveSession.active = false;
-        if (bar) bar.style.display = 'none';
       }
 
       if (outEl) outEl.scrollTop = outEl.scrollHeight;
@@ -2603,36 +2601,53 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
   if (!outEl) return;
 
   var history = _interactiveSession.history;
+  var segments = [];
+  var lastPos = 0;
+
+  for (var i = 0; i < history.length; i++) {
+    var item = history[i];
+    var len = item.prefixLen;
+    if (len <= rawStdout.length) {
+      segments.push({ type: 'output', text: rawStdout.substring(lastPos, len) });
+      segments.push({ type: 'input', text: item.input });
+      lastPos = len;
+    }
+  }
+
+  var remaining = rawStdout.substring(lastPos);
 
   if (isWaiting) {
-    // Separate body from active prompt line
-    var lastNl = rawStdout.lastIndexOf('\n');
-    var bodyText = lastNl !== -1 ? rawStdout.substring(0, lastNl + 1) : '';
-    var promptText = lastNl !== -1 ? rawStdout.substring(lastNl + 1) : rawStdout;
-    _interactiveSession.lastPrompt = promptText;
+    var lastNl = remaining.lastIndexOf('\n');
+    var body = '';
+    var prompt = '';
+    if (lastNl !== -1) {
+      body = remaining.substring(0, lastNl + 1);
+      prompt = remaining.substring(lastNl + 1);
+    } else {
+      prompt = remaining;
+    }
+    if (body) segments.push({ type: 'output', text: body });
+    _interactiveSession.lastPrompt = prompt;
 
-    var interleavedBody = '';
-    var lastIdx = 0;
-    for (var i = 0; i < history.length; i++) {
-      var item = history[i];
-      if (item.prefixLen <= bodyText.length) {
-        interleavedBody += esc(bodyText.substring(lastIdx, item.prefixLen));
-        interleavedBody += '<span class="terminal-user-echo">' + esc(item.input) + '</span>\n';
-        lastIdx = item.prefixLen;
+    var html = '';
+    for (var j = 0; j < segments.length; j++) {
+      var seg = segments[j];
+      if (seg.type === 'output') {
+        html += esc(seg.text);
+      } else if (seg.type === 'input') {
+        html += '<span class="terminal-user-echo">' + esc(seg.text) + '</span>\n';
       }
     }
-    interleavedBody += esc(bodyText.substring(lastIdx));
 
     var activeLineHtml = '<div class="terminal-active-line" id="terminal-active-line">'
-      + '<span class="terminal-active-prompt">' + esc(promptText || '❯ ') + '</span>'
-      + '<input type="text" id="terminal-inline-input" class="terminal-inline-input" autofocus autocomplete="off" spellcheck="false" placeholder="Type input here and press Enter ↵..." />'
+      + '<span class="terminal-active-prompt">' + esc(prompt || '❯ ') + '</span>'
+      + '<input type="text" id="terminal-inline-input" class="terminal-inline-input" autofocus autocomplete="off" spellcheck="false" placeholder="Type here and press Enter ↵..." />'
       + '<button id="terminal-inline-btn" class="terminal-inline-btn" title="Send Input (Enter)">↵ Send</button>'
       + '</div>';
 
-    outEl.innerHTML = (interleavedBody ? '<pre class="output-success" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + interleavedBody + '</pre>' : '')
+    outEl.innerHTML = (html ? '<pre class="output-success" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>' : '')
       + activeLineHtml;
 
-    // Wire up inline input listeners
     var inlineInp = ge('terminal-inline-input');
     if (inlineInp) {
       inlineInp.addEventListener('keydown', function(e){
@@ -2641,10 +2656,12 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
           submitTerminalInput(this.value);
         }
       });
-      setTimeout(function(){
-        if (inlineInp) inlineInp.focus();
-      }, 40);
+      inlineInp.focus();
+      setTimeout(function(){ if (inlineInp) inlineInp.focus(); }, 15);
+      setTimeout(function(){ if (inlineInp) inlineInp.focus(); }, 60);
+      setTimeout(function(){ if (inlineInp) inlineInp.focus(); }, 180);
     }
+
     var inlineBtn = ge('terminal-inline-btn');
     if (inlineBtn) {
       inlineBtn.addEventListener('click', function(e){
@@ -2653,19 +2670,19 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
         submitTerminalInput(inp ? inp.value : '');
       });
     }
+
   } else {
-    // Finished run (not waiting)
+    if (remaining) segments.push({ type: 'output', text: remaining });
+
     var html = '';
-    var lastIdx = 0;
-    for (var i = 0; i < history.length; i++) {
-      var item = history[i];
-      if (item.prefixLen <= rawStdout.length) {
-        html += esc(rawStdout.substring(lastIdx, item.prefixLen));
-        html += '<span class="terminal-user-echo">' + esc(item.input) + '</span>\n';
-        lastIdx = item.prefixLen;
+    for (var k = 0; k < segments.length; k++) {
+      var s = segments[k];
+      if (s.type === 'output') {
+        html += esc(s.text);
+      } else if (s.type === 'input') {
+        html += '<span class="terminal-user-echo">' + esc(s.text) + '</span>\n';
       }
     }
-    html += esc(rawStdout.substring(lastIdx));
 
     if (rawStderr) {
       html += (html ? '\n' : '') + '<span class="output-error">' + esc(rawStderr) + '</span>';
@@ -2680,6 +2697,8 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
     var hasErr = !!rawStderr && exitCode !== 0;
     outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>';
   }
+
+  outEl.scrollTop = outEl.scrollHeight;
 }
 
 function submitTerminalInput(overrideVal) {
@@ -3214,7 +3233,7 @@ document.addEventListener('DOMContentLoaded', function(){
     termInp.addEventListener('keydown', function(e){
       if (e.key === 'Enter') {
         e.preventDefault();
-        submitTerminalInput();
+        submitTerminalInput(this.value);
       }
     });
   }
@@ -3222,9 +3241,22 @@ document.addEventListener('DOMContentLoaded', function(){
   if (termBtn) {
     termBtn.addEventListener('click', function(e){
       e.preventDefault();
-      submitTerminalInput();
+      var inp = ge('terminal-input');
+      submitTerminalInput(inp ? inp.value : '');
     });
   }
+
+  var outPanel = ge('compiler-output-panel');
+  if (outPanel) {
+    outPanel.addEventListener('click', function(e){
+      if (e.target && (e.target.id === 'clear-output-btn' || e.target.id === 'toggle-stdin-btn')) return;
+      var inlineInp = ge('terminal-inline-input');
+      if (inlineInp && !inlineInp.disabled) {
+        inlineInp.focus();
+      }
+    });
+  }
+
   var outArea = ge('output-area');
   if (outArea) {
     outArea.addEventListener('click', function(){
@@ -3233,13 +3265,33 @@ document.addEventListener('DOMContentLoaded', function(){
         inlineInp.focus();
         return;
       }
-      var bar = ge('terminal-interactive-bar');
-      if (bar && bar.style.display !== 'none') {
-        var inp = ge('terminal-input');
-        if (inp && !inp.disabled) inp.focus();
+      if (!_interactiveSession.active && !_interactiveSession.isExecuting) {
+        runCode();
       }
     });
   }
+
+  // Global keydown handler to route keystrokes directly to the terminal input
+  document.addEventListener('keydown', function(e) {
+    var screen = document.querySelector('.screen.active');
+    if (!screen || screen.id !== 'screen-compiler') return;
+
+    var tag = (document.activeElement && document.activeElement.tagName) ? document.activeElement.tagName.toLowerCase() : '';
+    if (tag === 'textarea' || (tag === 'input' && document.activeElement.id !== 'terminal-inline-input')) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    var inlineInp = ge('terminal-inline-input');
+    if (inlineInp && !inlineInp.disabled) {
+      if (document.activeElement !== inlineInp) {
+        inlineInp.focus();
+      }
+    } else if (!_interactiveSession.active && !_interactiveSession.isExecuting) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        runCode();
+      }
+    }
+  });
 
   // ── AVATAR ────────────────────────────────────────────────────
   qsa('.avatar-tab').forEach(function(t){t.addEventListener('click',function(){switchAvatarTab(this.getAttribute('data-tab'));});});

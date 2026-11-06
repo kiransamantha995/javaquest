@@ -7,7 +7,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=7.4"/>
+  <link rel="stylesheet" href="style.css?v=7.5"/>
 </head>
 <body>
 
@@ -477,7 +477,10 @@
           <textarea id="compiler-stdin" class="compiler-stdin-textarea" placeholder="Optional batch inputs for Scanner (one per line)...&#10;e.g.:&#10;1&#10;Coffee&#10;4.50&#10;Drinks&#10;4" spellcheck="false" rows="3"></textarea>
         </div>
         <div class="output-area" id="output-area">
-          <div class="output-placeholder" style="cursor:pointer;" onclick="runCode()">Click Run Code to execute your Java program</div>
+          <div class="terminal-idle-state" id="terminal-idle-prompt" onclick="runCode()">
+            <span class="terminal-idle-icon">❯</span>
+            <span class="terminal-idle-text">Java Terminal Ready. Click <button class="terminal-run-pill" onclick="runCode()">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>
+          </div>
         </div>
         <div class="terminal-interactive-bar" id="terminal-interactive-bar" style="display:none">
           <span class="terminal-prompt-sym">❯</span>
@@ -829,10 +832,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=7.4"></script>
-<script src="animations.js?v=7.4"></script>
-<script src="supabase.js?v=7.4"></script>
-<script src="ai-tutor.js?v=7.4"></script>
-<script src="app.js?v=7.4"></script>
+<script src="curriculum.js?v=7.5"></script>
+<script src="animations.js?v=7.5"></script>
+<script src="supabase.js?v=7.5"></script>
+<script src="ai-tutor.js?v=7.5"></script>
+<script src="app.js?v=7.5"></script>
 </body>
 </html>

@@ -2743,42 +2743,89 @@ body {
 /* Inline Terminal Active Line (Inside the Console Output Text) */
 .terminal-active-line {
   display: flex; align-items: center; flex-wrap: wrap;
-  gap: 0.4rem; margin-top: 0.35rem; padding: 0.2rem 0;
-  font-family: var(--font-code); font-size: 0.88rem; line-height: 1.6;
+  gap: 0.5rem; margin-top: 0.45rem; padding: 0.35rem 0.2rem;
+  font-family: var(--font-code); font-size: 0.92rem; line-height: 1.6;
 }
 .terminal-active-prompt {
-  color: #00F59B; font-family: var(--font-code); font-weight: 700;
-  white-space: pre-wrap;
+  color: #00F59B; font-family: var(--font-code); font-weight: 800;
+  white-space: pre-wrap; letter-spacing: 0.02em;
 }
 .terminal-inline-input {
-  flex: 1; min-width: 120px;
-  background: rgba(255, 230, 0, 0.08);
-  border: 1.5px solid #FFE600;
+  flex: 1; min-width: 140px;
+  background: #141417;
+  border: 2px solid #FFE600;
   border-radius: 6px; color: #FFE600;
-  font-family: var(--font-code); font-size: 0.92rem; font-weight: 700;
-  padding: 0.25rem 0.65rem; outline: none; caret-color: #FFE600;
-  box-shadow: 0 0 8px rgba(255, 230, 0, 0.25); transition: all var(--t);
+  font-family: var(--font-code); font-size: 0.95rem; font-weight: 700;
+  padding: 0.35rem 0.75rem; outline: none; caret-color: #00F59B;
+  box-shadow: 0 0 10px rgba(255, 230, 0, 0.4), inset 0 1px 3px rgba(0,0,0,0.5);
+  transition: all var(--t);
+  animation: terminalInputPulse 2.5s infinite ease-in-out;
+}
+@keyframes terminalInputPulse {
+  0%, 100% { border-color: #FFE600; box-shadow: 0 0 8px rgba(255, 230, 0, 0.35); }
+  50% { border-color: #00F59B; box-shadow: 0 0 14px rgba(0, 245, 155, 0.55); }
 }
 .terminal-inline-input:focus {
-  background: rgba(0, 245, 155, 0.1);
+  background: #0D0E11;
   border-color: #00F59B; caret-color: #00F59B; color: #00F59B;
-  box-shadow: 0 0 12px rgba(0, 245, 155, 0.35);
+  box-shadow: 0 0 16px rgba(0, 245, 155, 0.6), inset 0 1px 3px rgba(0,0,0,0.6);
+  animation: none;
 }
 .terminal-inline-input::placeholder {
-  color: #71717A; font-weight: 400; font-size: 0.8rem;
+  color: #71717A; font-weight: 500; font-size: 0.85rem; font-style: italic;
 }
 .terminal-inline-btn {
-  background: #FFE600; color: #121316; border: 1.5px solid #18181B;
-  border-radius: 6px; font-family: var(--font-code); font-size: 0.76rem;
-  font-weight: 800; padding: 0.25rem 0.65rem; cursor: pointer;
+  background: #FFE600; color: #121316; border: 2px solid #000000;
+  border-radius: 6px; font-family: var(--font-code); font-size: 0.82rem;
+  font-weight: 800; padding: 0.35rem 0.85rem; cursor: pointer;
   box-shadow: 2px 2px 0px #000000; transition: all var(--t); white-space: nowrap;
 }
-.terminal-inline-btn:hover { background: #FFF04D; transform: translate(-1px, -1px); }
-.terminal-inline-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+.terminal-inline-btn:hover {
+  background: #FFF04D; transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
+}
+.terminal-inline-btn:active {
+  transform: translate(1px, 1px); box-shadow: none;
+}
 .terminal-user-echo {
-  color: #FFE600 !important; font-weight: 700;
-  background: rgba(255, 230, 0, 0.12);
-  padding: 0.05rem 0.35rem; border-radius: 4px;
+  color: #FFE600 !important; font-weight: 800;
+  background: rgba(255, 230, 0, 0.15);
+  padding: 0.1rem 0.45rem; border-radius: 4px;
+  border: 1px dashed rgba(255, 230, 0, 0.4);
+}
+
+/* Terminal Idle State */
+.terminal-idle-state {
+  display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;
+  padding: 0.75rem 0.25rem; font-family: var(--font-code); font-size: 0.9rem;
+  color: #A1A1AA; cursor: pointer; user-select: none;
+}
+.terminal-idle-icon {
+  color: #00F59B; font-weight: 900; font-size: 1.15rem;
+}
+.terminal-idle-text {
+  line-height: 1.5; color: #D4D4D8;
+}
+.terminal-idle-text strong {
+  color: #FFE600;
+}
+.terminal-run-pill {
+  background: #00F59B; color: #121316; border: 1.5px solid #000000;
+  border-radius: 6px; font-family: var(--font-code); font-size: 0.8rem;
+  font-weight: 800; padding: 0.2rem 0.65rem; cursor: pointer;
+  box-shadow: 1.5px 1.5px 0px #000000; margin: 0 0.3rem;
+  transition: all var(--t); vertical-align: middle;
+}
+.terminal-run-pill:hover {
+  background: #34D399; transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0px #000000;
+}
+.terminal-run-pill:active {
+  transform: translate(1px, 1px); box-shadow: none;
+}
+
+#terminal-interactive-bar {
+  display: none !important;
 }
 
 /* ═══ CODING CHALLENGE SCREEN ══════════════════════════════════ */
