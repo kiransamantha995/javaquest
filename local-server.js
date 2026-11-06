@@ -154,18 +154,19 @@ const server = http.createServer((req, res) => {
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
       try {
-        const payload = JSON.parse(body || '{}');
-        const code = payload.code || '';
-        const stdin = payload.stdin || '';
-
-        if (!code.trim()) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          return res.end(JSON.stringify({ error: 'No code provided' }));
-        }
-
-        runJavaProcess(code, stdin, result => {
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(result));
+        const runHandler = require('./api/run.js');
+        const fakeReq = { method: 'POST', body: JSON.parse(body || '{}') };
+        const fakeRes = {
+          setHeader: (k, v) => res.setHeader(k, v),
+          status: (code) => {
+            res.writeHead(code, { 'Content-Type': 'application/json' });
+            return fakeRes;
+          },
+          json: (data) => res.end(JSON.stringify(data))
+        };
+        runHandler(fakeReq, fakeRes).catch(err => {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
         });
       } catch (err) {
         res.writeHead(400, { 'Content-Type': 'application/json' });

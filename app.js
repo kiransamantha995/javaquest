@@ -1831,7 +1831,7 @@ function renderTestCasesList(testCases) {
 }
 
 function executeJava(code, stdin) {
-  // 1. First priority: Local OpenJDK 24 compiler endpoint (/api/run)
+  // 1. Primary: Serverless OpenJDK 22 compiler endpoint (/api/run)
   return fetch('/api/run', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1842,55 +1842,51 @@ function executeJava(code, stdin) {
     return res.json();
   })
   .catch(function(err){
-    // 2. Second priority: Online deployment (e.g. Vercel) — run via ultra-fast Gemini Flash-Lite compiler engine
-    var apiKey = (typeof getGeminiKey === 'function') ? getGeminiKey() : null;
-    if (apiKey) {
-      return executeJavaWithAI(code, stdin, apiKey).catch(function(aiErr){
-        console.warn('AI compilation fallback failed, trying client interpreter:', aiErr);
+    console.warn('/api/run endpoint unreachable, attempting direct OpenJDK compilation:', err.message);
+    // 2. Second priority: Direct OpenJDK 22 compilation via Wandbox (CORS supported)
+    return executeWandboxDirect(code, stdin)
+      .catch(function(wErr){
+        console.warn('Direct OpenJDK runner failed:', wErr.message, 'Trying client interpreter...');
+        // 3. Third priority: Client-side interpreter fallback for basic scripts
         return runClientJavaInterpreter(code, stdin);
       });
-    }
-    // 3. Client-side fallback interpreter
-    return runClientJavaInterpreter(code, stdin);
   });
 }
 
-function executeJavaWithAI(code, stdin, apiKey) {
-  var prompt = 'Act as an OpenJDK Java compiler and runtime simulator. '
-    + 'Simulate execution of the following Java program accurately. '
-    + (stdin ? 'Provide standard input: ' + JSON.stringify(stdin) + '. ' : '')
-    + 'Return ONLY a raw JSON object matching this schema without markdown or formatting: '
-    + '{"stdout": "<full standard output string>", "stderr": "<compile or runtime error message, or empty string>", "code": 0}. '
-    + 'If compilation or syntax error occurs, set code to 1 and put error in stderr.\\n\\nJava Code:\\n' + code;
-
-  var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=' + apiKey;
-  return fetch(url, {
+function executeWandboxDirect(code, stdin) {
+  var prepared = code.replace(/\bpublic\s+(class|interface|record|enum)\b/g, '$1');
+  return fetch('https://wandbox.org/api/compile.json', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.1,
-        maxOutputTokens: 1000
-      }
+      compiler: 'openjdk-jdk-22+36',
+      code: prepared,
+      stdin: stdin || ''
     })
   })
   .then(function(res){
-    if (!res.ok) throw new Error('AI Compiler HTTP ' + res.status);
+    if (!res.ok) throw new Error('Wandbox HTTP ' + res.status);
     return res.json();
   })
   .then(function(data){
-    var text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-    if (!text) throw new Error('No output from AI compiler');
-    var clean = text.replace(/```json\\s*/gi, '').replace(/```\\s*/g, '').trim();
-    var parsed = JSON.parse(clean);
+    var statusCode = parseInt(data.status || '0', 10);
+    var compilerErr = (data.compiler_error || data.compiler_message || '').trim();
+    var programOut = (data.program_output || '').replace(/\r\n/g, '\n');
+    var programErr = (data.program_error || '').replace(/\r\n/g, '\n').trim();
+
+    if (statusCode !== 0 && compilerErr) {
+      return {
+        compile: { code: statusCode, stderr: compilerErr },
+        run: { stdout: '', stderr: compilerErr, code: statusCode }
+      };
+    }
     return {
+      compile: null,
       run: {
-        stdout: parsed.stdout || '',
-        stderr: parsed.stderr || '',
-        code: (typeof parsed.code === 'number') ? parsed.code : 0
-      },
-      compile: (parsed.code !== 0 && parsed.stderr) ? { stderr: parsed.stderr, code: parsed.code } : null
+        stdout: programOut,
+        stderr: programErr,
+        code: statusCode
+      }
     };
   });
 }

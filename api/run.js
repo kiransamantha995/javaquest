@@ -1,0 +1,186 @@
+// JavaQuest Serverless Java Compiler & Execution Engine — api/run.js
+// Runs on Vercel Serverless Function
+// High-performance OpenJDK 22 compilation with intelligent fallback
+
+const CANDIDATE_MODELS = [
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3-flash-preview',
+  'gemini-3.5-flash',
+  'gemini-flash-lite-latest',
+  'gemini-flash-latest'
+];
+
+function sanitizeJavaCode(code) {
+  // In OpenJDK single-file execution, top-level classes cannot conflict with the runner filename.
+  // Stripping 'public' from class/interface/record/enum declarations makes them
+  // package-private so multi-class and OOP programs compile cleanly without restriction.
+  return code.replace(/\bpublic\s+(class|interface|record|enum)\b/g, '$1');
+}
+
+async function runWandbox(code, stdin) {
+  const prepared = sanitizeJavaCode(code);
+  const response = await fetch('https://wandbox.org/api/compile.json', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      compiler: 'openjdk-jdk-22+36',
+      code: prepared,
+      stdin: stdin || ''
+    }),
+    signal: AbortSignal.timeout(18000)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Wandbox HTTP ${response.status}`);
+  }
+
+  const data = await response.json();
+  const statusCode = parseInt(data.status || '0', 10);
+  const compilerErr = (data.compiler_error || data.compiler_message || '').trim();
+  const programOut = (data.program_output || '').replace(/\r\n/g, '\n');
+  const programErr = (data.program_error || '').replace(/\r\n/g, '\n').trim();
+
+  if (statusCode !== 0 && compilerErr) {
+    return {
+      compile: {
+        code: statusCode,
+        stderr: compilerErr
+      },
+      run: {
+        stdout: '',
+        stderr: compilerErr,
+        code: statusCode
+      }
+    };
+  }
+
+  return {
+    compile: null,
+    run: {
+      stdout: programOut,
+      stderr: programErr,
+      code: statusCode
+    }
+  };
+}
+
+async function runWithGemini(code, stdin, apiKey) {
+  const prompt = `Act as an official OpenJDK 22 Java compiler and JVM runtime.
+Execute the following Java code strictly according to standard Java language specifications.
+${stdin ? `Standard Input (stdin):\n${stdin}\n` : ''}
+
+Java Code:
+\`\`\`java
+${code}
+\`\`\`
+
+Evaluate compilation and execution. Return ONLY a single raw JSON object matching this schema with NO markdown ticks or extra prose:
+{
+  "compile": {
+    "code": 0,
+    "stderr": ""
+  },
+  "run": {
+    "stdout": "full exact standard output here",
+    "stderr": "runtime exceptions or empty string",
+    "code": 0
+  }
+}
+If there are compilation errors (syntax error, type mismatch, missing semicolon, undeclared identifier, etc.), set compile.code to 1, compile.stderr to the realistic javac error message, and run.stdout to "".`;
+
+  let lastErr = null;
+  for (const model of CANDIDATE_MODELS) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.0,
+            maxOutputTokens: 2048,
+            responseMimeType: 'application/json'
+          }
+        }),
+        signal: AbortSignal.timeout(15000)
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error('Empty response from model');
+
+      const clean = text.replace(/```(?:json)?/g, '').trim();
+      const parsed = JSON.parse(clean);
+      return parsed;
+    } catch(e) {
+      lastErr = e;
+      continue;
+    }
+  }
+
+  throw lastErr || new Error('AI Compiler fallback unavailable');
+}
+
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed. Use POST.' });
+    return;
+  }
+
+  try {
+    let body = req.body;
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch(e) { body = {}; }
+    }
+    body = body || {};
+
+    const code = (body.code || '').trim();
+    const stdin = body.stdin || '';
+
+    if (!code) {
+      res.status(400).json({ error: 'No Java code provided to compile.' });
+      return;
+    }
+
+    // 1. Primary: Real OpenJDK 22 Cloud Engine (Wandbox)
+    try {
+      const result = await runWandbox(code, stdin);
+      res.status(200).json(result);
+      return;
+    } catch(wandboxErr) {
+      console.warn('[Compiler] OpenJDK Wandbox failed:', wandboxErr.message, 'Falling back to AI engine...');
+    }
+
+    // 2. Secondary: Cloud AI OpenJDK 22 Simulator (Gemini with process.env.GEMINI_API_KEY)
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (apiKey) {
+      try {
+        const aiResult = await runWithGemini(code, stdin, apiKey);
+        res.status(200).json(aiResult);
+        return;
+      } catch(aiErr) {
+        console.warn('[Compiler] AI Engine fallback failed:', aiErr.message);
+      }
+    }
+
+    res.status(503).json({
+      error: 'Compiler service temporarily unavailable. Please retry in a moment.'
+    });
+
+  } catch(err) {
+    console.error('Compiler handler error:', err);
+    res.status(500).json({ error: err.message || 'Server error during Java execution' });
+  }
+};
