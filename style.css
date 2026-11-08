@@ -5167,3 +5167,1521 @@ body.dark-theme .vis-uml-item {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+
+/* ============================================================
+   CODÉDEX 2-COLUMN COURSE HUB & MINECRAFT CAVERN SYSTEM
+   Inspired by Codédex.io, Minecraft & Apple Design Craftsmanship
+   ============================================================ */
+
+/* ─── Course Hub Container ───────────────────────────────────── */
+.course-hub-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0.5rem 1.5rem 4rem;
+}
+
+/* ─── Underground Redstone & Diamond Cavern Hero Banner ──────── */
+.course-hero-cavern {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 3px solid var(--ink);
+  background: #0A0F1D;
+  background-image: 
+    radial-gradient(circle at 12% 25%, rgba(0, 245, 155, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 88% 75%, rgba(239, 68, 68, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 50% 110%, rgba(245, 158, 11, 0.1) 0%, transparent 40%),
+    linear-gradient(180deg, #070A14 0%, #0F172A 50%, #080C16 100%);
+  color: #FFFFFF;
+  padding: 3rem 3rem 2.75rem;
+  margin-bottom: 2rem;
+  box-shadow: 6px 6px 0px var(--ink);
+}
+
+.cavern-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Ambient Deepslate Grid Pattern */
+.cavern-decorations::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+  opacity: 0.7;
+}
+
+/* Pixel Ore Clusters */
+.pixel-ore {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.pixel-ore.ore-diamond {
+  top: 24px;
+  right: 48px;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.75));
+  animation: diamondGlint 4s infinite ease-in-out;
+}
+
+.pixel-ore.ore-redstone {
+  bottom: 24px;
+  right: 120px;
+  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.7));
+  animation: redstonePulse 2.8s infinite ease-in-out;
+}
+
+.pixel-ore.ore-gold {
+  top: 36px;
+  left: 60%;
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.65));
+}
+
+/* Wall Torches */
+.pixel-torch {
+  position: absolute;
+  width: 32px;
+  height: 48px;
+  z-index: 2;
+}
+
+.pixel-torch.torch-left {
+  top: 32px;
+  left: 28px;
+  animation: torchFlicker 1.8s infinite alternate ease-in-out;
+}
+
+.pixel-torch.torch-right {
+  bottom: 28px;
+  right: 28px;
+  animation: torchFlicker 2.1s infinite alternate-reverse ease-in-out;
+}
+
+/* Dust particles floating */
+.cavern-ambient-dust {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #38BDF8;
+  border-radius: 1px;
+  opacity: 0.6;
+  box-shadow: 0 0 8px #38BDF8;
+  animation: dustDrift 8s infinite linear;
+}
+.cavern-ambient-dust:nth-child(1) { top: 20%; left: 30%; animation-duration: 9s; }
+.cavern-ambient-dust:nth-child(2) { top: 70%; left: 75%; animation-duration: 12s; background: #EF4444; box-shadow: 0 0 8px #EF4444; }
+.cavern-ambient-dust:nth-child(3) { top: 40%; left: 85%; animation-duration: 7s; background: #FFE600; box-shadow: 0 0 8px #FFE600; }
+
+@keyframes diamondGlint {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)); }
+  50% { filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.95)) brightness(1.15); }
+}
+
+@keyframes redstonePulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.55)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.95)); transform: scale(1.04); }
+}
+
+@keyframes torchFlicker {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.7)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.95)); transform: scale(1.06) translateY(-1px); }
+}
+
+@keyframes dustDrift {
+  0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-40px) translateX(20px); opacity: 0; }
+}
+
+/* Cavern Hero Content */
+.cavern-hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 680px;
+}
+
+.course-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.course-pill-badge {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38BDF8;
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.course-pill-type {
+  background: rgba(255, 255, 255, 0.1);
+  color: #F1F5F9;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero-course-title {
+  font-family: var(--font-ui);
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 0.52em;
+  height: 0.95em;
+  background: #FFE600;
+  vertical-align: -0.08em;
+  animation: cursorBlink 1s infinite steps(2, start);
+  box-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.hero-course-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #CBD5E1;
+  margin-bottom: 1.85rem;
+  font-weight: 500;
+  max-width: 620px;
+}
+
+.hero-action-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.85rem;
+}
+
+.btn-resume-learning {
+  background: #FFE600;
+  color: #18181B;
+  font-family: var(--font-ui);
+  font-size: 1.08rem;
+  font-weight: 800;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  border: 2.5px solid #18181B;
+  box-shadow: 4px 4px 0px #18181B;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: transform var(--t), box-shadow var(--t), background var(--t);
+  user-select: none;
+}
+
+.btn-resume-learning:hover {
+  background: #FFF04D;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #18181B;
+}
+
+.btn-resume-learning:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #18181B;
+}
+
+.hero-meta-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  color: #94A3B8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.stat-item svg {
+  stroke: #94A3B8;
+}
+
+.avatar-stack {
+  display: inline-flex;
+  align-items: center;
+}
+
+.avatar-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #0F172A;
+  margin-left: -8px;
+  background-size: cover;
+}
+.avatar-circle:first-child { margin-left: 0; }
+.avatar-circle.c1 { background: #38BDF8; }
+.avatar-circle.c2 { background: #F43F5E; }
+.avatar-circle.c3 { background: #10B981; }
+
+/* ─── Track Switcher Tabs ────────────────────────────────────── */
+.track-tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.track-tab-bar::-webkit-scrollbar { display: none; }
+
+.track-tab-btn {
+  background: var(--bg-surface);
+  color: var(--text-2);
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 0.65rem 1.25rem;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+  box-shadow: 2.5px 2.5px 0px var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--t);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.track-tab-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--ink);
+  background: var(--bg-card-hover);
+  color: var(--text-1);
+}
+
+.track-tab-btn.active {
+  background: var(--ink);
+  color: #FFFFFF;
+  box-shadow: 0 0 0px transparent;
+  transform: translate(2px, 2px);
+  border-color: var(--ink);
+}
+
+.track-tab-btn .tab-badge-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+}
+.track-tab-btn.active .tab-badge-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Two-Column Course Hub Grid ─────────────────────────────── */
+.course-hub-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+/* ─── Left Column: Chapters Accordion ────────────────────────── */
+.course-chapters-col {
+  min-width: 0;
+}
+
+.chapters-accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.chapter-accordion-card {
+  background: var(--bg-surface);
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0px var(--ink);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  transition: box-shadow var(--t), transform var(--t);
+}
+
+.chapter-accordion-card:hover {
+  box-shadow: 5px 5px 0px var(--ink);
+}
+
+.chapter-header {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  padding: 1.25rem 1.45rem;
+  cursor: pointer;
+  user-select: none;
+  background: var(--bg-surface);
+  transition: background 0.15s ease;
+}
+
+.chapter-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.chapter-status-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 1.5px 1.5px 0px var(--ink);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.chapter-status-dot.completed {
+  background: var(--codedex-green);
+  color: #18181B;
+}
+
+.chapter-status-dot.in-progress {
+  background: var(--codedex-yellow);
+  color: #18181B;
+}
+
+.chapter-status-dot.locked {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.chapter-header-title-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter-title {
+  font-family: var(--font-ui);
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--text-1);
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.chapter-desc {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.chapter-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.chapter-progress-pill {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink);
+  background: var(--bg-secondary);
+  color: var(--text-2);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+.chapter-progress-pill.all-done {
+  background: #DCFCE7;
+  color: #166534;
+  border-color: #166534;
+}
+
+.chapter-chevron {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  background: var(--bg-surface);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), background 0.15s;
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+.chapter-accordion-card.open .chapter-chevron {
+  transform: rotate(180deg);
+  background: var(--codedex-yellow);
+}
+
+.chapter-body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.25s ease;
+}
+
+.chapter-accordion-card.open .chapter-body {
+  max-height: 1800px;
+  opacity: 1;
+  border-top: 2px solid var(--border-subtle);
+  padding: 1rem 1.45rem 1.45rem;
+  background: var(--bg-surface);
+}
+
+.chapter-intro-banner {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1.15rem;
+  padding: 0.4rem 0.2rem;
+}
+
+/* ─── Exercise Table & Rows ──────────────────────────────────── */
+.exercise-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.exercise-row {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.15rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  transition: all var(--t);
+}
+
+.exercise-row:hover {
+  border-color: var(--ink);
+  background: var(--bg-card-hover);
+  transform: translateX(2px);
+}
+
+.exercise-row.status-done {
+  border-color: rgba(5, 211, 128, 0.4);
+  background: rgba(5, 211, 128, 0.04);
+}
+
+.exercise-row.status-available {
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0px var(--ink);
+}
+
+.exercise-row.status-locked {
+  opacity: 0.6;
+  background: var(--bg-secondary);
+  border-color: transparent;
+}
+
+.exercise-col-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.exercise-col-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.exercise-title-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.exercise-type-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.exercise-type-tag.tag-lesson {
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #93C5FD;
+}
+
+.exercise-type-tag.tag-quiz {
+  background: #FAF5FF;
+  color: #7C3AED;
+  border: 1px solid #C4B5FD;
+}
+
+.exercise-type-tag.tag-code {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #6EE7B7;
+}
+
+.exercise-type-tag.tag-ai {
+  background: #FFFBEB;
+  color: #D97706;
+  border: 1px solid #FCD34D;
+}
+
+.exercise-col-action {
+  flex-shrink: 0;
+}
+
+.exercise-btn {
+  font-family: var(--font-ui);
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0.45rem 1.15rem;
+  border-radius: 8px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: all var(--t);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 105px;
+  justify-content: center;
+  user-select: none;
+}
+
+.exercise-btn.btn-done {
+  background: #ECFDF5;
+  color: #059669;
+  border-color: #059669;
+  box-shadow: 1.5px 1.5px 0px #059669;
+}
+
+.exercise-btn.btn-done:hover {
+  background: #D1FAE5;
+  transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0px #059669;
+}
+
+.exercise-btn.btn-start {
+  background: #FFE600;
+  color: #18181B;
+  box-shadow: 2px 2px 0px var(--ink);
+}
+
+.exercise-btn.btn-start:hover {
+  background: #FFF04D;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--ink);
+}
+
+.exercise-btn.btn-start:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
+.exercise-btn.btn-quiz {
+  background: #8B5CF6;
+  color: #FFFFFF;
+  box-shadow: 2px 2px 0px var(--ink);
+}
+
+.exercise-btn.btn-quiz:hover {
+  background: #7C3AED;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--ink);
+}
+
+.exercise-btn.btn-code {
+  background: #05D380;
+  color: #18181B;
+  box-shadow: 2px 2px 0px var(--ink);
+}
+
+.exercise-btn.btn-code:hover {
+  background: #10B981;
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--ink);
+}
+
+.exercise-btn.btn-locked {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border-color: var(--border-subtle);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ─── Track Divider Banners & Capstone Cards ─────────────────── */
+.track-divider-banner {
+  background: linear-gradient(135deg, #18181B 0%, #27272A 100%);
+  color: #FFFFFF;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin: 2.25rem 0 1.25rem;
+  box-shadow: 4px 4px 0px var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.track-divider-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.track-divider-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 2px solid #3F3F46;
+  background: #121316;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-divider-title {
+  font-family: var(--font-ui);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.track-divider-desc {
+  font-size: 0.85rem;
+  color: #A1A1AA;
+}
+
+.capstone-hub-banner {
+  background: linear-gradient(135deg, #FFFDF5 0%, #FEF3C7 100%);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  padding: 1.5rem 1.6rem;
+  margin: 2rem 0 1.5rem;
+  box-shadow: 5px 5px 0px var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.capstone-hub-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.capstone-hub-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 2.5px solid var(--ink);
+  background: #FFE600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0px var(--ink);
+  flex-shrink: 0;
+}
+
+.capstone-hub-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #B45309;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.capstone-hub-title {
+  font-family: var(--font-ui);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 2px 0 4px;
+}
+
+.capstone-hub-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  max-width: 500px;
+}
+
+.capstone-launch-btn {
+  background: #FFE600;
+  color: #18181B;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: 2.5px solid var(--ink);
+  box-shadow: 3px 3px 0px var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--t);
+}
+
+.capstone-launch-btn:hover {
+  background: #FFF04D;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--ink);
+}
+
+/* ─── Right Column: Sticky Student HUD Sidebar ───────────────── */
+.course-hud-sidebar {
+  position: sticky;
+  top: calc(var(--navbar-h) + 1.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hud-card {
+  background: var(--bg-surface);
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0px var(--ink);
+  padding: 1.35rem;
+}
+
+/* Card 1: Profile */
+.hud-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hud-avatar-frame {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+  background: var(--bg-secondary);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 2px 2px 0px var(--ink);
+  flex-shrink: 0;
+}
+
+.hud-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.hud-profile-name {
+  font-family: var(--font-ui);
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hud-profile-rank {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-3);
+  margin: 2px 0 6px;
+}
+
+.hud-view-profile-btn {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink);
+  background: var(--bg-surface);
+  color: var(--text-1);
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0px var(--ink);
+  display: inline-block;
+  transition: all var(--t);
+}
+
+.hud-view-profile-btn:hover {
+  background: var(--codedex-yellow);
+  transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0px var(--ink);
+}
+
+/* Card 2: Progress */
+.hud-card-title {
+  font-family: var(--font-ui);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--text-1);
+  margin-bottom: 0.9rem;
+}
+
+.hud-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-2);
+  margin-bottom: 0.4rem;
+}
+
+.hud-progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--ink);
+  overflow: hidden;
+  margin-bottom: 0.95rem;
+}
+
+.hud-progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.hud-progress-bar.bar-emerald {
+  background: var(--codedex-green);
+}
+
+.hud-progress-bar.bar-amber {
+  background: #F59E0B;
+}
+
+/* Card 3: Badges Shelf */
+.hud-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.hud-card-header-link {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-1);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.hud-badges-sub {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+  line-height: 1.4;
+}
+
+.hud-badges-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.45rem;
+}
+
+.hud-badge-slot {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 1px 1px 0px var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.hud-badge-slot:hover {
+  transform: scale(1.08);
+}
+
+.hud-badge-slot.unlocked {
+  background: #FFFFFF;
+}
+
+.hud-badge-slot.locked {
+  background: #27272A;
+  opacity: 0.65;
+}
+
+.hud-badge-slot svg {
+  width: 26px;
+  height: 26px;
+  image-rendering: pixelated;
+}
+
+/* Card 4: Reference / Cheatsheets */
+.hud-ref-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hud-ref-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-subtle);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-1);
+  transition: all var(--t);
+}
+
+.hud-ref-item:hover {
+  border-color: var(--ink);
+  background: var(--bg-card-hover);
+  transform: translateX(2px);
+  box-shadow: 2px 2px 0px var(--ink);
+}
+
+.hud-ref-item svg {
+  stroke: var(--text-3);
+  transition: stroke 0.15s, transform 0.15s;
+}
+
+.hud-ref-item:hover svg {
+  stroke: var(--ink);
+  transform: translateX(2px);
+}
+
+/* ─── Developer Cheatsheet Modal ─────────────────────────────── */
+.cheatsheet-modal {
+  width: min(840px, 94vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.cheatsheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.6rem;
+  border-bottom: 2.5px solid var(--ink);
+  background: var(--bg-elevated);
+}
+
+.cheatsheet-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1.5px solid #2563EB;
+  letter-spacing: 0.05em;
+}
+
+.cheatsheet-title {
+  font-family: var(--font-ui);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-1);
+  padding: 1rem 1.6rem 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.cheatsheet-content {
+  padding: 0 1.6rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cheatsheet-section {
+  border-bottom: 1.5px solid var(--border-subtle);
+  padding-bottom: 1.15rem;
+}
+.cheatsheet-section:last-child {
+  border-bottom: none;
+}
+
+.cheatsheet-section-title {
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-1);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cheatsheet-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.88rem;
+  margin-top: 0.5rem;
+}
+
+.cheatsheet-table th {
+  background: var(--bg-secondary);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 1.5px solid var(--border-subtle);
+  color: var(--text-2);
+}
+
+.cheatsheet-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-1);
+}
+.cheatsheet-table tr:last-child td {
+  border-bottom: none;
+}
+
+.cheatsheet-code-block {
+  font-family: var(--font-code, monospace);
+  font-size: 0.85rem;
+  background: #18191D;
+  color: #F4F4F5;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  overflow-x: auto;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.cheatsheet-footer {
+  padding: 1rem 1.6rem;
+  border-top: 2px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ─── Trophy Hall Badge Filters & Cards ──────────────────────── */
+.badge-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 1.25rem auto 2.25rem;
+  max-width: 650px;
+}
+
+.badge-filter-btn {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.45rem 1.15rem;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  background: var(--bg-surface);
+  color: var(--text-2);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--ink);
+  transition: all var(--t);
+  user-select: none;
+}
+
+.badge-filter-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--ink);
+  background: var(--bg-card-hover);
+  color: var(--text-1);
+}
+
+.badge-filter-btn.active {
+  background: var(--ink);
+  color: #FFFFFF;
+  box-shadow: 0 0 0px transparent;
+  transform: translate(1px, 1px);
+}
+
+/* Badge Rarity Glow Accents */
+.badge-card.rarity-common.unlocked:hover {
+  border-color: #059669;
+  box-shadow: 5px 5px 0px #059669;
+}
+
+.badge-card.rarity-rare.unlocked:hover {
+  border-color: #2563EB;
+  box-shadow: 5px 5px 0px #2563EB;
+}
+
+.badge-card.rarity-epic.unlocked:hover {
+  border-color: #9333EA;
+  box-shadow: 5px 5px 0px #9333EA;
+}
+
+.badge-card.rarity-legendary.unlocked:hover {
+  border-color: #D97706;
+  box-shadow: 5px 5px 0px #D97706;
+}
+
+/* ─── Dark Theme Overrides for Course Hub ────────────────────── */
+body.dark-theme .course-hero-cavern {
+  border-color: #000000;
+  box-shadow: 6px 6px 0px #000000;
+}
+
+body.dark-theme .btn-resume-learning {
+  border-color: #000000;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+body.dark-theme .btn-resume-learning:hover {
+  box-shadow: 6px 6px 0px #000000;
+}
+
+body.dark-theme .track-tab-btn {
+  background: #1E1F24;
+  color: #E4E4E7;
+  border-color: #000000;
+  box-shadow: 2.5px 2.5px 0px #000000;
+}
+
+body.dark-theme .track-tab-btn:hover {
+  background: #282A30;
+  color: #F4F4F5;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+body.dark-theme .track-tab-btn.active {
+  background: #FFE600;
+  color: #121316;
+  border-color: #000000;
+  box-shadow: 0 0 0px transparent;
+}
+
+body.dark-theme .track-tab-btn.active .tab-badge-count {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+body.dark-theme .chapter-accordion-card {
+  background: #1E1F24;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+body.dark-theme .chapter-accordion-card:hover {
+  box-shadow: 5px 5px 0px #000000;
+}
+
+body.dark-theme .chapter-header {
+  background: #1E1F24;
+}
+
+body.dark-theme .chapter-header:hover {
+  background: #282A30;
+}
+
+body.dark-theme .chapter-accordion-card.open .chapter-body {
+  background: #1E1F24;
+  border-top-color: #27272A;
+}
+
+body.dark-theme .chapter-chevron {
+  background: #1E1F24;
+  border-color: #000000;
+  box-shadow: 1px 1px 0px #000000;
+  color: #F4F4F5;
+}
+
+body.dark-theme .chapter-accordion-card.open .chapter-chevron {
+  background: #FFE600;
+  color: #121316;
+}
+
+body.dark-theme .chapter-progress-pill {
+  background: #18191D;
+  border-color: #000000;
+  color: #A1A1AA;
+}
+
+body.dark-theme .chapter-progress-pill.all-done {
+  background: #064E3B;
+  color: #6EE7B7;
+  border-color: #059669;
+}
+
+body.dark-theme .exercise-row {
+  background: #18191D;
+  border-color: #27272A;
+}
+
+body.dark-theme .exercise-row:hover {
+  background: #24262C;
+  border-color: #000000;
+}
+
+body.dark-theme .exercise-row.status-done {
+  background: rgba(5, 211, 128, 0.08);
+  border-color: rgba(5, 211, 128, 0.35);
+}
+
+body.dark-theme .exercise-row.status-available {
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .exercise-row.status-locked {
+  background: #141518;
+}
+
+body.dark-theme .exercise-btn {
+  border-color: #000000;
+}
+
+body.dark-theme .exercise-btn.btn-done {
+  background: #064E3B;
+  color: #6EE7B7;
+  border-color: #059669;
+  box-shadow: 1.5px 1.5px 0px #059669;
+}
+
+body.dark-theme .exercise-btn.btn-start {
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .exercise-btn.btn-quiz {
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .exercise-btn.btn-code {
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .exercise-btn.btn-locked {
+  background: #18191D;
+  border-color: #27272A;
+}
+
+body.dark-theme .hud-card {
+  background: #1E1F24;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+body.dark-theme .hud-avatar-frame {
+  background: #18191D;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .hud-view-profile-btn {
+  background: #18191D;
+  color: #F4F4F5;
+  border-color: #000000;
+  box-shadow: 1.5px 1.5px 0px #000000;
+}
+
+body.dark-theme .hud-view-profile-btn:hover {
+  background: #FFE600;
+  color: #121316;
+}
+
+body.dark-theme .hud-progress-track {
+  background: #18191D;
+  border-color: #000000;
+}
+
+body.dark-theme .hud-badge-slot {
+  border-color: #000000;
+  box-shadow: 1px 1px 0px #000000;
+}
+
+body.dark-theme .hud-badge-slot.unlocked {
+  background: #24262C;
+}
+
+body.dark-theme .hud-ref-item {
+  background: #18191D;
+  border-color: #27272A;
+  color: #F4F4F5;
+}
+
+body.dark-theme .hud-ref-item:hover {
+  background: #24262C;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .capstone-hub-banner {
+  background: linear-gradient(135deg, #1E1F24 0%, #29241C 100%);
+  border-color: #000000;
+  box-shadow: 5px 5px 0px #000000;
+}
+
+body.dark-theme .capstone-hub-title {
+  color: #F4F4F5;
+}
+
+body.dark-theme .capstone-hub-desc {
+  color: #A1A1AA;
+}
+
+body.dark-theme .capstone-launch-btn {
+  border-color: #000000;
+  box-shadow: 3px 3px 0px #000000;
+}
+
+body.dark-theme .cheatsheet-header,
+body.dark-theme .cheatsheet-footer {
+  background: #18191D;
+  border-color: #27272A;
+}
+
+body.dark-theme .cheatsheet-table th {
+  background: #18191D;
+  border-color: #27272A;
+  color: #E4E4E7;
+}
+
+body.dark-theme .cheatsheet-table td {
+  border-color: #27272A;
+  color: #F4F4F5;
+}
+
+body.dark-theme .badge-filter-btn {
+  background: #1E1F24;
+  color: #E4E4E7;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .badge-filter-btn:hover {
+  background: #282A30;
+  color: #F4F4F5;
+  box-shadow: 3px 3px 0px #000000;
+}
+
+body.dark-theme .badge-filter-btn.active {
+  background: #FFE600;
+  color: #121316;
+  border-color: #000000;
+  box-shadow: 0 0 0px transparent;
+}
+
+/* ─── Responsive Breakpoints ─────────────────────────────────── */
+@media (max-width: 980px) {
+  .course-hub-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .course-hud-sidebar {
+    position: static;
+  }
+  .course-hero-cavern {
+    padding: 2.25rem 1.75rem 2rem;
+  }
+  .hero-course-title {
+    font-size: 2.6rem;
+  }
+  .capstone-hub-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .course-hub-container {
+    padding: 0.5rem 1rem 3rem;
+  }
+  .course-hero-cavern {
+    padding: 1.75rem 1.25rem 1.5rem;
+    border-radius: 16px;
+  }
+  .hero-course-title {
+    font-size: 2.2rem;
+  }
+  .exercise-row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding: 0.85rem;
+  }
+  .exercise-col-num {
+    display: none;
+  }
+  .exercise-col-action {
+    width: 100%;
+  }
+  .exercise-btn {
+    width: 100%;
+  }
+  .track-divider-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

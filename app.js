@@ -948,6 +948,134 @@ var MINECRAFT_BADGES = {
       ['#18181B', '#3F3F46', '#52525B', '#27272A', '#18181B', '#27272A', '#52525B', '#18181B'],
       ['#3F3F46', '#27272A', '#18181B', '#3F3F46', '#27272A', '#3F3F46', '#18181B', '#27272A']
     ]
+  },
+  oak_sign: {
+    id: 'oak_sign',
+    name: 'Oak Sign',
+    rarity: 'COMMON',
+    rarityColor: '#10B981',
+    grid: [
+      ['#8B5A2B','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#8B5A2B'],
+      ['#CD853F','#8B5A2B','#5C3A21','#5C3A21','#5C3A21','#5C3A21','#8B5A2B','#CD853F'],
+      ['#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F'],
+      ['#CD853F','#8B5A2B','#5C3A21','#5C3A21','#5C3A21','#8B5A2B','#CD853F','#CD853F'],
+      ['#8B5A2B','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#CD853F','#8B5A2B'],
+      ['transparent','transparent','transparent','#5C3A21','#8B5A2B','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','#5C3A21','#8B5A2B','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','#5C3A21','#8B5A2B','transparent','transparent','transparent']
+    ]
+  },
+  stone_pickaxe: {
+    id: 'stone_pickaxe',
+    name: 'Stone Pickaxe',
+    rarity: 'COMMON',
+    rarityColor: '#10B981',
+    grid: [
+      ['transparent','#4B5563','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#4B5563','transparent'],
+      ['#4B5563','#9CA3AF','transparent','transparent','#5C3A21','transparent','transparent','#4B5563'],
+      ['transparent','transparent','transparent','#6E4720','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','#6E4720','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','#6E4720','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['#5C3A21','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+    ]
+  },
+  redstone_block: {
+    id: 'redstone_block',
+    name: 'Redstone Repeater',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['#7F1D1D','#DC2626','#EF4444','#EF4444','#DC2626','#EF4444','#DC2626','#7F1D1D'],
+      ['#DC2626','#EF4444','#B91C1C','#DC2626','#EF4444','#B91C1C','#EF4444','#DC2626'],
+      ['#EF4444','#B91C1C','#EF4444','#EF4444','#DC2626','#EF4444','#DC2626','#EF4444'],
+      ['#EF4444','#DC2626','#EF4444','#7F1D1D','#B91C1C','#DC2626','#EF4444','#EF4444'],
+      ['#DC2626','#EF4444','#DC2626','#B91C1C','#EF4444','#EF4444','#DC2626','#DC2626'],
+      ['#EF4444','#B91C1C','#EF4444','#EF4444','#DC2626','#B91C1C','#EF4444','#EF4444'],
+      ['#DC2626','#EF4444','#DC2626','#B91C1C','#EF4444','#EF4444','#B91C1C','#DC2626'],
+      ['#7F1D1D','#DC2626','#EF4444','#DC2626','#DC2626','#EF4444','#DC2626','#7F1D1D']
+    ]
+  },
+  minecart: {
+    id: 'minecart',
+    name: 'Iron Minecart',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','#4B5563','transparent','transparent','transparent','transparent','#4B5563','transparent'],
+      ['#4B5563','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#4B5563'],
+      ['#4B5563','#D1D5DB','#4B5563','#4B5563','#4B5563','#4B5563','#D1D5DB','#4B5563'],
+      ['#374151','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#9CA3AF','#374151'],
+      ['transparent','#4B5563','#4B5563','#4B5563','#4B5563','#4B5563','#4B5563','transparent'],
+      ['transparent','#111827','#374151','transparent','transparent','#111827','#374151','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+    ]
+  },
+  iron_shield: {
+    id: 'iron_shield',
+    name: 'Iron Shield',
+    rarity: 'RARE',
+    rarityColor: '#3B82F6',
+    grid: [
+      ['#374151','#9CA3AF','#D1D5DB','#D1D5DB','#D1D5DB','#D1D5DB','#9CA3AF','#374151'],
+      ['#9CA3AF','#CD853F','#8B5A2B','#D1D5DB','#D1D5DB','#8B5A2B','#CD853F','#9CA3AF'],
+      ['#9CA3AF','#CD853F','#8B5A2B','#D1D5DB','#D1D5DB','#8B5A2B','#CD853F','#9CA3AF'],
+      ['#9CA3AF','#8B5A2B','#8B5A2B','#D1D5DB','#D1D5DB','#8B5A2B','#8B5A2B','#9CA3AF'],
+      ['#4B5563','#CD853F','#8B5A2B','#8B5A2B','#8B5A2B','#8B5A2B','#CD853F','#4B5563'],
+      ['transparent','#4B5563','#CD853F','#8B5A2B','#8B5A2B','#CD853F','#4B5563','transparent'],
+      ['transparent','transparent','#374151','#4B5563','#4B5563','#374151','transparent','transparent'],
+      ['transparent','transparent','transparent','#1F2937','#1F2937','transparent','transparent','transparent']
+    ]
+  },
+  golden_clock: {
+    id: 'golden_clock',
+    name: 'Golden Clock',
+    rarity: 'EPIC',
+    rarityColor: '#A855F7',
+    grid: [
+      ['transparent','transparent','#D97706','#F59E0B','#F59E0B','#D97706','transparent','transparent'],
+      ['transparent','#D97706','#FEF3C7','#FBBF24','#FBBF24','#FEF3C7','#D97706','transparent'],
+      ['#D97706','#FEF3C7','#38BDF8','#60A5FA','#1E3A8A','#1E293B','#FEF3C7','#D97706'],
+      ['#F59E0B','#FBBF24','#60A5FA','#FCD34D','#1F2937','#0F172A','#FBBF24','#F59E0B'],
+      ['#F59E0B','#FBBF24','#1E3A8A','#0F172A','#FCD34D','#38BDF8','#FBBF24','#F59E0B'],
+      ['#D97706','#FEF3C7','#0F172A','#0F172A','#60A5FA','#38BDF8','#FEF3C7','#D97706'],
+      ['transparent','#D97706','#FEF3C7','#FBBF24','#FBBF24','#FEF3C7','#D97706','transparent'],
+      ['transparent','transparent','#D97706','#F59E0B','#F59E0B','#D97706','transparent','transparent']
+    ]
+  },
+  brewing_stand: {
+    id: 'brewing_stand',
+    name: 'Brewing Stand',
+    rarity: 'EPIC',
+    rarityColor: '#A855F7',
+    grid: [
+      ['transparent','transparent','transparent','#F59E0B','#F59E0B','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','#D97706','#D97706','transparent','transparent','transparent'],
+      ['transparent','#EF4444','transparent','#B45309','#B45309','transparent','#A855F7','transparent'],
+      ['transparent','#FCA5A5','#EF4444','#78350F','#78350F','#C084FC','#A855F7','transparent'],
+      ['transparent','transparent','#4B5563','#6B7280','#6B7280','#4B5563','transparent','transparent'],
+      ['transparent','#374151','#6B7280','#9CA3AF','#9CA3AF','#6B7280','#374151','transparent'],
+      ['#374151','#4B5563','#6B7280','#6B7280','#6B7280','#6B7280','#4B5563','#374151'],
+      ['#1F2937','#374151','#374151','#374151','#374151','#374151','#374151','#1F2937']
+    ]
+  },
+  dragon_egg: {
+    id: 'dragon_egg',
+    name: 'Ender Dragon Egg',
+    rarity: 'LEGENDARY',
+    rarityColor: '#F59E0B',
+    grid: [
+      ['transparent','transparent','transparent','#111827','#111827','transparent','transparent','transparent'],
+      ['transparent','transparent','#111827','#1F2937','#C084FC','#111827','transparent','transparent'],
+      ['transparent','#111827','#1F2937','#111827','#1F2937','#111827','#111827','transparent'],
+      ['#111827','#1F2937','#A855F7','#1F2937','#1F2937','#A855F7','#1F2937','#111827'],
+      ['#111827','#1F2937','#1F2937','#C084FC','#1F2937','#1F2937','#1F2937','#111827'],
+      ['#111827','#111827','#1F2937','#1F2937','#1F2937','#111827','#111827','#111827'],
+      ['transparent','#111827','#111827','#A855F7','#111827','#111827','#111827','transparent'],
+      ['transparent','transparent','#111827','#111827','#111827','#111827','transparent','transparent']
+    ]
   }
 };
 
@@ -967,7 +1095,15 @@ var BADGE_MINECRAFT_MAP = {
   'beginner-done': 'iron_ingot',
   'inter-done': 'diamond_sword',
   'advanced-done': 'netherite_ingot',
-  'all-modules': 'totem_undying'
+  'all-modules': 'totem_undying',
+  'hello-world': 'oak_sign',
+  'syntax-miner': 'stone_pickaxe',
+  'redstone-logician': 'redstone_block',
+  'loop-runner': 'minecart',
+  'shield-bearer': 'iron_shield',
+  'clockwork-coder': 'golden_clock',
+  'brewing-master': 'brewing_stand',
+  'totem-undying': 'dragon_egg'
 };
 
 function drawAvatar(el, av) {
@@ -1160,153 +1296,457 @@ function markModuleCompleteIfReady(mod) {
   }
 }
 
+var _activeTrackFilter = 'all';
+
+function setTrackFilter(trackKey) {
+  _activeTrackFilter = trackKey;
+  qsa('.track-tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-track') === trackKey);
+  });
+  renderMap();
+}
+
 function renderMap() {
-  var path = ge('module-path');
-  if (!path) return;
-  var allMods = getModulesForDifficulty();
+  var container = ge('chapters-accordion');
+  if (!container) return;
+
+  var allMods = window.CURRICULUM || (typeof CURRICULUM !== 'undefined' ? CURRICULUM : []);
   if (!allMods.length) {
-    path.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.4);padding:2rem">Loading curriculum…</p>';
+    container.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,.4);padding:2rem">Loading curriculum…</p>';
     return;
   }
 
-  // Update banner
-  var banner = ge('diff-path-banner');
-  if (banner) {
-    var p = STATE.player;
-    banner.innerHTML = '<span class="diff-banner-tag">' + (DIFFICULTY_LABELS[p.difficulty] || 'Beginner') + '</span> '
-      + '<span class="diff-banner-info">' + allMods.length + ' modules available</span> — '
-      + '<a class="diff-banner-link" id="map-change-diff">Change difficulty</a>';
-    var cd = ge('map-change-diff');
-    if (cd) cd.addEventListener('click', function(e){ e.preventDefault(); openDiffModal(); });
+  // Update Hero Banner Tag & Resume Button
+  var trackTag = ge('hero-track-tag');
+  if (trackTag) {
+    if (_activeTrackFilter === 'all') trackTag.textContent = 'ALL TRACKS (OVERWORLD • NETHER • END)';
+    else if (_activeTrackFilter === 'beginner') trackTag.textContent = 'TRACK 1 • OVERWORLD (BEGINNER)';
+    else if (_activeTrackFilter === 'intermediate') trackTag.textContent = 'TRACK 2 • THE NETHER (INTERMEDIATE)';
+    else if (_activeTrackFilter === 'advanced') trackTag.textContent = 'TRACK 3 • THE END (ADVANCED)';
   }
 
-  path.innerHTML = '';
-
-  var tracks = [
-    { key: 'beginner', title: 'Beginner Track — Foundations & Core Java', desc: 'Modules B1–B8 • Java syntax, control flow, methods, arrays & OOP fundamentals', projId: 'proj-beginner', badge: 'TRACK 1 • BEGINNER' },
-    { key: 'intermediate', title: 'Intermediate Track — OOP, Streams & Architecture', desc: 'Modules I1–I8 • Streams, Lambdas, JDBC, Concurrency, JUnit & Collections', projId: 'proj-intermediate', badge: 'TRACK 2 • INTERMEDIATE' },
-    { key: 'advanced', title: 'Advanced Track — JVM Internals & Cloud Enterprise', desc: 'Modules A1–A8 • Virtual Threads, Spring Boot, Security & Microservices', projId: 'proj-advanced', badge: 'TRACK 3 • ADVANCED' }
-  ];
-
-  tracks.forEach(function(tr){
-    var modsInTrack = allMods.filter(function(m){ return m.level === tr.key; });
-    if (!modsInTrack.length) return;
-
-    // Track Section Header Card (Neobrutalist, clean, NO photo)
-    var header = document.createElement('div');
-    header.className = 'track-section-header';
-    header.innerHTML = '<div class="track-header-card">'
-      + '<span class="track-header-badge">' + tr.badge + '</span>'
-      + '<div class="track-header-title">' + esc(tr.title) + '</div>'
-      + '<div class="track-header-desc">' + esc(tr.desc) + '</div>'
-      + '</div>';
-    path.appendChild(header);
-
-    // Track Nodes Path Container
-    var trackNodes = document.createElement('div');
-    trackNodes.className = 'track-nodes-row';
-
-    modsInTrack.forEach(function(mod){
-      var completed = (STATE.player.completedModules || []).indexOf(mod.id) !== -1;
-      var unlocked = isModUnlocked(mod.id);
-      var st = completed ? 'completed' : unlocked ? 'available' : 'locked';
-
-      var wrap = document.createElement('div');
-      wrap.className = 'module-node-wrap';
-
-      var node = document.createElement('div');
-      node.className = 'module-node ' + st;
-      node.style.setProperty('--node-color', mod.color || '#6C63FF');
-
-      var codeBadge = document.createElement('div');
-      codeBadge.className = 'module-code-pill';
-      codeBadge.textContent = (mod.code || mod.id).toUpperCase();
-
-      var btn = document.createElement('div');
-      btn.className = 'module-node-btn';
-
-      if (st === 'locked') {
-        btn.innerHTML = '<span class="lock-overlay"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>';
-      } else {
-        btn.innerHTML = '<span class="node-code-text">' + esc((mod.code || mod.id).toUpperCase()) + '</span>';
-        if (completed) {
-          var ck = document.createElement('div');
-          ck.className = 'check-overlay';
-          ck.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-          btn.appendChild(ck);
+  // Wire Resume Learning Button to jump to next unfinished lesson
+  var resumeBtn = ge('btn-resume-quest');
+  if (resumeBtn) {
+    resumeBtn.onclick = function() {
+      for (var i = 0; i < allMods.length; i++) {
+        var m = allMods[i];
+        if (!isModUnlocked(m.id)) continue;
+        for (var j = 0; j < m.lessons.length; j++) {
+          if ((STATE.player.completedLessons || []).indexOf(m.lessons[j].id) === -1) {
+            startLesson(m.id, m.lessons[j].id);
+            return;
+          }
         }
-        btn.setAttribute('data-modid', mod.id);
-        btn.addEventListener('click', function(e){
-          e.stopPropagation();
-          openModulePopup(this.getAttribute('data-modid'));
-        });
+        if (m.challenge && (STATE.player.completedChallenges || []).indexOf(m.challenge.id) === -1) {
+          startChallenge(m.id);
+          return;
+        }
+        if (m.codingTask && (STATE.player.completedCoding || []).indexOf(m.id) === -1) {
+          startCodingChallenge(m.id);
+          return;
+        }
+      }
+      toast('All available curriculum completed! Awesome job!');
+    };
+  }
+
+  // Update Track Switcher Tabs click handlers
+  qsa('.track-tab-btn').forEach(function(b){
+    b.onclick = function() {
+      setTrackFilter(this.getAttribute('data-track'));
+    };
+  });
+
+  // Filter modules by track
+  var filteredMods = allMods;
+  if (_activeTrackFilter !== 'all') {
+    filteredMods = allMods.filter(function(m){ return m.level === _activeTrackFilter; });
+  }
+
+  container.innerHTML = '';
+
+  var trackMeta = {
+    beginner: { name: 'Track 1: Overworld', sub: 'Foundations, Syntax, Control Flow & Core OOP', icon: '🌱', color: '#10B981', capstoneId: 'proj-beginner' },
+    intermediate: { name: 'Track 2: The Nether', sub: 'Deep OOP, Collections, Streams, I/O & Concurrency', icon: '🔥', color: '#F59E0B', capstoneId: 'proj-intermediate' },
+    advanced: { name: 'Track 3: The End', sub: 'JVM Internals, Virtual Threads, Spring Boot & Cloud', icon: '🌌', color: '#8B5CF6', capstoneId: 'proj-advanced' }
+  };
+
+  var currentTrack = null;
+  var foundFirstActive = false;
+
+  filteredMods.forEach(function(mod, modIdx){
+    // Track transition banner when viewing All Tracks
+    if (_activeTrackFilter === 'all' && mod.level !== currentTrack) {
+      currentTrack = mod.level;
+      var tm = trackMeta[currentTrack];
+      if (tm) {
+        var trHeader = document.createElement('div');
+        trHeader.className = 'track-divider-banner';
+        trHeader.style.setProperty('--track-accent', tm.color);
+        trHeader.innerHTML = '<div class="track-divider-left">'
+          + '<span class="track-divider-icon">' + tm.icon + '</span>'
+          + '<div>'
+          + '<div class="track-divider-title">' + tm.name + '</div>'
+          + '<div class="track-divider-sub">' + tm.sub + '</div>'
+          + '</div>'
+          + '</div>'
+          + '<span class="track-divider-pill">8 CHAPTERS</span>';
+        container.appendChild(trHeader);
+      }
+    }
+
+    var isCompleted = (STATE.player.completedModules || []).indexOf(mod.id) !== -1;
+    var isUnlocked = isModUnlocked(mod.id);
+    var statusKey = isCompleted ? 'completed' : (isUnlocked ? 'available' : 'locked');
+
+    var totalEx = mod.lessons.length + (mod.challenge ? 1 : 0) + (mod.codingTask ? 1 : 0);
+    var doneEx = 0;
+    mod.lessons.forEach(function(l){
+      if ((STATE.player.completedLessons || []).indexOf(l.id) !== -1) doneEx++;
+    });
+    if (mod.challenge && (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) !== -1) doneEx++;
+    if (mod.codingTask && (STATE.player.completedCoding || []).indexOf(mod.id) !== -1) doneEx++;
+
+    var shouldExpand = false;
+    if (isUnlocked && !isCompleted && !foundFirstActive) {
+      shouldExpand = true;
+      foundFirstActive = true;
+    }
+
+    var card = document.createElement('div');
+    card.className = 'chapter-accordion-card ' + statusKey + (shouldExpand ? ' expanded' : '');
+    card.id = 'chapter-card-' + mod.id;
+
+    var statusIconHtml = '';
+    if (isCompleted) {
+      statusIconHtml = '<div class="chapter-status-dot completed" title="Chapter Completed">'
+        + '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+        + '</div>';
+    } else if (isUnlocked) {
+      statusIconHtml = '<div class="chapter-status-dot active" title="In Progress">'
+        + '<span class="chapter-dot-num">' + (mod.code || (modIdx + 1)) + '</span>'
+        + '</div>';
+    } else {
+      statusIconHtml = '<div class="chapter-status-dot locked" title="Locked">'
+        + '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#71717A" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+        + '</div>';
+    }
+
+    var headerHtml = '<div class="chapter-header" data-modid="' + mod.id + '">'
+      + '<div class="chapter-header-left">'
+      + statusIconHtml
+      + '<div class="chapter-title-group">'
+      + '<div class="chapter-heading-row">'
+      + '<span class="chapter-code-badge">' + (mod.code || mod.id).toUpperCase() + '</span>'
+      + '<h3 class="chapter-title">' + esc(mod.title) + '</h3>'
+      + '</div>'
+      + '<p class="chapter-desc">' + esc(mod.subtitle || '') + '</p>'
+      + '</div>'
+      + '</div>'
+      + '<div class="chapter-header-right">'
+      + '<span class="chapter-progress-pill ' + (isCompleted ? 'pill-done' : '') + '">' + doneEx + ' / ' + totalEx + ' Done</span>'
+      + '<span class="chapter-chevron">▼</span>'
+      + '</div>'
+      + '</div>';
+
+    var bodyHtml = '<div class="chapter-body">';
+    bodyHtml += '<div class="exercise-table">';
+
+    // Lessons
+    mod.lessons.forEach(function(lesson, lIdx){
+      var lDone = (STATE.player.completedLessons || []).indexOf(lesson.id) !== -1;
+      var lUnlocked = isLessonUnlocked(mod.id, lesson.id);
+
+      var btnHtml = '';
+      if (lDone) {
+        btnHtml = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">Done! ✓</button>';
+      } else if (lUnlocked) {
+        btnHtml = '<button class="exercise-btn btn-start" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">Start →</button>';
+      } else {
+        btnHtml = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
       }
 
-      var label = document.createElement('div');
-      label.className = 'module-node-label';
-      label.textContent = mod.title;
-
-      node.appendChild(codeBadge);
-      node.appendChild(btn);
-      node.appendChild(label);
-      wrap.appendChild(node);
-      trackNodes.appendChild(wrap);
+      bodyHtml += '<div class="exercise-row ' + (lDone ? 'row-done' : (lUnlocked ? 'row-active' : 'row-locked')) + '" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">'
+        + '<div class="exercise-col-num">Exercise ' + (lIdx + 1) + '</div>'
+        + '<div class="exercise-col-title">'
+        + '<span class="exercise-name">' + esc(lesson.title) + '</span>'
+        + '<span class="exercise-type-tag tag-lesson">Lesson (+' + lesson.xp + ' XP)</span>'
+        + '</div>'
+        + '<div class="exercise-col-action">' + btnHtml + '</div>'
+        + '</div>';
     });
 
-    path.appendChild(trackNodes);
-
-    // Capstone Project Card at the end of each track (NO photo banner)
-    var proj = (window.PROJECTS || []).find(function(p){ return p.id === tr.projId; });
-    if (proj) {
-      var pState = (STATE && STATE.player && STATE.player.capstoneProjects) ? STATE.player.capstoneProjects[proj.id] : null;
-      var isCompleted = pState && pState.completed;
-      var checkedCount = 0;
-      if (pState && pState.tasks) {
-        checkedCount = Object.keys(pState.tasks).filter(function(k){ return pState.tasks[k]; }).length;
-      }
-      var totalReqs = (proj.requirements || []).length;
-
-      var pCard = document.createElement('div');
-      var cardClasses = 'capstone-project-card glass-card';
-      if (isCompleted) cardClasses += ' capstone-card-completed';
-      else if (checkedCount > 0) cardClasses += ' capstone-card-in-progress';
-      pCard.className = cardClasses;
-      pCard.setAttribute('data-projid', proj.id);
-
-      var pillText = tr.key.toUpperCase() + ' CAPSTONE PROJECT';
-      var actionBtnText = 'View Project';
-      var descText = proj.description;
-
-      if (isCompleted) {
-        pillText = tr.key.toUpperCase() + ' CAPSTONE • COMPLETED (+' + (proj.xpReward || 250) + ' XP)';
-        actionBtnText = 'Review Project';
-        descText = 'Milestone requirements verified! ' + (pState.completedAt ? 'Completed on ' + new Date(pState.completedAt).toLocaleDateString() : 'Claimed!');
-      } else if (checkedCount > 0) {
-        pillText = tr.key.toUpperCase() + ' CAPSTONE • IN PROGRESS (' + checkedCount + '/' + totalReqs + ' Tasks)';
-        actionBtnText = 'Continue Project';
+    // Quiz Challenge
+    if (mod.challenge) {
+      var qDone = (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) !== -1;
+      var qUnlocked = isUnlocked && doneEx >= mod.lessons.length;
+      var qBtn = '';
+      if (qDone) {
+        qBtn = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-type="quiz">Done! ✓</button>';
+      } else if (qUnlocked) {
+        qBtn = '<button class="exercise-btn btn-quiz" data-mid="' + mod.id + '" data-type="quiz">Quiz (+' + mod.challenge.xp + ' XP) →</button>';
+      } else {
+        qBtn = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
       }
 
-      pCard.innerHTML = '<div class="capstone-header-row">'
-        + '<span class="capstone-tag-pill">' + pillText + '</span>'
-        + '<span class="capstone-badge-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>'
+      bodyHtml += '<div class="exercise-row ' + (qDone ? 'row-done' : (qUnlocked ? 'row-active' : 'row-locked')) + '" data-mid="' + mod.id + '" data-type="quiz">'
+        + '<div class="exercise-col-num">Quiz Challenge</div>'
+        + '<div class="exercise-col-title">'
+        + '<span class="exercise-name">Knowledge Check: ' + esc(mod.title) + '</span>'
+        + '<span class="exercise-type-tag tag-quiz">Evaluation (+' + mod.challenge.xp + ' XP)</span>'
         + '</div>'
-        + '<h3 class="capstone-card-title">' + esc(proj.title) + '</h3>'
-        + '<p class="capstone-card-desc">' + esc(descText) + '</p>'
-        + '<div class="capstone-progress-row">'
-        + '<div class="capstone-prog-bar"><div class="capstone-prog-fill" style="width:' + (totalReqs ? Math.round(checkedCount/totalReqs*100) : 0) + '%"></div></div>'
-        + '<span class="capstone-prog-label">' + checkedCount + '/' + totalReqs + ' Verified</span>'
-        + '</div>'
-        + '<div class="capstone-action">'
-        + '<button class="btn-primary btn-sm capstone-view-btn" data-projid="' + proj.id + '">' + actionBtnText + '</button>'
+        + '<div class="exercise-col-action">' + qBtn + '</div>'
         + '</div>';
+    }
 
-      pCard.addEventListener('click', function(e){
-        var pid = this.getAttribute('data-projid');
-        openProjectModal(pid);
+    // Coding Workbench
+    if (mod.codingTask) {
+      var cDone = (STATE.player.completedCoding || []).indexOf(mod.id) !== -1;
+      var cUnlocked = isUnlocked && doneEx >= mod.lessons.length;
+      var cBtn = '';
+      if (cDone) {
+        cBtn = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-type="code">Solved! ✓</button>';
+      } else if (cUnlocked) {
+        cBtn = '<button class="exercise-btn btn-code" data-mid="' + mod.id + '" data-type="code">Code (+' + (mod.codingTask.xp || 75) + ' XP) →</button>';
+      } else {
+        cBtn = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
+      }
+
+      bodyHtml += '<div class="exercise-row ' + (cDone ? 'row-done' : (cUnlocked ? 'row-active' : 'row-locked')) + '" data-mid="' + mod.id + '" data-type="code">'
+        + '<div class="exercise-col-num">Coding Lab</div>'
+        + '<div class="exercise-col-title">'
+        + '<span class="exercise-name">' + esc(mod.codingTask.title) + '</span>'
+        + '<span class="exercise-type-tag tag-code">Live Java Workbench</span>'
+        + '</div>'
+        + '<div class="exercise-col-action">' + cBtn + '</div>'
+        + '</div>';
+    }
+
+    bodyHtml += '</div>';
+    bodyHtml += '</div>';
+
+    card.innerHTML = headerHtml + bodyHtml;
+
+    var hdr = card.querySelector('.chapter-header');
+    if (hdr) {
+      hdr.addEventListener('click', function(e){
+        card.classList.toggle('expanded');
       });
-      path.appendChild(pCard);
+    }
+
+    card.querySelectorAll('.exercise-row').forEach(function(row){
+      row.addEventListener('click', function(e){
+        var mid = this.getAttribute('data-mid');
+        var lid = this.getAttribute('data-lid');
+        var type = this.getAttribute('data-type');
+        if (lid) {
+          if (isLessonUnlocked(mid, lid) || (STATE.player.completedLessons || []).indexOf(lid) !== -1) {
+            startLesson(mid, lid);
+          } else {
+            toast('Complete earlier lessons to unlock this exercise!');
+          }
+        } else if (type === 'quiz') {
+          startChallenge(mid);
+        } else if (type === 'code') {
+          startCodingChallenge(mid);
+        }
+      });
+    });
+
+    container.appendChild(card);
+
+    // Track Capstone Card at the end of each track
+    var isLastInTrack = (modIdx === filteredMods.length - 1) || (filteredMods[modIdx + 1] && filteredMods[modIdx + 1].level !== mod.level);
+    if (isLastInTrack) {
+      var tmObj = trackMeta[mod.level];
+      if (tmObj && tmObj.capstoneId) {
+        var capProj = (window.PROJECTS || []).find(function(p){ return p.id === tmObj.capstoneId; });
+        if (capProj) {
+          var pState = (STATE && STATE.player && STATE.player.capstoneProjects) ? STATE.player.capstoneProjects[capProj.id] : null;
+          var isCapDone = pState && pState.completed;
+          var capCard = document.createElement('div');
+          capCard.className = 'capstone-hub-banner' + (isCapDone ? ' completed' : '');
+          capCard.innerHTML = '<div class="capstone-hub-content">'
+            + '<div class="capstone-hub-header">'
+            + '<span class="capstone-hub-pill">' + mod.level.toUpperCase() + ' CAPSTONE PROJECT</span>'
+            + (isCapDone ? '<span class="capstone-verified-badge">✓ Verified & Claimed</span>' : '<span class="capstone-xp-badge">+' + (capProj.xpReward || 250) + ' XP</span>')
+            + '</div>'
+            + '<h3 class="capstone-hub-title">' + esc(capProj.title) + '</h3>'
+            + '<p class="capstone-hub-desc">' + esc(capProj.description) + '</p>'
+            + '<button class="btn-capstone-hub">' + (isCapDone ? 'Review Project IDE' : 'Launch Capstone Workbench →') + '</button>'
+            + '</div>';
+          capCard.onclick = function() { openProjectModal(capProj.id); };
+          container.appendChild(capCard);
+        }
+      }
     }
   });
+
+  // Render Right Sidebar
+  renderStudentHUD(allMods);
+}
+
+function renderStudentHUD(allMods) {
+  if (!STATE || !STATE.player) return;
+  var p = STATE.player;
+  if (!allMods || !allMods.length) allMods = window.CURRICULUM || (typeof CURRICULUM !== 'undefined' ? CURRICULUM : []);
+
+  // 1. Profile
+  drawAvatar(ge('avatar-display-hud'));
+  setText('hud-player-name', p.name || 'JavaLearner');
+  var lv = getLv();
+  setText('hud-player-rank', 'Level ' + p.level + ' • ' + lv.name);
+  var editBtn = ge('btn-hud-edit-avatar');
+  if (editBtn) editBtn.onclick = function() { showScreen('avatar'); };
+  var frame = ge('hud-avatar-frame');
+  if (frame) frame.onclick = function() { showScreen('avatar'); };
+
+  // 2. Course Progress
+  var totalExercises = 0;
+  var completedExercises = 0;
+  allMods.forEach(function(m){
+    totalExercises += m.lessons.length + (m.challenge ? 1 : 0) + (m.codingTask ? 1 : 0);
+    m.lessons.forEach(function(l){
+      if ((p.completedLessons || []).indexOf(l.id) !== -1) completedExercises++;
+    });
+    if (m.challenge && (p.completedChallenges || []).indexOf(m.challenge.id) !== -1) completedExercises++;
+    if (m.codingTask && (p.completedCoding || []).indexOf(m.id) !== -1) completedExercises++;
+  });
+
+  var pct = totalExercises > 0 ? Math.round(completedExercises / totalExercises * 100) : 0;
+  setText('hud-progress-percent', pct + '%');
+  setText('hud-exercises-val', completedExercises + ' / ' + totalExercises);
+  setWidth('hud-exercises-bar', pct + '%');
+
+  var totalTrackXP = 5200;
+  var xpPct = Math.min(100, Math.round(p.xp / totalTrackXP * 100));
+  setText('hud-xp-val', p.xp + ' / ' + totalTrackXP);
+  setWidth('hud-xp-bar', xpPct + '%');
+
+  // 3. Badges Mini-Grid (Shelf)
+  var shelf = ge('hud-badges-mini-grid');
+  if (shelf && window.BADGES) {
+    shelf.innerHTML = '';
+    setText('hud-badge-count', p.badges.length + ' / ' + BADGES.length);
+
+    // Show first 8 prominent badges
+    var showcaseBadges = BADGES.slice(0, 8);
+    showcaseBadges.forEach(function(badge){
+      var isUnlocked = (p.badges || []).indexOf(badge.id) !== -1;
+      var itemKey = BADGE_MINECRAFT_MAP[badge.id] || 'wooden_pickaxe';
+      var item = MINECRAFT_BADGES[itemKey] || MINECRAFT_BADGES.wooden_pickaxe;
+
+      var slot = document.createElement('div');
+      slot.className = 'hud-badge-slot ' + (isUnlocked ? 'unlocked' : 'locked');
+      slot.title = isUnlocked ? (badge.name + ' (' + item.name + ')') : 'Locked Medal';
+
+      var svgContent = isUnlocked 
+        ? renderMinecraftSVG(item.grid)
+        : '<div class="slot-lock-icon">🔒</div>';
+
+      slot.innerHTML = svgContent;
+      slot.onclick = function() { showScreen('badges'); };
+      shelf.appendChild(slot);
+    });
+  }
+
+  var viewBadgesBtn = ge('btn-hud-view-badges');
+  if (viewBadgesBtn) viewBadgesBtn.onclick = function() { showScreen('badges'); };
+
+  // 4. Quick References
+  qsa('.hud-ref-item').forEach(function(item){
+    item.onclick = function() {
+      openCheatsheet(this.getAttribute('data-ref'));
+    };
+  });
+}
+
+var JAVA_CHEATSHEETS = {
+  jvm: {
+    title: 'JVM Architecture & Memory Internals',
+    content: '<div class="cheatsheet-section">'
+      + '<h4>1. ClassLoader Subsystem</h4>'
+      + '<p><strong>Loading:</strong> Bootstrap → Platform (Extension) → Application ClassLoader.<br/>'
+      + '<strong>Linking:</strong> Verification (checks bytecode integrity), Preparation (allocates static fields with defaults), Resolution (replaces symbolic references with direct memory addresses).<br/>'
+      + '<strong>Initialization:</strong> Executes static blocks <code>&lt;clinit&gt;</code> and assigns initial static values.</p>'
+      + '<h4>2. JVM Runtime Data Areas</h4>'
+      + '<p>• <strong>Method Area / Metaspace:</strong> Per-JVM off-heap storage for class metadata, runtime constant pool, and static variables.<br/>'
+      + '• <strong>Heap Memory:</strong> Shared among all threads. Contains all class instances and arrays. Divided into Young Gen (Eden + S0/S1) and Old Gen (Tenured).<br/>'
+      + '• <strong>JVM Stacks:</strong> Thread-private. Each method call creates a Stack Frame containing Local Variable Array, Operand Stack, and Frame Data.<br/>'
+      + '• <strong>PC Register:</strong> Holds current execution instruction address per thread.<br/>'
+      + '• <strong>Native Method Stack:</strong> Executes JNI C/C++ native code.</p>'
+      + '<h4>3. Execution Engine & JIT Tiered Compilation</h4>'
+      + '<p>Bytecode interpreter starts instantly. Hot code paths are identified by method invocation counters and compiled by Tier 1 (C1 Client Compiler, quick optimizations) and Tier 2 (C2 Server Compiler, deep aggressive inlining and escape analysis).</p>'
+      + '</div>'
+  },
+  types: {
+    title: 'Java Primitives & Memory Layout',
+    content: '<div class="cheatsheet-section">'
+      + '<h4>Primitive Types & Bit Widths</h4>'
+      + '<table class="cheatsheet-table">'
+      + '<tr><th>Type</th><th>Size</th><th>Default</th><th>Range / Description</th></tr>'
+      + '<tr><td><code>byte</code></td><td>8-bit</td><td>0</td><td>-128 to 127</td></tr>'
+      + '<tr><td><code>short</code></td><td>16-bit</td><td>0</td><td>-32,768 to 32,767</td></tr>'
+      + '<tr><td><code>int</code></td><td>32-bit</td><td>0</td><td>-2,147,483,648 to 2,147,483,647</td></tr>'
+      + '<tr><td><code>long</code></td><td>64-bit</td><td>0L</td><td>-2<sup>63</sup> to 2<sup>63</sup>-1 (use L suffix)</td></tr>'
+      + '<tr><td><code>float</code></td><td>32-bit IEEE 754</td><td>0.0f</td><td>~6-7 decimal digits precision</td></tr>'
+      + '<tr><td><code>double</code></td><td>64-bit IEEE 754</td><td>0.0d</td><td>~15-16 decimal digits precision (default floating)</td></tr>'
+      + '<tr><td><code>boolean</code></td><td>JVM Dependent (1-bit logical)</td><td>false</td><td>true or false</td></tr>'
+      + '<tr><td><code>char</code></td><td>16-bit Unicode</td><td>\\u0000</td><td>0 to 65,535 (UTF-16 code units)</td></tr>'
+      + '</table>'
+      + '<h4>Reference Types & Compressed OOPs</h4>'
+      + '<p>Reference variables store 32-bit or 64-bit addresses pointing to Heap objects. In 64-bit JVMs with heaps under 32GB, <strong>Compressed OOPs</strong> (Ordinary Object Pointers) compress 64-bit pointers into 32-bit representations, saving ~20% heap footprint.</p>'
+      + '</div>'
+  },
+  collections: {
+    title: 'Java Collections Framework & Complexity Matrix',
+    content: '<div class="cheatsheet-section">'
+      + '<table class="cheatsheet-table">'
+      + '<tr><th>Data Structure</th><th>Access</th><th>Search</th><th>Insertion</th><th>Deletion</th><th>Key Properties</th></tr>'
+      + '<tr><td><code>ArrayList</code></td><td>O(1)</td><td>O(n)</td><td>O(1) amortized</td><td>O(n)</td><td>Dynamic array, fast index access, slow middle shifts.</td></tr>'
+      + '<tr><td><code>LinkedList</code></td><td>O(n)</td><td>O(n)</td><td>O(1) at head/tail</td><td>O(1)</td><td>Doubly linked nodes, higher memory overhead per node.</td></tr>'
+      + '<tr><td><code>HashMap</code></td><td>N/A</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>Hash bucket table, turns into Red-Black Tree at 8 items per bucket.</td></tr>'
+      + '<tr><td><code>TreeMap</code></td><td>N/A</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td><td>Self-balancing Red-Black Tree, sorted order by Comparable.</td></tr>'
+      + '<tr><td><code>HashSet</code></td><td>N/A</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>Backed by HashMap keys, rejects duplicate elements.</td></tr>'
+      + '<tr><td><code>ConcurrentHashMap</code></td><td>N/A</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>Thread-safe lock striping / synchronized CAS bucket nodes.</td></tr>'
+      + '</table>'
+      + '</div>'
+  },
+  streams: {
+    title: 'Modern Java Stream API Cheatsheet',
+    content: '<div class="cheatsheet-section">'
+      + '<h4>1. Intermediate Operations (Lazy)</h4>'
+      + '<p>• <code>filter(Predicate&lt;T&gt;)</code>: Discards elements not matching test.<br/>'
+      + '• <code>map(Function&lt;T, R&gt;)</code>: Transforms element of type T into type R.<br/>'
+      + '• <code>flatMap(Function&lt;T, Stream&lt;R&gt;&gt;)</code>: Flattens nested streams/collections into a single stream.<br/>'
+      + '• <code>distinct()</code>: Removes duplicates via <code>equals()</code> / <code>hashCode()</code>.<br/>'
+      + '• <code>sorted(Comparator&lt;T&gt;)</code>: Sorts elements in natural or custom order.<br/>'
+      + '• <code>peek(Consumer&lt;T&gt;)</code>: Inspects elements for debugging without mutating.</p>'
+      + '<h4>2. Terminal Operations (Eager & Trigger Execution)</h4>'
+      + '<p>• <code>collect(Collectors.toList())</code> or <code>.toList()</code> (Java 16+): Collects into immutable list.<br/>'
+      + '• <code>reduce(identity, accumulator)</code>: Combines elements into a single accumulated result.<br/>'
+      + '• <code>count()</code>: Returns total element count.<br/>'
+      + '• <code>anyMatch() / allMatch() / noneMatch()</code>: Short-circuiting boolean verification.<br/>'
+      + '• <code>findFirst() / findAny()</code>: Returns an <code>Optional&lt;T&gt;</code>.<br/>'
+      + '• <code>forEach(Consumer&lt;T&gt;)</code>: Iterates each element.</p>'
+      + '<h4>3. Code Example</h4>'
+      + '<pre class="code-preview"><code>List&lt;String&gt; topCoders = users.stream()\n    .filter(u -&gt; u.getXp() &gt;= 1000)\n    .sorted(Comparator.comparingInt(User::getXp).reversed())\n    .map(User::getHandle)\n    .limit(10)\n    .toList();</code></pre>'
+      + '</div>'
+  }
+};
+
+function openCheatsheet(refKey) {
+  var sheet = JAVA_CHEATSHEETS[refKey];
+  if (!sheet) return;
+  setText('cheatsheet-title', sheet.title);
+  var body = ge('cheatsheet-content');
+  if (body) body.innerHTML = sheet.content;
+  showModal('modal-cheatsheet');
+}
+
+function closeCheatsheet() {
+  hideModal('modal-cheatsheet');
 }
 
 var _activeCapstoneProj = null;
@@ -2810,19 +3250,52 @@ function awardBadgeDirect(badgeId){
   }, 600);
 }
 
+var _activeBadgeFilter = 'all';
+
+function setBadgeFilter(filter) {
+  _activeBadgeFilter = filter || 'all';
+  var btns = qsa('.badge-filter-btn');
+  btns.forEach(function(b) {
+    b.classList.toggle('active', (b.getAttribute('data-filter') || 'all') === _activeBadgeFilter);
+  });
+  renderBadges();
+}
+
 function renderBadges(){
   if(!window.BADGES) return;
   var grid=ge('badges-grid'); if(!grid) return;
   grid.innerHTML=''; 
-  setText('badges-earned-count', STATE.player.badges.length+' / '+BADGES.length+' Minecraft Medals Unlocked');
-  
-  BADGES.forEach(function(badge){
+  var totalCount = BADGES.length;
+  var unlockedCount = (STATE && STATE.player && STATE.player.badges) ? STATE.player.badges.length : 0;
+  setText('badges-earned-count', unlockedCount + ' / ' + totalCount + ' Minecraft Medals Unlocked');
+
+  // Wire filter buttons
+  var filterBtns = qsa('.badge-filter-btn');
+  filterBtns.forEach(function(b) {
+    b.onclick = function() {
+      setBadgeFilter(this.getAttribute('data-filter'));
+    };
+  });
+
+  var filteredList = BADGES.filter(function(badge) {
+    if (!_activeBadgeFilter || _activeBadgeFilter === 'all') return true;
+    var itemKey = BADGE_MINECRAFT_MAP[badge.id] || 'wooden_pickaxe';
+    var item = MINECRAFT_BADGES[itemKey] || MINECRAFT_BADGES.wooden_pickaxe;
+    return (item.rarity || '').toLowerCase() === _activeBadgeFilter.toLowerCase();
+  });
+
+  if (filteredList.length === 0) {
+    grid.innerHTML = '<div class="empty-filter-state" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 15px;">No Minecraft medals found in this category.</div>';
+    return;
+  }
+
+  filteredList.forEach(function(badge){
     var unlocked = STATE.player.badges.indexOf(badge.id) !== -1;
     var itemKey = BADGE_MINECRAFT_MAP[badge.id] || 'wooden_pickaxe';
     var item = MINECRAFT_BADGES[itemKey] || MINECRAFT_BADGES.wooden_pickaxe;
     
     var card = document.createElement('div');
-    card.className = 'badge-card ' + (unlocked ? 'unlocked' : 'locked');
+    card.className = 'badge-card ' + (unlocked ? 'unlocked' : 'locked') + ' rarity-' + (item.rarity || 'common').toLowerCase();
     
     var iconInner = unlocked 
       ? renderMinecraftSVG(item.grid) 
@@ -3318,6 +3791,9 @@ document.addEventListener('DOMContentLoaded', function(){
   var rcon=ge('reset-confirm-btn');      if(rcon)rcon.addEventListener('click',resetProgress);
   var dacnl=ge('delete-account-cancel-btn');  if(dacnl)dacnl.addEventListener('click',function(){hideModal('modal-delete-account');});
   var dacon=ge('delete-account-confirm-btn'); if(dacon)dacon.addEventListener('click',deleteAccount);
+  var csClose=ge('btn-close-cheatsheet')||ge('cheatsheet-close-btn'); if(csClose)csClose.addEventListener('click',closeCheatsheet);
+  var csOk=ge('btn-ok-cheatsheet')||ge('cheatsheet-ok-btn');           if(csOk)csOk.addEventListener('click',closeCheatsheet);
+  var csBg=ge('modal-cheatsheet');                                    if(csBg)csBg.addEventListener('click',function(e){if(e.target===csBg)closeCheatsheet();});
 
   // ── CODING CHALLENGE ─────────────────────────────────────────
   var cbb=ge('coding-back-btn');    if(cbb)cbb.addEventListener('click',function(){showScreen('map');});

@@ -3514,7 +3514,63 @@ const BADGES = [
     "icon": "",
     "description": "Conquered the entire 24-module map",
     "condition": "all_modules"
-}
+  },
+  {
+    "id": "hello-world",
+    "name": "Hello World",
+    "icon": "",
+    "description": "Executed your first program in the Code Playground",
+    "condition": "hello_world"
+  },
+  {
+    "id": "syntax-miner",
+    "name": "Syntax Miner",
+    "icon": "",
+    "description": "Mastered foundational Modules B1 & B2",
+    "condition": "syntax_miner"
+  },
+  {
+    "id": "redstone-logician",
+    "name": "Redstone Logician",
+    "icon": "",
+    "description": "Mastered Operators & Boolean Logic in Module B3",
+    "condition": "redstone_logic"
+  },
+  {
+    "id": "loop-runner",
+    "name": "Loop Runner",
+    "icon": "",
+    "description": "Conquered Control Flow & Loops in Module B4",
+    "condition": "loop_runner"
+  },
+  {
+    "id": "shield-bearer",
+    "name": "Shield Bearer",
+    "icon": "",
+    "description": "Protected applications with Exception Handling in B8",
+    "condition": "shield_bearer"
+  },
+  {
+    "id": "clockwork-coder",
+    "name": "Clockwork Coder",
+    "icon": "",
+    "description": "Completed 10 lessons across the JavaQuest curriculum",
+    "condition": "lessons_10"
+  },
+  {
+    "id": "brewing-master",
+    "name": "Brewing Master",
+    "icon": "",
+    "description": "Crafted functional pipelines with Streams & Lambdas in I4",
+    "condition": "streams_done"
+  },
+  {
+    "id": "totem-undying",
+    "name": "Totem of Undying",
+    "icon": "",
+    "description": "Completed a Quiz Challenge with full 3 hearts remaining",
+    "condition": "perfect_hearts"
+  }
 ];
 
 const LEVELS = [

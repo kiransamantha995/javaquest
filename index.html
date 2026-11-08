@@ -7,7 +7,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=7.5"/>
+  <link rel="stylesheet" href="style.css?v=7.6"/>
 </head>
 <body>
 
@@ -237,15 +237,169 @@
   </div>
 </section>
 
-<!-- ====== MAP SCREEN ====== -->
+<!-- ====== MAP SCREEN (Codédex 2-Column Course Hub) ====== -->
 <section class="screen" id="screen-map">
-  <div class="map-container">
-    <div class="map-header">
-      <h1>Java Learning Map</h1>
-      <p id="map-subtext">Complete modules in sequence to master core Java, streams, concurrency, and architecture.</p>
+  <div class="course-hub-container">
+    
+    <!-- Hero Panoramic Banner: Underground Redstone & Diamond Cavern -->
+    <div class="course-hero-cavern" id="course-hero-cavern">
+      <div class="cavern-decorations" aria-hidden="true">
+        <span class="pixel-ore ore-diamond ore-d1"></span>
+        <span class="pixel-ore ore-diamond ore-d2"></span>
+        <span class="pixel-ore ore-diamond ore-d3"></span>
+        <span class="pixel-ore ore-redstone ore-r1"></span>
+        <span class="pixel-ore ore-redstone ore-r2"></span>
+        <span class="pixel-ore ore-gold ore-g1"></span>
+        <span class="pixel-torch torch-1"></span>
+        <span class="pixel-torch torch-2"></span>
+      </div>
+      <div class="cavern-hero-content">
+        <div class="hero-tag-row">
+          <span class="hero-level-tag"><span class="pixel-dot"></span>JAVA QUEST</span>
+          <span class="hero-track-tag" id="hero-track-tag">OVERWORLD • BEGINNER</span>
+        </div>
+        <h1 class="hero-course-title">JAVA<span class="title-cursor">_</span></h1>
+        <p class="hero-course-desc">
+          Master modern Java 21 LTS from core syntax to OOP, JVM memory layout, high-performance Streams, and cloud architecture.
+        </p>
+        <div class="hero-actions-row">
+          <button class="btn-resume-quest" id="btn-resume-quest">
+            <span class="btn-play-icon">▶</span> Resume Learning
+          </button>
+          <div class="hero-meta-stats">
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ~24h of learning</span>
+            <span class="meta-item-divider">•</span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 24 Modules</span>
+            <span class="meta-item-divider">•</span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> +15,000 Adventurers</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="diff-path-banner" id="diff-path-banner"></div>
-    <div class="module-path" id="module-path"></div>
+
+    <!-- Top Track Switcher Tabs -->
+    <div class="track-tab-bar" id="track-tab-bar">
+      <button class="track-tab-btn active" data-track="all">
+        <span class="track-tab-icon">🗺</span>
+        <span class="track-tab-label">All Tracks</span>
+        <span class="track-tab-count">24</span>
+      </button>
+      <button class="track-tab-btn" data-track="beginner">
+        <span class="track-tab-icon">🌱</span>
+        <span class="track-tab-label">Track 1: Overworld (Beginner)</span>
+        <span class="track-tab-count">8</span>
+      </button>
+      <button class="track-tab-btn" data-track="intermediate">
+        <span class="track-tab-icon">🔥</span>
+        <span class="track-tab-label">Track 2: The Nether (Intermediate)</span>
+        <span class="track-tab-count">8</span>
+      </button>
+      <button class="track-tab-btn" data-track="advanced">
+        <span class="track-tab-icon">🌌</span>
+        <span class="track-tab-label">Track 3: The End (Advanced)</span>
+        <span class="track-tab-count">8</span>
+      </button>
+    </div>
+
+    <!-- 2-Column Course Layout (Codédex Style) -->
+    <div class="course-hub-grid">
+      
+      <!-- Left Column: Chapter Accordions -->
+      <div class="course-chapters-col">
+        <div class="chapters-accordion" id="chapters-accordion">
+          <!-- Populated dynamically by renderMap() -->
+        </div>
+      </div>
+
+      <!-- Right Column: Sticky Student HUD Sidebar -->
+      <aside class="course-hud-sidebar" id="course-hud-sidebar">
+        
+        <!-- Player Mini-Profile Card -->
+        <div class="hud-card hud-profile-card">
+          <div class="hud-profile-row">
+            <div class="hud-avatar-frame" id="hud-avatar-frame" title="Click to customize avatar">
+              <div class="avatar-display small" id="avatar-display-hud"></div>
+            </div>
+            <div class="hud-profile-info">
+              <div class="hud-player-name" id="hud-player-name">JavaLearner</div>
+              <div class="hud-player-rank" id="hud-player-rank">Level 1 • Novice</div>
+            </div>
+            <button class="btn-hud-edit" id="btn-hud-edit-avatar" title="Customize Character">Edit</button>
+          </div>
+        </div>
+
+        <!-- Course Progress Card -->
+        <div class="hud-card hud-progress-card">
+          <div class="hud-card-header">
+            <span class="hud-card-title">Course Progress</span>
+            <span class="hud-progress-percent" id="hud-progress-percent">0%</span>
+          </div>
+          <div class="hud-progress-stat">
+            <div class="hud-stat-label-row">
+              <span class="hud-stat-name">Exercises Done</span>
+              <span class="hud-stat-val" id="hud-exercises-val">0 / 48</span>
+            </div>
+            <div class="hud-progress-track">
+              <div class="hud-progress-bar bar-emerald" id="hud-exercises-bar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="hud-progress-stat">
+            <div class="hud-stat-label-row">
+              <span class="hud-stat-name">XP Earned</span>
+              <span class="hud-stat-val" id="hud-xp-val">0 / 5,200</span>
+            </div>
+            <div class="hud-progress-track">
+              <div class="hud-progress-bar bar-gold" id="hud-xp-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Badges Shelf Card -->
+        <div class="hud-card hud-badges-card">
+          <div class="hud-card-header">
+            <span class="hud-card-title">Minecraft Medals</span>
+            <span class="hud-badge-count" id="hud-badge-count">0 / 24</span>
+          </div>
+          <p class="hud-card-sub">Complete milestones to collect authentic Minecraft pixel trophies!</p>
+          <div class="hud-badges-mini-grid" id="hud-badges-mini-grid">
+            <!-- Populated dynamically -->
+          </div>
+          <button class="btn-hud-trophy" id="btn-hud-view-badges">View Trophy Room →</button>
+        </div>
+
+        <!-- Quick Reference Cheat Sheets Card -->
+        <div class="hud-card hud-ref-card">
+          <div class="hud-card-header">
+            <span class="hud-card-title">Java Quick References</span>
+            <span class="hud-ref-count">4 guides</span>
+          </div>
+          <div class="hud-ref-list">
+            <div class="hud-ref-item" data-ref="jvm">
+              <span class="ref-icon">⚙</span>
+              <span class="ref-name">JVM Architecture & Memory</span>
+              <span class="ref-arrow">→</span>
+            </div>
+            <div class="hud-ref-item" data-ref="types">
+              <span class="ref-icon">📦</span>
+              <span class="ref-name">Primitives & Memory Sizes</span>
+              <span class="ref-arrow">→</span>
+            </div>
+            <div class="hud-ref-item" data-ref="collections">
+              <span class="ref-icon">📑</span>
+              <span class="ref-name">Collections & Complexity</span>
+              <span class="ref-arrow">→</span>
+            </div>
+            <div class="hud-ref-item" data-ref="streams">
+              <span class="ref-icon">⚡</span>
+              <span class="ref-name">Stream API Cheatsheet</span>
+              <span class="ref-arrow">→</span>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
   </div>
 </section>
 
@@ -529,8 +683,15 @@
 <section class="screen" id="screen-badges">
   <div class="badges-container">
     <div class="badges-header">
-      <h1>Achievement Gallery</h1>
-      <p id="badges-earned-count">Earn achievement medals by completing curriculum modules and coding milestones.</p>
+      <h1>Minecraft Trophy Hall</h1>
+      <p id="badges-earned-count">0 / 24 Minecraft Medals Unlocked</p>
+      <div class="badge-filter-bar" id="badge-filter-bar">
+        <button class="badge-filter-btn active" data-filter="all">All (24)</button>
+        <button class="badge-filter-btn" data-filter="common">Common</button>
+        <button class="badge-filter-btn" data-filter="rare">Rare</button>
+        <button class="badge-filter-btn" data-filter="epic">Epic</button>
+        <button class="badge-filter-btn" data-filter="legendary">Legendary</button>
+      </div>
     </div>
     <div class="badges-grid" id="badges-grid"></div>
   </div>
@@ -797,6 +958,23 @@
     </div>
   </div>
 </div>
+<!-- ====== JAVA QUICK REFERENCE CHEATSHEET MODAL ====== -->
+<div class="modal-overlay hidden" id="modal-cheatsheet">
+  <div class="modal-box cheatsheet-modal">
+    <div class="cheatsheet-header">
+      <div class="cheatsheet-badge">DEVELOPER CHEATSHEET</div>
+      <button class="modal-close-btn" id="btn-close-cheatsheet">✕</button>
+    </div>
+    <h2 class="cheatsheet-title" id="cheatsheet-title">Java Quick Reference</h2>
+    <div class="cheatsheet-content" id="cheatsheet-content">
+      <!-- Injected dynamically -->
+    </div>
+    <div class="cheatsheet-footer">
+      <button class="btn-primary" id="btn-ok-cheatsheet">Close Reference</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay hidden" id="modal-reset">
   <div class="modal-box">
     <div style="font-size:2.8rem;line-height:1;margin-bottom:0.5rem;font-weight:900;color:#DC2626">!</div>
@@ -832,10 +1010,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=7.5"></script>
-<script src="animations.js?v=7.5"></script>
-<script src="supabase.js?v=7.5"></script>
-<script src="ai-tutor.js?v=7.5"></script>
-<script src="app.js?v=7.5"></script>
+<script src="curriculum.js?v=7.6"></script>
+<script src="animations.js?v=7.6"></script>
+<script src="supabase.js?v=7.6"></script>
+<script src="ai-tutor.js?v=7.6"></script>
+<script src="app.js?v=7.6"></script>
 </body>
 </html>
