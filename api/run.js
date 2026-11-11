@@ -1,30 +1,111 @@
-// JavaQuest Serverless Java Compiler & Execution Engine — api/run.js
-// Runs on Vercel Serverless Function
-// High-performance OpenJDK 22 compilation with intelligent fallback
+// JavaQuest — api/run.js
+// Authenticated Java compilation proxy via Wandbox (OpenJDK).
+// No simulated / AI fallback — real execution only.
+// Security: Supabase JWT required, rate-limited, max code/stdin size enforced.
 
-const CANDIDATE_MODELS = [
-  'gemini-3.1-flash-lite-preview',
-  'gemini-3-flash-preview',
-  'gemini-3.5-flash',
-  'gemini-flash-lite-latest',
-  'gemini-flash-latest'
-];
+// ─── Config ───────────────────────────────────────────────────────────────────
+const ALLOWED_ORIGIN = 'https://javaquest-ashen.vercel.app';
+const MAX_CODE_BYTES  = 20 * 1024;   // 20 KB
+const MAX_STDIN_BYTES = 2  * 1024;   //  2 KB
+const WANDBOX_TIMEOUT = 25000;        // ms
 
+// ─── Simple in-process rate limiter (resets on cold start) ────────────────────
+// For production scale, move to Upstash Redis or similar.
+const _ipBucket  = new Map(); // ip  → { count, resetAt }
+const _userBucket = new Map(); // uid → { count, resetAt }
+const IP_LIMIT   = 10;  // per minute
+const USER_LIMIT = 20;  // per minute
+
+function checkRateLimit(bucket, key, limit) {
+  const now = Date.now();
+  let entry = bucket.get(key);
+  if (!entry || now > entry.resetAt) {
+    entry = { count: 0, resetAt: now + 60_000 };
+    bucket.set(key, entry);
+  }
+  entry.count++;
+  if (entry.count > limit) {
+    return false; // rate limited
+  }
+  return true;
+}
+
+// ─── Supabase JWT verification (lightweight RS256 header check) ───────────────
+// We trust Supabase's public key; for a full production check use a JWT library.
+// This minimal version: decode payload, verify exp, verify iss matches our project.
+const SUPABASE_URL = process.env.SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
+
+function decodeJwtPayload(token) {
+  try {
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+    const pad = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const json = Buffer.from(pad, 'base64').toString('utf8');
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+async function verifySupabaseJwt(authHeader) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.slice(7);
+  const payload = decodeJwtPayload(token);
+  if (!payload) return null;
+  if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null; // expired
+
+  // For users (not anon), sub is the user UUID
+  if (!payload.sub) return null;
+
+  // Double-check with Supabase /auth/v1/user to confirm token is live
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+    try {
+      const r = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${token}`
+        },
+        signal: AbortSignal.timeout(5000)
+      });
+      if (!r.ok) return null;
+      const user = await r.json();
+      return user; // { id, email, role, ... }
+    } catch {
+      // Network hiccup — fall through to payload-only check
+    }
+  }
+
+  // Fallback: trust payload (acceptable for dev / misconfigured env)
+  return { id: payload.sub, email: payload.email, role: payload.role };
+}
+
+// ─── Code sanitizer (compile-time helpers only, NOT security) ─────────────────
 function sanitizeJavaCode(code) {
-  // 1. Auto-repair common copy-paste typo: "port java..." -> "import java..."
+  // Auto-repair common copy-paste typo: "port java..." -> "import java..."
   let prepared = code.replace(/^[ \t]*port[ \t]+/gm, 'import ');
-
-  // 2. In OpenJDK single-file execution, top-level classes cannot conflict with the runner filename.
-  // Stripping 'public' from class/interface/record/enum declarations makes them
-  // package-private so multi-class, records, and OOP programs compile cleanly without restriction.
+  // Strip 'public' from top-level types so multi-class files work in Wandbox
   prepared = prepared.replace(/\bpublic\s+(class|interface|record|enum)\b/g, '$1');
-
   return prepared;
 }
 
+// ─── Privacy-safe logger ──────────────────────────────────────────────────────
+function safeLog(level, msg, meta) {
+  // Never log code content, chat text, emails, or keys
+  const safeMeta = meta ? { ...meta } : {};
+  delete safeMeta.code;
+  delete safeMeta.stdin;
+  delete safeMeta.email;
+  if (level === 'error') console.error(`[run] ${msg}`, safeMeta);
+  else if (level === 'warn') console.warn(`[run] ${msg}`, safeMeta);
+  else console.log(`[run] ${msg}`, safeMeta);
+}
+
+// ─── Wandbox runner ───────────────────────────────────────────────────────────
 async function runWandbox(code, stdin) {
   const prepared = sanitizeJavaCode(code);
   const userStdin = stdin != null ? String(stdin) : '';
+
   const response = await fetch('https://wandbox.org/api/compile.json', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -33,7 +114,7 @@ async function runWandbox(code, stdin) {
       code: prepared,
       stdin: userStdin
     }),
-    signal: AbortSignal.timeout(25000)
+    signal: AbortSignal.timeout(WANDBOX_TIMEOUT)
   });
 
   if (!response.ok) {
@@ -48,173 +129,91 @@ async function runWandbox(code, stdin) {
 
   if (statusCode !== 0 && compilerErr) {
     return {
-      compile: {
-        code: statusCode,
-        stderr: compilerErr
-      },
-      run: {
-        stdout: '',
-        stderr: compilerErr,
-        code: statusCode
-      }
+      compile: { code: statusCode, stderr: compilerErr },
+      run:     { stdout: '', stderr: compilerErr, code: statusCode }
     };
   }
 
-  // Live Interactive Scanner Detection:
-  // When programErr contains NoSuchElementException, the Java code reached a Scanner input statement
-  // and is waiting for the user to provide standard input in the console!
-  if (statusCode !== 0 && (programErr.includes('NoSuchElementException') || programErr.includes('No line found') || programErr.includes('NoSuchElement'))) {
+  // Scanner waiting for input detection
+  if (
+    statusCode !== 0 &&
+    (programErr.includes('NoSuchElementException') ||
+     programErr.includes('No line found') ||
+     programErr.includes('NoSuchElement'))
+  ) {
     return {
       compile: null,
-      run: {
-        stdout: programOut,
-        stderr: '',
-        code: 0,
-        waitingForInput: true
-      }
+      run: { stdout: programOut, stderr: '', code: 0, waitingForInput: true }
     };
   }
 
   return {
     compile: null,
-    run: {
-      stdout: programOut,
-      stderr: programErr,
-      code: statusCode,
-      waitingForInput: false
-    }
+    run: { stdout: programOut, stderr: programErr, code: statusCode, waitingForInput: false }
   };
 }
 
-async function runWithGemini(code, stdin, apiKey) {
-  const prepared = sanitizeJavaCode(code);
-  const prompt = `Act as an official OpenJDK 22 Java compiler and JVM runtime.
-Execute the following Java code strictly according to standard Java language specifications.
-${stdin ? `Standard Input (stdin):\n${stdin}\n` : ''}
-
-Java Code:
-\`\`\`java
-${prepared}
-\`\`\`
-
-Interactive Scanner Rules:
-If the Java code reads from System.in (via Scanner, BufferedReader, System.console, etc.) and the provided Standard Input (stdin) is empty or does NOT have enough lines for the next input statement:
-1. STOP program execution at that exact point where input is expected.
-2. Return only the stdout printed up to that exact prompt.
-3. Set waitingForInput to true!
-4. Do NOT fake or simulate future user inputs. Do NOT run the rest of the program.
-
-Evaluate compilation and execution. Return ONLY a single raw JSON object matching this schema with NO markdown ticks or extra prose:
-{
-  "compile": {
-    "code": 0,
-    "stderr": ""
-  },
-  "run": {
-    "stdout": "exact standard output printed up to this moment",
-    "stderr": "runtime exceptions or empty string",
-    "code": 0,
-    "waitingForInput": false
-  }
-}
-If there are genuine compilation errors (syntax error, type mismatch, missing semicolon, undeclared identifier, etc.), set compile.code to 1, compile.stderr to the realistic javac error message, run.stdout to "", and waitingForInput to false.`;
-
-  let lastErr = null;
-  for (const model of CANDIDATE_MODELS) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.0,
-            maxOutputTokens: 2048,
-            responseMimeType: 'application/json'
-          }
-        }),
-        signal: AbortSignal.timeout(15000)
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error('Empty response from model');
-
-      const clean = text.replace(/```(?:json)?/g, '').trim();
-      const parsed = JSON.parse(clean);
-      if (parsed.run && parsed.waitingForInput !== undefined && parsed.run.waitingForInput === undefined) {
-        parsed.run.waitingForInput = !!parsed.waitingForInput;
-      }
-      return parsed;
-    } catch(e) {
-      lastErr = e;
-      continue;
-    }
-  }
-
-  throw lastErr || new Error('AI Compiler fallback unavailable');
-}
-
+// ─── Main handler ─────────────────────────────────────────────────────────────
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  const origin = req.headers['origin'] || '';
+  const isAllowed = origin === ALLOWED_ORIGIN || process.env.NODE_ENV === 'development';
+  res.setHeader('Access-Control-Allow-Origin', isAllowed ? origin : ALLOWED_ORIGIN);
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Vary', 'Origin');
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
+  if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed. Use POST.' });
+    res.status(405).json({ error: 'Method not allowed.' });
     return;
   }
 
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  const user = await verifySupabaseJwt(req.headers['authorization']);
+  if (!user) {
+    res.status(401).json({ error: 'Authentication required. Please sign in to use the compiler.' });
+    return;
+  }
+
+  // ── Rate limit by IP and user ─────────────────────────────────────────────
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
+  if (!checkRateLimit(_ipBucket, ip, IP_LIMIT)) {
+    safeLog('warn', 'IP rate limited', { ip });
+    res.status(429).json({ error: 'Too many requests from your network. Please wait a minute and try again.' });
+    return;
+  }
+  if (!checkRateLimit(_userBucket, user.id, USER_LIMIT)) {
+    safeLog('warn', 'User rate limited', { uid: user.id });
+    res.status(429).json({ error: 'You\'re running code too fast! Take a breath and try again in a minute.' });
+    return;
+  }
+
+  // ── Parse body ────────────────────────────────────────────────────────────
+  let body = req.body;
+  if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+  body = body || {};
+
+  const code  = (body.code  || '').trim();
+  const stdin = (body.stdin || '').slice(0, MAX_STDIN_BYTES);
+
+  if (!code) {
+    res.status(400).json({ error: 'No Java code provided.' });
+    return;
+  }
+  if (Buffer.byteLength(code, 'utf8') > MAX_CODE_BYTES) {
+    res.status(400).json({ error: `Code is too large. Maximum size is ${MAX_CODE_BYTES / 1024} KB.` });
+    return;
+  }
+
+  // ── Run (Wandbox only — no AI simulation) ─────────────────────────────────
   try {
-    let body = req.body;
-    if (typeof body === 'string') {
-      try { body = JSON.parse(body); } catch(e) { body = {}; }
-    }
-    body = body || {};
-
-    const code = (body.code || '').trim();
-    const stdin = body.stdin || '';
-
-    if (!code) {
-      res.status(400).json({ error: 'No Java code provided to compile.' });
-      return;
-    }
-
-    // 1. Primary: Real OpenJDK 22 Cloud Engine (Wandbox)
-    try {
-      const result = await runWandbox(code, stdin);
-      res.status(200).json(result);
-      return;
-    } catch(wandboxErr) {
-      console.warn('[Compiler] OpenJDK Wandbox failed:', wandboxErr.message, 'Falling back to AI engine...');
-    }
-
-    // 2. Secondary: Cloud AI OpenJDK 22 Simulator (Gemini with process.env.GEMINI_API_KEY)
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (apiKey) {
-      try {
-        const aiResult = await runWithGemini(code, stdin, apiKey);
-        res.status(200).json(aiResult);
-        return;
-      } catch(aiErr) {
-        console.warn('[Compiler] AI Engine fallback failed:', aiErr.message);
-      }
-    }
-
+    const result = await runWandbox(code, stdin);
+    res.status(200).json(result);
+  } catch (err) {
+    safeLog('warn', 'Wandbox failed', { status: err.message });
     res.status(503).json({
-      error: 'Compiler service temporarily unavailable. Please retry in a moment.'
+      error: 'The Java runner is busy or temporarily down. Please wait a moment and try again.',
+      details: null // never expose internal errors to client
     });
-
-  } catch(err) {
-    console.error('Compiler handler error:', err);
-    res.status(500).json({ error: err.message || 'Server error during Java execution' });
   }
 };

@@ -12,34 +12,43 @@ function getGeminiKey() {
   return '';
 }
 
-// Universal AI Caller: Prefers secure serverless /api/ai, falls back to direct client API call
+// Universal AI Caller: Calls secure serverless /api/ai with Supabase JWT auth.
+// No client-side API key. No apiKey in request body.
 function callAI(action, payload) {
   var bodyData = Object.assign({ action: action }, payload || {});
-  var clientKey = getGeminiKey();
-  if (clientKey) {
-    bodyData.apiKey = clientKey;
-  }
+  // Never include apiKey in body — the server uses its own env var
+  delete bodyData.apiKey;
+
+  // Get the Supabase session token for auth
+  var token = (window._sbSession && window._sbSession.access_token) ? window._sbSession.access_token : '';
 
   return fetch('/api/ai', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token ? ('Bearer ' + token) : ''
+    },
     body: JSON.stringify(bodyData)
   })
   .then(function(res) {
+    if (res.status === 401) {
+      throw new Error('Please sign in to use AI features.');
+    }
+    if (res.status === 429) {
+      return res.json().then(function(e) { throw new Error(e.error || 'Too many requests. Please wait a moment.'); });
+    }
     if (!res.ok) {
       return res.json().then(function(errObj) {
         throw new Error(errObj.error || ('Server returned HTTP ' + res.status));
       });
     }
     return res.json();
-  })
-  .catch(function(err) {
-    // If /api/ai is not available (e.g., viewing as raw static file:// without a server)
-    if (clientKey && typeof callGeminiDirect === 'function') {
-      return callGeminiDirect(action, payload, clientKey);
-    }
-    throw err;
   });
+}
+
+function callGeminiDirect() {
+  // Removed: direct client-side Gemini calls are not permitted.
+  return Promise.reject(new Error('AI features require an active session. Please sign in.'));
 }
 
 function callGeminiDirect(action, payload, apiKey) {

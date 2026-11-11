@@ -1,6 +1,20 @@
 // JavaQuest — app.js (Supabase Edition)
 // Pure addEventListener, no inline onclick, full Supabase sync
 
+/* ═══════════════ XSS SAFETY UTILITY ════════════════════════════
+   Use esc(str) anywhere text from user input or AI output is
+   inserted into the DOM. For plain text prefer textContent.      */
+function esc(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+/* Safe-text helper: sets textContent rather than innerHTML (defined below at original location) */
+
 /* ═══════════════ DIFFICULTY CONFIG ═════════════════════════════ */
 var DIFFICULTY_LIMITS = {
   beginner:     8,   // modules B1–B8 (8 modules + Capstone 1)
@@ -1336,6 +1350,16 @@ function renderMap() {
     return;
   }
 
+  
+  // Update Hero & Track Tab Counts dynamically from single source of truth
+  var stats = computeCurriculumStats();
+  setText('hero-time-estimate', '~' + stats.estimatedHours + 'h of learning');
+  setText('hero-modules-count', stats.moduleCount + ' Modules');
+  setText('track-count-all', stats.countsByTrack.all);
+  setText('track-count-beginner', stats.countsByTrack.beginner);
+  setText('track-count-intermediate', stats.countsByTrack.intermediate);
+  setText('track-count-advanced', stats.countsByTrack.advanced);
+
   // Update Hero Banner Tag & Resume Button
   var trackTag = ge('hero-track-tag');
   if (trackTag) {
@@ -1707,9 +1731,10 @@ function renderStudentHUD(allMods) {
   setText('hud-exercises-val', completedExercises + ' / ' + totalExercises);
   setWidth('hud-exercises-bar', pct + '%');
 
-  var totalTrackXP = 5200;
+  var stats = computeCurriculumStats();
+  var totalTrackXP = stats.totalXP;
   var xpPct = Math.min(100, Math.round(p.xp / totalTrackXP * 100));
-  setText('hud-xp-val', p.xp + ' / ' + totalTrackXP);
+  setText('hud-xp-val', p.xp.toLocaleString() + ' / ' + totalTrackXP.toLocaleString());
   setWidth('hud-xp-bar', xpPct + '%');
 
   // 3. Badges Mini-Grid (Shelf)
@@ -2359,23 +2384,29 @@ function renderTestCasesList(testCases) {
 }
 
 function executeJava(code, stdin) {
-  // 1. Primary: Serverless OpenJDK 22 compiler endpoint (/api/run)
+  // Authenticated serverless OpenJDK 22 runner (/api/run)
+  var token = (window._sbSession && window._sbSession.access_token) ? window._sbSession.access_token : '';
   return fetch('/api/run', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token ? ('Bearer ' + token) : ''
+    },
     body: JSON.stringify({ code: code, stdin: stdin || '' })
   })
   .then(function(res){
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (res.status === 401) throw new Error('Sign in to use the Java compiler.');
+    if (res.status === 429) return res.json().then(function(e){ throw new Error(e.error || 'Too many runs. Please wait a minute.'); });
+    if (res.status === 503) return res.json().then(function(e){ throw new Error(e.error || 'Compiler is temporarily unavailable. Please try again.'); });
+    if (!res.ok) throw new Error('Compiler error (HTTP ' + res.status + ')');
     return res.json();
   })
   .catch(function(err){
-    console.warn('/api/run endpoint unreachable, attempting direct OpenJDK compilation:', err.message);
-    // 2. Second priority: Direct OpenJDK 22 compilation via Wandbox (CORS supported)
+    // Network failure — try Wandbox directly as fallback (no AI simulation)
+    console.warn('/api/run failed:', err.message, '— trying Wandbox direct...');
     return executeWandboxDirect(code, stdin)
       .catch(function(wErr){
-        console.warn('Direct OpenJDK runner failed:', wErr.message, 'Trying client interpreter...');
-        // 3. Third priority: Client-side interpreter fallback for basic scripts
+        console.warn('Wandbox direct also failed:', wErr.message);
         return runClientJavaInterpreter(code, stdin);
       });
   });
@@ -3416,9 +3447,43 @@ function renderSettings(){
   setText('settings-player-name',STATE.player.name);
   setText('settings-difficulty',DIFFICULTY_LABELS[STATE.player.difficulty]||'Beginner');
   updateThemeUI(document.body.classList.contains('dark-theme'));
+  updateRefillBtn();
 }
 
-function refillHearts(){STATE.player.hearts=3;STATE.player.heartRefillTime=null;localSave();renderHearts();toast('Hearts refilled!');}
+// Hearts refill via cooldown (4 hours) — not a free button.
+// The refill-hearts-btn in Settings now shows time remaining instead.
+var HEART_COOLDOWN_MS = 4 * 60 * 60 * 1000; // 4 hours
+function refillHearts(){
+  var p = STATE.player;
+  if (p.hearts >= 3) { toast('Your hearts are already full! ❤️'); return; }
+  var now = Date.now();
+  if (p.heartRefillTime && now < p.heartRefillTime) {
+    var remaining = Math.ceil((p.heartRefillTime - now) / 60000);
+    toast('Hearts refill in ' + remaining + ' min. Complete a practice to earn one back!');
+    return;
+  }
+  // Cooldown elapsed or no cooldown — allow refill
+  p.hearts = 3; p.heartRefillTime = null;
+  localSave(); renderHearts();
+  toast('Hearts refilled! ❤️❤️❤️');
+}
+function updateRefillBtn(){
+  var btn = ge('refill-hearts-btn');
+  if (!btn) return;
+  var p = STATE && STATE.player;
+  if (!p) return;
+  if (p.hearts >= 3) {
+    btn.textContent = 'Hearts Full ❤️'; btn.disabled = true;
+  } else {
+    var now = Date.now();
+    if (p.heartRefillTime && now < p.heartRefillTime) {
+      var mins = Math.ceil((p.heartRefillTime - now) / 60000);
+      btn.textContent = 'Refill in ' + mins + ' min'; btn.disabled = true;
+    } else {
+      btn.textContent = 'Claim Refill ❤️'; btn.disabled = false;
+    }
+  }
+}
 
 function resetProgress(){
   var name=STATE.player.name, diff=STATE.player.difficulty;

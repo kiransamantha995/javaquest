@@ -7,7 +7,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=7.7"/>
+  <link rel="stylesheet" href="style.css?v=8.0"/>
 </head>
 <body>
 
@@ -267,9 +267,9 @@
             <span class="btn-play-icon">▶</span> Resume Learning
           </button>
           <div class="hero-meta-stats">
-            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ~24h of learning</span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span id="hero-time-estimate">~24h of learning</span></span>
             <span class="meta-item-divider">•</span>
-            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 24 Modules</span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <span id="hero-modules-count">24 Modules</span></span>
             <span class="meta-item-divider">•</span>
             <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> +15,000 Adventurers</span>
           </div>
@@ -282,22 +282,22 @@
       <button class="track-tab-btn active" data-track="all">
         <span class="track-tab-icon">🗺</span>
         <span class="track-tab-label">All Tracks</span>
-        <span class="track-tab-count">24</span>
+        <span class="track-tab-count" id="track-count-all">24</span>
       </button>
       <button class="track-tab-btn" data-track="beginner">
         <span class="track-tab-icon">🌱</span>
         <span class="track-tab-label">Track 1: Overworld (Beginner)</span>
-        <span class="track-tab-count">8</span>
+        <span class="track-tab-count" id="track-count-beginner">8</span>
       </button>
       <button class="track-tab-btn" data-track="intermediate">
         <span class="track-tab-icon">🔥</span>
         <span class="track-tab-label">Track 2: The Nether (Intermediate)</span>
-        <span class="track-tab-count">8</span>
+        <span class="track-tab-count" id="track-count-intermediate">8</span>
       </button>
       <button class="track-tab-btn" data-track="advanced">
         <span class="track-tab-icon">🌌</span>
         <span class="track-tab-label">Track 3: The End (Advanced)</span>
-        <span class="track-tab-count">8</span>
+        <span class="track-tab-count" id="track-count-advanced">8</span>
       </button>
     </div>
 
@@ -1010,10 +1010,10 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=7.7"></script>
-<script src="animations.js?v=7.7"></script>
-<script src="supabase.js?v=7.7"></script>
-<script src="ai-tutor.js?v=7.7"></script>
-<script src="app.js?v=7.7"></script>
+<script src="curriculum.js?v=8.0"></script>
+<script src="animations.js?v=8.0"></script>
+<script src="supabase.js?v=8.0"></script>
+<script src="ai-tutor.js?v=8.0"></script>
+<script src="app.js?v=8.0"></script>
 </body>
 </html>
