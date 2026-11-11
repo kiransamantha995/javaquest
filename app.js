@@ -1306,6 +1306,26 @@ function setTrackFilter(trackKey) {
   renderMap();
 }
 
+function startNextExerciseInMod(mod) {
+  if (!mod || !mod.lessons || !mod.lessons.length) return;
+  for (var i = 0; i < mod.lessons.length; i++) {
+    var l = mod.lessons[i];
+    if ((STATE.player.completedLessons || []).indexOf(l.id) === -1) {
+      startLesson(mod.id, l.id);
+      return;
+    }
+  }
+  if (mod.challenge && (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) === -1) {
+    startChallenge(mod.id);
+    return;
+  }
+  if (mod.codingTask && (STATE.player.completedCoding || []).indexOf(mod.id) === -1) {
+    startCodingChallenge(mod.id);
+    return;
+  }
+  startLesson(mod.id, mod.lessons[0].id);
+}
+
 function renderMap() {
   var container = ge('chapters-accordion');
   if (!container) return;
@@ -1415,7 +1435,7 @@ function renderMap() {
     }
 
     var card = document.createElement('div');
-    card.className = 'chapter-accordion-card ' + statusKey + (shouldExpand ? ' expanded' : '');
+    card.className = 'chapter-accordion-card ' + statusKey + (shouldExpand ? ' open expanded' : '');
     card.id = 'chapter-card-' + mod.id;
 
     var statusIconHtml = '';
@@ -1433,6 +1453,15 @@ function renderMap() {
         + '</div>';
     }
 
+    var actionBtnHtml = '';
+    if (isCompleted) {
+      actionBtnHtml = '<button class="btn-chapter-action chapter-btn-review" data-mid="' + mod.id + '" title="Review chapter">Review ✓</button>';
+    } else if (isUnlocked) {
+      actionBtnHtml = '<button class="btn-chapter-action chapter-btn-start" data-mid="' + mod.id + '" title="Start next lesson in this chapter">Start →</button>';
+    } else {
+      actionBtnHtml = '<span class="chapter-lock-badge" title="Complete earlier chapters to unlock">🔒 Locked</span>';
+    }
+
     var headerHtml = '<div class="chapter-header" data-modid="' + mod.id + '">'
       + '<div class="chapter-header-left">'
       + statusIconHtml
@@ -1445,6 +1474,7 @@ function renderMap() {
       + '</div>'
       + '</div>'
       + '<div class="chapter-header-right">'
+      + actionBtnHtml
       + '<span class="chapter-progress-pill ' + (isCompleted ? 'pill-done' : '') + '">' + doneEx + ' / ' + totalEx + ' Done</span>'
       + '<span class="chapter-chevron">▼</span>'
       + '</div>'
@@ -1467,7 +1497,7 @@ function renderMap() {
         btnHtml = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
       }
 
-      bodyHtml += '<div class="exercise-row ' + (lDone ? 'row-done' : (lUnlocked ? 'row-active' : 'row-locked')) + '" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">'
+      bodyHtml += '<div class="exercise-row ' + (lDone ? 'status-done row-done' : (lUnlocked ? 'status-available row-active' : 'status-locked row-locked')) + '" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">'
         + '<div class="exercise-col-num">Exercise ' + (lIdx + 1) + '</div>'
         + '<div class="exercise-col-title">'
         + '<span class="exercise-name">' + esc(lesson.title) + '</span>'
@@ -1490,7 +1520,7 @@ function renderMap() {
         qBtn = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
       }
 
-      bodyHtml += '<div class="exercise-row ' + (qDone ? 'row-done' : (qUnlocked ? 'row-active' : 'row-locked')) + '" data-mid="' + mod.id + '" data-type="quiz">'
+      bodyHtml += '<div class="exercise-row ' + (qDone ? 'status-done row-done' : (qUnlocked ? 'status-available row-active' : 'status-locked row-locked')) + '" data-mid="' + mod.id + '" data-type="quiz">'
         + '<div class="exercise-col-num">Quiz Challenge</div>'
         + '<div class="exercise-col-title">'
         + '<span class="exercise-name">Knowledge Check: ' + esc(mod.title) + '</span>'
@@ -1513,7 +1543,7 @@ function renderMap() {
         cBtn = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
       }
 
-      bodyHtml += '<div class="exercise-row ' + (cDone ? 'row-done' : (cUnlocked ? 'row-active' : 'row-locked')) + '" data-mid="' + mod.id + '" data-type="code">'
+      bodyHtml += '<div class="exercise-row ' + (cDone ? 'status-done row-done' : (cUnlocked ? 'status-available row-active' : 'status-locked row-locked')) + '" data-mid="' + mod.id + '" data-type="code">'
         + '<div class="exercise-col-num">Coding Lab</div>'
         + '<div class="exercise-col-title">'
         + '<span class="exercise-name">' + esc(mod.codingTask.title) + '</span>'
@@ -1531,7 +1561,27 @@ function renderMap() {
     var hdr = card.querySelector('.chapter-header');
     if (hdr) {
       hdr.addEventListener('click', function(e){
-        card.classList.toggle('expanded');
+        if (e.target && e.target.closest('.btn-chapter-action')) return;
+        var isOpen = card.classList.contains('open') || card.classList.contains('expanded');
+        if (isOpen) {
+          card.classList.remove('open');
+          card.classList.remove('expanded');
+        } else {
+          card.classList.add('open');
+          card.classList.add('expanded');
+        }
+      });
+    }
+
+    var actBtn = card.querySelector('.btn-chapter-action');
+    if (actBtn) {
+      actBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        if (isUnlocked) {
+          startNextExerciseInMod(mod);
+        } else {
+          toast('Complete earlier chapters to unlock this module!');
+        }
       });
     }
 
@@ -1547,9 +1597,47 @@ function renderMap() {
             toast('Complete earlier lessons to unlock this exercise!');
           }
         } else if (type === 'quiz') {
-          startChallenge(mid);
+          if (isUnlocked) {
+            startChallenge(mid);
+          } else {
+            toast('Complete earlier modules to unlock this quiz!');
+          }
         } else if (type === 'code') {
-          startCodingChallenge(mid);
+          if (isUnlocked) {
+            startCodingChallenge(mid);
+          } else {
+            toast('Complete earlier modules to unlock this coding lab!');
+          }
+        }
+      });
+    });
+
+    card.querySelectorAll('.exercise-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var row = this.closest('.exercise-row');
+        if (!row) return;
+        var mid = row.getAttribute('data-mid');
+        var lid = row.getAttribute('data-lid');
+        var type = row.getAttribute('data-type');
+        if (lid) {
+          if (isLessonUnlocked(mid, lid) || (STATE.player.completedLessons || []).indexOf(lid) !== -1) {
+            startLesson(mid, lid);
+          } else {
+            toast('Complete earlier lessons to unlock this exercise!');
+          }
+        } else if (type === 'quiz') {
+          if (isUnlocked) {
+            startChallenge(mid);
+          } else {
+            toast('Complete earlier modules to unlock this quiz!');
+          }
+        } else if (type === 'code') {
+          if (isUnlocked) {
+            startCodingChallenge(mid);
+          } else {
+            toast('Complete earlier modules to unlock this coding lab!');
+          }
         }
       });
     });

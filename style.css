@@ -5551,6 +5551,7 @@ body.dark-theme .vis-uml-item {
 .chapter-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1.15rem;
   padding: 1.25rem 1.45rem;
   cursor: pointer;
@@ -5561,6 +5562,40 @@ body.dark-theme .vis-uml-item {
 
 .chapter-header:hover {
   background: var(--bg-card-hover);
+}
+
+.chapter-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter-title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.chapter-code-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink);
+  background: #FFE600;
+  color: #18181B;
+  box-shadow: 1px 1px 0px var(--ink);
+  letter-spacing: 0.04em;
 }
 
 .chapter-status-dot {
@@ -5582,6 +5617,7 @@ body.dark-theme .vis-uml-item {
   color: #18181B;
 }
 
+.chapter-status-dot.active,
 .chapter-status-dot.in-progress {
   background: var(--codedex-yellow);
   color: #18181B;
@@ -5591,6 +5627,12 @@ body.dark-theme .vis-uml-item {
   background: var(--bg-secondary);
   color: var(--text-muted);
   opacity: 0.7;
+}
+
+.chapter-dot-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 800;
 }
 
 .chapter-header-title-box {
@@ -5616,11 +5658,57 @@ body.dark-theme .vis-uml-item {
   font-weight: 500;
 }
 
+.chapter-header-right,
 .chapter-header-meta {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
+}
+
+.btn-chapter-action {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  font-weight: 800;
+  padding: 0.38rem 0.9rem;
+  border-radius: 8px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: all var(--t);
+  box-shadow: 2px 2px 0px var(--ink);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.chapter-btn-start {
+  background: #FFE600;
+  color: #18181B;
+}
+
+.chapter-btn-start:hover {
+  background: #FFF04D;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--ink);
+}
+
+.chapter-btn-review {
+  background: #ECFDF5;
+  color: #059669;
+  border-color: #059669;
+  box-shadow: 2px 2px 0px #059669;
+}
+
+.chapter-lock-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-subtle);
 }
 
 .chapter-progress-pill {
@@ -5635,6 +5723,7 @@ body.dark-theme .vis-uml-item {
   box-shadow: 1px 1px 0px var(--ink);
 }
 
+.chapter-progress-pill.pill-done,
 .chapter-progress-pill.all-done {
   background: #DCFCE7;
   color: #166534;
@@ -5654,7 +5743,8 @@ body.dark-theme .vis-uml-item {
   box-shadow: 1px 1px 0px var(--ink);
 }
 
-.chapter-accordion-card.open .chapter-chevron {
+.chapter-accordion-card.open .chapter-chevron,
+.chapter-accordion-card.expanded .chapter-chevron {
   transform: rotate(180deg);
   background: var(--codedex-yellow);
 }
@@ -5666,8 +5756,9 @@ body.dark-theme .vis-uml-item {
   transition: max-height 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.25s ease;
 }
 
-.chapter-accordion-card.open .chapter-body {
-  max-height: 1800px;
+.chapter-accordion-card.open .chapter-body,
+.chapter-accordion-card.expanded .chapter-body {
+  max-height: 2500px;
   opacity: 1;
   border-top: 2px solid var(--border-subtle);
   padding: 1rem 1.45rem 1.45rem;
@@ -6447,7 +6538,8 @@ body.dark-theme .chapter-header:hover {
   background: #282A30;
 }
 
-body.dark-theme .chapter-accordion-card.open .chapter-body {
+body.dark-theme .chapter-accordion-card.open .chapter-body,
+body.dark-theme .chapter-accordion-card.expanded .chapter-body {
   background: #1E1F24;
   border-top-color: #27272A;
 }
@@ -6459,9 +6551,38 @@ body.dark-theme .chapter-chevron {
   color: #F4F4F5;
 }
 
-body.dark-theme .chapter-accordion-card.open .chapter-chevron {
+body.dark-theme .chapter-accordion-card.open .chapter-chevron,
+body.dark-theme .chapter-accordion-card.expanded .chapter-chevron {
   background: #FFE600;
   color: #121316;
+}
+
+body.dark-theme .chapter-code-badge {
+  background: #FFE600;
+  color: #121316;
+  border-color: #000000;
+  box-shadow: 1px 1px 0px #000000;
+}
+
+body.dark-theme .btn-chapter-action {
+  border-color: #000000;
+}
+
+body.dark-theme .chapter-btn-start {
+  box-shadow: 2px 2px 0px #000000;
+}
+
+body.dark-theme .chapter-btn-review {
+  background: #064E3B;
+  color: #6EE7B7;
+  border-color: #059669;
+  box-shadow: 2px 2px 0px #059669;
+}
+
+body.dark-theme .chapter-lock-badge {
+  background: #18191D;
+  border-color: #27272A;
+  color: #71717A;
 }
 
 body.dark-theme .chapter-progress-pill {
@@ -6470,6 +6591,7 @@ body.dark-theme .chapter-progress-pill {
   color: #A1A1AA;
 }
 
+body.dark-theme .chapter-progress-pill.pill-done,
 body.dark-theme .chapter-progress-pill.all-done {
   background: #064E3B;
   color: #6EE7B7;
