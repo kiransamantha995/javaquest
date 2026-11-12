@@ -8313,782 +8313,942 @@ body.dark-theme .mojang-disclaimer {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   JAVAQUEST — MINECRAFT DESIGN SYSTEM LAYER (Phase 8)
-   Deep Minecraft theme: blocky pixel-art borders, ore-glow accents,
-   deepslate dark surfaces, creeper-green & redstone-red highlights.
-   Professional & attention-to-detail oriented — no emojis, pure SVG.
+   JAVAQUEST — APPLE CRAFTSMANSHIP DESIGN SYSTEM LAYER
+   Toned-down Minecraft gamification framed in Apple-grade elegance:
+   Continuous squircle curves, luminous dot-grid backgrounds, diffuse
+   elevation, razor-sharp SF Pro typography, and zero floating glitches.
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* ─── Minecraft Design Tokens ─────────────────────────────────── */
+/* ─── Apple Design Tokens ─────────────────────────────────────────────── */
 :root {
-  /* Minecraft Block Palette */
-  --mc-grass:      #5a8c3c;
-  --mc-grass-top:  #7ec850;
-  --mc-dirt:       #8B6914;
-  --mc-stone:      #808080;
-  --mc-deepslate:  #3a3a3a;
-  --mc-diamond:    #38BDF8;
-  --mc-diamond-glow: rgba(56, 189, 248, 0.5);
-  --mc-redstone:   #c00000;
-  --mc-redstone-glow: rgba(192, 0, 0, 0.6);
-  --mc-gold:       #FFD700;
-  --mc-gold-glow:  rgba(255, 215, 0, 0.5);
-  --mc-emerald:    #00c060;
-  --mc-netherrack: #6b0000;
-  --mc-nether-glow:rgba(255, 60, 0, 0.4);
-  --mc-endstone:   #d6c88a;
-  --mc-obsidian:   #1a0a2e;
-  --mc-lava:       #FF6600;
-  --mc-water:      #2255dd;
-  --mc-creeper:    #4a7a4a;
-  --mc-wood:       #8B6914;
+  /* Apple Squircle Geometry */
+  --radius-2xl: 24px;
+  --radius-xl:  20px;
+  --radius-lg:  16px;
+  --radius-md:  12px;
+  --radius-sm:  8px;
+  --radius-pill: 9999px;
 
-  /* Blocky Border System (pixel-sharp) */
-  --mc-border:     2px solid #18181B;
-  --mc-border-thick: 3px solid #18181B;
-  --mc-sh:         3px 3px 0px #18181B;
-  --mc-sh-diamond: 3px 3px 0px rgba(56, 189, 248, 0.6);
-  --mc-sh-gold:    3px 3px 0px rgba(255, 215, 0, 0.5);
-  --mc-sh-red:     3px 3px 0px rgba(192, 0, 0, 0.5);
-  --mc-sh-emerald: 3px 3px 0px rgba(0, 192, 96, 0.5);
+  /* Apple Diffuse Shadows */
+  --apple-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --apple-shadow-sm: 0 2px 6px -1px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --apple-shadow-md: 0 6px 20px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  --apple-shadow-lg: 0 14px 36px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  --apple-shadow-hover: 0 18px 42px -6px rgba(0, 0, 0, 0.12), 0 6px 18px -2px rgba(0, 0, 0, 0.06);
 
-  /* Minecraft block border radius — SQUARE (pixel art) */
-  --mc-r: 4px;
-  --mc-r-sm: 2px;
-  --mc-r-lg: 6px;
+  /* Apple Subtle Borders */
+  --apple-border: 1px solid rgba(0, 0, 0, 0.08);
+  --apple-border-subtle: 1px solid rgba(0, 0, 0, 0.05);
+  --apple-border-dark: 1px solid rgba(255, 255, 255, 0.09);
+  --apple-border-dark-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* Gamified Track Colors (Refined & Vibrant) */
+  --track-overworld: #10B981;
+  --track-nether:    #F59E0B;
+  --track-end:       #8B5CF6;
+  --gold-accent:     #FFE600;
+  --cyan-accent:     #38BDF8;
 }
 
-/* ─── Body: Minecraft Stone background with subtle grid ─────── */
+/* ─── 1. Background: Subtle Luminous Radial Dot Grid ─────────────────── */
 body {
-  background-color: #F0EDE0 !important;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px) !important;
-  background-size: 32px 32px !important;
+  background-color: #F7F5EE !important;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.10) 1.5px, transparent 1.5px) !important;
+  background-size: 24px 24px !important;
+  color: #18181B !important;
+  font-family: var(--font-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Plus Jakarta Sans", sans-serif) !important;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Navbar: Deepslate slab style ──────────────────────────── */
-.navbar {
-  background: #1C1C1C !important;
-  border-bottom: 3px solid #000 !important;
-  box-shadow: 0 4px 0 #000, inset 0 1px 0 rgba(255,255,255,0.08) !important;
+body.dark-theme {
+  background-color: #0D1117 !important;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.5px, transparent 1.5px) !important;
+  background-size: 24px 24px !important;
+  color: #F0F6FC !important;
 }
-.logo-text,
-.logo-text .logo-accent {
+
+/* ─── 2. Clean Up: Remove Glitched Floating Elements & Mascot ───────── */
+#javabot-mascot,
+.javabot-mascot,
+.cavern-decorations,
+.pixel-ore,
+.pixel-torch,
+.cavern-ambient-dust {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* ─── 3. Navbar: Apple Frosted Glass Header ──────────────────────────── */
+.navbar {
+  background: rgba(24, 24, 27, 0.88) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.logo-text {
+  font-family: "Space Grotesk", -apple-system, sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: none !important;
+  color: #FFFFFF !important;
+}
+.logo-accent {
   color: #FFE600 !important;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.6);
 }
 .logo-icon-badge {
   background: #FFE600 !important;
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 2px 2px 0px #000 !important;
-}
-.nav-links a,
-.nav-link {
-  color: #CBD5E1 !important;
-}
-.nav-links a:hover,
-.nav-link:hover {
-  color: #FFE600 !important;
-}
-.navbar .btn-primary,
-.navbar .btn-cta {
-  background: #4CAF50 !important;
-  border-color: #000 !important;
-  box-shadow: var(--mc-sh) !important;
-  border-radius: var(--mc-r) !important;
-}
-.navbar .btn-primary:hover {
-  background: #45a049 !important;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #000 !important;
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: 0 2px 10px rgba(255, 230, 0, 0.35) !important;
 }
 
-/* ─── HUD stats bar (hearts / XP) ──────────────────────────── */
+.nav-links .nav-btn,
+.nav-link {
+  border-radius: 10px !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.nav-links .nav-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
+.nav-links .nav-btn.active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #FFE600 !important;
+}
+
 .stat-badge,
 .hud-stat-badge {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: var(--mc-sh) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
 }
-.stat-hearts .stat-badge { background: #8B0000 !important; color: #fff !important; }
-.stat-xp .stat-badge     { background: #FFE600 !important; color: #18181B !important; }
-.stat-streak .stat-badge  { background: #FF6600 !important; color: #fff !important; }
 
-/* ─── Course Hero Banner — Underground Redstone Cavern ──────── */
+/* ─── 4. Map Screen: Panoramic Hero Banner ────────────────────────────── */
 .course-hero-cavern {
-  background: #0A0F1D !important;
-  background-image:
-    radial-gradient(circle at 10% 20%, rgba(56,189,248,0.14) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(192,0,0,0.18) 0%, transparent 40%),
-    linear-gradient(180deg, #060911 0%, #0D1525 60%, #060911 100%) !important;
-  border: 3px solid #000 !important;
-  box-shadow: 6px 6px 0 #000 !important;
-  border-radius: var(--mc-r-lg) !important;
-  position: relative;
-  overflow: hidden;
+  position: relative !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: radial-gradient(ellipse at 85% 20%, rgba(56, 189, 248, 0.18) 0%, transparent 50%),
+              radial-gradient(ellipse at 15% 85%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+              linear-gradient(135deg, #090D1A 0%, #111827 50%, #070B14 100%) !important;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.32), 0 4px 16px -2px rgba(0, 0, 0, 0.18) !important;
+  padding: 3rem 3.25rem !important;
+  margin-bottom: 2rem !important;
+  overflow: hidden !important;
 }
 
-/* Deepslate cobblestone texture overlay */
 .course-hero-cavern::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 16px 16px;
-  pointer-events: none;
-  z-index: 0;
+  display: none !important;
 }
-.cavern-hero-content { position: relative; z-index: 2; }
+
+.cavern-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+
+.hero-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.hero-level-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  background: rgba(56, 189, 248, 0.14) !important;
+  color: #38BDF8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  border-radius: 9999px !important;
+  padding: 0.35rem 0.9rem !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.06em !important;
+  box-shadow: none !important;
+}
+
+.hero-track-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: rgba(255, 230, 0, 0.12) !important;
+  color: #FFE600 !important;
+  border: 1px solid rgba(255, 230, 0, 0.3) !important;
+  border-radius: 9999px !important;
+  padding: 0.35rem 0.9rem !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.04em !important;
+  box-shadow: none !important;
+}
+
+.pixel-dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: #38BDF8 !important;
+  box-shadow: 0 0 8px #38BDF8 !important;
+}
 
 .hero-course-title {
-  font-family: "Press Start 2P", var(--font-ui) !important;
-  font-size: clamp(1.4rem, 3.5vw, 2.4rem) !important;
-  letter-spacing: 0.04em !important;
-  color: #FFE600 !important;
-  text-shadow: 3px 3px 0 #000, 0 0 20px rgba(255,230,0,0.4) !important;
-}
-.title-cursor {
-  color: #38BDF8 !important;
-  text-shadow: 0 0 12px rgba(56,189,248,0.8) !important;
-}
-.hero-course-desc,
-.hero-course-subtitle {
-  color: #94A3B8 !important;
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif !important;
+  font-size: clamp(2.2rem, 5vw, 3.4rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  color: #FFFFFF !important;
+  text-shadow: none !important;
+  margin: 0.25rem 0 0.85rem !important;
+  line-height: 1.15 !important;
 }
 
-/* Resume button — Minecraft-style creeper green ────────────── */
+.hero-badge-edition {
+  display: inline-block;
+  font-size: 0.45em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 230, 0, 0.16);
+  color: #FFE600;
+  border: 1px solid rgba(255, 230, 0, 0.35);
+  font-family: var(--font-mono, monospace);
+  vertical-align: middle;
+  margin-left: 0.4rem;
+  font-weight: 700;
+}
+
+.hero-course-desc {
+  color: #94A3B8 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 2rem !important;
+}
+
+.hero-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
 .btn-resume-quest,
 .btn-resume-learning {
-  background: #4CAF50 !important;
-  border: 2px solid #000 !important;
-  border-radius: var(--mc-r) !important;
-  box-shadow: 3px 3px 0 #000 !important;
-  color: #fff !important;
-  font-family: "Press Start 2P", var(--font-ui) !important;
-  font-size: 0.72rem !important;
-  letter-spacing: 0.03em !important;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.5) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  background: #10B981 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 0.85rem 1.65rem !important;
+  font-family: var(--font-ui) !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35) !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-shadow: none !important;
 }
+
 .btn-resume-quest:hover,
 .btn-resume-learning:hover {
-  background: #5cb85c !important;
-  transform: translate(-2px, -2px) !important;
-  box-shadow: 5px 5px 0 #000 !important;
+  background: #059669 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45) !important;
 }
 
-/* Hero tag row ─────────────────────────────────────────────── */
-.hero-level-tag {
-  background: rgba(56,189,248,0.15) !important;
-  color: #38BDF8 !important;
-  border: 1.5px solid rgba(56,189,248,0.4) !important;
-  border-radius: var(--mc-r-sm) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
-  letter-spacing: 0.08em !important;
-  box-shadow: 1px 1px 0 rgba(56,189,248,0.3) !important;
-}
-.hero-track-tag {
-  background: rgba(255,230,0,0.1) !important;
-  color: #FFE600 !important;
-  border: 1.5px solid rgba(255,230,0,0.3) !important;
-  border-radius: var(--mc-r-sm) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
-}
-.pixel-dot {
-  background: #38BDF8 !important;
-  box-shadow: 0 0 6px #38BDF8 !important;
+.btn-play-svg {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-/* ─── Track Switcher Tabs — Minecraft block tabs ────────────── */
+.hero-meta-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #94A3B8 !important;
+  font-size: 0.88rem !important;
+  font-weight: 500 !important;
+}
+.hero-meta-stats .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hero-meta-stats svg {
+  color: #38BDF8;
+}
+.meta-item-divider {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── 5. Track Switcher: Apple Segmented Pill Control ────────────────── */
+.track-tab-bar {
+  display: flex !important;
+  gap: 0.4rem !important;
+  padding: 5px !important;
+  border-radius: 16px !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  margin-bottom: 2rem !important;
+  overflow-x: auto;
+}
+
+body.dark-theme .track-tab-bar {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 .track-tab-btn {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 3px 3px 0 #000 !important;
-  font-family: var(--font-ui) !important;
-  font-weight: 800 !important;
-  background: #E8E4D4 !important;
-  color: #1C1C1C !important;
-  transition: all 0.1s ease !important;
-}
-.track-tab-btn:hover {
-  transform: translate(-1px,-1px) !important;
-  box-shadow: 4px 4px 0 #000 !important;
-  background: #F5F3E8 !important;
-}
-.track-tab-btn.active {
-  background: #FFE600 !important;
-  color: #18181B !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.65rem 1.15rem !important;
+  border-radius: 12px !important;
+  border: 1px solid transparent !important;
   box-shadow: none !important;
-  transform: translate(2px,2px) !important;
-  border-color: #000 !important;
-}
-.track-tab-icon svg {
-  display: block;
-  image-rendering: pixelated;
-}
-.track-tab-count {
-  background: rgba(0,0,0,0.12) !important;
-  border-radius: 3px !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
-  padding: 2px 5px !important;
-}
-.track-tab-btn.active .track-tab-count {
-  background: rgba(0,0,0,0.18) !important;
+  background: transparent !important;
+  color: #64748B !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  cursor: pointer !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap;
 }
 
-/* ─── Chapter Accordion Cards — Deepslate blocks ────────────── */
+.track-tab-btn:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #18181B !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.dark-theme .track-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #FFFFFF !important;
+}
+
+.track-tab-btn.active {
+  background: #FFFFFF !important;
+  color: #18181B !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07) !important;
+  transform: none !important;
+}
+
+body.dark-theme .track-tab-btn.active {
+  background: #21262D !important;
+  color: #F0F6FC !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+.track-tab-count {
+  border-radius: 9999px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-weight: 700 !important;
+  font-size: 0.7rem !important;
+  padding: 2px 7px !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+body.dark-theme .track-tab-count {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ─── 6. Chapter Accordion Cards: Apple Continuous Squircles ─────────── */
 .chapter-accordion-card {
-  border: 2px solid #000 !important;
-  border-radius: var(--mc-r) !important;
-  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+  background: #FFFFFF !important;
   overflow: hidden !important;
-  margin-bottom: 1rem !important;
-  background: #FEFEFE !important;
-  transition: box-shadow 0.1s, transform 0.1s !important;
+  margin-bottom: 1.25rem !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
+
 .chapter-accordion-card:hover {
-  box-shadow: 5px 5px 0 #000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
 }
+
+body.dark-theme .chapter-accordion-card {
+  background: #161B22 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+body.dark-theme .chapter-accordion-card:hover {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
 .chapter-accordion-card.completed {
-  border-color: var(--mc-emerald) !important;
-  box-shadow: 4px 4px 0 var(--mc-emerald) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
 }
 .chapter-accordion-card.locked {
   opacity: 0.65 !important;
-  filter: grayscale(0.3) !important;
 }
 
-/* Chapter header — stone slab header */
+/* Chapter Header */
 .chapter-header {
-  background: #FEFEFE !important;
+  padding: 1.25rem 1.5rem !important;
+  background: transparent !important;
   border-bottom: none !important;
-  padding: 1rem 1.25rem !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
+
 .chapter-header:hover {
-  background: #FFFEF0 !important;
+  background: rgba(0, 0, 0, 0.015) !important;
 }
+body.dark-theme .chapter-header:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
 .chapter-accordion-card.open .chapter-header,
 .chapter-accordion-card.expanded .chapter-header {
-  background: #FFFEF0 !important;
-  border-bottom: 2px solid #000 !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+body.dark-theme .chapter-accordion-card.open .chapter-header,
+body.dark-theme .chapter-accordion-card.expanded .chapter-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
-/* Status dot — Minecraft ore style */
+/* Chapter Status Dot */
 .chapter-status-dot {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  image-rendering: pixelated;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  animation: none !important;
 }
+
 .chapter-status-dot.completed {
-  background: var(--mc-emerald) !important;
-  box-shadow: 2px 2px 0 #000, 0 0 8px rgba(0,192,96,0.4) !important;
+  background: #10B981 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35) !important;
 }
 .chapter-status-dot.active,
 .chapter-status-dot.in-progress {
-  background: var(--mc-gold) !important;
-  box-shadow: 2px 2px 0 #000, 0 0 8px rgba(255,215,0,0.4) !important;
+  background: #FFE600 !important;
+  color: #18181B !important;
+  box-shadow: 0 2px 10px rgba(255, 230, 0, 0.35) !important;
 }
 .chapter-status-dot.locked {
-  background: #808080 !important;
-  box-shadow: 2px 2px 0 #000 !important;
+  background: #E2E8F0 !important;
+  color: #94A3B8 !important;
+}
+body.dark-theme .chapter-status-dot.locked {
+  background: #21262D !important;
+  color: #64748B !important;
 }
 
-/* Code badge — gold ingot style */
+/* Code Badge */
 .chapter-code-badge {
-  background: var(--mc-gold) !important;
-  color: #18181B !important;
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #000 !important;
-  box-shadow: 1.5px 1.5px 0 #000 !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
-  letter-spacing: 0.04em !important;
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #475569 !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  padding: 3px 8px !important;
+}
+body.dark-theme .chapter-code-badge {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #94A3B8 !important;
 }
 
-/* Chapter title */
 .chapter-title {
-  font-weight: 800 !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
   letter-spacing: -0.015em !important;
 }
 
-/* Progress pill — experience bar style */
+.chapter-desc {
+  color: #64748B !important;
+  font-size: 0.88rem !important;
+}
+body.dark-theme .chapter-desc {
+  color: #8B949E !important;
+}
+
+/* Progress Pill */
 .chapter-progress-pill {
-  background: #E8E4D4 !important;
-  border: 1.5px solid #000 !important;
-  box-shadow: 1.5px 1.5px 0 #000 !important;
-  border-radius: var(--mc-r-sm) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.55rem !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: none !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #64748B !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  padding: 4px 10px !important;
+}
+body.dark-theme .chapter-progress-pill {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #94A3B8 !important;
 }
 .chapter-progress-pill.pill-done {
-  background: rgba(0,192,96,0.2) !important;
-  color: var(--mc-emerald) !important;
-  border-color: var(--mc-emerald) !important;
-  box-shadow: 1.5px 1.5px 0 var(--mc-emerald) !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
 }
 
-/* Chapter action buttons */
+/* Action Buttons */
 .chapter-btn-start {
+  border-radius: 10px !important;
   background: #FFE600 !important;
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
   color: #18181B !important;
-  letter-spacing: 0.03em !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(255, 230, 0, 0.3) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  padding: 0.45rem 1.1rem !important;
+  transition: all 0.15s ease !important;
+  letter-spacing: 0 !important;
 }
 .chapter-btn-start:hover {
-  background: #FFF04D !important;
-  transform: translate(-1px,-1px) !important;
-  box-shadow: 3px 3px 0 #000 !important;
-}
-.chapter-btn-review {
-  background: rgba(0,192,96,0.15) !important;
-  color: var(--mc-emerald) !important;
-  border-color: var(--mc-emerald) !important;
-  box-shadow: 2px 2px 0 var(--mc-emerald) !important;
-  border-radius: var(--mc-r-sm) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.6rem !important;
-}
-.chapter-lock-badge {
-  background: #808080 !important;
-  color: #fff !important;
-  border: 1.5px solid #000 !important;
-  border-radius: var(--mc-r-sm) !important;
-  font-family: var(--font-ui) !important;
-  font-weight: 800 !important;
+  background: #FFED4A !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 230, 0, 0.4) !important;
 }
 
-/* Chevron */
+.chapter-btn-review {
+  border-radius: 10px !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  padding: 0.45rem 1.1rem !important;
+  transition: all 0.15s ease !important;
+  letter-spacing: 0 !important;
+}
+
+.chapter-lock-badge {
+  border-radius: 10px !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #94A3B8 !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 0.78rem !important;
+  padding: 0.45rem 0.85rem !important;
+  box-shadow: none !important;
+}
+
 .chapter-chevron {
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #000 !important;
-  box-shadow: 1.5px 1.5px 0 #000 !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: none !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: #64748B !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+body.dark-theme .chapter-chevron {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #94A3B8 !important;
 }
 .chapter-accordion-card.open .chapter-chevron,
 .chapter-accordion-card.expanded .chapter-chevron {
-  background: #FFE600 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
   transform: rotate(180deg) !important;
 }
 
-/* Chapter body — open state */
+/* Chapter Body & Exercises */
 .chapter-accordion-card.open .chapter-body,
 .chapter-accordion-card.expanded .chapter-body {
-  border-top: 2px solid #000 !important;
-  background: #F9F7F0 !important;
-}
-
-/* ─── Track Divider Banner ───────────────────────────────────── */
-.track-divider-banner {
-  border: 2px solid var(--track-accent, #18181B) !important;
-  border-radius: var(--mc-r) !important;
-  box-shadow: 3px 3px 0 var(--track-accent, #18181B) !important;
-  background: linear-gradient(135deg, rgba(0,0,0,0.04), transparent) !important;
-  margin-bottom: 1rem !important;
-  overflow: hidden !important;
-}
-.track-divider-icon svg {
-  image-rendering: pixelated;
-}
-.track-divider-title {
-  font-weight: 900 !important;
-  letter-spacing: -0.01em !important;
-}
-.track-divider-pill {
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.55rem !important;
-  letter-spacing: 0.06em !important;
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid currentColor !important;
-}
-
-/* ─── Exercise Rows — Crafting table style ───────────────────── */
-.exercise-row {
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #d4d0c0 !important;
-  background: #FEFEFE !important;
-  transition: all 0.1s ease !important;
-}
-.exercise-row:hover {
-  border-color: #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  transform: translateX(2px) !important;
-  background: #FFFEF4 !important;
-}
-.exercise-row.status-available {
-  border-color: #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  background: #FFFEF4 !important;
-}
-.exercise-row.status-done {
-  background: rgba(0,192,96,0.06) !important;
-  border-color: rgba(0,192,96,0.5) !important;
-}
-.exercise-row.status-locked {
-  background: #F0EDE0 !important;
-  opacity: 0.6 !important;
-}
-
-/* Exercise buttons — Minecraft button style */
-.exercise-btn {
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #000 !important;
-  font-weight: 800 !important;
-}
-.exercise-btn.btn-start {
-  background: #FFE600 !important;
-  color: #18181B !important;
-  box-shadow: 2px 2px 0 #000 !important;
-}
-.exercise-btn.btn-start:hover {
-  transform: translate(-1px,-1px) !important;
-  box-shadow: 3px 3px 0 #000 !important;
-}
-.exercise-btn.btn-done {
-  background: rgba(0,192,96,0.12) !important;
-  color: var(--mc-emerald) !important;
-  border-color: var(--mc-emerald) !important;
-  box-shadow: 1.5px 1.5px 0 var(--mc-emerald) !important;
-}
-.exercise-btn.btn-quiz {
-  background: #8B5CF6 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-}
-.exercise-btn.btn-code {
-  background: #38BDF8 !important;
-  color: #18181B !important;
-  box-shadow: 2px 2px 0 #000 !important;
-}
-.exercise-btn.btn-locked {
-  background: #808080 !important;
-  color: #bbb !important;
-  border-color: #666 !important;
-  box-shadow: none !important;
-  cursor: not-allowed !important;
-}
-
-/* Exercise type tags — ore-inspired colors */
-.exercise-type-tag.tag-lesson {
-  background: rgba(56,189,248,0.12) !important;
-  color: #0284C7 !important;
-  border-color: rgba(56,189,248,0.4) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.55rem !important;
-  border-radius: var(--mc-r-sm) !important;
-}
-.exercise-type-tag.tag-quiz {
-  background: rgba(139,92,246,0.12) !important;
-  color: #7C3AED !important;
-  border-color: rgba(139,92,246,0.4) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.55rem !important;
-  border-radius: var(--mc-r-sm) !important;
-}
-.exercise-type-tag.tag-code {
-  background: rgba(0,192,96,0.1) !important;
-  color: #059669 !important;
-  border-color: rgba(0,192,96,0.4) !important;
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.55rem !important;
-  border-radius: var(--mc-r-sm) !important;
-}
-
-/* ─── HUD Sidebar — Stone inventory panel ───────────────────── */
-.hud-card {
-  border: 2px solid #000 !important;
-  border-radius: var(--mc-r) !important;
-  box-shadow: 4px 4px 0 #000 !important;
-  background: #FEFEFE !important;
-}
-.hud-card-title {
-  font-weight: 900 !important;
-  letter-spacing: -0.01em !important;
-}
-
-/* Avatar frame — crafting slot */
-.hud-avatar-frame {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  background: #E8E4D4 !important;
-}
-
-/* Progress bars — XP experience bar */
-.hud-progress-track {
-  background: #E8E4D4 !important;
-  border: 1.5px solid #000 !important;
-  border-radius: var(--mc-r-sm) !important;
-  overflow: hidden !important;
-  height: 12px !important;
-}
-.hud-progress-bar {
-  border-radius: 0 !important;
-  height: 100% !important;
-}
-.hud-progress-bar.bar-emerald {
-  background: linear-gradient(90deg, #00c060, #00e070) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3) !important;
-}
-.hud-progress-bar.bar-gold {
-  background: linear-gradient(90deg, #FFD700, #FFE600) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3) !important;
-}
-
-/* Badge mini grid */
-.hud-badges-mini-grid .badge-mini-item {
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #000 !important;
-  box-shadow: 1.5px 1.5px 0 #000 !important;
-}
-
-/* Trophy room button */
-.btn-hud-trophy {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  font-weight: 800 !important;
-  background: #FFE600 !important;
-  color: #18181B !important;
-  transition: all 0.1s !important;
-}
-.btn-hud-trophy:hover {
-  transform: translate(-1px,-1px) !important;
-  box-shadow: 3px 3px 0 #000 !important;
-}
-
-/* Reference items */
-.hud-ref-item {
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #d4d0c0 !important;
-  transition: all 0.1s !important;
-}
-.hud-ref-item:hover {
-  border-color: #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  transform: translateX(2px) !important;
-  background: #FFFEF4 !important;
-}
-
-/* ─── Home Screen Cards ──────────────────────────────────────── */
-.stat-card,
-.feature-card,
-.glass-card,
-.info-card {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 4px 4px 0 #000 !important;
-}
-.stat-card:hover,
-.feature-card:hover {
-  transform: translate(-2px,-2px) !important;
-  box-shadow: 6px 6px 0 #000 !important;
-}
-
-/* ─── Primary buttons — Minecraft action button ─────────────── */
-.btn-primary {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 3px 3px 0 #000 !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.01em !important;
-  transition: all 0.1s ease !important;
-}
-.btn-primary:hover {
-  transform: translate(-1px,-1px) !important;
-  box-shadow: 4px 4px 0 #000 !important;
-}
-.btn-primary:active {
-  transform: translate(2px,2px) !important;
-  box-shadow: 1px 1px 0 #000 !important;
-}
-.btn-secondary {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 3px 3px 0 #000 !important;
-}
-
-/* Run / Submit button — redstone power */
-.btn-run,
-.btn-run-secondary {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-  font-weight: 800 !important;
-}
-
-/* ─── Code Editor — crafting table / command block ──────────── */
-.cm-editor {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-}
-.editor-toolbar {
-  border-bottom: 2px solid #000 !important;
-  background: #1C1C1C !important;
-  border-radius: var(--mc-r-sm) var(--mc-r-sm) 0 0 !important;
-}
-.editor-lang-badge {
-  font-family: "Press Start 2P", monospace !important;
-  font-size: 0.55rem !important;
-  background: rgba(56,189,248,0.2) !important;
-  color: #38BDF8 !important;
-  border: 1px solid rgba(56,189,248,0.4) !important;
-  border-radius: var(--mc-r-sm) !important;
-}
-
-/* ─── Lesson Panel ──────────────────────────────────────────── */
-.split-lesson-container .lesson-steps-strip {
-  border-right: 2px solid #000 !important;
-  background: #1C1C1C !important;
-}
-.lesson-step-dot {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-}
-.lesson-step-dot.active {
-  background: #FFE600 !important;
-  box-shadow: 0 0 8px rgba(255,230,0,0.5) !important;
-}
-.lesson-step-dot.done {
-  background: var(--mc-emerald) !important;
-  box-shadow: 0 0 6px rgba(0,192,96,0.4) !important;
-}
-
-/* Hint buttons */
-.hint-btn {
-  border-radius: var(--mc-r-sm) !important;
-  border: 1.5px solid #000 !important;
-  box-shadow: 2px 2px 0 #000 !important;
-}
-
-/* ─── Home screen continue card ─────────────────────────────── */
-.continue-card,
-.daily-quest-card {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 4px 4px 0 #000 !important;
-}
-
-/* ─── Toast notifications — command block popup ─────────────── */
-.toast {
-  border-radius: var(--mc-r-sm) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 3px 3px 0 #000 !important;
-  font-family: var(--font-ui) !important;
-  font-weight: 800 !important;
-}
-
-/* ─── Badge Trophy Room — enchanting table style ────────────── */
-.badge-card {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 3px 3px 0 #000 !important;
-}
-.badge-card.earned {
-  box-shadow: 3px 3px 0 var(--mc-gold),
-              0 0 12px rgba(255,215,0,0.25) !important;
-  border-color: var(--mc-gold) !important;
-}
-
-/* ─── Settings cards ────────────────────────────────────────── */
-.settings-card {
-  border-radius: var(--mc-r) !important;
-  border: 2px solid #000 !important;
-  box-shadow: 3px 3px 0 #000 !important;
-}
-.settings-card.danger-card {
-  border-color: #c00000 !important;
-  box-shadow: 3px 3px 0 #c00000 !important;
-}
-
-/* ─── DARK THEME — Deepslate / Nether aesthetic ─────────────── */
-body.dark-theme {
-  background-color: #0F0F0F !important;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px) !important;
-  background-size: 32px 32px !important;
-}
-body.dark-theme .chapter-accordion-card {
-  background: #1a1a1a !important;
-  border-color: #444 !important;
-  box-shadow: 4px 4px 0 #000 !important;
-}
-body.dark-theme .chapter-header {
-  background: #1a1a1a !important;
-}
-body.dark-theme .chapter-header:hover,
-body.dark-theme .chapter-accordion-card.open .chapter-header,
-body.dark-theme .chapter-accordion-card.expanded .chapter-header {
-  background: #242424 !important;
+  border-top: none !important;
+  background: #FAF9F5 !important;
+  padding: 1.25rem 1.5rem !important;
 }
 body.dark-theme .chapter-accordion-card.open .chapter-body,
 body.dark-theme .chapter-accordion-card.expanded .chapter-body {
-  background: #161616 !important;
-  border-top-color: #444 !important;
+  background: #0E131A !important;
+  border-top: none !important;
 }
+
+/* ─── 7. Exercise Rows ───────────────────────────────────────────────── */
+.exercise-row {
+  border-radius: 14px !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  margin-bottom: 0.5rem !important;
+  padding: 0.85rem 1.25rem !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.exercise-row:hover {
+  background: #FFFFFF !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
 body.dark-theme .exercise-row {
-  background: #1e1e1e !important;
-  border-color: #333 !important;
+  background: #161B22 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
 }
 body.dark-theme .exercise-row:hover {
-  background: #242424 !important;
-  border-color: #666 !important;
+  background: #1C2128 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
 }
-body.dark-theme .hud-card {
-  background: #1a1a1a !important;
-  border-color: #444 !important;
+
+.exercise-row.status-available {
+  border-color: rgba(0, 0, 0, 0.10) !important;
 }
-body.dark-theme .track-tab-btn {
-  background: #2a2a2a !important;
-  color: #CBD5E1 !important;
-  border-color: #555 !important;
+body.dark-theme .exercise-row.status-available {
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
-body.dark-theme .track-tab-btn:hover {
-  background: #333 !important;
+
+.exercise-row.status-done {
+  background: rgba(16, 185, 129, 0.05) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
 }
-body.dark-theme .track-tab-btn.active {
+
+.exercise-btn {
+  border-radius: 9999px !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  padding: 0.4rem 1.05rem !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.exercise-btn.btn-start {
   background: #FFE600 !important;
   color: #18181B !important;
-  border-color: #000 !important;
+  box-shadow: 0 2px 8px rgba(255, 230, 0, 0.3) !important;
 }
-body.dark-theme .chapter-accordion-card.open .chapter-body {
-  border-top-color: #333 !important;
-}
-
-/* ─── Responsive adjustments ────────────────────────────────── */
-@media (max-width: 900px) {
-  .track-tab-btn {
-    padding: 0.5rem 0.9rem !important;
-    font-size: 0.82rem !important;
-  }
-  .hero-course-title {
-    font-size: clamp(1.1rem, 4.5vw, 1.8rem) !important;
-  }
+.exercise-btn.btn-start:hover {
+  background: #FFED4A !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 230, 0, 0.45) !important;
 }
 
-/* ─── Pixel-art keyframe animations for ore glows ───────────── */
-@keyframes mc-diamond-pulse {
-  0%, 100% { box-shadow: 0 0 6px rgba(56,189,248,0.4); }
-  50%       { box-shadow: 0 0 14px rgba(56,189,248,0.8); }
-}
-@keyframes mc-redstone-pulse {
-  0%, 100% { box-shadow: 0 0 6px rgba(192,0,0,0.4); }
-  50%       { box-shadow: 0 0 14px rgba(192,0,0,0.9); }
-}
-@keyframes mc-gold-shimmer {
-  0%, 100% { box-shadow: 0 0 5px rgba(255,215,0,0.4); }
-  50%       { box-shadow: 0 0 12px rgba(255,215,0,0.8); }
+.exercise-btn.btn-done {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
 }
 
-/* Apply subtle ore-glow to relevant status elements */
-.chapter-status-dot.completed { animation: mc-diamond-pulse 3s infinite ease-in-out; }
-.chapter-status-dot.active    { animation: mc-gold-shimmer 2.5s infinite ease-in-out; }
+.exercise-btn.btn-quiz {
+  background: #8B5CF6 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3) !important;
+}
+.exercise-btn.btn-quiz:hover {
+  background: #7C3AED !important;
+  transform: translateY(-1px) !important;
+}
+
+.exercise-btn.btn-code {
+  background: #0284C7 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3) !important;
+}
+
+.exercise-btn.btn-locked {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #94A3B8 !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
+}
+body.dark-theme .exercise-btn.btn-locked {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #64748B !important;
+}
+
+.exercise-type-tag {
+  border-radius: 9999px !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 0.68rem !important;
+  padding: 2px 8px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.exercise-type-tag.tag-lesson {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: #0284C7 !important;
+}
+.exercise-type-tag.tag-quiz {
+  background: rgba(139, 92, 246, 0.12) !important;
+  color: #7C3AED !important;
+}
+.exercise-type-tag.tag-code {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+}
+
+/* ─── 8. Track Divider Banner ────────────────────────────────────────── */
+.track-divider-banner {
+  border-radius: 18px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.04) !important;
+  background: #FFFFFF !important;
+  padding: 1.15rem 1.5rem !important;
+  margin: 2.25rem 0 1.25rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+body.dark-theme .track-divider-banner {
+  background: #161B22 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.track-divider-title {
+  font-family: var(--font-ui) !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  letter-spacing: -0.015em !important;
+}
+.track-divider-sub {
+  color: #64748B !important;
+  font-size: 0.85rem !important;
+}
+.track-divider-pill {
+  border-radius: 9999px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-weight: 700 !important;
+  font-size: 0.68rem !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+body.dark-theme .track-divider-pill {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ─── 9. HUD Sidebar Card (Player Profile) ───────────────────────────── */
+.hud-card {
+  border-radius: 20px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+  background: #FFFFFF !important;
+  margin-bottom: 1.5rem !important;
+}
+body.dark-theme .hud-card {
+  background: #161B22 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.hud-avatar-frame {
+  border-radius: 16px !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+  background: #F8F9FA !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+body.dark-theme .hud-avatar-frame {
+  background: #21262D !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.hud-progress-track {
+  border-radius: 9999px !important;
+  border: none !important;
+  height: 8px !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  overflow: hidden !important;
+}
+body.dark-theme .hud-progress-track {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.hud-progress-bar {
+  border-radius: 9999px !important;
+}
+
+.btn-hud-trophy {
+  border-radius: 12px !important;
+  border: none !important;
+  background: #FFE600 !important;
+  color: #18181B !important;
+  box-shadow: 0 2px 8px rgba(255, 230, 0, 0.3) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  transition: all 0.15s ease !important;
+}
+.btn-hud-trophy:hover {
+  background: #FFED4A !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 230, 0, 0.4) !important;
+}
+
+.hud-ref-item {
+  border-radius: 12px !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.15s ease !important;
+}
+.hud-ref-item:hover {
+  background: rgba(0, 0, 0, 0.02) !important;
+  transform: translateX(2px) !important;
+}
+body.dark-theme .hud-ref-item {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+body.dark-theme .hud-ref-item:hover {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* ─── 10. Ask AI Floating Pill Button & Chat Panel ───────────────────── */
+.ai-chat-fab {
+  border-radius: 9999px !important;
+  background: #FFE600 !important;
+  color: #18181B !important;
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  padding: 0.75rem 1.35rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.ai-chat-fab:hover {
+  background: #FFED4A !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22) !important;
+}
+.ai-chat-fab:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+.chat-panel {
+  border-radius: 22px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  overflow: hidden !important;
+}
+
+.chat-chip {
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+  font-size: 0.76rem !important;
+}
+
+.chat-input-area input {
+  border-radius: 12px !important;
+}
+
+/* ─── 11. Global Cards, Modals, Buttons & Dialogs ───────────────────── */
+.stat-card,
+.feature-card,
+.glass-card,
+.info-card,
+.continue-card,
+.daily-quest-card,
+.settings-card,
+.badge-card {
+  border-radius: 20px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.stat-card:hover,
+.feature-card:hover,
+.continue-card:hover,
+.badge-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.dark-theme .stat-card,
+body.dark-theme .feature-card,
+body.dark-theme .glass-card,
+body.dark-theme .info-card,
+body.dark-theme .continue-card,
+body.dark-theme .daily-quest-card,
+body.dark-theme .settings-card,
+body.dark-theme .badge-card {
+  background: #161B22 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.btn-primary,
+.btn-cta {
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.btn-primary:hover,
+.btn-cta:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+.btn-secondary,
+.btn-outline {
+  border-radius: 12px !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+}
+
+.modal-card,
+.modal-content {
+  border-radius: 24px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.toast {
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 700 !important;
+}
+

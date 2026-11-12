@@ -11,15 +11,16 @@ if (!process.env.GEMINI_API_KEY) {
 // ─── Config ───────────────────────────────────────────────────────────────────
 const ALLOWED_ORIGIN    = 'https://javaquest-ashen.vercel.app';
 const CANDIDATE_MODELS  = [
-  'gemini-3.1-flash-lite-preview',
+  'gemini-3.5-flash-lite',
   'gemini-3-flash-preview',
   'gemini-3.5-flash',
-  'gemini-flash-lite-latest',
+  'gemini-3.8-flash',
   'gemini-flash-latest'
 ];
 const MAX_INPUT_BYTES   = 8 * 1024;   // 8 KB (code + chat combined)
 const MAX_CHAT_BYTES    = 1 * 1024;   // 1 KB per chat message
 const DAILY_USER_LIMIT  = parseInt(process.env.AI_DAILY_LIMIT  || '50',  10);
+const GUEST_DAILY_LIMIT = 15;
 const PER_MIN_IP_LIMIT  = parseInt(process.env.AI_PER_MIN_LIMIT || '10', 10);
 const DISABLE_AI_TUTOR  = process.env.DISABLE_AI_TUTOR === 'true';
 
@@ -171,8 +172,8 @@ module.exports = async function handler(req, res) {
 
   // CORS
   const origin = req.headers['origin'] || '';
-  const isAllowed = origin === ALLOWED_ORIGIN || process.env.NODE_ENV === 'development';
-  res.setHeader('Access-Control-Allow-Origin', isAllowed ? origin : ALLOWED_ORIGIN);
+  const isAllowed = !origin || origin === ALLOWED_ORIGIN || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1') || process.env.NODE_ENV === 'development';
+  res.setHeader('Access-Control-Allow-Origin', isAllowed ? (origin || ALLOWED_ORIGIN) : ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Vary', 'Origin');
@@ -188,22 +189,32 @@ module.exports = async function handler(req, res) {
 
   // Auth
   const user = await verifySupabaseJwt(req.headers['authorization']);
-  if (!user) {
-    res.status(401).json({ error: 'Sign in required to use AI features.' });
-    return;
-  }
-
-  // Rate limiting
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
-  if (!checkBucket(_ipMinuteBucket, ip, PER_MIN_IP_LIMIT, 60_000)) {
-    safeLog('warn', 'IP rate limited', { reason: 'per-minute', uid: user.id });
-    res.status(429).json({ error: 'Too many requests. Please wait a minute.' });
-    return;
-  }
-  if (!checkBucket(_userDayBucket, user.id, DAILY_USER_LIMIT, 24 * 60 * 60_000)) {
-    safeLog('warn', 'User daily quota hit', { reason: 'daily-quota', uid: user.id });
-    res.status(429).json({ error: `You've used your ${DAILY_USER_LIMIT} AI requests for today. Come back tomorrow!` });
-    return;
+
+  if (!user) {
+    // Guest tier: allowed with IP rate limiting (15 daily requests, 3 per minute)
+    if (!checkBucket(_ipMinuteBucket, 'guest-min:' + ip, 3, 60_000)) {
+      safeLog('warn', 'Guest IP rate limited', { reason: 'per-minute', uid: 'guest:' + ip });
+      res.status(429).json({ error: 'Please wait a moment before asking another question.' });
+      return;
+    }
+    if (!checkBucket(_userDayBucket, 'guest-day:' + ip, GUEST_DAILY_LIMIT, 24 * 60 * 60_000)) {
+      safeLog('warn', 'Guest daily quota hit', { reason: 'daily-quota', uid: 'guest:' + ip });
+      res.status(429).json({ error: `Guest daily limit reached (${GUEST_DAILY_LIMIT} questions/day). Create a free account to get 50 daily questions!` });
+      return;
+    }
+  } else {
+    // Registered user tier
+    if (!checkBucket(_ipMinuteBucket, ip, PER_MIN_IP_LIMIT, 60_000)) {
+      safeLog('warn', 'IP rate limited', { reason: 'per-minute', uid: user.id });
+      res.status(429).json({ error: 'Too many requests. Please wait a minute.' });
+      return;
+    }
+    if (!checkBucket(_userDayBucket, user.id, DAILY_USER_LIMIT, 24 * 60 * 60_000)) {
+      safeLog('warn', 'User daily quota hit', { reason: 'daily-quota', uid: user.id });
+      res.status(429).json({ error: `You've used your ${DAILY_USER_LIMIT} AI requests for today. Come back tomorrow!` });
+      return;
+    }
   }
 
   // Parse body
@@ -214,8 +225,9 @@ module.exports = async function handler(req, res) {
   // Reject any attempt to pass an apiKey from client
   delete body.apiKey;
 
+  const effectiveUid = user ? user.id : ('guest:' + ip);
   const action = userStr(body.action || 'chat', 32);
-  safeLog('info', 'AI request', { action, uid: user.id });
+  safeLog('info', 'AI request', { action, uid: effectiveUid });
 
   try {
     // ── 1. QUIZ GENERATION ────────────────────────────────────────────────────

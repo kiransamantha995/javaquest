@@ -32,14 +32,18 @@ function callAI(action, payload) {
   })
   .then(function(res) {
     if (res.status === 401) {
-      throw new Error('Please sign in to use AI features.');
+      return res.json().catch(function(){ return {}; }).then(function(e){
+        throw new Error(e.error || 'Please sign in or continue as guest to use JavaBot.');
+      });
     }
     if (res.status === 429) {
-      return res.json().then(function(e) { throw new Error(e.error || 'Too many requests. Please wait a moment.'); });
+      return res.json().catch(function(){ return {}; }).then(function(e) {
+        throw new Error(e.error || 'Rate limit reached. Please wait a moment.');
+      });
     }
     if (!res.ok) {
-      return res.json().then(function(errObj) {
-        throw new Error(errObj.error || ('Server returned HTTP ' + res.status));
+      return res.json().catch(function(){ return {}; }).then(function(errObj) {
+        throw new Error(errObj.error || ('AI service temporarily busy (HTTP ' + res.status + '). Please try again in a few seconds.'));
       });
     }
     return res.json();
