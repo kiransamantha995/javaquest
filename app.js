@@ -4100,6 +4100,9 @@ function initCodeMirrorEditors() {
       isDark: isDark,
       onChange: function(val) {
         if (origCodingArea) origCodingArea.value = val;
+        if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onCodeChange === 'function') {
+          window.JavaBotWatcher.onCodeChange(val);
+        }
       },
       onRun: function() {
         var submitBtn = ge('coding-submit-btn');
@@ -4117,6 +4120,9 @@ function initCodeMirrorEditors() {
       isDark: isDark,
       onChange: function(val) {
         if (origLessonArea) origLessonArea.value = val;
+        if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onCodeChange === 'function') {
+          window.JavaBotWatcher.onCodeChange(val);
+        }
       },
       onRun: function() {
         runLessonCode();
@@ -4593,6 +4599,9 @@ function runLessonCode() {
         if (lineMatch && _cmLesson) {
           _cmLesson.setLineError(parseInt(lineMatch[1], 10), data.compile.stderr.split('\n')[0]);
         }
+        if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onExecutionResult === 'function') {
+          window.JavaBotWatcher.onExecutionResult({ code: code, compileError: data.compile.stderr });
+        }
         return;
       }
 
@@ -4613,6 +4622,10 @@ function runLessonCode() {
         + esc(data.run.stdout || '')
         + (hasErr ? ('\n[Runtime Error]\n' + esc(data.run.stderr)) : '')
         + '</pre>';
+
+      if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onExecutionResult === 'function') {
+        window.JavaBotWatcher.onExecutionResult({ code: code, runtimeError: (hasErr ? data.run.stderr : ''), output: data.run.stdout });
+      }
     })
     .catch(function(err) {
       if (outEl) outEl.innerHTML = '<pre class="output-error">[Execution Failed]\n' + esc(err.message) + '</pre>';
@@ -4698,6 +4711,9 @@ function submitLessonTests() {
       if (lineMatch && _cmLesson) {
         _cmLesson.setLineError(parseInt(lineMatch[1], 10), firstCompileErr.split('\n')[0]);
       }
+      if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onTestFailure === 'function') {
+        window.JavaBotWatcher.onTestFailure({ code: code, compileError: firstCompileErr });
+      }
       return;
     }
 
@@ -4733,6 +4749,9 @@ function submitLessonTests() {
       _stepTestsPassed[_slideIdx] = true;
       _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx + 1);
       updateStepPills();
+      if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onTestSuccess === 'function') {
+        window.JavaBotWatcher.onTestSuccess({ code: code });
+      }
       if (window.GameFX) {
         if (window.GameFX.playBlockBreak) window.GameFX.playBlockBreak();
         if (window.GameFX.flyXpOrbs) window.GameFX.flyXpOrbs();
@@ -4740,6 +4759,9 @@ function submitLessonTests() {
       }
       showRecapOverlay();
     } else {
+      if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onTestFailure === 'function') {
+        window.JavaBotWatcher.onTestFailure({ code: code, summary: 'Some test cases did not pass expected output.' });
+      }
       if (window.GameFX) {
         if (window.GameFX.playGentleOops) window.GameFX.playGentleOops();
         if (window.GameFX.mascotReact) window.GameFX.mascotReact("shake");

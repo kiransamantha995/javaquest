@@ -9354,3 +9354,89 @@ body.dark-theme .badge-card {
   }
 }
 
+/* ─── 13. JavaBot AI Tutor v2 Enhancements ─────────────────────────── */
+.live-watch-toggle-btn.paused,
+#live-watch-toggle-btn.paused {
+  background: rgba(156, 163, 175, 0.15) !important;
+  color: #9CA3AF !important;
+  border-color: rgba(156, 163, 175, 0.3) !important;
+}
+
+.javabot-suggestion-toast {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.5rem;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(28, 29, 34, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  padding: 0.85rem 1.15rem;
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.4);
+  max-width: 420px;
+  width: calc(100vw - 3rem);
+  animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #F3F4F6;
+}
+
+.javabot-toast-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.javabot-toast-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.javabot-toast-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #FCD34D;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
+}
+
+.javabot-toast-msg {
+  font-size: 0.84rem;
+  line-height: 1.35;
+  color: #E5E7EB;
+  word-break: break-word;
+}
+
+.javabot-toast-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.diff-preview-modal {
+  max-width: 620px;
+  width: 92%;
+}
+
+body.dark-theme .diff-preview-modal,
+body.dark-theme .learner-memory-modal {
+  background: #18191D !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+

@@ -9,7 +9,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=8.8"/>
+  <link rel="stylesheet" href="style.css?v=9.0"/>
 </head>
 <body>
 
@@ -681,6 +681,7 @@
             <span class="mac-traffic-dot green"></span>
           </div>
           <span class="editor-lang-badge">Solution.java</span>
+          <button class="btn-xs btn-outline-gold live-watch-toggle-btn" id="coding-live-watch-btn" onclick="window.toggleLiveWatching()" title="Toggle JavaBot live watching" aria-label="Toggle JavaBot live watching"><svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 10c3-5.5 15-5.5 18 0-3 5.5-15 5.5-18 0z"/><circle cx="10" cy="10" r="2.5"/></svg> Watching</button>
           <button class="btn-secondary btn-sm" id="coding-reset-btn">↺ Reset Code</button>
           <button class="btn-secondary btn-sm" id="coding-expand-btn" title="Toggle tall editor view">Expand Editor</button>
           <div style="flex:1"></div>
@@ -1046,7 +1047,8 @@
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:.4rem;">
-        <button class="btn-clear-chat" id="chat-clear-btn" title="Clear chat history to save tokens">↺ Reset</button>
+        <button class="btn-clear-chat" id="chat-memory-btn" onclick="window.openLearnerMemoryModal()" title="View learner weak spots">🧠 Memory</button>
+        <button class="btn-clear-chat" id="chat-clear-btn" title="Clear chat history">↺ Reset</button>
         <button class="chat-close-btn" id="chat-close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     </div>
@@ -1161,6 +1163,72 @@
   </div>
 </div>
 
+<!-- ====== JAVABOT DIFF PREVIEW MODAL ====== -->
+<div class="modal-overlay hidden" id="modal-diff-preview" role="dialog" aria-modal="true" aria-labelledby="diff-modal-title">
+  <div class="modal-box diff-preview-modal glass-card">
+    <div class="diff-modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div class="diff-modal-badge" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(16,185,129,0.12);color:#10B981;border:1px solid rgba(16,185,129,0.3);padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;font-weight:800;letter-spacing:0.04em;">
+        <span class="diff-badge-dot" style="width:6px;height:6px;border-radius:50%;background:#10B981;"></span>
+        JAVABOT SUGGESTION
+      </div>
+      <button class="modal-close-btn" onclick="window.closeDiffModal()" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <h3 class="diff-modal-title" id="diff-modal-title" style="margin:0 0 0.5rem;font-size:1.2rem;font-weight:800;color:var(--ink);">Suggested Code Fix</h3>
+    <p class="diff-modal-explanation" id="diff-modal-explanation" style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.25rem;line-height:1.45;"></p>
+    <div class="diff-preview-container" style="background:#0D1117;border:1px solid rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;margin-bottom:1.5rem;font-family:var(--font-mono);font-size:0.85rem;">
+      <div class="diff-line diff-line-removed" style="display:flex;align-items:flex-start;padding:0.6rem 0.85rem;background:rgba(239,68,68,0.15);border-bottom:1px solid rgba(239,68,68,0.2);color:#F87171;">
+        <span class="diff-sign" style="user-select:none;margin-right:0.75rem;font-weight:900;">-</span>
+        <code class="diff-code" id="diff-preview-old" style="white-space:pre-wrap;word-break:break-all;color:inherit;background:transparent;padding:0;"></code>
+      </div>
+      <div class="diff-line diff-line-added" style="display:flex;align-items:flex-start;padding:0.6rem 0.85rem;background:rgba(16,185,129,0.15);color:#34D399;">
+        <span class="diff-sign" style="user-select:none;margin-right:0.75rem;font-weight:900;">+</span>
+        <code class="diff-code" id="diff-preview-new" style="white-space:pre-wrap;word-break:break-all;color:inherit;background:transparent;padding:0;"></code>
+      </div>
+    </div>
+    <div class="diff-modal-actions" style="display:flex;gap:0.75rem;justify-content:flex-end;">
+      <button class="btn-secondary" onclick="window.closeDiffModal()">Dismiss</button>
+      <button class="btn-primary" id="btn-apply-diff" onclick="window.applyDiffSuggestion()">Apply Suggestion</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== LEARNER MEMORY VIEWER MODAL ====== -->
+<div class="modal-overlay hidden" id="modal-learner-memory" role="dialog" aria-modal="true" aria-labelledby="learner-memory-title">
+  <div class="modal-box learner-memory-modal glass-card" style="max-width:640px;width:92%;">
+    <div class="diff-modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div class="diff-modal-badge" style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(99,102,241,0.12);color:#6366F1;border:1px solid rgba(99,102,241,0.3);padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;font-weight:800;letter-spacing:0.04em;">
+        <span class="diff-badge-dot" style="width:6px;height:6px;border-radius:50%;background:#6366F1;"></span>
+        LEARNING RECAP & MEMORY
+      </div>
+      <button class="modal-close-btn" onclick="window.closeLearnerMemoryModal()" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <h3 class="diff-modal-title" id="learner-memory-title" style="margin:0 0 0.5rem;font-size:1.25rem;font-weight:800;color:var(--ink);">Tracked Coding Weak Spots</h3>
+    <p style="color:var(--text-secondary);font-size:0.88rem;margin:0 0 1.25rem;line-height:1.45;">JavaBot tracks recurring syntax and logic pitfalls locally on your device to personalize review questions and Socratic hints.</p>
+    <div id="learner-memory-full-list" class="learner-memory-grid" style="max-height:340px;overflow-y:auto;padding-right:0.25rem;"></div>
+    <div class="diff-modal-actions" style="margin-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+      <button class="btn-secondary" style="color:#EF4444;border-color:rgba(239,68,68,0.3);" onclick="window.clearLearnerMemory()">Clear All Memory</button>
+      <button class="btn-primary" onclick="window.closeLearnerMemoryModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== JAVABOT PROACTIVE TOAST ====== -->
+<div class="javabot-suggestion-toast hidden" id="javabot-suggestion-toast" role="alert">
+  <div class="javabot-toast-icon">☕</div>
+  <div class="javabot-toast-body">
+    <div class="javabot-toast-title" id="javabot-toast-title">JavaBot Tip</div>
+    <div class="javabot-toast-msg" id="javabot-toast-msg"></div>
+  </div>
+  <div class="javabot-toast-actions">
+    <button class="btn-xs btn-primary" id="javabot-toast-action-btn">Ask Hint</button>
+    <button class="btn-xs btn-secondary" onclick="window.dismissJavaBotToast()">Dismiss</button>
+  </div>
+</div>
+
 <div class="modal-overlay hidden" id="modal-reset">
   <div class="modal-box">
     <div style="font-size:2.8rem;line-height:1;margin-bottom:0.5rem;font-weight:900;color:#DC2626">!</div>
@@ -1196,12 +1264,12 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=8.8"></script>
-<script src="animations.js?v=8.8"></script>
-<script src="supabase.js?v=8.8"></script>
-<script src="ai-tutor.js?v=8.8"></script>
-<script src="lib/editor.bundle.js?v=8.8"></script>
-<script src="lib/game-fx.js?v=8.8"></script>
-<script src="app.js?v=8.8"></script>
+<script src="curriculum.js?v=9.0"></script>
+<script src="animations.js?v=9.0"></script>
+<script src="supabase.js?v=9.0"></script>
+<script src="ai-tutor.js?v=9.0"></script>
+<script src="lib/editor.bundle.js?v=9.0"></script>
+<script src="lib/game-fx.js?v=9.0"></script>
+<script src="app.js?v=9.0"></script>
 </body>
 </html>
