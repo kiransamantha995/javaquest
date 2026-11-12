@@ -1,3 +1,19 @@
+
+function getPlayerState() {
+  if (STATE && STATE.player) return STATE.player;
+  return {
+    name: 'JavaLearner',
+    level: 1,
+    xp: 0,
+    hearts: 3,
+    difficulty: 'beginner',
+    completedModules: [],
+    completedLessons: [],
+    completedChallenges: [],
+    completedCoding: []
+  };
+}
+
 // JavaQuest — app.js (Supabase Edition)
 // Pure addEventListener, no inline onclick, full Supabase sync
 
@@ -1202,13 +1218,13 @@ function renderContinueCard() {
   var mods = getModulesForDifficulty();
   for (var i=0; i<mods.length; i++) {
     var mod=mods[i];
-    if (STATE.player.completedModules.indexOf(mod.id)===-1) {
+    if (getPlayerState().completedModules.indexOf(mod.id)===-1) {
       var badgeEl = ge('continue-badge');
       if (badgeEl) badgeEl.style.backgroundColor = mod.color || '#FFE600';
       setText('continue-badge-code', (mod.code || mod.id).toUpperCase());
       setText('continue-title', mod.title);
       var done=0;
-      for(var j=0;j<mod.lessons.length;j++) if(STATE.player.completedLessons.indexOf(mod.lessons[j].id)!==-1) done++;
+      for(var j=0;j<mod.lessons.length;j++) if(getPlayerState().completedLessons.indexOf(mod.lessons[j].id)!==-1) done++;
       var total=mod.lessons.length, pct2=Math.round(done/total*100);
       setText('continue-subtitle', done+' / '+total+' lessons complete');
       setWidth('continue-progress-fill', pct2+'%'); setText('continue-progress-label', pct2+'%');
@@ -1227,18 +1243,18 @@ function startDailyQuest() {
     if (!isModUnlocked(mod.id)) continue;
     // Check lessons
     for (var j = 0; j < mod.lessons.length; j++) {
-      if (STATE.player.completedLessons.indexOf(mod.lessons[j].id) === -1) {
+      if (getPlayerState().completedLessons.indexOf(mod.lessons[j].id) === -1) {
         startLesson(mod.id, mod.lessons[j].id);
         return;
       }
     }
     // Check quiz challenge
-    if (mod.challenge && STATE.player.completedChallenges.indexOf(mod.challenge.id) === -1) {
+    if (mod.challenge && getPlayerState().completedChallenges.indexOf(mod.challenge.id) === -1) {
       startChallenge(mod.id);
       return;
     }
     // Check coding challenge
-    if (mod.codingTask && (STATE.player.completedCoding || []).indexOf(mod.id) === -1) {
+    if (mod.codingTask && (getPlayerState().completedCoding || []).indexOf(mod.id) === -1) {
       startCodingChallenge(mod.id);
       return;
     }
@@ -1250,10 +1266,20 @@ function startDailyQuest() {
 function isModUnlocked(modId) {
   var mods = getModulesForDifficulty();
   if (!mods.length) return false;
+  // Check if first module overall (always unlocked)
+  var allMods = window.CURRICULUM || (typeof CURRICULUM !== 'undefined' ? CURRICULUM : []);
+  if (allMods.length && allMods[0].id === modId) return true;
+  // Check within difficulty-limited list
   if (mods[0].id === modId) return true;
   for (var i = 1; i < mods.length; i++) {
     if (mods[i].id === modId) {
-      return (STATE.player.completedModules || []).indexOf(mods[i - 1].id) !== -1;
+      return (getPlayerState().completedModules || []).indexOf(mods[i - 1].id) !== -1;
+    }
+  }
+  // For tracks beyond current difficulty, check sequentially in full curriculum
+  for (var i = 1; i < allMods.length; i++) {
+    if (allMods[i].id === modId) {
+      return (getPlayerState().completedModules || []).indexOf(allMods[i - 1].id) !== -1;
     }
   }
   return false;
@@ -1266,7 +1292,7 @@ function isLessonUnlocked(modId, lessonId) {
   if (mod.lessons[0].id === lessonId) return true;
   for (var i = 1; i < mod.lessons.length; i++) {
     if (mod.lessons[i].id === lessonId) {
-      return (STATE.player.completedLessons || []).indexOf(mod.lessons[i - 1].id) !== -1;
+      return (getPlayerState().completedLessons || []).indexOf(mod.lessons[i - 1].id) !== -1;
     }
   }
   return false;
@@ -1285,23 +1311,23 @@ function markModuleCompleteIfReady(mod) {
   if (!mod) return;
   var allLessonsDone = true;
   for (var i = 0; i < mod.lessons.length; i++) {
-    if ((STATE.player.completedLessons || []).indexOf(mod.lessons[i].id) === -1) {
+    if ((getPlayerState().completedLessons || []).indexOf(mod.lessons[i].id) === -1) {
       allLessonsDone = false;
       break;
     }
   }
-  var quizDone = !mod.challenge || (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) !== -1;
-  var codeDone = !mod.codingTask || (STATE.player.completedCoding || []).indexOf(mod.id) !== -1;
+  var quizDone = !mod.challenge || (getPlayerState().completedChallenges || []).indexOf(mod.challenge.id) !== -1;
+  var codeDone = !mod.codingTask || (getPlayerState().completedCoding || []).indexOf(mod.id) !== -1;
 
   if (allLessonsDone && (quizDone || codeDone)) {
-    if ((STATE.player.completedModules || []).indexOf(mod.id) === -1) {
-      STATE.player.completedModules.push(mod.id);
+    if ((getPlayerState().completedModules || []).indexOf(mod.id) === -1) {
+      getPlayerState().completedModules.push(mod.id);
       checkBadge('first_module');
       checkBadge('module_' + mod.id.replace('module-', ''));
       var allM = true;
       var mods = getModulesForDifficulty();
       for (var j = 0; j < mods.length; j++) {
-        if (STATE.player.completedModules.indexOf(mods[j].id) === -1) { allM = false; break; }
+        if (getPlayerState().completedModules.indexOf(mods[j].id) === -1) { allM = false; break; }
       }
       if (allM) checkBadge('all_modules');
       localSave();
@@ -1324,21 +1350,66 @@ function startNextExerciseInMod(mod) {
   if (!mod || !mod.lessons || !mod.lessons.length) return;
   for (var i = 0; i < mod.lessons.length; i++) {
     var l = mod.lessons[i];
-    if ((STATE.player.completedLessons || []).indexOf(l.id) === -1) {
+    if ((getPlayerState().completedLessons || []).indexOf(l.id) === -1) {
       startLesson(mod.id, l.id);
       return;
     }
   }
-  if (mod.challenge && (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) === -1) {
+  if (mod.challenge && (getPlayerState().completedChallenges || []).indexOf(mod.challenge.id) === -1) {
     startChallenge(mod.id);
     return;
   }
-  if (mod.codingTask && (STATE.player.completedCoding || []).indexOf(mod.id) === -1) {
+  if (mod.codingTask && (getPlayerState().completedCoding || []).indexOf(mod.id) === -1) {
     startCodingChallenge(mod.id);
     return;
   }
   startLesson(mod.id, mod.lessons[0].id);
 }
+
+
+function computeCurriculumStats() {
+  var mods = window.CURRICULUM || (typeof CURRICULUM !== 'undefined' ? CURRICULUM : []);
+  var totalLessons = 0;
+  var totalExercises = 0;
+  var totalXP = 0;
+  var totalMinutes = 0;
+  var countsByTrack = { all: mods.length, beginner: 0, intermediate: 0, advanced: 0 };
+
+  mods.forEach(function(m){
+    var track = m.level || 'beginner';
+    if (countsByTrack[track] !== undefined) countsByTrack[track]++;
+    var lCount = (m.lessons || []).length;
+    totalLessons += lCount;
+    var hasQuiz = !!(m.challenge || (m.quizBank && m.quizBank.length));
+    var hasCoding = !!m.codingTask;
+    totalExercises += lCount + (hasQuiz ? 1 : 0) + (hasCoding ? 1 : 0);
+    
+    (m.lessons || []).forEach(function(l){
+      totalXP += (l.xp || 25);
+      totalMinutes += (l.estimatedMinutes || 12);
+    });
+    if (hasQuiz) totalXP += (m.challenge ? (m.challenge.xp || 50) : 50);
+    if (hasCoding) totalXP += (m.codingTask ? (m.codingTask.xp || 75) : 75);
+  });
+
+  if (window.PROJECTS && Array.isArray(PROJECTS)) {
+    PROJECTS.forEach(function(p){ totalXP += (p.xpReward || 100); totalExercises += 1; });
+  }
+
+  var hours = Math.max(1, Math.round(totalMinutes / 60));
+  var totalBadges = (window.BADGES && BADGES.length) || 24;
+
+  return {
+    moduleCount: mods.length,
+    countsByTrack: countsByTrack,
+    lessonCount: totalLessons,
+    exerciseCount: totalExercises,
+    totalXP: totalXP,
+    estimatedHours: hours,
+    badgeCount: totalBadges
+  };
+}
+window.computeCurriculumStats = computeCurriculumStats;
 
 function renderMap() {
   var container = ge('chapters-accordion');
@@ -1377,16 +1448,16 @@ function renderMap() {
         var m = allMods[i];
         if (!isModUnlocked(m.id)) continue;
         for (var j = 0; j < m.lessons.length; j++) {
-          if ((STATE.player.completedLessons || []).indexOf(m.lessons[j].id) === -1) {
+          if ((getPlayerState().completedLessons || []).indexOf(m.lessons[j].id) === -1) {
             startLesson(m.id, m.lessons[j].id);
             return;
           }
         }
-        if (m.challenge && (STATE.player.completedChallenges || []).indexOf(m.challenge.id) === -1) {
+        if (m.challenge && (getPlayerState().completedChallenges || []).indexOf(m.challenge.id) === -1) {
           startChallenge(m.id);
           return;
         }
-        if (m.codingTask && (STATE.player.completedCoding || []).indexOf(m.id) === -1) {
+        if (m.codingTask && (getPlayerState().completedCoding || []).indexOf(m.id) === -1) {
           startCodingChallenge(m.id);
           return;
         }
@@ -1411,9 +1482,9 @@ function renderMap() {
   container.innerHTML = '';
 
   var trackMeta = {
-    beginner: { name: 'Track 1: Overworld', sub: 'Foundations, Syntax, Control Flow & Core OOP', icon: '🌱', color: '#10B981', capstoneId: 'proj-beginner' },
-    intermediate: { name: 'Track 2: The Nether', sub: 'Deep OOP, Collections, Streams, I/O & Concurrency', icon: '🔥', color: '#F59E0B', capstoneId: 'proj-intermediate' },
-    advanced: { name: 'Track 3: The End', sub: 'JVM Internals, Virtual Threads, Spring Boot & Cloud', icon: '🌌', color: '#8B5CF6', capstoneId: 'proj-advanced' }
+    beginner: { name: 'Track 1: Overworld', sub: 'Foundations, Syntax, Control Flow & Core OOP', icon: '<svg viewBox="0 0 16 16" width="20" height="20" fill="none"><rect x="2" y="6" width="12" height="10" fill="#5a8c3c"/><rect x="2" y="2" width="12" height="4" fill="#8B6914"/><rect x="4" y="8" width="2" height="2" fill="#3a6a28"/><rect x="10" y="8" width="2" height="2" fill="#3a6a28"/><rect x="7" y="6" width="2" height="2" fill="#3a6a28"/></svg>', color: '#10B981', capstoneId: 'proj-beginner' },
+    intermediate: { name: 'Track 2: The Nether', sub: 'Deep OOP, Collections, Streams, I/O & Concurrency', icon: '<svg viewBox="0 0 16 16" width="20" height="20" fill="none"><rect x="1" y="1" width="14" height="14" fill="#8B0000"/><rect x="3" y="3" width="4" height="4" fill="#FF4500"/><rect x="9" y="3" width="4" height="4" fill="#FF4500"/><rect x="6" y="8" width="4" height="4" fill="#FF6600"/><rect x="2" y="10" width="2" height="4" fill="#C0392B"/><rect x="12" y="10" width="2" height="4" fill="#C0392B"/></svg>', color: '#F59E0B', capstoneId: 'proj-intermediate' },
+    advanced: { name: 'Track 3: The End', sub: 'JVM Internals, Virtual Threads, Spring Boot & Cloud', icon: '<svg viewBox="0 0 16 16" width="20" height="20" fill="none"><rect x="1" y="1" width="14" height="14" fill="#1a0a2e"/><circle cx="4" cy="4" r="1" fill="#fff" opacity=".9"/><circle cx="12" cy="6" r="0.8" fill="#fff" opacity=".7"/><circle cx="7" cy="11" r="1.2" fill="#fff" opacity=".8"/><circle cx="13" cy="13" r="0.6" fill="#fff" opacity=".6"/><circle cx="2" cy="12" r="0.7" fill="#a855f7" opacity=".9"/></svg>', color: '#8B5CF6', capstoneId: 'proj-advanced' }
   };
 
   var currentTrack = null;
@@ -1440,17 +1511,18 @@ function renderMap() {
       }
     }
 
-    var isCompleted = (STATE.player.completedModules || []).indexOf(mod.id) !== -1;
+    var player = getPlayerState();
+    var isCompleted = (player.completedModules || []).indexOf(mod.id) !== -1;
     var isUnlocked = isModUnlocked(mod.id);
     var statusKey = isCompleted ? 'completed' : (isUnlocked ? 'available' : 'locked');
 
     var totalEx = mod.lessons.length + (mod.challenge ? 1 : 0) + (mod.codingTask ? 1 : 0);
     var doneEx = 0;
     mod.lessons.forEach(function(l){
-      if ((STATE.player.completedLessons || []).indexOf(l.id) !== -1) doneEx++;
+      if ((getPlayerState().completedLessons || []).indexOf(l.id) !== -1) doneEx++;
     });
-    if (mod.challenge && (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) !== -1) doneEx++;
-    if (mod.codingTask && (STATE.player.completedCoding || []).indexOf(mod.id) !== -1) doneEx++;
+    if (mod.challenge && (getPlayerState().completedChallenges || []).indexOf(mod.challenge.id) !== -1) doneEx++;
+    if (mod.codingTask && (getPlayerState().completedCoding || []).indexOf(mod.id) !== -1) doneEx++;
 
     var shouldExpand = false;
     if (isUnlocked && !isCompleted && !foundFirstActive) {
@@ -1479,11 +1551,11 @@ function renderMap() {
 
     var actionBtnHtml = '';
     if (isCompleted) {
-      actionBtnHtml = '<button class="btn-chapter-action chapter-btn-review" data-mid="' + mod.id + '" title="Review chapter">Review ✓</button>';
+      actionBtnHtml = '<button class="btn-chapter-action chapter-btn-review" data-mid="' + mod.id + '" title="Review chapter">Review</button>';
     } else if (isUnlocked) {
-      actionBtnHtml = '<button class="btn-chapter-action chapter-btn-start" data-mid="' + mod.id + '" title="Start next lesson in this chapter">Start →</button>';
+      actionBtnHtml = '<button class="btn-chapter-action chapter-btn-start" data-mid="' + mod.id + '" title="Start next lesson in this chapter">Start</button>';
     } else {
-      actionBtnHtml = '<span class="chapter-lock-badge" title="Complete earlier chapters to unlock">🔒 Locked</span>';
+      actionBtnHtml = '<span class="chapter-lock-badge" title="Complete earlier chapters to unlock"><svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:3px;vertical-align:-1px"><rect x="2" y="6" width="10" height="7" rx="1"/><path d="M4 6V4a3 3 0 0 1 6 0v2"/></svg>Locked</span>';
     }
 
     var headerHtml = '<div class="chapter-header" data-modid="' + mod.id + '">'
@@ -1500,7 +1572,7 @@ function renderMap() {
       + '<div class="chapter-header-right">'
       + actionBtnHtml
       + '<span class="chapter-progress-pill ' + (isCompleted ? 'pill-done' : '') + '">' + doneEx + ' / ' + totalEx + ' Done</span>'
-      + '<span class="chapter-chevron">▼</span>'
+      + '<span class="chapter-chevron"><svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg></span>'
       + '</div>'
       + '</div>';
 
@@ -1509,16 +1581,16 @@ function renderMap() {
 
     // Lessons
     mod.lessons.forEach(function(lesson, lIdx){
-      var lDone = (STATE.player.completedLessons || []).indexOf(lesson.id) !== -1;
+      var lDone = (getPlayerState().completedLessons || []).indexOf(lesson.id) !== -1;
       var lUnlocked = isLessonUnlocked(mod.id, lesson.id);
 
       var btnHtml = '';
       if (lDone) {
-        btnHtml = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">Done! ✓</button>';
+        btnHtml = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">Done!</button>';
       } else if (lUnlocked) {
-        btnHtml = '<button class="exercise-btn btn-start" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">Start →</button>';
+        btnHtml = '<button class="exercise-btn btn-start" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">Start</button>';
       } else {
-        btnHtml = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
+        btnHtml = '<button class="exercise-btn btn-locked" disabled>Locked</button>';
       }
 
       bodyHtml += '<div class="exercise-row ' + (lDone ? 'status-done row-done' : (lUnlocked ? 'status-available row-active' : 'status-locked row-locked')) + '" data-mid="' + mod.id + '" data-lid="' + lesson.id + '">'
@@ -1533,15 +1605,15 @@ function renderMap() {
 
     // Quiz Challenge
     if (mod.challenge) {
-      var qDone = (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) !== -1;
+      var qDone = (getPlayerState().completedChallenges || []).indexOf(mod.challenge.id) !== -1;
       var qUnlocked = isUnlocked && doneEx >= mod.lessons.length;
       var qBtn = '';
       if (qDone) {
-        qBtn = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-type="quiz">Done! ✓</button>';
+        qBtn = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-type="quiz">Done!</button>';
       } else if (qUnlocked) {
-        qBtn = '<button class="exercise-btn btn-quiz" data-mid="' + mod.id + '" data-type="quiz">Quiz (+' + mod.challenge.xp + ' XP) →</button>';
+        qBtn = '<button class="exercise-btn btn-quiz" data-mid="' + mod.id + '" data-type="quiz">Quiz (+' + mod.challenge.xp + ' XP)</button>';
       } else {
-        qBtn = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
+        qBtn = '<button class="exercise-btn btn-locked" disabled>Locked</button>';
       }
 
       bodyHtml += '<div class="exercise-row ' + (qDone ? 'status-done row-done' : (qUnlocked ? 'status-available row-active' : 'status-locked row-locked')) + '" data-mid="' + mod.id + '" data-type="quiz">'
@@ -1556,15 +1628,15 @@ function renderMap() {
 
     // Coding Workbench
     if (mod.codingTask) {
-      var cDone = (STATE.player.completedCoding || []).indexOf(mod.id) !== -1;
+      var cDone = (getPlayerState().completedCoding || []).indexOf(mod.id) !== -1;
       var cUnlocked = isUnlocked && doneEx >= mod.lessons.length;
       var cBtn = '';
       if (cDone) {
-        cBtn = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-type="code">Solved! ✓</button>';
+        cBtn = '<button class="exercise-btn btn-done" data-mid="' + mod.id + '" data-type="code">Solved!</button>';
       } else if (cUnlocked) {
-        cBtn = '<button class="exercise-btn btn-code" data-mid="' + mod.id + '" data-type="code">Code (+' + (mod.codingTask.xp || 75) + ' XP) →</button>';
+        cBtn = '<button class="exercise-btn btn-code" data-mid="' + mod.id + '" data-type="code">Code (+' + (mod.codingTask.xp || 75) + ' XP)</button>';
       } else {
-        cBtn = '<button class="exercise-btn btn-locked" disabled>Locked 🔒</button>';
+        cBtn = '<button class="exercise-btn btn-locked" disabled>Locked</button>';
       }
 
       bodyHtml += '<div class="exercise-row ' + (cDone ? 'status-done row-done' : (cUnlocked ? 'status-available row-active' : 'status-locked row-locked')) + '" data-mid="' + mod.id + '" data-type="code">'
@@ -1615,7 +1687,7 @@ function renderMap() {
         var lid = this.getAttribute('data-lid');
         var type = this.getAttribute('data-type');
         if (lid) {
-          if (isLessonUnlocked(mid, lid) || (STATE.player.completedLessons || []).indexOf(lid) !== -1) {
+          if (isLessonUnlocked(mid, lid) || (getPlayerState().completedLessons || []).indexOf(lid) !== -1) {
             startLesson(mid, lid);
           } else {
             toast('Complete earlier lessons to unlock this exercise!');
@@ -1645,7 +1717,7 @@ function renderMap() {
         var lid = row.getAttribute('data-lid');
         var type = row.getAttribute('data-type');
         if (lid) {
-          if (isLessonUnlocked(mid, lid) || (STATE.player.completedLessons || []).indexOf(lid) !== -1) {
+          if (isLessonUnlocked(mid, lid) || (getPlayerState().completedLessons || []).indexOf(lid) !== -1) {
             startLesson(mid, lid);
           } else {
             toast('Complete earlier lessons to unlock this exercise!');
@@ -1682,11 +1754,11 @@ function renderMap() {
           capCard.innerHTML = '<div class="capstone-hub-content">'
             + '<div class="capstone-hub-header">'
             + '<span class="capstone-hub-pill">' + mod.level.toUpperCase() + ' CAPSTONE PROJECT</span>'
-            + (isCapDone ? '<span class="capstone-verified-badge">✓ Verified & Claimed</span>' : '<span class="capstone-xp-badge">+' + (capProj.xpReward || 250) + ' XP</span>')
+            + (isCapDone ? '<span class="capstone-verified-badge">Verified & Claimed</span>' : '<span class="capstone-xp-badge">+' + (capProj.xpReward || 250) + ' XP</span>')
             + '</div>'
             + '<h3 class="capstone-hub-title">' + esc(capProj.title) + '</h3>'
             + '<p class="capstone-hub-desc">' + esc(capProj.description) + '</p>'
-            + '<button class="btn-capstone-hub">' + (isCapDone ? 'Review Project IDE' : 'Launch Capstone Workbench →') + '</button>'
+            + '<button class="btn-capstone-hub">' + (isCapDone ? 'Review Project IDE' : 'Launch Capstone Workbench') + '</button>'
             + '</div>';
           capCard.onclick = function() { openProjectModal(capProj.id); };
           container.appendChild(capCard);
@@ -1756,7 +1828,7 @@ function renderStudentHUD(allMods) {
 
       var svgContent = isUnlocked 
         ? renderMinecraftSVG(item.grid)
-        : '<div class="slot-lock-icon">🔒</div>';
+        : '<div class="slot-lock-icon"><svg viewBox="0 0 14 14" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="10" height="8" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg></div>';
 
       slot.innerHTML = svgContent;
       slot.onclick = function() { showScreen('badges'); };
@@ -1997,11 +2069,11 @@ function openProjectModal(projId) {
       item.className = 'project-task-item' + (isChecked ? ' checked' : '');
       item.setAttribute('data-idx', idx);
       item.style.cursor = 'default';
-      item.innerHTML = '<div class="task-check-circle">' + (isChecked ? '✓' : '') + '</div>'
+      item.innerHTML = '<div class="task-check-circle">' + (isChecked ? '<svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="#00c060" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 7 5.5 11 12.5 3"/></svg>' : '') + '</div>'
         + '<div style="flex:1;"><div class="task-text">' + esc(reqText) + '</div>'
-        + (reason ? '<div class="task-eval-reason ' + (isChecked ? 'reason-pass' : 'reason-fail') + '">' + (isChecked ? '✓ ' : 'Notice: ') + esc(reason) + '</div>' : '')
+        + (reason ? '<div class="task-eval-reason ' + (isChecked ? 'reason-pass' : 'reason-fail') + '">' + (isChecked ? 'Passed: ' : 'Notice: ') + esc(reason) + '</div>' : '')
         + '</div>'
-        + '<span class="task-badge-pill ' + (isChecked ? 'pill-done' : 'pill-pending') + '">' + (isChecked ? 'Verified ✓' : 'Needs Code') + '</span>';
+        + '<span class="task-badge-pill ' + (isChecked ? 'pill-done' : 'pill-pending') + '">' + (isChecked ? 'Verified' : 'Needs Code') + '</span>';
 
       item.addEventListener('click', function(){
         toast('Milestones are verified automatically by AI! Write code in the editor and click "AI Verify Tasks".');
@@ -2150,11 +2222,11 @@ function openModulePopup(modId) {
   if (!lessDiv) return;
   lessDiv.innerHTML = '';
   mod.lessons.forEach(function(lesson){
-    var done = (STATE.player.completedLessons || []).indexOf(lesson.id) !== -1;
+    var done = (getPlayerState().completedLessons || []).indexOf(lesson.id) !== -1;
     var unlocked = isLessonUnlocked(mod.id, lesson.id);
     var item = document.createElement('div');
     item.className = 'popup-lesson-item' + (done ? ' completed' : '') + (!unlocked && !done ? ' locked-item' : '');
-    item.innerHTML = '<span class="lesson-check">' + (done ? '✓' : unlocked ? '•' : '') + '</span>'
+    item.innerHTML = '<span class="lesson-check">' + (done ? '<svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="#00c060" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9.5 10.5 2.5"/></svg>' : unlocked ? '•' : '') + '</span>'
       + '<span class="lesson-item-name">' + esc(lesson.title) + '</span>'
       + '<span class="lesson-item-xp">+' + lesson.xp + ' XP</span>';
     if (unlocked || done) {
@@ -2175,7 +2247,7 @@ function openModulePopup(modId) {
 
   var allDone = true;
   for (var i = 0; i < mod.lessons.length; i++) {
-    if ((STATE.player.completedLessons || []).indexOf(mod.lessons[i].id) === -1) {
+    if ((getPlayerState().completedLessons || []).indexOf(mod.lessons[i].id) === -1) {
       allDone = false;
       break;
     }
@@ -2183,7 +2255,7 @@ function openModulePopup(modId) {
 
   // Quiz Challenge Button
   if (mod.challenge) {
-    var challDone = (STATE.player.completedChallenges || []).indexOf(mod.challenge.id) !== -1;
+    var challDone = (getPlayerState().completedChallenges || []).indexOf(mod.challenge.id) !== -1;
     if (allDone || challDone) {
       var cbtn = document.createElement('button');
       cbtn.className = challDone ? 'btn-secondary' : 'btn-primary';
@@ -2215,7 +2287,7 @@ function openModulePopup(modId) {
 
   // Interactive Coding Challenge Button
   if (mod.codingTask) {
-    var codeDone = (STATE.player.completedCoding || []).indexOf(mod.id) !== -1;
+    var codeDone = (getPlayerState().completedCoding || []).indexOf(mod.id) !== -1;
     var attempts = (STATE.player.codingAttempts && STATE.player.codingAttempts[mod.id]) || 0;
     var cdBtn = document.createElement('button');
     cdBtn.className = codeDone ? 'btn-secondary btn-coding-popup' : 'btn-primary btn-coding-popup';
@@ -2296,7 +2368,7 @@ function startCodingChallenge(modId) {
   var overall = ge('test-overall-status');
   if (overall) {
     overall.className = 'test-status-pill';
-    var isDone = (STATE.player.completedCoding || []).indexOf(mod.id) !== -1;
+    var isDone = (getPlayerState().completedCoding || []).indexOf(mod.id) !== -1;
     overall.textContent = isDone ? 'Solved' : 'Not submitted';
   }
 
@@ -2568,7 +2640,7 @@ function runCodingTests() {
   if (testPanel && testPanel.classList.contains('collapsed')) {
     testPanel.classList.remove('collapsed');
     var icon = ge('test-collapse-icon');
-    if (icon) icon.textContent = '▼';
+    if (icon) icon.innerHTML = '<svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 4 6 8 10 4"/></svg>';
   }
 
   var fb = ge('test-feedback-box');
@@ -2626,11 +2698,11 @@ function runCodingTests() {
         if (gotEl) gotEl.textContent = actual;
 
         if (isPass) {
-          if (badge) { badge.className = 'tc-badge passed'; badge.textContent = 'Passed ✓'; }
+          if (badge) { badge.className = 'tc-badge passed'; badge.textContent = 'Passed'; }
           if (row) { row.classList.remove('failed-row'); row.classList.add('passed-row'); }
         } else {
           allPassed = false;
-          if (badge) { badge.className = 'tc-badge failed'; badge.textContent = 'Failed ✗'; }
+          if (badge) { badge.className = 'tc-badge failed'; badge.textContent = 'Failed'; }
           if (row) { row.classList.remove('passed-row'); row.classList.add('failed-row'); }
           if (!firstFailReason) {
             firstFailReason = stderr ? stderr : ('Expected "' + exp + '" but got "' + (stdout || '(No output)') + '"');
@@ -2642,7 +2714,7 @@ function runCodingTests() {
       })
       .catch(function(err){
         allPassed = false;
-        if (badge) { badge.className = 'tc-badge failed'; badge.textContent = 'Failed ✗'; }
+        if (badge) { badge.className = 'tc-badge failed'; badge.textContent = 'Failed'; }
         if (row) { row.classList.remove('passed-row'); row.classList.add('failed-row'); }
         if (actDiv) actDiv.classList.remove('hidden');
         if (gotEl) gotEl.textContent = 'Error: ' + err.message;
@@ -2669,9 +2741,9 @@ function finalizeCodingResults(passed, reason) {
   if (passed) {
     if (overall) { overall.className = 'test-status-pill passed'; overall.textContent = 'All Tests Passed!'; }
 
-    var isNew = (STATE.player.completedCoding || []).indexOf(_curCodingMod.id) === -1;
+    var isNew = (getPlayerState().completedCoding || []).indexOf(_curCodingMod.id) === -1;
     if (isNew) {
-      STATE.player.completedCoding.push(_curCodingMod.id);
+      getPlayerState().completedCoding.push(_curCodingMod.id);
       checkBadge('first_challenge');
       markModuleCompleteIfReady(_curCodingMod);
       localSave();
@@ -2780,7 +2852,7 @@ function renderSlide() {
   if(dots){dots.innerHTML='';for(var d=0;d<total;d++){var dot=document.createElement('div');dot.className='slide-dot'+(d===_slideIdx?' active':'');dots.appendChild(dot);}}
   var prev=ge('btn-prev-slide'),next=ge('btn-next-slide');
   if(prev) prev.style.visibility=(_slideIdx===0?'hidden':'visible');
-  if(next) next.textContent=(_slideIdx===total-1?'Finish Lesson ✓':'Next →');
+  if(next) next.textContent=(_slideIdx===total-1?'Finish Lesson':'Next →');
   var area=ge('slide-area'); if(!area) return;
   var typeLabel={intro:'Introduction',code:'Code Example',tip:'Pro Tip',visual:'Visualizer'}[slide.type]||'Lesson';
   var html='<div class="slide slide-type-'+(slide.type||'intro')+'">'
@@ -2817,12 +2889,12 @@ function nextSlide(){ if(_slideIdx<_curLesson.slides.length-1){_slideIdx++;rende
 function prevSlide(){ if(_slideIdx>0){_slideIdx--;renderSlide();} }
 
 function finishLesson() {
-  var isNew=STATE.player.completedLessons.indexOf(_curLesson.id)===-1;
+  var isNew=getPlayerState().completedLessons.indexOf(_curLesson.id)===-1;
   if(isNew){
-    STATE.player.completedLessons.push(_curLesson.id);
+    getPlayerState().completedLessons.push(_curLesson.id);
     addXP(_curLesson.xp); checkBadge('first_lesson');
     var allDone=true;
-    for(var i=0;i<_curMod.lessons.length;i++) if(STATE.player.completedLessons.indexOf(_curMod.lessons[i].id)===-1){allDone=false;break;}
+    for(var i=0;i<_curMod.lessons.length;i++) if(getPlayerState().completedLessons.indexOf(_curMod.lessons[i].id)===-1){allDone=false;break;}
     localSave();
     if(allDone){
       var mt=_curMod.title,lx=_curLesson.xp;
@@ -2861,7 +2933,7 @@ function startChallenge(modId, forceAI) {
   _cm = mod;
 
   // If user has already completed the module or explicitly requests fresh questions, generate with AI!
-  var isDone = (STATE.player.completedChallenges || []).indexOf(mod.challenge ? mod.challenge.id : '') !== -1;
+  var isDone = (getPlayerState().completedChallenges || []).indexOf(mod.challenge ? mod.challenge.id : '') !== -1;
   if (forceAI || isDone) {
     if (typeof generateAIQuiz === 'function') {
       generateAIQuiz(modId);
@@ -2908,7 +2980,7 @@ function renderQuestion() {
   setWidth('challenge-progress-fill',Math.round(_qi/_qs.length*100)+'%');
   var fb=ge('answer-feedback'),ca=ge('challenge-actions');
   if(fb)fb.classList.add('hidden'); if(ca)ca.classList.remove('hidden');
-  var chk=ge('btn-check-answer');if(chk){chk.disabled=false;chk.textContent='Check Answer ✓';}
+  var chk=ge('btn-check-answer');if(chk){chk.disabled=false;chk.textContent='Check Answer';}
   var labels={mcq:'Multiple Choice','true-false':'True or False',output:'Output Prediction','fill-blank':'Fill in the Blank',arrange:'Arrange the Code',bug:'Spot the Bug',match:'Match Pairs'};
   var area=ge('question-area'); if(!area) return;
   area.innerHTML='<span class="question-type-tag">'+(labels[q.type]||q.type)+'</span><div class="question-text">'+esc(q.question)+'</div>';
@@ -2945,7 +3017,8 @@ function checkAnswer() {
   if(fb){
     fb.classList.remove('hidden','correct-fb','wrong-fb');
     fb.classList.add(correct?'correct-fb':'wrong-fb');
-    setText('feedback-icon',correct?'✓':'✕');
+    var fbi = ge('feedback-icon');
+    if (fbi) fbi.innerHTML = correct ? '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#05D380" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
     setText('feedback-result',correct?'Correct!':'Not quite...');
     setText('feedback-explanation',q.explanation||'');
     var aiBox = ge('feedback-ai-box');
@@ -2969,15 +3042,15 @@ function nextQuestion(){_qi++;if(_qi<_qs.length)renderQuestion();else finishChal
 function finishChallenge() {
   var total=_qs.length,pct=Math.round(_hits/total*100),perfect=(_hits===total);
   var xp=_cm.challenge.xp+(perfect?25:0);
-  if(STATE.player.completedChallenges.indexOf(_cm.challenge.id)===-1){
-    STATE.player.completedChallenges.push(_cm.challenge.id);
+  if(getPlayerState().completedChallenges.indexOf(_cm.challenge.id)===-1){
+    getPlayerState().completedChallenges.push(_cm.challenge.id);
     addXP(xp);
     if(_cm.lessons && Array.isArray(_cm.lessons)){
-      var allL=true;for(var i=0;i<_cm.lessons.length;i++)if(STATE.player.completedLessons.indexOf(_cm.lessons[i].id)===-1){allL=false;break;}
-      if(allL&&STATE.player.completedModules.indexOf(_cm.id)===-1){
-        STATE.player.completedModules.push(_cm.id);
+      var allL=true;for(var i=0;i<_cm.lessons.length;i++)if(getPlayerState().completedLessons.indexOf(_cm.lessons[i].id)===-1){allL=false;break;}
+      if(allL&&getPlayerState().completedModules.indexOf(_cm.id)===-1){
+        getPlayerState().completedModules.push(_cm.id);
         checkBadge('first_module'); checkBadge('module_'+_cm.id.replace('module-',''));
-        var allM=true;var mods=getModulesForDifficulty();for(var j=0;j<mods.length;j++)if(STATE.player.completedModules.indexOf(mods[j].id)===-1){allM=false;break;}
+        var allM=true;var mods=getModulesForDifficulty();for(var j=0;j<mods.length;j++)if(getPlayerState().completedModules.indexOf(mods[j].id)===-1){allM=false;break;}
         if(allM) checkBadge('all_modules');
       }
     }
@@ -3435,7 +3508,7 @@ function renderBadges(){
       + '<div class="badge-minecraft-pixel-wrap">' + iconInner + '</div>'
       + '</div>'
       + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked Item') + '</div>'
-      + '<div class="badge-item-sub">' + (unlocked ? '⛏ ' + esc(item.name) : 'Mystery Block') + '</div>'
+      + '<div class="badge-item-sub">' + (unlocked ? '<span style="color:#FFE600">◆</span> ' + esc(item.name) : 'Mystery Block') + '</div>'
       + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete curriculum milestones to unlock this Minecraft medal.') + '</div>';
       
     grid.appendChild(card);
@@ -3459,7 +3532,7 @@ function renderSettings(){
 var HEART_COOLDOWN_MS = 4 * 60 * 60 * 1000; // 4 hours
 function refillHearts(){
   var p = STATE.player;
-  if (p.hearts >= 3) { toast('Your hearts are already full! ❤️'); return; }
+  if (p.hearts >= 3) { toast('Your hearts are already full!'); return; }
   var now = Date.now();
   if (p.heartRefillTime && now < p.heartRefillTime) {
     var remaining = Math.ceil((p.heartRefillTime - now) / 60000);
@@ -3469,7 +3542,7 @@ function refillHearts(){
   // Cooldown elapsed or no cooldown — allow refill
   p.hearts = 3; p.heartRefillTime = null;
   localSave(); renderHearts();
-  toast('Hearts refilled! ❤️❤️❤️');
+  toast('Hearts refilled!');
 }
 function updateRefillBtn(){
   var btn = ge('refill-hearts-btn');
@@ -3477,14 +3550,14 @@ function updateRefillBtn(){
   var p = STATE && STATE.player;
   if (!p) return;
   if (p.hearts >= 3) {
-    btn.textContent = 'Hearts Full ❤️'; btn.disabled = true;
+    btn.innerHTML = 'Hearts Full <svg viewBox="0 0 16 16" width="14" height="14" fill="#EF4444" style="vertical-align:-1px;margin-left:4px;"><path d="M8 14s-5.5-3.5-5.5-7.5A3.5 3.5 0 0 1 8 4.2 3.5 3.5 0 0 1 13.5 6.5C13.5 10.5 8 14 8 14z"/></svg>'; btn.disabled = true;
   } else {
     var now = Date.now();
     if (p.heartRefillTime && now < p.heartRefillTime) {
       var mins = Math.ceil((p.heartRefillTime - now) / 60000);
       btn.textContent = 'Refill in ' + mins + ' min'; btn.disabled = true;
     } else {
-      btn.textContent = 'Claim Refill ❤️'; btn.disabled = false;
+      btn.innerHTML = 'Claim Refill <svg viewBox="0 0 16 16" width="14" height="14" fill="#EF4444" style="vertical-align:-1px;margin-left:4px;"><path d="M8 14s-5.5-3.5-5.5-7.5A3.5 3.5 0 0 1 8 4.2 3.5 3.5 0 0 1 13.5 6.5C13.5 10.5 8 14 8 14z"/></svg>'; btn.disabled = false;
     }
   }
 }
@@ -3658,7 +3731,7 @@ function initResizableWorkspaces() {
     testToggleHeader.addEventListener('click', function(e){
       if (e.target.closest('button')) return;
       var isCollapsed = testPanel.classList.toggle('collapsed');
-      if (testCollapseIcon) testCollapseIcon.textContent = isCollapsed ? '▲' : '▼';
+      if (testCollapseIcon) testCollapseIcon.innerHTML = isCollapsed ? '<svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="2 8 6 4 10 8"/></svg>' : '<svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="2 4 6 8 10 4"/></svg>';
     });
   }
 
@@ -3928,11 +4001,11 @@ function startLesson(modId, lessonId) {
 
   // Header meta tags
   var biomeNames = {
-    beginner: '🌱 Overworld',
-    intermediate: '🔥 The Nether',
-    advanced: '🌌 The End'
+    beginner: 'Overworld',
+    intermediate: 'The Nether',
+    advanced: 'The End'
   };
-  setText('lesson-biome-tag', biomeNames[mod.level] || '🌱 Overworld');
+  setText('lesson-biome-tag', biomeNames[mod.level] || 'Overworld');
   setText('lesson-module-tag', mod.title);
   setText('lesson-title', lesson.title);
   setText('lesson-xp-badge', '+' + lesson.xp + ' XP');
@@ -3961,7 +4034,7 @@ function renderSplitLesson() {
     strip.innerHTML = '';
     for (var s = 0; s < total; s++) {
       var stepPill = document.createElement('button');
-      var isDone = (STATE.player.completedLessons || []).indexOf(_curLesson.id) !== -1 || s < _slideIdx;
+      var isDone = (getPlayerState().completedLessons || []).indexOf(_curLesson.id) !== -1 || s < _slideIdx;
       stepPill.className = 'step-pill' + (s === _slideIdx ? ' active' : isDone ? ' completed' : '');
       stepPill.textContent = (s + 1);
       stepPill.title = 'Step ' + (s + 1) + ': ' + (_curLesson.slides[s].title || '');
@@ -4026,7 +4099,7 @@ function renderSplitLesson() {
   var prevBtn = ge('btn-prev-slide');
   var nextBtn = ge('btn-next-slide');
   if (prevBtn) prevBtn.style.visibility = (_slideIdx === 0 ? 'hidden' : 'visible');
-  if (nextBtn) nextBtn.textContent = (_slideIdx === total - 1 ? 'Finish Lesson ✓' : 'Next Step →');
+  if (nextBtn) nextBtn.textContent = (_slideIdx === total - 1 ? 'Finish Lesson' : 'Next Step');
 }
 
 function setupLessonHints(slide) {
@@ -4258,7 +4331,7 @@ function submitLessonTests() {
         cardsHtml += '<div class="diff-card ' + (isPass ? 'pass' : 'fail') + '">'
           + '<div class="diff-card-header">'
           + '<span class="diff-test-name">Test ' + (idx + 1) + ': ' + esc(t.name || 'Output Verification') + '</span>'
-          + '<span class="diff-test-status">' + (isPass ? 'PASSED ✓' : 'FAILED ✗') + '</span>'
+          + '<span class="diff-test-status">' + (isPass ? 'PASSED' : 'FAILED') + '</span>'
           + '</div>'
           + '<div class="diff-comparison-grid">'
           + '<div class="diff-box"><div class="diff-box-label">Expected:</div><pre>' + esc(expected || '(Non-empty output)') + '</pre></div>'

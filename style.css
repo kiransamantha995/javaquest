@@ -8311,3 +8311,784 @@ body.dark-theme .mojang-disclaimer {
   border-top-color: #27272A;
   color: #71717A;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   JAVAQUEST — MINECRAFT DESIGN SYSTEM LAYER (Phase 8)
+   Deep Minecraft theme: blocky pixel-art borders, ore-glow accents,
+   deepslate dark surfaces, creeper-green & redstone-red highlights.
+   Professional & attention-to-detail oriented — no emojis, pure SVG.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Minecraft Design Tokens ─────────────────────────────────── */
+:root {
+  /* Minecraft Block Palette */
+  --mc-grass:      #5a8c3c;
+  --mc-grass-top:  #7ec850;
+  --mc-dirt:       #8B6914;
+  --mc-stone:      #808080;
+  --mc-deepslate:  #3a3a3a;
+  --mc-diamond:    #38BDF8;
+  --mc-diamond-glow: rgba(56, 189, 248, 0.5);
+  --mc-redstone:   #c00000;
+  --mc-redstone-glow: rgba(192, 0, 0, 0.6);
+  --mc-gold:       #FFD700;
+  --mc-gold-glow:  rgba(255, 215, 0, 0.5);
+  --mc-emerald:    #00c060;
+  --mc-netherrack: #6b0000;
+  --mc-nether-glow:rgba(255, 60, 0, 0.4);
+  --mc-endstone:   #d6c88a;
+  --mc-obsidian:   #1a0a2e;
+  --mc-lava:       #FF6600;
+  --mc-water:      #2255dd;
+  --mc-creeper:    #4a7a4a;
+  --mc-wood:       #8B6914;
+
+  /* Blocky Border System (pixel-sharp) */
+  --mc-border:     2px solid #18181B;
+  --mc-border-thick: 3px solid #18181B;
+  --mc-sh:         3px 3px 0px #18181B;
+  --mc-sh-diamond: 3px 3px 0px rgba(56, 189, 248, 0.6);
+  --mc-sh-gold:    3px 3px 0px rgba(255, 215, 0, 0.5);
+  --mc-sh-red:     3px 3px 0px rgba(192, 0, 0, 0.5);
+  --mc-sh-emerald: 3px 3px 0px rgba(0, 192, 96, 0.5);
+
+  /* Minecraft block border radius — SQUARE (pixel art) */
+  --mc-r: 4px;
+  --mc-r-sm: 2px;
+  --mc-r-lg: 6px;
+}
+
+/* ─── Body: Minecraft Stone background with subtle grid ─────── */
+body {
+  background-color: #F0EDE0 !important;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px) !important;
+  background-size: 32px 32px !important;
+}
+
+/* ─── Navbar: Deepslate slab style ──────────────────────────── */
+.navbar {
+  background: #1C1C1C !important;
+  border-bottom: 3px solid #000 !important;
+  box-shadow: 0 4px 0 #000, inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+.logo-text,
+.logo-text .logo-accent {
+  color: #FFE600 !important;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.6);
+}
+.logo-icon-badge {
+  background: #FFE600 !important;
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0px #000 !important;
+}
+.nav-links a,
+.nav-link {
+  color: #CBD5E1 !important;
+}
+.nav-links a:hover,
+.nav-link:hover {
+  color: #FFE600 !important;
+}
+.navbar .btn-primary,
+.navbar .btn-cta {
+  background: #4CAF50 !important;
+  border-color: #000 !important;
+  box-shadow: var(--mc-sh) !important;
+  border-radius: var(--mc-r) !important;
+}
+.navbar .btn-primary:hover {
+  background: #45a049 !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #000 !important;
+}
+
+/* ─── HUD stats bar (hearts / XP) ──────────────────────────── */
+.stat-badge,
+.hud-stat-badge {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: var(--mc-sh) !important;
+}
+.stat-hearts .stat-badge { background: #8B0000 !important; color: #fff !important; }
+.stat-xp .stat-badge     { background: #FFE600 !important; color: #18181B !important; }
+.stat-streak .stat-badge  { background: #FF6600 !important; color: #fff !important; }
+
+/* ─── Course Hero Banner — Underground Redstone Cavern ──────── */
+.course-hero-cavern {
+  background: #0A0F1D !important;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(56,189,248,0.14) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(192,0,0,0.18) 0%, transparent 40%),
+    linear-gradient(180deg, #060911 0%, #0D1525 60%, #060911 100%) !important;
+  border: 3px solid #000 !important;
+  box-shadow: 6px 6px 0 #000 !important;
+  border-radius: var(--mc-r-lg) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Deepslate cobblestone texture overlay */
+.course-hero-cavern::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 16px 16px;
+  pointer-events: none;
+  z-index: 0;
+}
+.cavern-hero-content { position: relative; z-index: 2; }
+
+.hero-course-title {
+  font-family: "Press Start 2P", var(--font-ui) !important;
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem) !important;
+  letter-spacing: 0.04em !important;
+  color: #FFE600 !important;
+  text-shadow: 3px 3px 0 #000, 0 0 20px rgba(255,230,0,0.4) !important;
+}
+.title-cursor {
+  color: #38BDF8 !important;
+  text-shadow: 0 0 12px rgba(56,189,248,0.8) !important;
+}
+.hero-course-desc,
+.hero-course-subtitle {
+  color: #94A3B8 !important;
+}
+
+/* Resume button — Minecraft-style creeper green ────────────── */
+.btn-resume-quest,
+.btn-resume-learning {
+  background: #4CAF50 !important;
+  border: 2px solid #000 !important;
+  border-radius: var(--mc-r) !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  color: #fff !important;
+  font-family: "Press Start 2P", var(--font-ui) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.03em !important;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5) !important;
+}
+.btn-resume-quest:hover,
+.btn-resume-learning:hover {
+  background: #5cb85c !important;
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 5px 5px 0 #000 !important;
+}
+
+/* Hero tag row ─────────────────────────────────────────────── */
+.hero-level-tag {
+  background: rgba(56,189,248,0.15) !important;
+  color: #38BDF8 !important;
+  border: 1.5px solid rgba(56,189,248,0.4) !important;
+  border-radius: var(--mc-r-sm) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+  letter-spacing: 0.08em !important;
+  box-shadow: 1px 1px 0 rgba(56,189,248,0.3) !important;
+}
+.hero-track-tag {
+  background: rgba(255,230,0,0.1) !important;
+  color: #FFE600 !important;
+  border: 1.5px solid rgba(255,230,0,0.3) !important;
+  border-radius: var(--mc-r-sm) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+}
+.pixel-dot {
+  background: #38BDF8 !important;
+  box-shadow: 0 0 6px #38BDF8 !important;
+}
+
+/* ─── Track Switcher Tabs — Minecraft block tabs ────────────── */
+.track-tab-btn {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 800 !important;
+  background: #E8E4D4 !important;
+  color: #1C1C1C !important;
+  transition: all 0.1s ease !important;
+}
+.track-tab-btn:hover {
+  transform: translate(-1px,-1px) !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  background: #F5F3E8 !important;
+}
+.track-tab-btn.active {
+  background: #FFE600 !important;
+  color: #18181B !important;
+  box-shadow: none !important;
+  transform: translate(2px,2px) !important;
+  border-color: #000 !important;
+}
+.track-tab-icon svg {
+  display: block;
+  image-rendering: pixelated;
+}
+.track-tab-count {
+  background: rgba(0,0,0,0.12) !important;
+  border-radius: 3px !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+  padding: 2px 5px !important;
+}
+.track-tab-btn.active .track-tab-count {
+  background: rgba(0,0,0,0.18) !important;
+}
+
+/* ─── Chapter Accordion Cards — Deepslate blocks ────────────── */
+.chapter-accordion-card {
+  border: 2px solid #000 !important;
+  border-radius: var(--mc-r) !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  overflow: hidden !important;
+  margin-bottom: 1rem !important;
+  background: #FEFEFE !important;
+  transition: box-shadow 0.1s, transform 0.1s !important;
+}
+.chapter-accordion-card:hover {
+  box-shadow: 5px 5px 0 #000 !important;
+}
+.chapter-accordion-card.completed {
+  border-color: var(--mc-emerald) !important;
+  box-shadow: 4px 4px 0 var(--mc-emerald) !important;
+}
+.chapter-accordion-card.locked {
+  opacity: 0.65 !important;
+  filter: grayscale(0.3) !important;
+}
+
+/* Chapter header — stone slab header */
+.chapter-header {
+  background: #FEFEFE !important;
+  border-bottom: none !important;
+  padding: 1rem 1.25rem !important;
+}
+.chapter-header:hover {
+  background: #FFFEF0 !important;
+}
+.chapter-accordion-card.open .chapter-header,
+.chapter-accordion-card.expanded .chapter-header {
+  background: #FFFEF0 !important;
+  border-bottom: 2px solid #000 !important;
+}
+
+/* Status dot — Minecraft ore style */
+.chapter-status-dot {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  image-rendering: pixelated;
+}
+.chapter-status-dot.completed {
+  background: var(--mc-emerald) !important;
+  box-shadow: 2px 2px 0 #000, 0 0 8px rgba(0,192,96,0.4) !important;
+}
+.chapter-status-dot.active,
+.chapter-status-dot.in-progress {
+  background: var(--mc-gold) !important;
+  box-shadow: 2px 2px 0 #000, 0 0 8px rgba(255,215,0,0.4) !important;
+}
+.chapter-status-dot.locked {
+  background: #808080 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+}
+
+/* Code badge — gold ingot style */
+.chapter-code-badge {
+  background: var(--mc-gold) !important;
+  color: #18181B !important;
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #000 !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Chapter title */
+.chapter-title {
+  font-weight: 800 !important;
+  letter-spacing: -0.015em !important;
+}
+
+/* Progress pill — experience bar style */
+.chapter-progress-pill {
+  background: #E8E4D4 !important;
+  border: 1.5px solid #000 !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+  border-radius: var(--mc-r-sm) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.55rem !important;
+}
+.chapter-progress-pill.pill-done {
+  background: rgba(0,192,96,0.2) !important;
+  color: var(--mc-emerald) !important;
+  border-color: var(--mc-emerald) !important;
+  box-shadow: 1.5px 1.5px 0 var(--mc-emerald) !important;
+}
+
+/* Chapter action buttons */
+.chapter-btn-start {
+  background: #FFE600 !important;
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+  color: #18181B !important;
+  letter-spacing: 0.03em !important;
+}
+.chapter-btn-start:hover {
+  background: #FFF04D !important;
+  transform: translate(-1px,-1px) !important;
+  box-shadow: 3px 3px 0 #000 !important;
+}
+.chapter-btn-review {
+  background: rgba(0,192,96,0.15) !important;
+  color: var(--mc-emerald) !important;
+  border-color: var(--mc-emerald) !important;
+  box-shadow: 2px 2px 0 var(--mc-emerald) !important;
+  border-radius: var(--mc-r-sm) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.6rem !important;
+}
+.chapter-lock-badge {
+  background: #808080 !important;
+  color: #fff !important;
+  border: 1.5px solid #000 !important;
+  border-radius: var(--mc-r-sm) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 800 !important;
+}
+
+/* Chevron */
+.chapter-chevron {
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #000 !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+}
+.chapter-accordion-card.open .chapter-chevron,
+.chapter-accordion-card.expanded .chapter-chevron {
+  background: #FFE600 !important;
+  transform: rotate(180deg) !important;
+}
+
+/* Chapter body — open state */
+.chapter-accordion-card.open .chapter-body,
+.chapter-accordion-card.expanded .chapter-body {
+  border-top: 2px solid #000 !important;
+  background: #F9F7F0 !important;
+}
+
+/* ─── Track Divider Banner ───────────────────────────────────── */
+.track-divider-banner {
+  border: 2px solid var(--track-accent, #18181B) !important;
+  border-radius: var(--mc-r) !important;
+  box-shadow: 3px 3px 0 var(--track-accent, #18181B) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.04), transparent) !important;
+  margin-bottom: 1rem !important;
+  overflow: hidden !important;
+}
+.track-divider-icon svg {
+  image-rendering: pixelated;
+}
+.track-divider-title {
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+}
+.track-divider-pill {
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.55rem !important;
+  letter-spacing: 0.06em !important;
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid currentColor !important;
+}
+
+/* ─── Exercise Rows — Crafting table style ───────────────────── */
+.exercise-row {
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #d4d0c0 !important;
+  background: #FEFEFE !important;
+  transition: all 0.1s ease !important;
+}
+.exercise-row:hover {
+  border-color: #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  transform: translateX(2px) !important;
+  background: #FFFEF4 !important;
+}
+.exercise-row.status-available {
+  border-color: #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  background: #FFFEF4 !important;
+}
+.exercise-row.status-done {
+  background: rgba(0,192,96,0.06) !important;
+  border-color: rgba(0,192,96,0.5) !important;
+}
+.exercise-row.status-locked {
+  background: #F0EDE0 !important;
+  opacity: 0.6 !important;
+}
+
+/* Exercise buttons — Minecraft button style */
+.exercise-btn {
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #000 !important;
+  font-weight: 800 !important;
+}
+.exercise-btn.btn-start {
+  background: #FFE600 !important;
+  color: #18181B !important;
+  box-shadow: 2px 2px 0 #000 !important;
+}
+.exercise-btn.btn-start:hover {
+  transform: translate(-1px,-1px) !important;
+  box-shadow: 3px 3px 0 #000 !important;
+}
+.exercise-btn.btn-done {
+  background: rgba(0,192,96,0.12) !important;
+  color: var(--mc-emerald) !important;
+  border-color: var(--mc-emerald) !important;
+  box-shadow: 1.5px 1.5px 0 var(--mc-emerald) !important;
+}
+.exercise-btn.btn-quiz {
+  background: #8B5CF6 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+}
+.exercise-btn.btn-code {
+  background: #38BDF8 !important;
+  color: #18181B !important;
+  box-shadow: 2px 2px 0 #000 !important;
+}
+.exercise-btn.btn-locked {
+  background: #808080 !important;
+  color: #bbb !important;
+  border-color: #666 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+/* Exercise type tags — ore-inspired colors */
+.exercise-type-tag.tag-lesson {
+  background: rgba(56,189,248,0.12) !important;
+  color: #0284C7 !important;
+  border-color: rgba(56,189,248,0.4) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.55rem !important;
+  border-radius: var(--mc-r-sm) !important;
+}
+.exercise-type-tag.tag-quiz {
+  background: rgba(139,92,246,0.12) !important;
+  color: #7C3AED !important;
+  border-color: rgba(139,92,246,0.4) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.55rem !important;
+  border-radius: var(--mc-r-sm) !important;
+}
+.exercise-type-tag.tag-code {
+  background: rgba(0,192,96,0.1) !important;
+  color: #059669 !important;
+  border-color: rgba(0,192,96,0.4) !important;
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.55rem !important;
+  border-radius: var(--mc-r-sm) !important;
+}
+
+/* ─── HUD Sidebar — Stone inventory panel ───────────────────── */
+.hud-card {
+  border: 2px solid #000 !important;
+  border-radius: var(--mc-r) !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  background: #FEFEFE !important;
+}
+.hud-card-title {
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Avatar frame — crafting slot */
+.hud-avatar-frame {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  background: #E8E4D4 !important;
+}
+
+/* Progress bars — XP experience bar */
+.hud-progress-track {
+  background: #E8E4D4 !important;
+  border: 1.5px solid #000 !important;
+  border-radius: var(--mc-r-sm) !important;
+  overflow: hidden !important;
+  height: 12px !important;
+}
+.hud-progress-bar {
+  border-radius: 0 !important;
+  height: 100% !important;
+}
+.hud-progress-bar.bar-emerald {
+  background: linear-gradient(90deg, #00c060, #00e070) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3) !important;
+}
+.hud-progress-bar.bar-gold {
+  background: linear-gradient(90deg, #FFD700, #FFE600) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3) !important;
+}
+
+/* Badge mini grid */
+.hud-badges-mini-grid .badge-mini-item {
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #000 !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+}
+
+/* Trophy room button */
+.btn-hud-trophy {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  font-weight: 800 !important;
+  background: #FFE600 !important;
+  color: #18181B !important;
+  transition: all 0.1s !important;
+}
+.btn-hud-trophy:hover {
+  transform: translate(-1px,-1px) !important;
+  box-shadow: 3px 3px 0 #000 !important;
+}
+
+/* Reference items */
+.hud-ref-item {
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #d4d0c0 !important;
+  transition: all 0.1s !important;
+}
+.hud-ref-item:hover {
+  border-color: #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  transform: translateX(2px) !important;
+  background: #FFFEF4 !important;
+}
+
+/* ─── Home Screen Cards ──────────────────────────────────────── */
+.stat-card,
+.feature-card,
+.glass-card,
+.info-card {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+}
+.stat-card:hover,
+.feature-card:hover {
+  transform: translate(-2px,-2px) !important;
+  box-shadow: 6px 6px 0 #000 !important;
+}
+
+/* ─── Primary buttons — Minecraft action button ─────────────── */
+.btn-primary {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em !important;
+  transition: all 0.1s ease !important;
+}
+.btn-primary:hover {
+  transform: translate(-1px,-1px) !important;
+  box-shadow: 4px 4px 0 #000 !important;
+}
+.btn-primary:active {
+  transform: translate(2px,2px) !important;
+  box-shadow: 1px 1px 0 #000 !important;
+}
+.btn-secondary {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+}
+
+/* Run / Submit button — redstone power */
+.btn-run,
+.btn-run-secondary {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  font-weight: 800 !important;
+}
+
+/* ─── Code Editor — crafting table / command block ──────────── */
+.cm-editor {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+}
+.editor-toolbar {
+  border-bottom: 2px solid #000 !important;
+  background: #1C1C1C !important;
+  border-radius: var(--mc-r-sm) var(--mc-r-sm) 0 0 !important;
+}
+.editor-lang-badge {
+  font-family: "Press Start 2P", monospace !important;
+  font-size: 0.55rem !important;
+  background: rgba(56,189,248,0.2) !important;
+  color: #38BDF8 !important;
+  border: 1px solid rgba(56,189,248,0.4) !important;
+  border-radius: var(--mc-r-sm) !important;
+}
+
+/* ─── Lesson Panel ──────────────────────────────────────────── */
+.split-lesson-container .lesson-steps-strip {
+  border-right: 2px solid #000 !important;
+  background: #1C1C1C !important;
+}
+.lesson-step-dot {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+}
+.lesson-step-dot.active {
+  background: #FFE600 !important;
+  box-shadow: 0 0 8px rgba(255,230,0,0.5) !important;
+}
+.lesson-step-dot.done {
+  background: var(--mc-emerald) !important;
+  box-shadow: 0 0 6px rgba(0,192,96,0.4) !important;
+}
+
+/* Hint buttons */
+.hint-btn {
+  border-radius: var(--mc-r-sm) !important;
+  border: 1.5px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+}
+
+/* ─── Home screen continue card ─────────────────────────────── */
+.continue-card,
+.daily-quest-card {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+}
+
+/* ─── Toast notifications — command block popup ─────────────── */
+.toast {
+  border-radius: var(--mc-r-sm) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 800 !important;
+}
+
+/* ─── Badge Trophy Room — enchanting table style ────────────── */
+.badge-card {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+}
+.badge-card.earned {
+  box-shadow: 3px 3px 0 var(--mc-gold),
+              0 0 12px rgba(255,215,0,0.25) !important;
+  border-color: var(--mc-gold) !important;
+}
+
+/* ─── Settings cards ────────────────────────────────────────── */
+.settings-card {
+  border-radius: var(--mc-r) !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+}
+.settings-card.danger-card {
+  border-color: #c00000 !important;
+  box-shadow: 3px 3px 0 #c00000 !important;
+}
+
+/* ─── DARK THEME — Deepslate / Nether aesthetic ─────────────── */
+body.dark-theme {
+  background-color: #0F0F0F !important;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px) !important;
+  background-size: 32px 32px !important;
+}
+body.dark-theme .chapter-accordion-card {
+  background: #1a1a1a !important;
+  border-color: #444 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+}
+body.dark-theme .chapter-header {
+  background: #1a1a1a !important;
+}
+body.dark-theme .chapter-header:hover,
+body.dark-theme .chapter-accordion-card.open .chapter-header,
+body.dark-theme .chapter-accordion-card.expanded .chapter-header {
+  background: #242424 !important;
+}
+body.dark-theme .chapter-accordion-card.open .chapter-body,
+body.dark-theme .chapter-accordion-card.expanded .chapter-body {
+  background: #161616 !important;
+  border-top-color: #444 !important;
+}
+body.dark-theme .exercise-row {
+  background: #1e1e1e !important;
+  border-color: #333 !important;
+}
+body.dark-theme .exercise-row:hover {
+  background: #242424 !important;
+  border-color: #666 !important;
+}
+body.dark-theme .hud-card {
+  background: #1a1a1a !important;
+  border-color: #444 !important;
+}
+body.dark-theme .track-tab-btn {
+  background: #2a2a2a !important;
+  color: #CBD5E1 !important;
+  border-color: #555 !important;
+}
+body.dark-theme .track-tab-btn:hover {
+  background: #333 !important;
+}
+body.dark-theme .track-tab-btn.active {
+  background: #FFE600 !important;
+  color: #18181B !important;
+  border-color: #000 !important;
+}
+body.dark-theme .chapter-accordion-card.open .chapter-body {
+  border-top-color: #333 !important;
+}
+
+/* ─── Responsive adjustments ────────────────────────────────── */
+@media (max-width: 900px) {
+  .track-tab-btn {
+    padding: 0.5rem 0.9rem !important;
+    font-size: 0.82rem !important;
+  }
+  .hero-course-title {
+    font-size: clamp(1.1rem, 4.5vw, 1.8rem) !important;
+  }
+}
+
+/* ─── Pixel-art keyframe animations for ore glows ───────────── */
+@keyframes mc-diamond-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(56,189,248,0.4); }
+  50%       { box-shadow: 0 0 14px rgba(56,189,248,0.8); }
+}
+@keyframes mc-redstone-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(192,0,0,0.4); }
+  50%       { box-shadow: 0 0 14px rgba(192,0,0,0.9); }
+}
+@keyframes mc-gold-shimmer {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,215,0,0.4); }
+  50%       { box-shadow: 0 0 12px rgba(255,215,0,0.8); }
+}
+
+/* Apply subtle ore-glow to relevant status elements */
+.chapter-status-dot.completed { animation: mc-diamond-pulse 3s infinite ease-in-out; }
+.chapter-status-dot.active    { animation: mc-gold-shimmer 2.5s infinite ease-in-out; }

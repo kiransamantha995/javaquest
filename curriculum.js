@@ -3617,6 +3617,35 @@ const LEVELS = [
   }
 ];
 
+
+// Harmonize challenge & quizBank across all modules so they render and run seamlessly
+if (typeof CURRICULUM !== 'undefined') {
+  CURRICULUM.forEach(function(m) {
+    if (!m.challenge && m.quizBank && m.quizBank.length) {
+      m.challenge = {
+        id: m.id + '_quiz',
+        title: 'Knowledge Check: ' + m.title,
+        xp: 50,
+        questions: m.quizBank
+      };
+    }
+    if (!m.codingTask && m.lessons && m.lessons.length) {
+      // Find the last lesson's exercise to also offer as a workbench lab
+      var lastLesson = m.lessons[m.lessons.length - 1];
+      if (lastLesson && lastLesson.exercise) {
+        m.codingTask = {
+          title: lastLesson.title + ' Challenge',
+          instructions: lastLesson.exercise.instructions,
+          starterCode: lastLesson.exercise.starterCode,
+          solution: lastLesson.exercise.solution,
+          tests: lastLesson.exercise.tests,
+          xp: 75
+        };
+      }
+    }
+  });
+}
+
 if (typeof window !== 'undefined') {
   window.CURRICULUM = CURRICULUM;
   window.PROJECTS   = PROJECTS;
