@@ -52,7 +52,7 @@ function sanitizeState(state) {
   if (!p.name) p.name = 'JavaLearner';
   if (!p.difficulty || ['beginner','intermediate','advanced'].indexOf(p.difficulty) === -1) p.difficulty = 'beginner';
   if (!p.avatar || typeof p.avatar !== 'object') p.avatar = { skin: 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 };
-  if (!p.minecraftSkin) p.minecraftSkin = 'steve';
+  if (!p.minecraftSkin || p.minecraftSkin === 'steve') p.minecraftSkin = 'blockhead'; if (!p.avatarHat) p.avatarHat = 'none'; if (!p.avatarCape) p.avatarCape = 'none';
   if (!p.theme) p.theme = (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light';
   if (!Array.isArray(p.completedLessons)) p.completedLessons = [];
   if (!Array.isArray(p.completedModules)) p.completedModules = [];
@@ -74,7 +74,7 @@ function freshState(name, diff, skin) {
       name:          name || 'JavaLearner',
       difficulty:    diff || 'beginner',
       avatar:        { skin: skin || 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 },
-      minecraftSkin: 'steve',
+      minecraftSkin: 'blockhead', avatarHat: 'none', avatarCape: 'none',
       theme:         (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light',
       xp: 0, level: 1, streak: 1, lastVisit: new Date().toDateString(),
       hearts: 3, heartRefillTime: null,
@@ -251,7 +251,7 @@ function showScreen(name) {
 /* ═══════════════ AUTH SCREENS ═══════════════════════════════════ */
 var _signupDiff = 'beginner';
 var _signupSkin = 0;
-var _signupMinecraftSkin = 'steve';
+var _signupMinecraftSkin = 'blockhead';
 var SKIN_COLORS = ['#FDBCB4','#EAA175','#D08B5B','#AE5D29','#3B1F1A'];
 
 function initAuthUI() {
@@ -259,7 +259,7 @@ function initAuthUI() {
   var row = ge('login-skin-row');
   if (row) {
     row.innerHTML = '';
-    var skinKeys = ['steve', 'alex', 'diamond_knight', 'creeper', 'ender_coder', 'redstone', 'cyber_steve', 'golden_king'];
+    var skinKeys = ['blockhead', 'scout', 'crystal_knight', 'hisser', 'void_coder', 'circuit_mage', 'cyber_crafter', 'gilded_monarch'];
     skinKeys.forEach(function(key, i){
       var s = MINECRAFT_SKINS[key];
       var btn = document.createElement('button');
@@ -272,7 +272,7 @@ function initAuthUI() {
     });
     row.addEventListener('click', function(e){
       var btn = e.target.closest('.login-skin-btn'); if(!btn) return;
-      _signupMinecraftSkin = btn.getAttribute('data-skin') || 'steve';
+      _signupMinecraftSkin = btn.getAttribute('data-skin') || 'blockhead';
       qsa('.login-skin-btn').forEach(function(b){ b.classList.remove('selected'); });
       btn.classList.add('selected');
     });
@@ -570,9 +570,9 @@ var _avTab    = 'skin';
 function mkEl(tag,css){ var e=document.createElement(tag); if(css) e.style.cssText=css; return e; }
 
 var MINECRAFT_SKINS = {
-  steve: {
-    id: 'steve',
-    name: 'Steve • OG Crafter',
+  blockhead: {
+    id: 'blockhead',
+    name: 'Blockhead • OG Crafter',
     tag: 'Classic',
     grid: [
       ['#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18','#4A2E18'],
@@ -585,9 +585,9 @@ var MINECRAFT_SKINS = {
       ['#4A2E18','#4A2E18','#512818','#512818','#512818','#512818','#4A2E18','#4A2E18']
     ]
   },
-  alex: {
-    id: 'alex',
-    name: 'Alex • Code Explorer',
+  scout: {
+    id: 'scout',
+    name: 'Scout • Code Explorer',
     tag: 'Adventurer',
     grid: [
       ['#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623','#AF5623'],
@@ -600,9 +600,9 @@ var MINECRAFT_SKINS = {
       ['#AF5623','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#AF5623']
     ]
   },
-  diamond_knight: {
-    id: 'diamond_knight',
-    name: 'Diamond Knight • Full Armor',
+  crystal_knight: {
+    id: 'crystal_knight',
+    name: 'Crystal Knight • Full Armor',
     tag: 'Hero',
     grid: [
       ['#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8'],
@@ -615,9 +615,9 @@ var MINECRAFT_SKINS = {
       ['#26968D','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#36B3A8','#26968D']
     ]
   },
-  creeper: {
-    id: 'creeper',
-    name: 'Creeper Dev • Pixel Mascot',
+  hisser: {
+    id: 'hisser',
+    name: 'Hisser Dev • Pixel Mascot',
     tag: 'Mascot',
     grid: [
       ['#45A03A','#5EBA43','#45A03A','#5EBA43','#45A03A','#5EBA43','#45A03A','#5EBA43'],
@@ -630,9 +630,9 @@ var MINECRAFT_SKINS = {
       ['#5EBA43','#45A03A','#1E1E24','#45A03A','#45A03A','#1E1E24','#45A03A','#5EBA43']
     ]
   },
-  ender_coder: {
-    id: 'ender_coder',
-    name: 'Ender Wizard • Void Coder',
+  void_coder: {
+    id: 'void_coder',
+    name: 'Void Coder • Portal Master',
     tag: 'Mystic',
     grid: [
       ['#181424','#181424','#181424','#181424','#181424','#181424','#181424','#181424'],
@@ -645,9 +645,9 @@ var MINECRAFT_SKINS = {
       ['#241D35','#181424','#181424','#181424','#181424','#181424','#181424','#241D35']
     ]
   },
-  redstone: {
-    id: 'redstone',
-    name: 'Redstone • Logic Architect',
+  circuit_mage: {
+    id: 'circuit_mage',
+    name: 'Circuit Mage • Logic Architect',
     tag: 'Engineer',
     grid: [
       ['#595959','#7F7F7F','#FFE600','#FFE600','#7F7F7F','#595959','#595959','#7F7F7F'],
@@ -660,9 +660,9 @@ var MINECRAFT_SKINS = {
       ['#38210F','#38210F','#38210F','#C68B59','#C68B59','#38210F','#38210F','#38210F']
     ]
   },
-  cyber_steve: {
-    id: 'cyber_steve',
-    name: 'Cyber Coder • Neon Visor',
+  cyber_crafter: {
+    id: 'cyber_crafter',
+    name: 'Cyber Crafter • Neon Visor',
     tag: 'Cyber',
     grid: [
       ['#111116','#1E1E24','#111116','#1E1E24','#1E1E24','#111116','#1E1E24','#111116'],
@@ -675,9 +675,9 @@ var MINECRAFT_SKINS = {
       ['#111116','#1E1E24','#E5B28B','#E5B28B','#E5B28B','#E5B28B','#1E1E24','#111116']
     ]
   },
-  golden_king: {
-    id: 'golden_king',
-    name: 'Golden King • Java Master',
+  gilded_monarch: {
+    id: 'gilded_monarch',
+    name: 'Gilded Monarch • Java Master',
     tag: 'Master',
     grid: [
       ['#FFD700','#FFD700','#05D380','#FFD700','#FFD700','#05D380','#FFD700','#FFD700'],
@@ -692,11 +692,80 @@ var MINECRAFT_SKINS = {
   }
 };
 
-function renderMinecraftSVG(grid) {
+// Aliases for backwards compatibility with user profiles
+MINECRAFT_SKINS.steve = MINECRAFT_SKINS.blockhead;
+MINECRAFT_SKINS.alex = MINECRAFT_SKINS.scout;
+MINECRAFT_SKINS.diamond_knight = MINECRAFT_SKINS.crystal_knight;
+MINECRAFT_SKINS.creeper = MINECRAFT_SKINS.hisser;
+MINECRAFT_SKINS.ender_coder = MINECRAFT_SKINS.void_coder;
+MINECRAFT_SKINS.redstone = MINECRAFT_SKINS.circuit_mage;
+MINECRAFT_SKINS.cyber_steve = MINECRAFT_SKINS.cyber_crafter;
+MINECRAFT_SKINS.golden_king = MINECRAFT_SKINS.gilded_monarch;
+
+var MINECRAFT_HATS = {
+  none: { id: 'none', name: 'No Hat', tag: 'Standard', grid: null },
+  miner_helm: {
+    id: 'miner_helm',
+    name: 'Miner Helmet',
+    tag: 'Explorer',
+    grid: [
+      ['#F59E0B','#F59E0B','#F59E0B','#FFE600','#FFE600','#F59E0B','#F59E0B','#F59E0B'],
+      ['#D97706','#F59E0B','#F59E0B','#FFE600','#FFE600','#F59E0B','#F59E0B','#D97706'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+    ]
+  },
+  wizard_hat: {
+    id: 'wizard_hat',
+    name: 'Void Wizard Hat',
+    tag: 'Mystic',
+    grid: [
+      ['transparent','transparent','transparent','#8B5CF6','#8B5CF6','transparent','transparent','transparent'],
+      ['transparent','transparent','#7C3AED','#8B5CF6','#8B5CF6','#7C3AED','transparent','transparent'],
+      ['#6D28D9','#7C3AED','#FFE600','#FFE600','#FFE600','#FFE600','#7C3AED','#6D28D9'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+    ]
+  },
+  scholar_cap: {
+    id: 'scholar_cap',
+    name: 'Scholar Mortarboard',
+    tag: 'Academic',
+    grid: [
+      ['#1E293B','#1E293B','#1E293B','#1E293B','#1E293B','#1E293B','#1E293B','#FFE600'],
+      ['transparent','#1E293B','#1E293B','#1E293B','#1E293B','#1E293B','#1E293B','#FFE600'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FFE600'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent'],
+      ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+    ]
+  }
+};
+
+var MINECRAFT_CAPES = {
+  none: { id: 'none', name: 'No Cape', tag: 'Standard', color: 'transparent' },
+  emerald_cape: { id: 'emerald_cape', name: 'Emerald Crest', tag: 'Hero', color: '#10B981' },
+  obsidian_cloak: { id: 'obsidian_cloak', name: 'Obsidian Void', tag: 'Mystic', color: '#8B5CF6' },
+  lava_banner: { id: 'lava_banner', name: 'Nether Forge', tag: 'Master', color: '#F59E0B' },
+  cyber_matrix: { id: 'cyber_matrix', name: 'Cyber Grid', tag: 'Cyber', color: '#38BDF8' }
+};
+
+function renderMinecraftSVG(grid, hatGrid) {
   var svg = '<svg viewBox="0 0 8 8" class="minecraft-pixel-face" style="width:100%;height:100%;shape-rendering:crispEdges;image-rendering:pixelated;display:block;">';
   for (var r = 0; r < 8; r++) {
     for (var c = 0; c < 8; c++) {
-      var color = (grid && grid[r] && grid[r][c]) || '';
+      var color = (hatGrid && hatGrid[r] && hatGrid[r][c] && hatGrid[r][c] !== 'transparent') 
+        ? hatGrid[r][c] 
+        : ((grid && grid[r] && grid[r][c]) || '');
       if (color && color !== 'transparent') {
         svg += '<rect x="' + c + '" y="' + r + '" width="1" height="1" fill="' + color + '"/>';
       }
@@ -1138,56 +1207,137 @@ var BADGE_MINECRAFT_MAP = {
 
 function drawAvatar(el, av) {
   if (!el) return;
-  var skinId = (STATE && STATE.player && (STATE.player.minecraftSkin || STATE.player.avatarSkin)) || (av && (av.minecraftSkin || av.avatarSkin)) || 'steve';
-  var skinData = MINECRAFT_SKINS[skinId] || MINECRAFT_SKINS.steve;
+  var p = (STATE && STATE.player) || {};
+  var draft = av || {};
+  var rawSkin = draft.minecraftSkin || draft.avatarSkin || p.minecraftSkin || p.avatarSkin || 'blockhead';
+  
+  if (rawSkin === 'steve') rawSkin = 'blockhead';
+  else if (rawSkin === 'alex') rawSkin = 'scout';
+  else if (rawSkin === 'creeper') rawSkin = 'hisser';
+  else if (rawSkin === 'diamond_knight') rawSkin = 'crystal_knight';
+  else if (rawSkin === 'ender_coder') rawSkin = 'void_coder';
+  else if (rawSkin === 'redstone') rawSkin = 'circuit_mage';
+  else if (rawSkin === 'cyber_steve') rawSkin = 'cyber_crafter';
+  else if (rawSkin === 'golden_king') rawSkin = 'gilded_monarch';
+
+  var skinData = MINECRAFT_SKINS[rawSkin] || MINECRAFT_SKINS.blockhead;
+  var hatKey = draft.avatarHat || p.avatarHat || 'none';
+  var hatData = (MINECRAFT_HATS && MINECRAFT_HATS[hatKey]) || null;
+  var capeKey = draft.avatarCape || p.avatarCape || 'none';
+  var capeData = (MINECRAFT_CAPES && MINECRAFT_CAPES[capeKey]) || null;
+
+  var capeStyle = (capeData && capeData.color && capeData.color !== 'transparent')
+    ? 'border: 3px solid ' + capeData.color + '; box-shadow: 0 0 10px ' + capeData.color + ';'
+    : 'border: 2px solid var(--ink);';
+
   el.style.position = 'relative';
-  el.innerHTML = '<div class="minecraft-avatar-box">' + renderMinecraftSVG(skinData.grid) + '</div>';
+  el.innerHTML = '<div class="minecraft-avatar-box" style="' + capeStyle + '; border-radius: 4px; overflow: hidden;">' 
+    + renderMinecraftSVG(skinData.grid, hatData ? hatData.grid : null) 
+    + '</div>';
 }
 
 function renderAllAvatars() {
-  drawAvatar(ge('avatar-display-home'),   STATE && STATE.player && STATE.player.avatar);
-  drawAvatar(ge('avatar-display-editor'), _avDraft || (STATE && STATE.player && STATE.player.avatar));
+  drawAvatar(ge('avatar-display-home'),   STATE && STATE.player);
+  drawAvatar(ge('avatar-display-hud'),    STATE && STATE.player);
+  drawAvatar(ge('avatar-display-editor'), _avDraft || (STATE && STATE.player));
 }
 
+var _avTab = 'skin';
+
 function switchAvatarTab(tab) {
-  _avTab = 'skin';
+  _avTab = tab || 'skin';
   var grid = ge('avatar-options-grid'); if(!grid) return;
   grid.innerHTML = '';
-  var currentSkin = (STATE && STATE.player && (STATE.player.minecraftSkin || STATE.player.avatarSkin)) || (_avDraft && _avDraft.minecraftSkin) || 'steve';
   
-  Object.keys(MINECRAFT_SKINS).forEach(function(key){
-    var skin = MINECRAFT_SKINS[key];
-    var card = document.createElement('div');
-    var isSel = (currentSkin === key);
-    card.className = 'minecraft-char-card' + (isSel ? ' selected' : '');
-    card.setAttribute('data-skin', key);
-    card.innerHTML = '<div class="minecraft-char-thumb">' + renderMinecraftSVG(skin.grid) + '</div>'
-      + '<span class="minecraft-char-tag">' + esc(skin.tag) + '</span>'
-      + '<div class="minecraft-char-name">' + esc(skin.name) + '</div>';
-    card.addEventListener('click', function(){
-      if (!_avDraft) _avDraft = {};
-      _avDraft.minecraftSkin = key;
-      if (STATE && STATE.player) {
-        STATE.player.minecraftSkin = key;
-        STATE.player.avatarSkin = key;
-      }
-      qsa('.minecraft-char-card').forEach(function(c){ c.classList.remove('selected'); });
-      card.classList.add('selected');
-      drawAvatar(ge('avatar-display-editor'), _avDraft);
+  if (_avTab === 'skin' || _avTab === 'champions') {
+    var currentSkin = (_avDraft && _avDraft.minecraftSkin) || (STATE && STATE.player && STATE.player.minecraftSkin) || 'blockhead';
+    if (currentSkin === 'steve') currentSkin = 'blockhead';
+
+    var primaryKeys = ['blockhead', 'scout', 'crystal_knight', 'hisser', 'void_coder', 'circuit_mage', 'cyber_crafter', 'gilded_monarch'];
+    primaryKeys.forEach(function(key){
+      var skin = MINECRAFT_SKINS[key];
+      var card = document.createElement('div');
+      var isSel = (currentSkin === key);
+      card.className = 'minecraft-char-card' + (isSel ? ' selected' : '');
+      card.setAttribute('data-skin', key);
+      card.innerHTML = '<div class="minecraft-char-thumb">' + renderMinecraftSVG(skin.grid) + '</div>'
+        + '<span class="minecraft-char-tag">' + esc(skin.tag) + '</span>'
+        + '<div class="minecraft-char-name">' + esc(skin.name) + '</div>';
+      card.addEventListener('click', function(){
+        if (!_avDraft) _avDraft = {};
+        _avDraft.minecraftSkin = key;
+        qsa('.minecraft-char-card').forEach(function(c){ c.classList.remove('selected'); });
+        card.classList.add('selected');
+        drawAvatar(ge('avatar-display-editor'), _avDraft);
+      });
+      grid.appendChild(card);
     });
-    grid.appendChild(card);
-  });
+  } else if (_avTab === 'hats') {
+    var currentHat = (_avDraft && _avDraft.avatarHat) || (STATE && STATE.player && STATE.player.avatarHat) || 'none';
+    Object.keys(MINECRAFT_HATS).forEach(function(key){
+      var hat = MINECRAFT_HATS[key];
+      var card = document.createElement('div');
+      var isSel = (currentHat === key);
+      card.className = 'minecraft-char-card' + (isSel ? ' selected' : '');
+      card.setAttribute('data-hat', key);
+      var thumbHtml = hat.grid ? renderMinecraftSVG(MINECRAFT_SKINS.blockhead.grid, hat.grid) : '<div style="font-size:24px;text-align:center;line-height:48px;">✕</div>';
+      card.innerHTML = '<div class="minecraft-char-thumb">' + thumbHtml + '</div>'
+        + '<span class="minecraft-char-tag">' + esc(hat.tag) + '</span>'
+        + '<div class="minecraft-char-name">' + esc(hat.name) + '</div>';
+      card.addEventListener('click', function(){
+        if (!_avDraft) _avDraft = {};
+        _avDraft.avatarHat = key;
+        qsa('.minecraft-char-card').forEach(function(c){ c.classList.remove('selected'); });
+        card.classList.add('selected');
+        drawAvatar(ge('avatar-display-editor'), _avDraft);
+      });
+      grid.appendChild(card);
+    });
+  } else if (_avTab === 'capes') {
+    var currentCape = (_avDraft && _avDraft.avatarCape) || (STATE && STATE.player && STATE.player.avatarCape) || 'none';
+    Object.keys(MINECRAFT_CAPES).forEach(function(key){
+      var cape = MINECRAFT_CAPES[key];
+      var card = document.createElement('div');
+      var isSel = (currentCape === key);
+      card.className = 'minecraft-char-card' + (isSel ? ' selected' : '');
+      card.setAttribute('data-cape', key);
+      var capeBox = '<div style="width:48px;height:48px;background:' + (cape.color === 'transparent' ? '#E2E8F0' : cape.color) + ';border:2px solid var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#FFFFFF;">' + (cape.id === 'none' ? 'None' : '✦') + '</div>';
+      card.innerHTML = '<div class="minecraft-char-thumb">' + capeBox + '</div>'
+        + '<span class="minecraft-char-tag">' + esc(cape.tag) + '</span>'
+        + '<div class="minecraft-char-name">' + esc(cape.name) + '</div>';
+      card.addEventListener('click', function(){
+        if (!_avDraft) _avDraft = {};
+        _avDraft.avatarCape = key;
+        qsa('.minecraft-char-card').forEach(function(c){ c.classList.remove('selected'); });
+        card.classList.add('selected');
+        drawAvatar(ge('avatar-display-editor'), _avDraft);
+      });
+      grid.appendChild(card);
+    });
+  }
 }
+
+// Wire avatar category tabs
+document.addEventListener('DOMContentLoaded', function() {
+  qsa('.avatar-tab').forEach(function(b) {
+    b.onclick = function() {
+      qsa('.avatar-tab').forEach(function(t) { t.classList.remove('active'); });
+      b.classList.add('active');
+      switchAvatarTab(b.getAttribute('data-tab'));
+    };
+  });
+});
 
 function saveAvatar() {
   var inp = ge('avatar-name-input');
   if (inp && inp.value.trim()) STATE.player.name = inp.value.trim();
-  if (_avDraft && _avDraft.minecraftSkin) {
-    STATE.player.minecraftSkin = _avDraft.minecraftSkin;
-    STATE.player.avatarSkin = _avDraft.minecraftSkin;
+  if (_avDraft) {
+    if (_avDraft.minecraftSkin) STATE.player.minecraftSkin = _avDraft.minecraftSkin;
+    if (_avDraft.avatarHat) STATE.player.avatarHat = _avDraft.avatarHat;
+    if (_avDraft.avatarCape) STATE.player.avatarCape = _avDraft.avatarCape;
   }
   localSave(); renderAllAvatars(); updateNav();
-  showScreen('home'); toast('Minecraft avatar saved!');
+  showScreen('home'); toast('Pixel avatar & cosmetics saved!');
 }
 
 /* ═══════════════ HOME ═══════════════════════════════════════════ */
@@ -1440,10 +1590,21 @@ function renderMap() {
     else if (_activeTrackFilter === 'advanced') trackTag.textContent = 'TRACK 3 • THE END (ADVANCED)';
   }
 
-  // Wire Resume Learning Button to jump to next unfinished lesson
+  // Wire Resume Learning Button to jump to last active lesson or next unfinished lesson
   var resumeBtn = ge('btn-resume-quest');
   if (resumeBtn) {
     resumeBtn.onclick = function() {
+      try {
+        var last = localStorage.getItem('javaquest_last_lesson');
+        if (last) {
+          var parsed = JSON.parse(last);
+          if (parsed && parsed.modId && parsed.lessonId) {
+            startLesson(parsed.modId, parsed.lessonId, parsed.stepIdx || 0);
+            return;
+          }
+        }
+      } catch(e) {}
+
       for (var i = 0; i < allMods.length; i++) {
         var m = allMods[i];
         if (!isModUnlocked(m.id)) continue;
@@ -1531,7 +1692,7 @@ function renderMap() {
     }
 
     var card = document.createElement('div');
-    card.className = 'chapter-accordion-card ' + statusKey + (shouldExpand ? ' open expanded' : '');
+    card.className = 'chapter-accordion-card ' + statusKey + (!isUnlocked ? ' chunk-fogged' : '') + (shouldExpand ? ' open expanded' : '');
     card.id = 'chapter-card-' + mod.id;
 
     var statusIconHtml = '';
@@ -1564,9 +1725,9 @@ function renderMap() {
       + '<div class="chapter-title-group">'
       + '<div class="chapter-heading-row">'
       + '<span class="chapter-code-badge">' + (mod.code || mod.id).toUpperCase() + '</span>'
-      + '<h3 class="chapter-title">' + esc(mod.title) + '</h3>'
+      + '<h3 class="chapter-title">' + esc(mod.title) + '</h3>' + (mod.biome ? '<span class="biome-badge">◆ ' + esc(mod.biome) + '</span>' : '')
       + '</div>'
-      + '<p class="chapter-desc">' + esc(mod.subtitle || '') + '</p>'
+      + '<p class="chapter-desc">' + esc(mod.subtitle || '') + (mod.conceptMetaphor ? ' <span style="display:block;margin-top:4px;color:var(--pixel-mint);font-weight:600;">💡 ' + esc(mod.conceptMetaphor) + '</span>' : '') + '</p>'
       + '</div>'
       + '</div>'
       + '<div class="chapter-header-right">'
@@ -3066,21 +3227,35 @@ function finishChallenge() {
   if(perfect)setTimeout(function(){burstParticles('levelup-particles');},600);
 }
 
+function renderPixelHeartSvg(filled) {
+  var color = filled ? '#E11D48' : '#64748B';
+  var highlight = filled ? '#FDA4AF' : 'transparent';
+  return '<svg viewBox="0 0 9 8" width="16" height="14" class="pixel-heart' + (filled ? ' filled' : ' empty') + '" shape-rendering="crispEdges" style="margin:0 1px;vertical-align:middle;">'
+    + '<rect x="1" y="0" width="3" height="2" fill="' + color + '"/>'
+    + '<rect x="5" y="0" width="3" height="2" fill="' + color + '"/>'
+    + '<rect x="0" y="1" width="9" height="3" fill="' + color + '"/>'
+    + '<rect x="1" y="4" width="7" height="1" fill="' + color + '"/>'
+    + '<rect x="2" y="5" width="5" height="1" fill="' + color + '"/>'
+    + '<rect x="3" y="6" width="3" height="1" fill="' + color + '"/>'
+    + '<rect x="4" y="7" width="1" height="1" fill="' + color + '"/>'
+    + '<rect x="2" y="1" width="1" height="1" fill="' + highlight + '"/>'
+    + '</svg>';
+}
+
 function renderHearts(){
   var h = (STATE && STATE.player) ? STATE.player.hearts : 3;
   for(var i=1;i<=3;i++){
     var e=ge('heart-'+i);
     if(e) {
       e.classList.toggle('lost', i>h);
-      e.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="' + (i<=h ? '#E63946' : '#D1D5DB') + '"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+      e.innerHTML = renderPixelHeartSvg(i <= h);
     }
   }
   var container = ge('nav-hearts');
   if (container) {
     var svgHearts = '';
     for (var a = 0; a < 3; a++) {
-      var filled = (a < h);
-      svgHearts += '<svg class="heart-svg" viewBox="0 0 24 24" width="16" height="16" fill="' + (filled ? '#E63946' : '#9CA3AF') + '"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+      svgHearts += renderPixelHeartSvg(a < h);
     }
     container.innerHTML = svgHearts;
   }
@@ -3138,11 +3313,17 @@ function clearOutput() {
 }
 
 function runCode() {
-  var ed = ge('code-editor'); if (!ed) return;
-  var code = ed.value.trim(); if (!code) { toast('Write some code first!'); return; }
+  var code = getEditorCode('playground').trim();
+  if (!code) {
+    var ed = ge('code-editor');
+    if (ed) code = ed.value.trim();
+  }
+  if (!code) { toast('Write some code first!'); return; }
   if (_activeCapstoneProj) saveCapstoneCode();
   var outEl = ge('output-area'); if (!outEl) return;
   var bar = ge('terminal-interactive-bar'); if (bar) bar.style.display = 'none';
+
+  if (_cmPlayground) _cmPlayground.clearErrors();
 
   _interactiveSession.active = true;
   _interactiveSession.code = code;
@@ -3185,7 +3366,11 @@ function executeInteractiveStep() {
       if (data.compile && data.compile.stderr) {
         _interactiveSession.active = false;
         if (outEl) {
-          outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
+          outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
+        }
+        var lineMatch = data.compile.stderr.match(/:(\d+): error:/i) || data.compile.stderr.match(/\.java:(\d+):/i);
+        if (lineMatch && _cmPlayground) {
+          _cmPlayground.setLineError(parseInt(lineMatch[1], 10), data.compile.stderr.split('\n')[0]);
         }
         return;
       }
@@ -3194,7 +3379,7 @@ function executeInteractiveStep() {
       if (data.error) {
         _interactiveSession.active = false;
         if (outEl) {
-          outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Execution Error]\n' + esc(data.error) + '</pre>';
+          outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">[Execution Error]\n' + esc(data.error) + '</pre>';
         }
         return;
       }
@@ -3223,7 +3408,7 @@ function executeInteractiveStep() {
       if (bar) bar.style.display = 'none';
       var outEl = ge('output-area');
       if (outEl) {
-        outEl.innerHTML = '<div class="output-error"><pre style="margin:0;white-space:pre-wrap;word-break:break-all;">[Execution Error]\n' + esc(err.message) + '</pre></div>';
+        outEl.innerHTML = '<div class="output-error"><pre style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">[Execution Error]\n' + esc(err.message) + '</pre></div>';
       }
     });
 }
@@ -3277,7 +3462,7 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
       + '<button id="terminal-inline-btn" class="terminal-inline-btn" title="Send Input (Enter)">↵ Send</button>'
       + '</div>';
 
-    outEl.innerHTML = (html ? '<pre class="output-success" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>' : '')
+    outEl.innerHTML = (html ? '<pre class="output-success" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">' + html + '</pre>' : '')
       + activeLineHtml;
 
     var inlineInp = ge('terminal-inline-input');
@@ -3327,7 +3512,7 @@ function renderInterleavedConsole(rawStdout, rawStderr, isWaiting, exitCode) {
     }
 
     var hasErr = !!rawStderr && exitCode !== 0;
-    outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">' + html + '</pre>';
+    outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">' + html + '</pre>';
   }
 
   outEl.scrollTop = outEl.scrollHeight;
@@ -3463,7 +3648,7 @@ function renderBadges(){
   grid.innerHTML=''; 
   var totalCount = BADGES.length;
   var unlockedCount = (STATE && STATE.player && STATE.player.badges) ? STATE.player.badges.length : 0;
-  setText('badges-earned-count', unlockedCount + ' / ' + totalCount + ' Minecraft Medals Unlocked');
+  setText('badges-earned-count', unlockedCount + ' / ' + totalCount + ' Medals Unlocked');
 
   // Wire filter buttons
   var filterBtns = qsa('.badge-filter-btn');
@@ -3481,7 +3666,7 @@ function renderBadges(){
   });
 
   if (filteredList.length === 0) {
-    grid.innerHTML = '<div class="empty-filter-state" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 15px;">No Minecraft medals found in this category.</div>';
+    grid.innerHTML = '<div class="empty-filter-state" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 15px;">No medals found in this category.</div>';
     return;
   }
 
@@ -3509,7 +3694,7 @@ function renderBadges(){
       + '</div>'
       + '<div class="badge-name">' + (unlocked ? esc(badge.name) : 'Locked Item') + '</div>'
       + '<div class="badge-item-sub">' + (unlocked ? '<span style="color:#FFE600">◆</span> ' + esc(item.name) : 'Mystery Block') + '</div>'
-      + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete curriculum milestones to unlock this Minecraft medal.') + '</div>';
+      + '<div class="badge-desc">' + (unlocked ? esc(badge.description) : 'Complete milestone to unlock medal.') + '</div>';
       
     grid.appendChild(card);
   });
@@ -3978,8 +4163,11 @@ function setEditorCode(editorType, code) {
 }
 
 // ── Codédex Split-Screen Lesson Engine ────────────────────────────────────
+var _maxUnlockedStep = 0;
+var _stepCheckpointsPassed = {};
+var _stepTestsPassed = {};
 
-function startLesson(modId, lessonId) {
+function startLesson(modId, lessonId, initialStep) {
   var mod = getMod(modId);
   if (!mod) { toast('Module not found!'); return; }
   var lesson = null;
@@ -3990,13 +4178,28 @@ function startLesson(modId, lessonId) {
 
   _curMod = mod;
   _curLesson = lesson;
-  _slideIdx = 0;
+  _slideIdx = (typeof initialStep === 'number' && initialStep >= 0 && initialStep < lesson.slides.length) ? initialStep : 0;
   _unlockedHints = [false, false, false];
   _lessonAttempts = 0;
+  _stepCheckpointsPassed = {};
+  _stepTestsPassed = {};
+
+  var isCompleted = (getPlayerState().completedLessons || []).indexOf(lesson.id) !== -1;
+  _maxUnlockedStep = isCompleted ? (lesson.slides.length - 1) : Math.max(_slideIdx, 0);
+
+  // Persist session to resume later
+  try {
+    localStorage.setItem('javaquest_last_lesson', JSON.stringify({
+      modId: modId,
+      lessonId: lessonId,
+      stepIdx: _slideIdx,
+      timestamp: Date.now()
+    }));
+  } catch(e) {}
 
   // Deep link hash update
   if (window.history && window.history.replaceState) {
-    window.history.replaceState(null, '', '#lesson/' + modId + '/' + lessonId);
+    window.history.replaceState(null, '', '#lesson/' + modId + '/' + lessonId + '/' + (_slideIdx + 1));
   }
 
   // Header meta tags
@@ -4022,6 +4225,47 @@ function startLesson(modId, lessonId) {
   }, 100);
 }
 
+function updateStepPills() {
+  if (!_curMod || !_curLesson) return;
+  var strip = ge('lesson-steps-strip');
+  if (!strip) return;
+  var total = _curLesson.slides.length;
+  strip.innerHTML = '';
+
+  for (var s = 0; s < total; s++) {
+    var stepPill = document.createElement('button');
+    var isDone = (getPlayerState().completedLessons || []).indexOf(_curLesson.id) !== -1 || _stepTestsPassed[s] || s < _slideIdx;
+    var isUnlocked = isDone || s <= _maxUnlockedStep;
+
+    var cls = 'step-pill';
+    if (s === _slideIdx) cls += ' active';
+    else if (isDone) cls += ' completed';
+    else if (!isUnlocked) cls += ' locked';
+
+    stepPill.className = cls;
+    stepPill.textContent = (s + 1);
+    stepPill.setAttribute('type', 'button');
+    stepPill.setAttribute('data-step', s);
+    stepPill.setAttribute('aria-label', 'Step ' + (s + 1) + ': ' + (_curLesson.slides[s].title || '') + (isUnlocked ? '' : ' (Locked)'));
+
+    if (isUnlocked) {
+      stepPill.title = 'Step ' + (s + 1) + ': ' + (_curLesson.slides[s].title || '');
+      stepPill.onclick = function() {
+        var targetStep = parseInt(this.getAttribute('data-step'), 10);
+        _slideIdx = targetStep;
+        renderSplitLesson();
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', '#lesson/' + _curMod.id + '/' + _curLesson.id + '/' + (_slideIdx + 1));
+        }
+      };
+    } else {
+      stepPill.disabled = true;
+      stepPill.title = 'Complete previous steps to unlock Step ' + (s + 1);
+    }
+    strip.appendChild(stepPill);
+  }
+}
+
 function renderSplitLesson() {
   if (!_curMod || !_curLesson) return;
   var slide = _curLesson.slides[_slideIdx];
@@ -4029,24 +4273,7 @@ function renderSplitLesson() {
   if (!slide) return;
 
   // 1. Top Steps Strip
-  var strip = ge('lesson-steps-strip');
-  if (strip) {
-    strip.innerHTML = '';
-    for (var s = 0; s < total; s++) {
-      var stepPill = document.createElement('button');
-      var isDone = (getPlayerState().completedLessons || []).indexOf(_curLesson.id) !== -1 || s < _slideIdx;
-      stepPill.className = 'step-pill' + (s === _slideIdx ? ' active' : isDone ? ' completed' : '');
-      stepPill.textContent = (s + 1);
-      stepPill.title = 'Step ' + (s + 1) + ': ' + (_curLesson.slides[s].title || '');
-      stepPill.setAttribute('data-step', s);
-      stepPill.onclick = function() {
-        var targetStep = parseInt(this.getAttribute('data-step'), 10);
-        _slideIdx = targetStep;
-        renderSplitLesson();
-      };
-      strip.appendChild(stepPill);
-    }
-  }
+  updateStepPills();
 
   // 2. Story Hook
   var storyCard = ge('lesson-story-card');
@@ -4064,13 +4291,13 @@ function renderSplitLesson() {
       + '<div class="slide-inner">'
       + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
       + '<span class="slide-type-badge">' + typeLabel + '</span>'
-      + '<button class="btn-deep-dive" onclick="openDeepDive()">AI Deep Dive</button>'
+      + '<button class="btn-deep-dive" onclick="openDeepDive()" aria-label="Open AI Deep Dive modal">AI Deep Dive</button>'
       + '</div>'
       + '<h2 class="slide-title">' + esc(slide.title) + '</h2>'
       + '<div class="slide-content">' + fmt(slide.content) + '</div>';
     if (slide.code) html += buildCodeBlock(slide.code);
     if (slide.type === 'tip') {
-      html += '<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">' + fmt(slide.content) + '</div></div>';
+      html += '<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">' + fmt(slide.content) + '</div></div>';
     }
     html += '</div>';
     if (slide.visual) html += '<div class="visual-area" id="vis-now"></div>';
@@ -4079,7 +4306,88 @@ function renderSplitLesson() {
     if (slide.visual) setTimeout(function() { renderVis(slide); }, 80);
   }
 
-  // 4. Exercise Prompt & Starter Code
+  // 4. Inline Checkpoint (Concept check before code)
+  var checkpointCard = ge('lesson-checkpoint-card');
+  var checkpointQuestion = ge('checkpoint-question');
+  var checkpointOptions = ge('checkpoint-options');
+  var checkpointFeedback = ge('checkpoint-feedback');
+
+  var currentCheckpoint = null;
+  if (_curLesson.checkpoint && _curLesson.checkpoint.length > 0) {
+    if (_curLesson.checkpoint[_slideIdx]) {
+      currentCheckpoint = _curLesson.checkpoint[_slideIdx];
+    } else if (_slideIdx === 0 && _curLesson.checkpoint[0]) {
+      currentCheckpoint = _curLesson.checkpoint[0];
+    }
+  }
+
+  if (currentCheckpoint && checkpointCard && checkpointQuestion && checkpointOptions) {
+    checkpointCard.classList.remove('hidden');
+    checkpointQuestion.textContent = currentCheckpoint.question;
+    checkpointOptions.innerHTML = '';
+    if (checkpointFeedback) {
+      checkpointFeedback.classList.add('hidden');
+      checkpointFeedback.textContent = '';
+      checkpointFeedback.className = 'checkpoint-feedback hidden';
+    }
+
+    var answered = _stepCheckpointsPassed[_slideIdx];
+
+    currentCheckpoint.options.forEach(function(optText, optIdx) {
+      var btn = document.createElement('button');
+      btn.className = 'checkpoint-option-btn';
+      btn.setAttribute('data-idx', optIdx);
+      btn.setAttribute('type', 'button');
+      btn.innerHTML = '<strong>' + 'ABCD'[optIdx] + '.</strong> ' + esc(optText);
+
+      if (answered) {
+        if (optIdx === currentCheckpoint.answer) {
+          btn.classList.add('correct');
+        }
+        btn.disabled = true;
+      } else {
+        btn.onclick = function() {
+          var chosen = parseInt(this.getAttribute('data-idx'), 10);
+          var isCorrect = chosen === currentCheckpoint.answer;
+          qsa('.checkpoint-option-btn').forEach(function(b) { b.disabled = true; });
+
+          if (isCorrect) {
+            this.classList.add('correct');
+            _stepCheckpointsPassed[_slideIdx] = true;
+            _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx + 1);
+            if (checkpointFeedback) {
+              checkpointFeedback.textContent = '✓ Correct! Great job understanding this concept.';
+              checkpointFeedback.className = 'checkpoint-feedback correct';
+              checkpointFeedback.classList.remove('hidden');
+            }
+            if (window.GameFX && window.GameFX.playBlockBreak) window.GameFX.playBlockBreak();
+            updateStepPills();
+          } else {
+            this.classList.add('wrong');
+            var correctBtn = qsa('.checkpoint-option-btn')[currentCheckpoint.answer];
+            if (correctBtn) correctBtn.classList.add('correct');
+            if (checkpointFeedback) {
+              checkpointFeedback.textContent = '✗ Not quite. The correct answer is ' + 'ABCD'[currentCheckpoint.answer] + '. Review the concept above!';
+              checkpointFeedback.className = 'checkpoint-feedback wrong';
+              checkpointFeedback.classList.remove('hidden');
+            }
+            if (window.GameFX && window.GameFX.playGentleOops) window.GameFX.playGentleOops();
+          }
+        };
+      }
+      checkpointOptions.appendChild(btn);
+    });
+
+    if (answered && checkpointFeedback) {
+      checkpointFeedback.textContent = '✓ Checkpoint passed!';
+      checkpointFeedback.className = 'checkpoint-feedback correct';
+      checkpointFeedback.classList.remove('hidden');
+    }
+  } else if (checkpointCard) {
+    checkpointCard.classList.add('hidden');
+  }
+
+  // 5. Exercise Prompt & Starter Code
   var exerciseBox = ge('lesson-exercise-box');
   var exerciseInstructions = ge('exercise-instructions');
   var starterCode = slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // Write your solution here\n    }\n}';
@@ -4092,14 +4400,61 @@ function renderSplitLesson() {
   // Populate editor with starter code if empty or step changed
   setEditorCode('lesson', starterCode);
 
-  // 5. 3-Tier Progressive Hints Setup
+  // 6. 3-Tier Progressive Hints Setup
   setupLessonHints(slide);
 
-  // 6. Navigation Buttons
+  // 7. Navigation Buttons
   var prevBtn = ge('btn-prev-slide');
   var nextBtn = ge('btn-next-slide');
-  if (prevBtn) prevBtn.style.visibility = (_slideIdx === 0 ? 'hidden' : 'visible');
-  if (nextBtn) nextBtn.textContent = (_slideIdx === total - 1 ? 'Finish Lesson' : 'Next Step');
+  if (prevBtn) {
+    prevBtn.style.visibility = (_slideIdx === 0 ? 'hidden' : 'visible');
+    prevBtn.onclick = function() {
+      if (_slideIdx > 0) {
+        _slideIdx--;
+        renderSplitLesson();
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', '#lesson/' + _curMod.id + '/' + _curLesson.id + '/' + (_slideIdx + 1));
+        }
+      }
+    };
+  }
+  if (nextBtn) {
+    var isLast = _slideIdx === total - 1;
+    nextBtn.textContent = isLast ? 'Finish Lesson' : 'Next Step →';
+    nextBtn.onclick = function() {
+      if (isLast) {
+        var isDone = (getPlayerState().completedLessons || []).indexOf(_curLesson.id) !== -1 || _stepTestsPassed[_slideIdx];
+        if (isDone) {
+          finishLesson();
+        } else {
+          toast('Run "Submit & Test" to pass verification before finishing!');
+        }
+        return;
+      }
+
+      var hasTests = slide.tests && slide.tests.length > 0;
+      var hasPassed = _stepTestsPassed[_slideIdx] || (getPlayerState().completedLessons || []).indexOf(_curLesson.id) !== -1;
+      var hasCheckpoint = _curLesson.checkpoint && _curLesson.checkpoint[_slideIdx];
+      var checkpointPassed = _stepCheckpointsPassed[_slideIdx];
+
+      if (hasCheckpoint && !checkpointPassed && !hasPassed) {
+        toast('Answer the Quick Concept Check above to advance!');
+        return;
+      }
+
+      if (hasTests && !hasPassed) {
+        toast('Run "Submit & Test" to pass the test cases before advancing!');
+        return;
+      }
+
+      _slideIdx++;
+      _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx);
+      renderSplitLesson();
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '#lesson/' + _curMod.id + '/' + _curLesson.id + '/' + (_slideIdx + 1));
+      }
+    };
+  }
 }
 
 function setupLessonHints(slide) {
@@ -4120,6 +4475,7 @@ function setupLessonHints(slide) {
     if (btn) {
       btn.disabled = (i > 1);
       btn.classList.remove('unlocked');
+      btn.setAttribute('aria-expanded', 'false');
     }
   }
 
@@ -4141,7 +4497,10 @@ function revealLessonHint(tier) {
   if (isHidden) {
     contentEl.classList.remove('hidden');
     _unlockedHints[tier - 1] = true;
-    if (btn) btn.classList.add('unlocked');
+    if (btn) {
+      btn.classList.add('unlocked');
+      btn.setAttribute('aria-expanded', 'true');
+    }
 
     // Unlock next tier button
     if (tier < 3) {
@@ -4158,6 +4517,7 @@ function revealLessonHint(tier) {
     if (counter) counter.textContent = count + '/3 Hints Unlocked';
   } else {
     contentEl.classList.add('hidden');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
   }
 }
 window.revealLessonHint = revealLessonHint;
@@ -4227,7 +4587,7 @@ function runLessonCode() {
       if (!outEl) return;
       // 1. Compilation Error
       if (data.compile && data.compile.stderr) {
-        outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
+        outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
         // Parse line error for editor squiggle
         var lineMatch = data.compile.stderr.match(/:(\d+): error:/i) || data.compile.stderr.match(/\.java:(\d+):/i);
         if (lineMatch && _cmLesson) {
@@ -4238,7 +4598,7 @@ function runLessonCode() {
 
       // 2. Waiting for Scanner input
       if (data.run && data.run.waitingForInput) {
-        outEl.innerHTML = '<pre class="output-success" style="margin:0;white-space:pre-wrap;">' + esc(data.run.stdout || '') + '</pre>';
+        outEl.innerHTML = '<pre class="output-success" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">' + esc(data.run.stdout || '') + '</pre>';
         if (bar) {
           bar.style.display = 'flex';
           var input = ge('lesson-terminal-input');
@@ -4249,7 +4609,7 @@ function runLessonCode() {
 
       // 3. Normal Execution output
       var hasErr = (data.run && data.run.code !== 0 && data.run.stderr);
-      outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">'
+      outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">'
         + esc(data.run.stdout || '')
         + (hasErr ? ('\n[Runtime Error]\n' + esc(data.run.stderr)) : '')
         + '</pre>';
@@ -4277,7 +4637,7 @@ function sendLessonTerminalInput() {
     .then(function(data) {
       if (!outEl) return;
       var outText = (data.run ? data.run.stdout : '') || '';
-      outEl.innerHTML = '<pre class="output-success" style="margin:0;white-space:pre-wrap;">' + esc(outText) + '</pre>';
+      outEl.innerHTML = '<pre class="output-success" style="margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">' + esc(outText) + '</pre>';
     });
 }
 window.sendLessonTerminalInput = sendLessonTerminalInput;
@@ -4303,57 +4663,91 @@ function submitLessonTests() {
   diffList.innerHTML = '<div class="test-placeholder"><span class="run-spinner"></span>Running deterministic test cases against OpenJDK 22…</div>';
 
   var slide = _curLesson.slides[_slideIdx];
-  var tests = slide.tests || [
-    { name: 'Default Test Case', stdin: '', expected: '' }
+  var tests = (slide && slide.tests && slide.tests.length) ? slide.tests : [
+    { name: 'Output Verification', stdin: '', expected: (slide && slide.expected) || '' }
   ];
 
   if (_cmLesson) _cmLesson.clearErrors();
 
-  executeJava(code, '')
-    .then(function(data) {
-      if (data.compile && data.compile.stderr) {
-        diffList.innerHTML = '<div class="diff-card fail">'
-          + '<div class="diff-card-header"><span class="diff-test-name">Compilation Check</span><span class="diff-test-status">FAILED</span></div>'
-          + '<pre class="output-error" style="margin:0;font-size:0.8rem;white-space:pre-wrap;">' + esc(data.compile.stderr) + '</pre>'
-          + '</div>';
-        return;
-      }
+  var results = [];
+  var promiseChain = Promise.resolve();
 
-      var stdout = (data.run ? data.run.stdout : '').trim();
-      var allPassed = true;
-      var cardsHtml = '';
-
-      tests.forEach(function(t, idx) {
-        var expected = String(t.expected || '').trim();
-        var isPass = (!expected) || (stdout === expected) || (stdout.includes(expected));
-        if (!isPass) allPassed = false;
-
-        cardsHtml += '<div class="diff-card ' + (isPass ? 'pass' : 'fail') + '">'
-          + '<div class="diff-card-header">'
-          + '<span class="diff-test-name">Test ' + (idx + 1) + ': ' + esc(t.name || 'Output Verification') + '</span>'
-          + '<span class="diff-test-status">' + (isPass ? 'PASSED' : 'FAILED') + '</span>'
-          + '</div>'
-          + '<div class="diff-comparison-grid">'
-          + '<div class="diff-box"><div class="diff-box-label">Expected:</div><pre>' + esc(expected || '(Non-empty output)') + '</pre></div>'
-          + '<div class="diff-box"><div class="diff-box-label">Your Output:</div><pre>' + esc(stdout || '(empty)') + '</pre></div>'
-          + '</div>'
-          + '</div>';
+  tests.forEach(function(t) {
+    promiseChain = promiseChain.then(function() {
+      return executeJava(code, (t.stdin != null ? String(t.stdin) : '')).then(function(res) {
+        results.push({ test: t, res: res });
       });
-
-      diffList.innerHTML = cardsHtml;
-      var passCountEl = ge('test-pass-count');
-      if (passCountEl) passCountEl.textContent = (allPassed ? tests.length : 0) + '/' + tests.length;
-
-      if (allPassed) {
-        if (window.GameFX) { window.GameFX.playBlockBreak(); window.GameFX.flyXpOrbs(); window.GameFX.mascotReact("bounce"); }
-        showRecapOverlay();
-      } else {
-        if (window.GameFX) { window.GameFX.playGentleOops(); window.GameFX.mascotReact("shake"); }
-      }
-    })
-    .catch(function(err) {
-      diffList.innerHTML = '<div class="diff-card fail"><div class="diff-card-header"><span class="diff-test-name">System Error</span><span class="diff-test-status">ERROR</span></div><pre class="output-error">' + esc(err.message) + '</pre></div>';
     });
+  });
+
+  promiseChain.then(function() {
+    var firstCompileErr = null;
+    for (var i = 0; i < results.length; i++) {
+      if (results[i].res.compile && results[i].res.compile.stderr) {
+        firstCompileErr = results[i].res.compile.stderr;
+        break;
+      }
+    }
+
+    if (firstCompileErr) {
+      diffList.innerHTML = '<div class="diff-card fail">'
+        + '<div class="diff-card-header"><span class="diff-test-name">Compilation Check</span><span class="diff-test-status">FAILED</span></div>'
+        + '<pre class="output-error" style="margin:0;font-size:0.8rem;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">' + esc(firstCompileErr) + '</pre>'
+        + '</div>';
+      var lineMatch = firstCompileErr.match(/:(\d+): error:/i) || firstCompileErr.match(/\.java:(\d+):/i);
+      if (lineMatch && _cmLesson) {
+        _cmLesson.setLineError(parseInt(lineMatch[1], 10), firstCompileErr.split('\n')[0]);
+      }
+      return;
+    }
+
+    var allPassed = true;
+    var cardsHtml = '';
+    var passCount = 0;
+
+    results.forEach(function(r, idx) {
+      var t = r.test;
+      var stdout = (r.res.run ? r.res.run.stdout : '').trim();
+      var expected = String(t.expected || '').trim();
+      var isPass = (!expected) || (stdout === expected) || (stdout.includes(expected));
+      if (isPass) passCount++;
+      else allPassed = false;
+
+      cardsHtml += '<div class="diff-card ' + (isPass ? 'pass' : 'fail') + '">'
+        + '<div class="diff-card-header">'
+        + '<span class="diff-test-name">Test ' + (idx + 1) + ': ' + esc(t.name || 'Output Verification') + '</span>'
+        + '<span class="diff-test-status">' + (isPass ? 'PASSED' : 'FAILED') + '</span>'
+        + '</div>'
+        + '<div class="diff-comparison-grid">'
+        + '<div class="diff-box"><div class="diff-box-label">Expected:</div><pre>' + esc(expected || '(Non-empty output)') + '</pre></div>'
+        + '<div class="diff-box"><div class="diff-box-label">Your Output:</div><pre>' + esc(stdout || '(empty)') + '</pre></div>'
+        + '</div>'
+        + '</div>';
+    });
+
+    diffList.innerHTML = cardsHtml;
+    var passCountEl = ge('test-pass-count');
+    if (passCountEl) passCountEl.textContent = passCount + '/' + tests.length;
+
+    if (allPassed) {
+      _stepTestsPassed[_slideIdx] = true;
+      _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx + 1);
+      updateStepPills();
+      if (window.GameFX) {
+        if (window.GameFX.playBlockBreak) window.GameFX.playBlockBreak();
+        if (window.GameFX.flyXpOrbs) window.GameFX.flyXpOrbs();
+        if (window.GameFX.mascotReact) window.GameFX.mascotReact("bounce");
+      }
+      showRecapOverlay();
+    } else {
+      if (window.GameFX) {
+        if (window.GameFX.playGentleOops) window.GameFX.playGentleOops();
+        if (window.GameFX.mascotReact) window.GameFX.mascotReact("shake");
+      }
+    }
+  }).catch(function(err) {
+    diffList.innerHTML = '<div class="diff-card fail"><div class="diff-card-header"><span class="diff-test-name">System Error</span><span class="diff-test-status">ERROR</span></div><pre class="output-error">' + esc(err.message) + '</pre></div>';
+  });
 }
 window.submitLessonTests = submitLessonTests;
 
@@ -4365,13 +4759,13 @@ function switchConsoleTab(tab) {
   var testView = ge('console-view-tests');
 
   if (tab === 'terminal') {
-    if (termBtn) termBtn.classList.add('active');
-    if (testBtn) testBtn.classList.remove('active');
+    if (termBtn) { termBtn.classList.add('active'); termBtn.setAttribute('aria-selected', 'true'); }
+    if (testBtn) { testBtn.classList.remove('active'); testBtn.setAttribute('aria-selected', 'false'); }
     if (termView) termView.classList.remove('hidden');
     if (testView) testView.classList.add('hidden');
   } else {
-    if (testBtn) testBtn.classList.add('active');
-    if (termBtn) termBtn.classList.remove('active');
+    if (testBtn) { testBtn.classList.add('active'); testBtn.setAttribute('aria-selected', 'true'); }
+    if (termBtn) { termBtn.classList.remove('active'); termBtn.setAttribute('aria-selected', 'false'); }
     if (testView) testView.classList.remove('hidden');
     if (termView) termView.classList.add('hidden');
   }
@@ -4381,8 +4775,17 @@ window.switchConsoleTab = switchConsoleTab;
 function switchMobileTab(tab) {
   _activeMobileTab = tab;
   qsa('.mobile-tab-btn').forEach(function(b) {
-    b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    var isActive = b.getAttribute('data-tab') === tab;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
+
+  var workspace = ge('split-lesson-workspace');
+  if (workspace) {
+    workspace.classList.remove('mobile-tab-guide', 'mobile-tab-editor', 'mobile-tab-console');
+    workspace.classList.add('mobile-tab-' + tab);
+  }
+
   var guideCol = ge('lesson-guide-col');
   var editorCol = ge('lesson-editor-col');
   var consolePanel = ge('lesson-console-panel');
@@ -4398,15 +4801,39 @@ function switchMobileTab(tab) {
       consolePanel.style.height = '';
     }
   }
+
+  if (tab === 'editor' && _cmLesson) {
+    setTimeout(function() { _cmLesson.focus(); }, 50);
+  }
 }
 window.switchMobileTab = switchMobileTab;
 
 function showRecapOverlay() {
   var overlay = ge('lesson-recap-overlay');
+  if (!overlay || !_curLesson) return;
+  var slide = _curLesson.slides[_slideIdx];
+  var total = _curLesson.slides.length;
+  var isLastStep = _slideIdx >= total - 1;
+
+  setText('recap-title', isLastStep ? 'Lesson Quest Mastered!' : 'Quest Step Complete!');
+  setText('recap-summary', isLastStep ? ('Congratulations! You completed all steps for ' + _curLesson.title + '.') : ('Step ' + (_slideIdx + 1) + ' passed with flying colors!'));
+
+  var learnedText = (slide && (slide.title || _curLesson.title)) || 'Java fundamentals and logic';
+  var reviewText = (slide && slide.hints && slide.hints[0]) || 'Verify syntax structure and edge cases.';
+  setText('recap-learned-text', learnedText);
+  setText('recap-review-text', reviewText);
+
   var xpVal = ge('recap-xp-awarded');
-  if (xpVal && _curLesson) xpVal.textContent = '+' + _curLesson.xp + ' XP';
-  if (overlay) overlay.classList.remove('hidden');
-  burstParticles('lesson-recap-overlay');
+  if (xpVal) xpVal.textContent = isLastStep ? ('+' + (_curLesson.xp || 25) + ' XP') : '+10 XP';
+
+  var contBtn = ge('btn-recap-continue');
+  if (contBtn) {
+    contBtn.textContent = isLastStep ? 'Complete Lesson & Next Quest →' : 'Next Step →';
+    contBtn.focus();
+  }
+
+  overlay.classList.remove('hidden');
+  if (typeof burstParticles === 'function') burstParticles('lesson-recap-overlay');
 }
 window.showRecapOverlay = showRecapOverlay;
 
@@ -4420,8 +4847,12 @@ function continueToNextStep() {
   hideRecapOverlay();
   if (_slideIdx < _curLesson.slides.length - 1) {
     _slideIdx++;
+    _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx);
     renderSplitLesson();
     addXP(10);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '#lesson/' + _curMod.id + '/' + _curLesson.id + '/' + (_slideIdx + 1));
+    }
   } else {
     finishLesson();
   }
@@ -4437,13 +4868,24 @@ function checkHashRoute() {
     if (parts.length >= 3) {
       var modId = parts[1];
       var lessonId = parts[2];
+      var stepIdx = parts.length >= 4 ? (parseInt(parts[3], 10) - 1) : 0;
       setTimeout(function() {
-        startLesson(modId, lessonId);
-      }, 200);
+        startLesson(modId, lessonId, stepIdx);
+      }, 150);
     }
   }
 }
 window.addEventListener('hashchange', checkHashRoute);
+
+// Keyboard accessibility: Escape dismisses modal/recap
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var recap = ge('lesson-recap-overlay');
+    if (recap && !recap.classList.contains('hidden')) {
+      hideRecapOverlay();
+    }
+  }
+});
 
 
 document.addEventListener('DOMContentLoaded', function(){

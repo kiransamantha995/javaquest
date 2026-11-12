@@ -123,19 +123,19 @@ const CURRICULUM = [
           }
         ],
         "exercise": {
-          "instructions": "Output `Quest: Active` on the first line, and `Player: Steve` on the second line.",
+          "instructions": "Output `Quest: Active` on the first line, and `Player: Blockhead` on the second line.",
           "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print two lines\n    }\n}",
           "hints": [
             "Call System.out.println twice",
             "First line: Quest: Active",
-            "Second line: Player: Steve"
+            "Second line: Player: Blockhead"
           ],
-          "solution": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Quest: Active\");\n        System.out.println(\"Player: Steve\");\n    }\n}",
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Quest: Active\");\n        System.out.println(\"Player: Blockhead\");\n    }\n}",
           "tests": [
             {
               "name": "Prints two lines",
               "stdin": "",
-              "expected": "Quest: Active\nPlayer: Steve"
+              "expected": "Quest: Active\nPlayer: Blockhead"
             }
           ]
         },
@@ -173,7 +173,8 @@ const CURRICULUM = [
         "answer": 1,
         "explanation": "print does not add a newline."
       }
-    ]
+    ],
+    "conceptMetaphor": "The JVM is your world engine, loading chunks of bytecode into memory on demand."
   },
   {
     "id": "b2",
@@ -328,7 +329,8 @@ const CURRICULUM = [
         "answer": 1,
         "explanation": "char is the 16-bit Unicode primitive."
       }
-    ]
+    ],
+    "conceptMetaphor": "Variables are like labeled storage chests with a fixed type: you only store what fits."
   },
   {
     "id": "b3",
@@ -477,7 +479,8 @@ const CURRICULUM = [
         "answer": 1,
         "explanation": "++a increments to 6 before multiplication, so 6 * 2 = 12."
       }
-    ]
+    ],
+    "conceptMetaphor": "Expressions and operators till raw inputs into cultivated outputs."
   },
   {
     "id": "b4",
@@ -626,7 +629,8 @@ const CURRICULUM = [
         "answer": 1,
         "explanation": "Loop runs for count = 0, 1, 2, exits when count becomes 3."
       }
-    ]
+    ],
+    "conceptMetaphor": "Loops are redstone clock circuits that repeat signals; if/else branches are levers directing flow."
   },
   {
     "id": "b5",
@@ -718,7 +722,8 @@ const CURRICULUM = [
         "answer": 0,
         "explanation": "Java is strictly pass-by-value. For objects, the value of the reference (pointer) is copied."
       }
-    ]
+    ],
+    "conceptMetaphor": "Methods are crafting recipes: give them ingredients (parameters), they forge an item (return value)."
   },
   {
     "id": "b6",
@@ -811,7 +816,8 @@ const CURRICULUM = [
         "answer": 0,
         "explanation": "Immutability enables String Constant Pool caching, thread-safety, and secure hashing."
       }
-    ]
+    ],
+    "conceptMetaphor": "Arrays are locked-size double chests; strings are immutable etched rune stones."
   },
   {
     "id": "b7",
@@ -908,7 +914,8 @@ const CURRICULUM = [
         "answer": 0,
         "explanation": "Encapsulation bundles data and methods while restricting direct access to fields."
       }
-    ]
+    ],
+    "conceptMetaphor": "A class is an architect blueprint; an object is an active creature spawned into the world from it."
   },
   {
     "id": "b8",
@@ -916,7 +923,7 @@ const CURRICULUM = [
     "level": "beginner",
     "title": "Exceptions & Collections Intro",
     "subtitle": "try-catch-finally, checked vs unchecked, ArrayList<E>, and HashMap<K,V>",
-    "biome": "Creeper Cave",
+    "biome": "Hisser Cavern",
     "estimatedMinutes": 120,
     "learningObjectives": [
       "Handle runtime errors safely using try-catch-finally blocks",
@@ -933,7 +940,7 @@ const CURRICULUM = [
         "title": "Handling Exceptions with try-catch",
         "xp": 30,
         "estimatedMinutes": 16,
-        "story": "In the Creeper Cave, unexpected surprises happen. Wrap hazardous operations in try-catch blocks to prevent your application from crashing.",
+        "story": "In the Hisser Cavern, unexpected surprises happen — an unhandled exception is like an exploding hisser creature that halts the game unless you safely catch and defuse it.",
         "slides": [
           {
             "title": "The try-catch Mechanism",
@@ -1058,7 +1065,8 @@ const CURRICULUM = [
         "answer": 1,
         "explanation": "ArrayList is the standard resizable array implementation."
       }
-    ]
+    ],
+    "conceptMetaphor": "An unhandled exception is an exploding hisser creature unless caught and defused in try-catch."
   },
   {
     "id": "i1",
@@ -1212,8 +1220,10 @@ const CURRICULUM = [
         "Record field accessors use name() without \"get\" prefix.",
         "Use double 149.50."
       ]
-    }
-},
+    },
+    "biome": "Creature Guild",
+    "conceptMetaphor": "Inheritance links creature families sharing traits; interfaces enforce what any guild member can do."
+  },
   {
     "id": "i2",
     "code": "I2",
@@ -1363,8 +1373,10 @@ const CURRICULUM = [
         "Use LinkedHashMap to preserve insertion order.",
         "Use freq.getOrDefault(w, 0) + 1."
       ]
-    }
-},
+    },
+    "biome": "Hopper Depot",
+    "conceptMetaphor": "Collections are inventories and sorting hoppers storing flexible volumes of items."
+  },
   {
     "id": "i3",
     "code": "I3",
@@ -1493,8 +1505,10 @@ const CURRICULUM = [
         "Wrap Integer.parseInt() in try-catch.",
         "Catch NumberFormatException and return fallback."
       ]
-    }
-},
+    },
+    "biome": "Nether Fortress",
+    "conceptMetaphor": "Secure file vaults and streams guarding persistent resources across worlds."
+  },
   {
     "id": "i4",
     "code": "I4",
@@ -1634,8 +1648,10 @@ const CURRICULUM = [
         "Use .map(n -> n * n)",
         "Use .forEach(System.out::println)"
       ]
-    }
-},
+    },
+    "biome": "Rail Pipeline",
+    "conceptMetaphor": "Java Streams are minecart rails and hopper pipelines filtering and transforming data in motion."
+  },
   {
     "id": "i5",
     "code": "I5",
@@ -1778,8 +1794,10 @@ const CURRICULUM = [
       "hints": [
         "Use String.matches() with regex pattern."
       ]
-    }
-},
+    },
+    "biome": "Chrono Monolith",
+    "conceptMetaphor": "Precise world time clocks, daylight cycles, and pattern-matching scrolls."
+  },
   {
     "id": "i6",
     "code": "I6",
@@ -1906,8 +1924,10 @@ const CURRICULUM = [
       "hints": [
         "Check both test conditions."
       ]
-    }
-},
+    },
+    "biome": "Inspection Quarry",
+    "conceptMetaphor": "Unit testing and assertions verifying every block before it is placed in the wall."
+  },
   {
     "id": "i7",
     "code": "I7",
@@ -2034,8 +2054,10 @@ const CURRICULUM = [
       "hints": [
         "Notice the question mark ? placeholder at the end."
       ]
-    }
-},
+    },
+    "biome": "Obsidian Archive",
+    "conceptMetaphor": "Relational databases and JDBC forging durable obsidian records that survive world resets."
+  },
   {
     "id": "i8",
     "code": "I8",
@@ -2162,8 +2184,10 @@ const CURRICULUM = [
       "hints": [
         "Submit task, shutdown pool, and await termination."
       ]
-    }
-},
+    },
+    "biome": "Villager Hive",
+    "conceptMetaphor": "Threads are multiple villagers working simultaneously; synchronization keeps them from colliding."
+  },
   {
     "id": "a1",
     "code": "A1",
@@ -2290,8 +2314,10 @@ const CURRICULUM = [
       "hints": [
         "Use Runtime.getRuntime().totalMemory()."
       ]
-    }
-},
+    },
+    "biome": "World Engine Core",
+    "conceptMetaphor": "Deep JVM internals: garbage collectors recycling dropped items and JIT compiling hot chunks."
+  },
   {
     "id": "a2",
     "code": "A2",
@@ -2418,8 +2444,10 @@ const CURRICULUM = [
       "hints": [
         "Use AtomicInteger.incrementAndGet()."
       ]
-    }
-},
+    },
+    "biome": "Parallel Void",
+    "conceptMetaphor": "Virtual threads and structured concurrency managing thousands of lightweight tasks in the void."
+  },
   {
     "id": "a3",
     "code": "A3",
@@ -2547,8 +2575,10 @@ const CURRICULUM = [
       "hints": [
         "Use pattern matching instanceof (obj instanceof String s)."
       ]
-    }
-},
+    },
+    "biome": "Crystal Altar",
+    "conceptMetaphor": "Records, sealed hierarchies, and pattern matching forging unyielding crystalline contracts."
+  },
   {
     "id": "a4",
     "code": "A4",
@@ -2592,7 +2622,7 @@ const CURRICULUM = [
             "type": "code",
             "title": "Builder Pattern",
             "content": "Fluent method chaining pattern.",
-            "code": "User u = new User.Builder(\"Alex\")\n    .email(\"alex@code.com\")\n    .role(\"ADMIN\")\n    .build();"
+            "code": "User u = new User.Builder(\"Scout\")\n    .email(\"scout@code.com\")\n    .role(\"ADMIN\")\n    .build();"
           },
           {
             "type": "tip",
@@ -2689,8 +2719,10 @@ const CURRICULUM = [
         "Each builder method sets field and returns this.",
         "build() instantiates HttpRequest."
       ]
-    }
-},
+    },
+    "biome": "Celestial Citadel",
+    "conceptMetaphor": "Enterprise software architecture and design patterns for monumental scale."
+  },
   {
     "id": "a5",
     "code": "A5",
@@ -2834,8 +2866,10 @@ const CURRICULUM = [
       "hints": [
         "Use Math.min(delay, maxMs) to prevent unbounded backoff."
       ]
-    }
-},
+    },
+    "biome": "Warded Beacon",
+    "conceptMetaphor": "Encrypted networking, TLS handshakes, and warded perimeter security."
+  },
   {
     "id": "a6",
     "code": "A6",
@@ -2966,8 +3000,10 @@ const CURRICULUM = [
       "hints": [
         "Pass EmailService into the NotificationClient constructor."
       ]
-    }
-},
+    },
+    "biome": "Spire Sanctuary",
+    "conceptMetaphor": "Spring Boot REST microservices and cloud persistence reaching to the sky."
+  },
   {
     "id": "a7",
     "code": "A7",
@@ -3094,8 +3130,10 @@ const CURRICULUM = [
       "hints": [
         "The third boolean argument `true` in LinkedHashMap constructor specifies access-order."
       ]
-    }
-},
+    },
+    "biome": "Telemetry Watchtower",
+    "conceptMetaphor": "Profiling, metrics, OpenTelemetry, and diagnostic lenses observing every heartbeat."
+  },
   {
     "id": "a8",
     "code": "A8",
@@ -3241,8 +3279,10 @@ const CURRICULUM = [
       "hints": [
         "Check both parameters."
       ]
-    }
-}
+    },
+    "biome": "End Gateway",
+    "conceptMetaphor": "Containers, automated CI/CD pipelines, and production release gateways."
+  }
 ];
 
 const PROJECTS = [

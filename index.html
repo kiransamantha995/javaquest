@@ -9,7 +9,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=8.7"/>
+  <link rel="stylesheet" href="style.css?v=8.8"/>
 </head>
 <body>
 
@@ -30,19 +30,13 @@
     <button class="nav-btn" id="nav-settings"><span class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span><span class="nav-label">Settings</span></button>
   </div>
   <div class="nav-stats">
-    <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Night Mode" aria-label="Toggle Night Mode">
-      <span id="theme-toggle-icon">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-      </span>
-    </button>
-    <div class="stat-chip diff-chip" id="nav-diff-chip">Beginner</div>
-    <div class="stat-chip level-chip"><span id="nav-level-icon" style="display:none"></span><span id="nav-level">Lv.1</span></div>
-    <div class="stat-chip xp-chip"><div class="xp-bar-mini"><div class="xp-fill-mini" id="xp-fill-mini"></div></div><span id="nav-xp">0 XP</span></div>
-    <div class="stat-chip streak-chip">
+    <div class="stat-chip level-chip" id="nav-level-chip" title="Current Level"><span id="nav-level-icon" style="display:none"></span><span id="nav-level">Lv.1</span></div>
+    <div class="stat-chip xp-chip" id="nav-xp-chip" title="Experience Points"><div class="xp-bar-mini"><div class="xp-fill-mini" id="xp-fill-mini"></div></div><span id="nav-xp">0 XP</span></div>
+    <div class="stat-chip streak-chip" id="nav-streak-chip" title="Active Streak">
       <svg class="flame-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2c-.6 1.4-1.2 2.7-1.2 4.1 0 2.3 1.8 3.9 1.8 5.9 0 3.3-2.7 6-6 6-1.1 0-2.1-.3-3-1 1.2 4 4.8 7 9.2 7 5.4 0 9.8-4.4 9.8-9.8 0-4.6-3.8-8.5-7.6-11.2-.8-.6-1.8-.7-3-1z"/></svg>
       <span id="nav-streak">0</span>
     </div>
-    <div class="stat-chip hearts-chip"><span id="nav-hearts" class="hearts-row"></span></div>
+    <div class="stat-chip hearts-chip" id="nav-hearts-chip" title="Player Health"><span id="nav-hearts" class="hearts-row"></span></div>
   </div>
 </nav>
 
@@ -102,7 +96,7 @@
         </div>
 
         <!-- Skin picker -->
-        <div class="login-skin-label">Pick your Minecraft character:</div>
+        <div class="login-skin-label">Pick your Pixel Champion:</div>
         <div class="login-skin-row" id="login-skin-row"></div>
 
         <div class="auth-error hidden" id="su-error"></div>
@@ -400,7 +394,7 @@
   <div class="split-lesson-container">
     <!-- Top Bar: Progress Strip & Controls -->
     <header class="lesson-top-bar">
-      <button class="btn-back-map" id="lesson-back-btn" title="Return to Course Map">
+      <button class="btn-back-map" id="lesson-back-btn" title="Return to Course Map" aria-label="Return to Course Map">
         <span>←</span> <span>Map</span>
       </button>
       <div class="lesson-top-info">
@@ -411,19 +405,19 @@
         <h2 class="lesson-current-title" id="lesson-title">Lesson Title</h2>
       </div>
       <!-- Steps Progress Strip -->
-      <div class="lesson-steps-strip" id="lesson-steps-strip">
+      <nav class="lesson-steps-strip" id="lesson-steps-strip" aria-label="Lesson step navigation">
         <!-- Rendered dynamically -->
-      </div>
+      </nav>
       <div class="lesson-top-actions">
         <span class="lesson-xp-pill" id="lesson-xp-badge">+30 XP</span>
       </div>
     </header>
 
     <!-- Mobile View Tab Switcher (shown on screens <= 768px) -->
-    <div class="lesson-mobile-tabs" id="lesson-mobile-tabs">
-      <button class="mobile-tab-btn active" data-tab="guide" onclick="switchMobileTab('guide')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Instructions</button>
-      <button class="mobile-tab-btn" data-tab="editor" onclick="switchMobileTab('editor')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Java Editor</button>
-      <button class="mobile-tab-btn" data-tab="console" onclick="switchMobileTab('console')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg> Output / Tests</button>
+    <div class="lesson-mobile-tabs" id="lesson-mobile-tabs" role="tablist" aria-label="Lesson panels">
+      <button class="mobile-tab-btn active" role="tab" aria-selected="true" data-tab="guide" onclick="switchMobileTab('guide')" aria-label="Instructions tab"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Instructions</button>
+      <button class="mobile-tab-btn" role="tab" aria-selected="false" data-tab="editor" onclick="switchMobileTab('editor')" aria-label="Java Editor tab"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Java Editor</button>
+      <button class="mobile-tab-btn" role="tab" aria-selected="false" data-tab="console" onclick="switchMobileTab('console')" aria-label="Output and Tests tab"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg> Output / Tests</button>
     </div>
 
     <!-- Main Split Workspace -->
@@ -471,33 +465,33 @@
             <span class="hints-counter" id="hints-counter">0/3 Hints Unlocked</span>
           </div>
           <div class="hints-accordion" id="hints-accordion">
-            <button class="hint-tier-btn" id="hint-tier-1-btn" onclick="revealLessonHint(1)">
+            <button class="hint-tier-btn" id="hint-tier-1-btn" onclick="revealLessonHint(1)" aria-expanded="false" aria-controls="hint-tier-1-content" aria-label="Tier 1 Hint: Gentle Nudge">
               <span class="hint-tier-num">1</span>
               <span class="hint-tier-label">Gentle Nudge</span>
               <span class="hint-tier-arrow">▼</span>
             </button>
-            <div class="hint-tier-content hidden" id="hint-tier-1-content"></div>
+            <div class="hint-tier-content hidden" id="hint-tier-1-content" role="region" aria-label="Tier 1 Hint Content"></div>
 
-            <button class="hint-tier-btn" id="hint-tier-2-btn" onclick="revealLessonHint(2)" disabled>
+            <button class="hint-tier-btn" id="hint-tier-2-btn" onclick="revealLessonHint(2)" disabled aria-expanded="false" aria-controls="hint-tier-2-content" aria-label="Tier 2 Hint: Specific Code Guidance">
               <span class="hint-tier-num">2</span>
               <span class="hint-tier-label">Specific Code Guidance</span>
               <span class="hint-tier-arrow">▼</span>
             </button>
-            <div class="hint-tier-content hidden" id="hint-tier-2-content"></div>
+            <div class="hint-tier-content hidden" id="hint-tier-2-content" role="region" aria-label="Tier 2 Hint Content"></div>
 
-            <button class="hint-tier-btn" id="hint-tier-3-btn" onclick="revealLessonHint(3)" disabled>
+            <button class="hint-tier-btn" id="hint-tier-3-btn" onclick="revealLessonHint(3)" disabled aria-expanded="false" aria-controls="hint-tier-3-content" aria-label="Tier 3 Hint: Near-Solution Skeleton">
               <span class="hint-tier-num">3</span>
               <span class="hint-tier-label">Near-Solution Skeleton</span>
               <span class="hint-tier-arrow">▼</span>
             </button>
-            <div class="hint-tier-content hidden" id="hint-tier-3-content"></div>
+            <div class="hint-tier-content hidden" id="hint-tier-3-content" role="region" aria-label="Tier 3 Hint Content"></div>
 
             <!-- Full Solution Unlock Button -->
-            <button class="btn-unlock-solution hidden" id="btn-unlock-solution" onclick="unlockLessonSolution()">
-              <span class="unlock-lock-icon"><svg viewBox="0 0 14 14" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="10" height="8" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg></span>
+            <button class="btn-unlock-solution hidden" id="btn-unlock-solution" onclick="unlockLessonSolution()" aria-label="Unlock Full Reference Solution for 25 XP">
+              <span class="unlock-lock-icon" aria-hidden="true"><svg viewBox="0 0 14 14" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="10" height="8" rx="1.5"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/></svg></span>
               <span id="unlock-solution-text">Unlock Full Solution (-25 XP)</span>
             </button>
-            <div class="solution-revealed-box hidden" id="solution-revealed-box">
+            <div class="solution-revealed-box hidden" id="solution-revealed-box" role="region" aria-label="Reference Solution">
               <div class="solution-header">Reference Solution:</div>
               <pre id="solution-code-pre"></pre>
             </div>
@@ -506,9 +500,9 @@
 
         <!-- Lesson Navigation Footer -->
         <div class="lesson-nav">
-          <button class="btn-secondary" id="btn-prev-slide">← Previous Step</button>
-          <div class="slide-dots" id="slide-dots"></div>
-          <button class="btn-primary" id="btn-next-slide">Next Step</button>
+          <button class="btn-secondary" id="btn-prev-slide" aria-label="Go to Previous Step">← Previous Step</button>
+          <div class="slide-dots" id="slide-dots" aria-label="Step progress indicators"></div>
+          <button class="btn-primary" id="btn-next-slide" aria-label="Proceed to Next Step">Next Step</button>
         </div>
       </div>
 
@@ -527,59 +521,63 @@
               <span class="mac-traffic-dot green"></span>
             </div>
             <span class="editor-lang-badge">Exercise.java</span>
-            <button class="btn-xs btn-outline-gold" id="live-watch-toggle-btn" onclick="window.toggleLiveWatching()" title="Toggle JavaBot live watching"><svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 10c3-5.5 15-5.5 18 0-3 5.5-15 5.5-18 0z"/><circle cx="10" cy="10" r="2.5"/></svg> Watching</button>
-            <button class="btn-secondary btn-sm" id="lesson-reset-code-btn" onclick="resetLessonCode()" title="Reset starter code">↺ Reset</button>
+            <button class="btn-xs btn-outline-gold" id="live-watch-toggle-btn" onclick="window.toggleLiveWatching()" title="Toggle JavaBot live watching" aria-label="Toggle JavaBot live watching"><svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M1 10c3-5.5 15-5.5 18 0-3 5.5-15 5.5-18 0z"/><circle cx="10" cy="10" r="2.5"/></svg> Watching</button>
+            <button class="btn-secondary btn-sm" id="lesson-reset-code-btn" onclick="resetLessonCode()" title="Reset starter code" aria-label="Reset starter code">↺ Reset</button>
             <div style="flex:1"></div>
-            <button class="btn-run-secondary" id="lesson-run-btn" onclick="runLessonCode()" title="Run code in interactive terminal (Ctrl+Enter)">▶ Run Code</button>
-            <button class="btn-run" id="lesson-submit-btn" onclick="submitLessonTests()" title="Run deterministic tests against code">Submit &amp; Test</button>
+            <button class="btn-run-secondary" id="lesson-run-btn" onclick="runLessonCode()" title="Run code in interactive terminal (Ctrl+Enter)" aria-label="Run Code in interactive terminal">▶ Run Code</button>
+            <button class="btn-run" id="lesson-submit-btn" onclick="submitLessonTests()" title="Run deterministic tests against code" aria-label="Submit code to test runner">Submit &amp; Test</button>
           </div>
           <!-- CodeMirror 6 Container -->
-          <div class="cm-editor-wrap" id="cm-lesson-editor"></div>
-          <textarea id="lesson-code-editor" style="display:none"></textarea>
+          <div class="cm-editor-wrap" id="cm-lesson-editor" role="region" aria-label="Java Code Editor"></div>
+          <textarea id="lesson-code-editor" style="display:none" aria-hidden="true"></textarea>
         </div>
 
         <!-- Bottom Console / Test Results Panel -->
-        <div class="lesson-console-panel" id="lesson-console-panel">
-          <div class="console-tab-header">
-            <button class="console-tab-btn active" id="tab-btn-terminal" onclick="switchConsoleTab('terminal')"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg> Terminal</button>
-            <button class="console-tab-btn" id="tab-btn-tests" onclick="switchConsoleTab('tests')"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M4.5 3h15"></path><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"></path><line x1="6" y1="14" x2="18" y2="14"></line></svg> Tests (<span id="test-pass-count">0/0</span>)</button>
+        <div class="lesson-console-panel" id="lesson-console-panel" role="region" aria-label="Console and test results">
+          <div class="console-tab-header" role="tablist">
+            <button class="console-tab-btn active" role="tab" aria-selected="true" id="tab-btn-terminal" onclick="switchConsoleTab('terminal')" aria-label="Terminal tab"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg> Terminal</button>
+            <button class="console-tab-btn" role="tab" aria-selected="false" id="tab-btn-tests" onclick="switchConsoleTab('tests')" aria-label="Tests tab"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;" aria-hidden="true"><path d="M4.5 3h15"></path><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"></path><line x1="6" y1="14" x2="18" y2="14"></line></svg> Tests (<span id="test-pass-count">0/0</span>)</button>
             <div style="flex:1"></div>
-            <button class="btn-xs btn-clear-console" id="btn-clear-lesson-console" onclick="clearLessonConsole()">Clear</button>
+            <button class="btn-xs btn-clear-console" id="btn-clear-lesson-console" onclick="clearLessonConsole()" aria-label="Clear Terminal Console">Clear</button>
           </div>
 
           <!-- Terminal Tab View -->
-          <div class="console-tab-view" id="console-view-terminal">
-            <div class="output-area lesson-output-area" id="lesson-terminal-out">
+          <div class="console-tab-view" id="console-view-terminal" role="tabpanel" aria-label="Terminal Output">
+            <div class="output-area lesson-output-area" id="lesson-terminal-out" aria-live="polite">
               <div class="terminal-idle-state" onclick="runLessonCode()">
-                <span class="terminal-idle-icon">❯</span>
-                <span class="terminal-idle-text">Ready. Click <button class="terminal-run-pill" onclick="runLessonCode()">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>
+                <span class="terminal-idle-icon" aria-hidden="true">❯</span>
+                <span class="terminal-idle-text">Ready. Click <button class="terminal-run-pill" onclick="runLessonCode()" aria-label="Run Code">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>
               </div>
             </div>
             <div class="terminal-interactive-bar" id="lesson-terminal-bar" style="display:none">
-              <span class="terminal-prompt-sym">❯</span>
-              <input type="text" id="lesson-terminal-input" class="terminal-input" placeholder="Type input here and press Enter ↵..." autocomplete="off" />
-              <button id="lesson-terminal-submit-btn" class="terminal-submit-btn" onclick="sendLessonTerminalInput()">Send ↵</button>
+              <span class="terminal-prompt-sym" aria-hidden="true">❯</span>
+              <input type="text" id="lesson-terminal-input" class="terminal-input" placeholder="Type input here and press Enter ↵..." autocomplete="off" aria-label="Terminal input" />
+              <button id="lesson-terminal-submit-btn" class="terminal-submit-btn" onclick="sendLessonTerminalInput()" aria-label="Send input to terminal">Send ↵</button>
             </div>
           </div>
 
           <!-- Tests Tab View (Deterministic Diff Runner) -->
-          <div class="console-tab-view hidden" id="console-view-tests">
-            <div class="test-diff-list" id="lesson-test-diff-list">
+          <div class="console-tab-view hidden" id="console-view-tests" role="tabpanel" aria-label="Test Results">
+            <div class="test-diff-list" id="lesson-test-diff-list" aria-live="polite">
               <div class="test-placeholder">Click "Submit &amp; Test" to run your code against verification test cases.</div>
             </div>
           </div>
         </div>
 
         <!-- Lesson End Recap Card (revealed when tests pass) -->
-        <div class="lesson-recap-overlay hidden" id="lesson-recap-overlay">
+        <div class="lesson-recap-overlay hidden" id="lesson-recap-overlay" role="dialog" aria-modal="true" aria-labelledby="recap-title">
           <div class="recap-card">
-            <div class="recap-badge-icon"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v8a6 6 0 0 1-12 0V2z"/><path d="M6 6H2a2 2 0 0 0 0 4h2"/><path d="M18 6h4a2 2 0 0 1 0 4h-2"/><path d="M12 14v6"/><path d="M8 20h8"/></svg></div>
-            <h3 class="recap-title">Quest Step Complete!</h3>
+            <div class="recap-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v8a6 6 0 0 1-12 0V2z"/><path d="M6 6H2a2 2 0 0 0 0 4h2"/><path d="M18 6h4a2 2 0 0 1 0 4h-2"/><path d="M12 14v6"/><path d="M8 20h8"/></svg></div>
+            <h3 class="recap-title" id="recap-title">Quest Step Complete!</h3>
             <p class="recap-summary" id="recap-summary">You mastered this concept and all tests passed!</p>
+            <div class="recap-takeaways" id="recap-takeaways">
+              <div class="recap-takeaway-item"><strong class="takeaway-label">What You Learned:</strong> <span id="recap-learned-text">Java fundamentals</span></div>
+              <div class="recap-takeaway-item"><strong class="takeaway-label">Key to Review:</strong> <span id="recap-review-text">Verify syntax rules and error handling</span></div>
+            </div>
             <div class="recap-xp-awarded" id="recap-xp-awarded">+30 XP</div>
             <div class="recap-actions">
-              <button class="btn-secondary" onclick="hideRecapOverlay()">Review Code</button>
-              <button class="btn-primary" id="btn-recap-continue" onclick="continueToNextStep()">Next Quest</button>
+              <button class="btn-secondary" id="btn-recap-review" onclick="hideRecapOverlay()" aria-label="Review Code">Review Code</button>
+              <button class="btn-primary" id="btn-recap-continue" onclick="continueToNextStep()" aria-label="Continue to Next Quest">Next Quest</button>
             </div>
           </div>
         </div>
@@ -814,8 +812,8 @@
 <section class="screen" id="screen-avatar">
   <div class="avatar-container">
     <div class="avatar-screen-header">
-      <h1>Minecraft Pixel Avatar Studio</h1>
-      <p>Choose an authentic 8-bit Minecraft character face for your Java profile across JavaQuest.</p>
+      <h1>Voxel Pixel Avatar Studio</h1>
+      <p>Choose an original 8-bit character face and customize with gear for your JavaQuest profile.</p>
     </div>
     <div class="avatar-editor">
       <div class="avatar-preview-col">
@@ -827,7 +825,9 @@
       </div>
       <div class="avatar-options-col">
         <div class="avatar-tabs">
-          <button class="avatar-tab active" id="tab-skin" data-tab="skin">Minecraft Characters</button>
+          <button class="avatar-tab active" id="tab-skin" data-tab="skin">Champions</button>
+          <button class="avatar-tab" id="tab-hats" data-tab="hats">Hats</button>
+          <button class="avatar-tab" id="tab-capes" data-tab="capes">Capes</button>
         </div>
         <div class="avatar-options-grid" id="avatar-options-grid"></div>
         <div class="name-input-row">
@@ -844,8 +844,8 @@
 <section class="screen" id="screen-badges">
   <div class="badges-container">
     <div class="badges-header">
-      <h1>Minecraft Trophy Hall</h1>
-      <p id="badges-earned-count">0 / 24 Minecraft Medals Unlocked</p>
+      <h1>Voxel Trophy Hall</h1>
+      <p id="badges-earned-count">0 / 24 Medals Unlocked</p>
       <div class="badge-filter-bar" id="badge-filter-bar">
         <button class="badge-filter-btn active" data-filter="all">All (24)</button>
         <button class="badge-filter-btn" data-filter="common">Common</button>
@@ -1196,12 +1196,12 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=8.7"></script>
-<script src="animations.js?v=8.7"></script>
-<script src="supabase.js?v=8.7"></script>
-<script src="ai-tutor.js?v=8.7"></script>
-<script src="lib/editor.bundle.js?v=8.7"></script>
-<script src="lib/game-fx.js?v=8.7"></script>
-<script src="app.js?v=8.7"></script>
+<script src="curriculum.js?v=8.8"></script>
+<script src="animations.js?v=8.8"></script>
+<script src="supabase.js?v=8.8"></script>
+<script src="ai-tutor.js?v=8.8"></script>
+<script src="lib/editor.bundle.js?v=8.8"></script>
+<script src="lib/game-fx.js?v=8.8"></script>
+<script src="app.js?v=8.8"></script>
 </body>
 </html>
