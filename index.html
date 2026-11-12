@@ -7,7 +7,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=8.0"/>
+  <link rel="stylesheet" href="style.css?v=8.1"/>
 </head>
 <body>
 
@@ -403,28 +403,194 @@
   </div>
 </section>
 
-<!-- ====== LESSON SCREEN ====== -->
+<!-- ====== CODEDEX-STYLE SPLIT-SCREEN LESSON SCREEN ====== -->
 <section class="screen" id="screen-lesson">
-  <div class="lesson-container">
-    <div class="lesson-header">
-      <button class="btn-back" id="lesson-back-btn">← Back to Map</button>
-      <div class="lesson-title-block">
-        <span class="lesson-module-tag" id="lesson-module-tag">Module</span>
-        <h2 class="lesson-title" id="lesson-title">Lesson Title</h2>
+  <div class="split-lesson-container">
+    <!-- Top Bar: Progress Strip & Controls -->
+    <header class="lesson-top-bar">
+      <button class="btn-back-map" id="lesson-back-btn" title="Return to Course Map">
+        <span>←</span> <span>Map</span>
+      </button>
+      <div class="lesson-top-info">
+        <span class="lesson-biome-tag" id="lesson-biome-tag">🌱 Overworld</span>
+        <span class="lesson-track-divider">•</span>
+        <span class="lesson-mod-title" id="lesson-module-tag">Module 1</span>
+        <span class="lesson-track-divider">•</span>
+        <h2 class="lesson-current-title" id="lesson-title">Lesson Title</h2>
       </div>
-      <div class="lesson-meta">
-        <div class="slide-counter" id="slide-counter">1 / 4</div>
-        <div class="lesson-xp-badge" id="lesson-xp-badge">+30 XP</div>
+      <!-- Steps Progress Strip -->
+      <div class="lesson-steps-strip" id="lesson-steps-strip">
+        <!-- Rendered dynamically -->
       </div>
+      <div class="lesson-top-actions">
+        <span class="lesson-xp-pill" id="lesson-xp-badge">+30 XP</span>
+      </div>
+    </header>
+
+    <!-- Mobile View Tab Switcher (shown on screens <= 768px) -->
+    <div class="lesson-mobile-tabs" id="lesson-mobile-tabs">
+      <button class="mobile-tab-btn active" data-tab="guide" onclick="switchMobileTab('guide')">📖 Instructions</button>
+      <button class="mobile-tab-btn" data-tab="editor" onclick="switchMobileTab('editor')">💻 Java Editor</button>
+      <button class="mobile-tab-btn" data-tab="console" onclick="switchMobileTab('console')">❯ Output / Tests</button>
     </div>
-    <div class="lesson-progress-bar-wrap">
-      <div class="lesson-progress-bar"><div class="lesson-progress-fill" id="lesson-progress-fill"></div></div>
-    </div>
-    <div class="slide-area" id="slide-area"></div>
-    <div class="lesson-nav">
-      <button class="btn-secondary" id="btn-prev-slide">← Previous</button>
-      <div class="slide-dots" id="slide-dots"></div>
-      <button class="btn-primary" id="btn-next-slide">Next →</button>
+
+    <!-- Main Split Workspace -->
+    <div class="split-lesson-workspace" id="split-lesson-workspace">
+      <!-- Left Column: Instructions, Story, Checkpoints, Hints -->
+      <div class="lesson-guide-col" id="lesson-guide-col">
+        <div class="lesson-story-card" id="lesson-story-card">
+          <div class="story-biome-icon" id="story-biome-icon">⛏</div>
+          <div class="story-text" id="story-text">
+            Master the fundamentals of Java through hands-on coding challenges!
+          </div>
+        </div>
+
+        <div class="slide-area" id="slide-area">
+          <!-- Slide explanation, visualizer, code snippets -->
+        </div>
+
+        <!-- Inline Checkpoint (Concept check before code) -->
+        <div class="lesson-checkpoint-card hidden" id="lesson-checkpoint-card">
+          <div class="checkpoint-header">
+            <span class="checkpoint-icon">⚡</span>
+            <span class="checkpoint-title">Quick Concept Check</span>
+          </div>
+          <div class="checkpoint-question" id="checkpoint-question"></div>
+          <div class="checkpoint-options" id="checkpoint-options"></div>
+          <div class="checkpoint-feedback hidden" id="checkpoint-feedback"></div>
+        </div>
+
+        <!-- Guided Exercise Prompt -->
+        <div class="lesson-exercise-box" id="lesson-exercise-box">
+          <div class="exercise-header">
+            <span class="exercise-badge">QUEST OBJECTIVE</span>
+            <span class="exercise-time" id="exercise-est-time">~10 min</span>
+          </div>
+          <div class="exercise-instructions" id="exercise-instructions">
+            Write your Java program according to the specification and verify output.
+          </div>
+        </div>
+
+        <!-- 3-Tier Progressive Hints & Solution Unlock -->
+        <div class="lesson-hints-container" id="lesson-hints-container">
+          <div class="hints-header">
+            <span class="hints-icon">💡</span>
+            <span class="hints-title">Need Guidance?</span>
+            <span class="hints-counter" id="hints-counter">0/3 Hints Unlocked</span>
+          </div>
+          <div class="hints-accordion" id="hints-accordion">
+            <button class="hint-tier-btn" id="hint-tier-1-btn" onclick="revealLessonHint(1)">
+              <span class="hint-tier-num">1</span>
+              <span class="hint-tier-label">Gentle Nudge</span>
+              <span class="hint-tier-arrow">▼</span>
+            </button>
+            <div class="hint-tier-content hidden" id="hint-tier-1-content"></div>
+
+            <button class="hint-tier-btn" id="hint-tier-2-btn" onclick="revealLessonHint(2)" disabled>
+              <span class="hint-tier-num">2</span>
+              <span class="hint-tier-label">Specific Code Guidance</span>
+              <span class="hint-tier-arrow">▼</span>
+            </button>
+            <div class="hint-tier-content hidden" id="hint-tier-2-content"></div>
+
+            <button class="hint-tier-btn" id="hint-tier-3-btn" onclick="revealLessonHint(3)" disabled>
+              <span class="hint-tier-num">3</span>
+              <span class="hint-tier-label">Near-Solution Skeleton</span>
+              <span class="hint-tier-arrow">▼</span>
+            </button>
+            <div class="hint-tier-content hidden" id="hint-tier-3-content"></div>
+
+            <!-- Full Solution Unlock Button -->
+            <button class="btn-unlock-solution hidden" id="btn-unlock-solution" onclick="unlockLessonSolution()">
+              <span class="unlock-lock-icon">🔒</span>
+              <span id="unlock-solution-text">Unlock Full Solution (-25 XP)</span>
+            </button>
+            <div class="solution-revealed-box hidden" id="solution-revealed-box">
+              <div class="solution-header">Reference Solution:</div>
+              <pre id="solution-code-pre"></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lesson Navigation Footer -->
+        <div class="lesson-nav">
+          <button class="btn-secondary" id="btn-prev-slide">← Previous Step</button>
+          <div class="slide-dots" id="slide-dots"></div>
+          <button class="btn-primary" id="btn-next-slide">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- Resizer Gutter -->
+      <div class="split-gutter split-gutter-h" id="lesson-resizer-h" title="Drag to resize panels">
+        <div class="gutter-handle"></div>
+      </div>
+
+      <!-- Right Column: CodeMirror 6 Editor + Interactive Terminal / Test Runner -->
+      <div class="lesson-editor-col" id="lesson-editor-col">
+        <div class="lesson-editor-top">
+          <div class="coding-editor-toolbar">
+            <div class="mac-traffic-lights" aria-hidden="true">
+              <span class="mac-traffic-dot red"></span>
+              <span class="mac-traffic-dot yellow"></span>
+              <span class="mac-traffic-dot green"></span>
+            </div>
+            <span class="editor-lang-badge">Exercise.java</span>
+            <button class="btn-secondary btn-sm" id="lesson-reset-code-btn" onclick="resetLessonCode()" title="Reset starter code">↺ Reset</button>
+            <div style="flex:1"></div>
+            <button class="btn-run-secondary" id="lesson-run-btn" onclick="runLessonCode()" title="Run code in interactive terminal (Ctrl+Enter)">▶ Run Code</button>
+            <button class="btn-run" id="lesson-submit-btn" onclick="submitLessonTests()" title="Run deterministic tests against code">Submit &amp; Test ✓</button>
+          </div>
+          <!-- CodeMirror 6 Container -->
+          <div class="cm-editor-wrap" id="cm-lesson-editor"></div>
+          <textarea id="lesson-code-editor" style="display:none"></textarea>
+        </div>
+
+        <!-- Bottom Console / Test Results Panel -->
+        <div class="lesson-console-panel" id="lesson-console-panel">
+          <div class="console-tab-header">
+            <button class="console-tab-btn active" id="tab-btn-terminal" onclick="switchConsoleTab('terminal')">❯ Terminal</button>
+            <button class="console-tab-btn" id="tab-btn-tests" onclick="switchConsoleTab('tests')">🧪 Tests (<span id="test-pass-count">0/0</span>)</button>
+            <div style="flex:1"></div>
+            <button class="btn-xs btn-clear-console" id="btn-clear-lesson-console" onclick="clearLessonConsole()">Clear</button>
+          </div>
+
+          <!-- Terminal Tab View -->
+          <div class="console-tab-view" id="console-view-terminal">
+            <div class="output-area lesson-output-area" id="lesson-terminal-out">
+              <div class="terminal-idle-state" onclick="runLessonCode()">
+                <span class="terminal-idle-icon">❯</span>
+                <span class="terminal-idle-text">Ready. Click <button class="terminal-run-pill" onclick="runLessonCode()">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>
+              </div>
+            </div>
+            <div class="terminal-interactive-bar" id="lesson-terminal-bar" style="display:none">
+              <span class="terminal-prompt-sym">❯</span>
+              <input type="text" id="lesson-terminal-input" class="terminal-input" placeholder="Type input here and press Enter ↵..." autocomplete="off" />
+              <button id="lesson-terminal-submit-btn" class="terminal-submit-btn" onclick="sendLessonTerminalInput()">Send ↵</button>
+            </div>
+          </div>
+
+          <!-- Tests Tab View (Deterministic Diff Runner) -->
+          <div class="console-tab-view hidden" id="console-view-tests">
+            <div class="test-diff-list" id="lesson-test-diff-list">
+              <div class="test-placeholder">Click "Submit &amp; Test ✓" to run your code against verification test cases.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lesson End Recap Card (revealed when tests pass) -->
+        <div class="lesson-recap-overlay hidden" id="lesson-recap-overlay">
+          <div class="recap-card">
+            <div class="recap-badge-icon">🏆</div>
+            <h3 class="recap-title">Quest Step Complete!</h3>
+            <p class="recap-summary" id="recap-summary">You mastered this concept and all tests passed!</p>
+            <div class="recap-xp-awarded" id="recap-xp-awarded">+30 XP</div>
+            <div class="recap-actions">
+              <button class="btn-secondary" onclick="hideRecapOverlay()">Review Code</button>
+              <button class="btn-primary" id="btn-recap-continue" onclick="continueToNextStep()">Next Quest →</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -529,7 +695,8 @@
           <div style="flex:1"></div>
           <button class="btn-run" id="coding-submit-btn">Submit & Run Tests</button>
         </div>
-        <textarea id="coding-editor" class="code-editor" spellcheck="false"></textarea>
+        <div id="cm-coding-editor" class="cm-editor-wrap"></div>
+        <textarea id="coding-editor" style="display:none"></textarea>
 
         <!-- Vertical Resizer Gutter between Editor & Test Results -->
         <div class="split-gutter split-gutter-v" id="coding-resizer-v" title="Drag to resize editor & test results">
@@ -603,7 +770,8 @@
           <div style="flex:1"></div>
           <button class="btn-run" id="run-btn">Run Code</button>
         </div>
-        <textarea id="code-editor" class="code-editor" spellcheck="false"></textarea>
+        <div id="cm-code-editor" class="cm-editor-wrap"></div>
+        <textarea id="code-editor" style="display:none"></textarea>
       </div>
 
       <!-- Horizontal Resizer Gutter -->
@@ -1010,10 +1178,11 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=8.0"></script>
-<script src="animations.js?v=8.0"></script>
-<script src="supabase.js?v=8.0"></script>
-<script src="ai-tutor.js?v=8.0"></script>
-<script src="app.js?v=8.0"></script>
+<script src="curriculum.js?v=8.1"></script>
+<script src="animations.js?v=8.1"></script>
+<script src="supabase.js?v=8.1"></script>
+<script src="ai-tutor.js?v=8.1"></script>
+<script src="lib/editor.bundle.js?v=8.1"></script>
+<script src="app.js?v=8.1"></script>
 </body>
 </html>

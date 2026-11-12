@@ -3790,6 +3790,585 @@ function initResizableWorkspaces() {
 }
 
 /* ═══════════════ WIRE ALL EVENTS ════════════════════════════════ */
+
+/* ═════════════════════════════════════════════════════════════════
+   PHASE 2: CODÉDEX SPLIT-SCREEN LESSON & CODEMIRROR 6 ENGINE
+   ═════════════════════════════════════════════════════════════════ */
+
+var _cmPlayground = null;
+var _cmCoding = null;
+var _cmLesson = null;
+var _activeConsoleTab = 'terminal';
+var _activeMobileTab = 'guide';
+var _unlockedHints = [false, false, false];
+var _lessonAttempts = 0;
+
+function initCodeMirrorEditors() {
+  if (typeof window.JavaEditor === 'undefined') {
+    console.warn('[Editor] window.JavaEditor bundle not loaded yet.');
+    return;
+  }
+
+  var isDark = document.body.classList.contains('dark-theme');
+
+  // 1. Code Playground Editor
+  var cmPlayMount = ge('cm-code-editor');
+  var origPlayArea = ge('code-editor');
+  if (cmPlayMount && !_cmPlayground) {
+    var initialCode = origPlayArea ? origPlayArea.value : '';
+    if (!initialCode.trim()) {
+      initialCode = 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, JavaQuest!");\n    }\n}';
+    }
+    _cmPlayground = window.JavaEditor.create(cmPlayMount, {
+      initialCode: initialCode,
+      isDark: isDark,
+      onChange: function(val) {
+        if (origPlayArea) origPlayArea.value = val;
+      },
+      onRun: function() {
+        runCode();
+      }
+    });
+    if (origPlayArea) origPlayArea.value = initialCode;
+  }
+
+  // 2. Coding Challenge Editor
+  var cmCodingMount = ge('cm-coding-editor');
+  var origCodingArea = ge('coding-editor');
+  if (cmCodingMount && !_cmCoding) {
+    _cmCoding = window.JavaEditor.create(cmCodingMount, {
+      initialCode: origCodingArea ? origCodingArea.value : '',
+      isDark: isDark,
+      onChange: function(val) {
+        if (origCodingArea) origCodingArea.value = val;
+      },
+      onRun: function() {
+        var submitBtn = ge('coding-submit-btn');
+        if (submitBtn) submitBtn.click();
+      }
+    });
+  }
+
+  // 3. Split-Screen Lesson Editor
+  var cmLessonMount = ge('cm-lesson-editor');
+  var origLessonArea = ge('lesson-code-editor');
+  if (cmLessonMount && !_cmLesson) {
+    _cmLesson = window.JavaEditor.create(cmLessonMount, {
+      initialCode: origLessonArea ? origLessonArea.value : '',
+      isDark: isDark,
+      onChange: function(val) {
+        if (origLessonArea) origLessonArea.value = val;
+      },
+      onRun: function() {
+        runLessonCode();
+      }
+    });
+  }
+}
+window.initCodeMirrorEditors = initCodeMirrorEditors;
+
+// Synchronize dark/light theme across all active CodeMirror instances
+function syncEditorThemes(isDark) {
+  if (_cmPlayground) _cmPlayground.setTheme(isDark);
+  if (_cmCoding) _cmCoding.setTheme(isDark);
+  if (_cmLesson) _cmLesson.setTheme(isDark);
+}
+window.syncEditorThemes = syncEditorThemes;
+
+// ── Helpers to get/set code cleanly across editors ─────────────────────────
+function getEditorCode(editorType) {
+  if (editorType === 'playground') {
+    return _cmPlayground ? _cmPlayground.getValue() : (ge('code-editor') ? ge('code-editor').value : '');
+  }
+  if (editorType === 'coding') {
+    return _cmCoding ? _cmCoding.getValue() : (ge('coding-editor') ? ge('coding-editor').value : '');
+  }
+  if (editorType === 'lesson') {
+    return _cmLesson ? _cmLesson.getValue() : (ge('lesson-code-editor') ? ge('lesson-code-editor').value : '');
+  }
+  return '';
+}
+
+function setEditorCode(editorType, code) {
+  var str = String(code || '');
+  if (editorType === 'playground') {
+    if (_cmPlayground) _cmPlayground.setValue(str);
+    var el = ge('code-editor'); if (el) el.value = str;
+  } else if (editorType === 'coding') {
+    if (_cmCoding) _cmCoding.setValue(str);
+    var el2 = ge('coding-editor'); if (el2) el2.value = str;
+  } else if (editorType === 'lesson') {
+    if (_cmLesson) _cmLesson.setValue(str);
+    var el3 = ge('lesson-code-editor'); if (el3) el3.value = str;
+  }
+}
+
+// ── Codédex Split-Screen Lesson Engine ────────────────────────────────────
+
+function startLesson(modId, lessonId) {
+  var mod = getMod(modId);
+  if (!mod) { toast('Module not found!'); return; }
+  var lesson = null;
+  for (var i = 0; i < mod.lessons.length; i++) {
+    if (mod.lessons[i].id === lessonId) { lesson = mod.lessons[i]; break; }
+  }
+  if (!lesson) { toast('Lesson not found!'); return; }
+
+  _curMod = mod;
+  _curLesson = lesson;
+  _slideIdx = 0;
+  _unlockedHints = [false, false, false];
+  _lessonAttempts = 0;
+
+  // Deep link hash update
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(null, '', '#lesson/' + modId + '/' + lessonId);
+  }
+
+  // Header meta tags
+  var biomeNames = {
+    beginner: '🌱 Overworld',
+    intermediate: '🔥 The Nether',
+    advanced: '🌌 The End'
+  };
+  setText('lesson-biome-tag', biomeNames[mod.level] || '🌱 Overworld');
+  setText('lesson-module-tag', mod.title);
+  setText('lesson-title', lesson.title);
+  setText('lesson-xp-badge', '+' + lesson.xp + ' XP');
+
+  if (typeof updateChatContext === 'function') updateChatContext(mod.title);
+
+  renderSplitLesson();
+  showScreen('lesson');
+
+  // Ensure CodeMirror is initialized and sized properly
+  setTimeout(function() {
+    initCodeMirrorEditors();
+    if (_cmLesson) _cmLesson.focus();
+  }, 100);
+}
+
+function renderSplitLesson() {
+  if (!_curMod || !_curLesson) return;
+  var slide = _curLesson.slides[_slideIdx];
+  var total = _curLesson.slides.length;
+  if (!slide) return;
+
+  // 1. Top Steps Strip
+  var strip = ge('lesson-steps-strip');
+  if (strip) {
+    strip.innerHTML = '';
+    for (var s = 0; s < total; s++) {
+      var stepPill = document.createElement('button');
+      var isDone = (STATE.player.completedLessons || []).indexOf(_curLesson.id) !== -1 || s < _slideIdx;
+      stepPill.className = 'step-pill' + (s === _slideIdx ? ' active' : isDone ? ' completed' : '');
+      stepPill.textContent = (s + 1);
+      stepPill.title = 'Step ' + (s + 1) + ': ' + (_curLesson.slides[s].title || '');
+      stepPill.setAttribute('data-step', s);
+      stepPill.onclick = function() {
+        var targetStep = parseInt(this.getAttribute('data-step'), 10);
+        _slideIdx = targetStep;
+        renderSplitLesson();
+      };
+      strip.appendChild(stepPill);
+    }
+  }
+
+  // 2. Story Hook
+  var storyCard = ge('lesson-story-card');
+  var storyText = ge('story-text');
+  if (storyCard && storyText) {
+    var story = _curLesson.story || (_curMod.title + ' • Step ' + (_slideIdx + 1));
+    storyText.textContent = story;
+  }
+
+  // 3. Explanation Slide Area
+  var slideArea = ge('slide-area');
+  if (slideArea) {
+    var typeLabel = { intro: 'Concept Overview', code: 'Code Walkthrough', tip: 'Expert Tip', visual: 'Architecture' }[slide.type] || 'Concept';
+    var html = '<div class="slide slide-type-' + (slide.type || 'intro') + '">'
+      + '<div class="slide-inner">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
+      + '<span class="slide-type-badge">' + typeLabel + '</span>'
+      + '<button class="btn-deep-dive" onclick="openDeepDive()">AI Deep Dive</button>'
+      + '</div>'
+      + '<h2 class="slide-title">' + esc(slide.title) + '</h2>'
+      + '<div class="slide-content">' + fmt(slide.content) + '</div>';
+    if (slide.code) html += buildCodeBlock(slide.code);
+    if (slide.type === 'tip') {
+      html += '<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">' + fmt(slide.content) + '</div></div>';
+    }
+    html += '</div>';
+    if (slide.visual) html += '<div class="visual-area" id="vis-now"></div>';
+    html += '</div>';
+    slideArea.innerHTML = html;
+    if (slide.visual) setTimeout(function() { renderVis(slide); }, 80);
+  }
+
+  // 4. Exercise Prompt & Starter Code
+  var exerciseBox = ge('lesson-exercise-box');
+  var exerciseInstructions = ge('exercise-instructions');
+  var starterCode = slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // Write your solution here\n    }\n}';
+
+  if (exerciseBox && exerciseInstructions) {
+    var taskDesc = slide.instructions || ('Practice writing the Java code for **' + esc(slide.title) + '**. Run your code or submit to verify tests!');
+    exerciseInstructions.innerHTML = fmt(taskDesc);
+  }
+
+  // Populate editor with starter code if empty or step changed
+  setEditorCode('lesson', starterCode);
+
+  // 5. 3-Tier Progressive Hints Setup
+  setupLessonHints(slide);
+
+  // 6. Navigation Buttons
+  var prevBtn = ge('btn-prev-slide');
+  var nextBtn = ge('btn-next-slide');
+  if (prevBtn) prevBtn.style.visibility = (_slideIdx === 0 ? 'hidden' : 'visible');
+  if (nextBtn) nextBtn.textContent = (_slideIdx === total - 1 ? 'Finish Lesson ✓' : 'Next Step →');
+}
+
+function setupLessonHints(slide) {
+  _unlockedHints = [false, false, false];
+  var rawHints = slide.hints || [
+    'Think about the types involved. Does your method signature match?',
+    'Double check standard syntax: semicolon at the end of statements and matching braces { }.',
+    'Review the code example above — notice how variables and methods are declared.'
+  ];
+
+  for (var i = 1; i <= 3; i++) {
+    var contentEl = ge('hint-tier-' + i + '-content');
+    var btn = ge('hint-tier-' + i + '-btn');
+    if (contentEl) {
+      contentEl.textContent = rawHints[i - 1] || 'Review the lesson explanation carefully.';
+      contentEl.classList.add('hidden');
+    }
+    if (btn) {
+      btn.disabled = (i > 1);
+      btn.classList.remove('unlocked');
+    }
+  }
+
+  var counter = ge('hints-counter');
+  if (counter) counter.textContent = '0/3 Hints Unlocked';
+
+  var unlockSolBtn = ge('btn-unlock-solution');
+  if (unlockSolBtn) unlockSolBtn.classList.add('hidden');
+  var solBox = ge('solution-revealed-box');
+  if (solBox) solBox.classList.add('hidden');
+}
+
+function revealLessonHint(tier) {
+  var contentEl = ge('hint-tier-' + tier + '-content');
+  var btn = ge('hint-tier-' + tier + '-btn');
+  if (!contentEl) return;
+
+  var isHidden = contentEl.classList.contains('hidden');
+  if (isHidden) {
+    contentEl.classList.remove('hidden');
+    _unlockedHints[tier - 1] = true;
+    if (btn) btn.classList.add('unlocked');
+
+    // Unlock next tier button
+    if (tier < 3) {
+      var nextBtn = ge('hint-tier-' + (tier + 1) + '-btn');
+      if (nextBtn) nextBtn.disabled = false;
+    } else {
+      // All 3 hints unlocked — show solution unlock button
+      var unlockSolBtn = ge('btn-unlock-solution');
+      if (unlockSolBtn) unlockSolBtn.classList.remove('hidden');
+    }
+
+    var count = _unlockedHints.filter(Boolean).length;
+    var counter = ge('hints-counter');
+    if (counter) counter.textContent = count + '/3 Hints Unlocked';
+  } else {
+    contentEl.classList.add('hidden');
+  }
+}
+window.revealLessonHint = revealLessonHint;
+
+function unlockLessonSolution() {
+  var p = STATE.player;
+  if (_lessonAttempts < 1) {
+    toast('Make at least 1 real attempt with "Run Code" before unlocking the full solution!');
+    return;
+  }
+
+  if (p.xp < 25 && p.hearts < 1) {
+    toast('Not enough XP or hearts to unlock solution!');
+    return;
+  }
+
+  if (p.xp >= 25) {
+    p.xp -= 25;
+    toast('Solution unlocked (-25 XP)');
+  } else {
+    p.hearts--;
+    toast('Solution unlocked (-1 Heart)');
+  }
+  localSave();
+  updateNav();
+
+  var solBox = ge('solution-revealed-box');
+  var solPre = ge('solution-code-pre');
+  var slide = _curLesson.slides[_slideIdx];
+  var solution = slide.solution || slide.code || '// Solution matches the code example provided in the lesson';
+  if (solBox && solPre) {
+    solPre.textContent = solution;
+    solBox.classList.remove('hidden');
+  }
+}
+window.unlockLessonSolution = unlockLessonSolution;
+
+function resetLessonCode() {
+  if (!_curLesson) return;
+  var slide = _curLesson.slides[_slideIdx];
+  var starterCode = slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n    }\n}';
+  setEditorCode('lesson', starterCode);
+  toast('Code reset to starter template.');
+}
+window.resetLessonCode = resetLessonCode;
+
+// ── Running Lesson Code & Interactive Terminal ────────────────────────────
+
+function runLessonCode() {
+  var code = getEditorCode('lesson').trim();
+  if (!code) { toast('Please write some Java code first!'); return; }
+  _lessonAttempts++;
+
+  switchConsoleTab('terminal');
+  var outEl = ge('lesson-terminal-out');
+  var bar = ge('lesson-terminal-bar');
+  if (bar) bar.style.display = 'none';
+
+  if (outEl) {
+    outEl.innerHTML = '<div class="output-running"><span class="run-spinner"></span>Compiling with OpenJDK 22 and running…</div>';
+  }
+
+  if (_cmLesson) _cmLesson.clearErrors();
+
+  executeJava(code, '')
+    .then(function(data) {
+      if (!outEl) return;
+      // 1. Compilation Error
+      if (data.compile && data.compile.stderr) {
+        outEl.innerHTML = '<pre class="output-error" style="margin:0;white-space:pre-wrap;word-break:break-all;">[Compilation Error]\n' + esc(data.compile.stderr) + '</pre>';
+        // Parse line error for editor squiggle
+        var lineMatch = data.compile.stderr.match(/:(\d+): error:/i) || data.compile.stderr.match(/\.java:(\d+):/i);
+        if (lineMatch && _cmLesson) {
+          _cmLesson.setLineError(parseInt(lineMatch[1], 10), data.compile.stderr.split('\n')[0]);
+        }
+        return;
+      }
+
+      // 2. Waiting for Scanner input
+      if (data.run && data.run.waitingForInput) {
+        outEl.innerHTML = '<pre class="output-success" style="margin:0;white-space:pre-wrap;">' + esc(data.run.stdout || '') + '</pre>';
+        if (bar) {
+          bar.style.display = 'flex';
+          var input = ge('lesson-terminal-input');
+          if (input) { input.value = ''; input.focus(); }
+        }
+        return;
+      }
+
+      // 3. Normal Execution output
+      var hasErr = (data.run && data.run.code !== 0 && data.run.stderr);
+      outEl.innerHTML = '<pre class="' + (hasErr ? 'output-error' : 'output-success') + '" style="margin:0;white-space:pre-wrap;word-break:break-all;">'
+        + esc(data.run.stdout || '')
+        + (hasErr ? ('\n[Runtime Error]\n' + esc(data.run.stderr)) : '')
+        + '</pre>';
+    })
+    .catch(function(err) {
+      if (outEl) outEl.innerHTML = '<pre class="output-error">[Execution Failed]\n' + esc(err.message) + '</pre>';
+    });
+}
+window.runLessonCode = runLessonCode;
+
+function sendLessonTerminalInput() {
+  var input = ge('lesson-terminal-input');
+  if (!input) return;
+  var val = input.value;
+  var code = getEditorCode('lesson');
+  var outEl = ge('lesson-terminal-out');
+  var bar = ge('lesson-terminal-bar');
+  if (bar) bar.style.display = 'none';
+
+  if (outEl) {
+    outEl.innerHTML += '<div style="color:#FFE600;font-weight:bold;">❯ ' + esc(val) + '</div>';
+  }
+
+  executeJava(code, val + '\n')
+    .then(function(data) {
+      if (!outEl) return;
+      var outText = (data.run ? data.run.stdout : '') || '';
+      outEl.innerHTML = '<pre class="output-success" style="margin:0;white-space:pre-wrap;">' + esc(outText) + '</pre>';
+    });
+}
+window.sendLessonTerminalInput = sendLessonTerminalInput;
+
+function clearLessonConsole() {
+  var outEl = ge('lesson-terminal-out');
+  if (outEl) {
+    outEl.innerHTML = '<div class="terminal-idle-state" onclick="runLessonCode()"><span class="terminal-idle-icon">❯</span><span class="terminal-idle-text">Console cleared.</span></div>';
+  }
+}
+window.clearLessonConsole = clearLessonConsole;
+
+// ── Deterministic Test Runner & Diff Viewer ───────────────────────────────
+
+function submitLessonTests() {
+  var code = getEditorCode('lesson').trim();
+  if (!code) { toast('Write your solution before submitting!'); return; }
+  _lessonAttempts++;
+
+  switchConsoleTab('tests');
+  var diffList = ge('lesson-test-diff-list');
+  if (!diffList) return;
+  diffList.innerHTML = '<div class="test-placeholder"><span class="run-spinner"></span>Running deterministic test cases against OpenJDK 22…</div>';
+
+  var slide = _curLesson.slides[_slideIdx];
+  var tests = slide.tests || [
+    { name: 'Default Test Case', stdin: '', expected: '' }
+  ];
+
+  if (_cmLesson) _cmLesson.clearErrors();
+
+  executeJava(code, '')
+    .then(function(data) {
+      if (data.compile && data.compile.stderr) {
+        diffList.innerHTML = '<div class="diff-card fail">'
+          + '<div class="diff-card-header"><span class="diff-test-name">Compilation Check</span><span class="diff-test-status">FAILED</span></div>'
+          + '<pre class="output-error" style="margin:0;font-size:0.8rem;white-space:pre-wrap;">' + esc(data.compile.stderr) + '</pre>'
+          + '</div>';
+        return;
+      }
+
+      var stdout = (data.run ? data.run.stdout : '').trim();
+      var allPassed = true;
+      var cardsHtml = '';
+
+      tests.forEach(function(t, idx) {
+        var expected = String(t.expected || '').trim();
+        var isPass = (!expected) || (stdout === expected) || (stdout.includes(expected));
+        if (!isPass) allPassed = false;
+
+        cardsHtml += '<div class="diff-card ' + (isPass ? 'pass' : 'fail') + '">'
+          + '<div class="diff-card-header">'
+          + '<span class="diff-test-name">Test ' + (idx + 1) + ': ' + esc(t.name || 'Output Verification') + '</span>'
+          + '<span class="diff-test-status">' + (isPass ? 'PASSED ✓' : 'FAILED ✗') + '</span>'
+          + '</div>'
+          + '<div class="diff-comparison-grid">'
+          + '<div class="diff-box"><div class="diff-box-label">Expected:</div><pre>' + esc(expected || '(Non-empty output)') + '</pre></div>'
+          + '<div class="diff-box"><div class="diff-box-label">Your Output:</div><pre>' + esc(stdout || '(empty)') + '</pre></div>'
+          + '</div>'
+          + '</div>';
+      });
+
+      diffList.innerHTML = cardsHtml;
+      var passCountEl = ge('test-pass-count');
+      if (passCountEl) passCountEl.textContent = (allPassed ? tests.length : 0) + '/' + tests.length;
+
+      if (allPassed) {
+        showRecapOverlay();
+      }
+    })
+    .catch(function(err) {
+      diffList.innerHTML = '<div class="diff-card fail"><div class="diff-card-header"><span class="diff-test-name">System Error</span><span class="diff-test-status">ERROR</span></div><pre class="output-error">' + esc(err.message) + '</pre></div>';
+    });
+}
+window.submitLessonTests = submitLessonTests;
+
+function switchConsoleTab(tab) {
+  _activeConsoleTab = tab;
+  var termBtn = ge('tab-btn-terminal');
+  var testBtn = ge('tab-btn-tests');
+  var termView = ge('console-view-terminal');
+  var testView = ge('console-view-tests');
+
+  if (tab === 'terminal') {
+    if (termBtn) termBtn.classList.add('active');
+    if (testBtn) testBtn.classList.remove('active');
+    if (termView) termView.classList.remove('hidden');
+    if (testView) testView.classList.add('hidden');
+  } else {
+    if (testBtn) testBtn.classList.add('active');
+    if (termBtn) termBtn.classList.remove('active');
+    if (testView) testView.classList.remove('hidden');
+    if (termView) termView.classList.add('hidden');
+  }
+}
+window.switchConsoleTab = switchConsoleTab;
+
+function switchMobileTab(tab) {
+  _activeMobileTab = tab;
+  qsa('.mobile-tab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+  });
+  var guideCol = ge('lesson-guide-col');
+  var editorCol = ge('lesson-editor-col');
+  var consolePanel = ge('lesson-console-panel');
+
+  if (guideCol && editorCol) {
+    guideCol.classList.toggle('mobile-hidden', tab !== 'guide');
+    editorCol.classList.toggle('mobile-hidden', tab === 'guide');
+  }
+  if (consolePanel) {
+    if (tab === 'console') {
+      consolePanel.style.height = '100%';
+    } else {
+      consolePanel.style.height = '';
+    }
+  }
+}
+window.switchMobileTab = switchMobileTab;
+
+function showRecapOverlay() {
+  var overlay = ge('lesson-recap-overlay');
+  var xpVal = ge('recap-xp-awarded');
+  if (xpVal && _curLesson) xpVal.textContent = '+' + _curLesson.xp + ' XP';
+  if (overlay) overlay.classList.remove('hidden');
+  burstParticles('lesson-recap-overlay');
+}
+window.showRecapOverlay = showRecapOverlay;
+
+function hideRecapOverlay() {
+  var overlay = ge('lesson-recap-overlay');
+  if (overlay) overlay.classList.add('hidden');
+}
+window.hideRecapOverlay = hideRecapOverlay;
+
+function continueToNextStep() {
+  hideRecapOverlay();
+  if (_slideIdx < _curLesson.slides.length - 1) {
+    _slideIdx++;
+    renderSplitLesson();
+    addXP(10);
+  } else {
+    finishLesson();
+  }
+}
+window.continueToNextStep = continueToNextStep;
+
+// ── Deep Linking Router ──────────────────────────────────────────────────
+function checkHashRoute() {
+  if (typeof window === 'undefined' || !window.location || !window.location.hash) return;
+  var hash = window.location.hash.substring(1);
+  if (hash.startsWith('lesson/')) {
+    var parts = hash.split('/');
+    if (parts.length >= 3) {
+      var modId = parts[1];
+      var lessonId = parts[2];
+      setTimeout(function() {
+        startLesson(modId, lessonId);
+      }, 200);
+    }
+  }
+}
+window.addEventListener('hashchange', checkHashRoute);
+
+
 document.addEventListener('DOMContentLoaded', function(){
   initAuthUI();
   initDiffModal();
