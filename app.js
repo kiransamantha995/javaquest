@@ -3301,7 +3301,8 @@ function addXP(amount, lessonId) {
     sbAwardXP(lessonId || (_curLesson ? _curLesson.id : 'activity'), amount);
   }
 }
-function triggerLevelUp(){var lv=getLv();setText('levelup-new-level','Level '+STATE.player.level);setText('levelup-rank',lv.name);setText('levelup-rank-icon',lv.icon);checkBadge('level_5');checkBadge('level_10');burstParticles('levelup-particles');setTimeout(function(){showModal('modal-levelup');},300);}
+function triggerLevelUp(){
+  if (window.GameFX) window.GameFX.playLevelUp();var lv=getLv();setText('levelup-new-level','Level '+STATE.player.level);setText('levelup-rank',lv.name);setText('levelup-rank-icon',lv.icon);checkBadge('level_5');checkBadge('level_10');burstParticles('levelup-particles');setTimeout(function(){showModal('modal-levelup');},300);}
 function getLv(){if(!window.LEVELS)return{level:1,name:'Novice',xpRequired:0,icon:''};var r=LEVELS[0];for(var i=0;i<LEVELS.length;i++)if(STATE.player.xp>=LEVELS[i].xpRequired)r=LEVELS[i];return r;}
 function getNextLv(){if(!window.LEVELS)return null;var cur=getLv();for(var i=0;i<LEVELS.length;i++)if(LEVELS[i].level===cur.level+1)return LEVELS[i];return null;}
 
@@ -3421,10 +3422,9 @@ function renderBadges(){
     
     var iconInner = unlocked 
       ? renderMinecraftSVG(item.grid) 
-      : '<div class="minecraft-bedrock-lock">' 
-          + renderMinecraftSVG(MINECRAFT_BADGES.bedrock_locked.grid) 
-          + '<span class="bedrock-lock-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>'
-        + '</div>';
+      : (window.GameFX 
+          ? window.GameFX.renderBadgeSilhouette(renderMinecraftSVG(item.grid), badge.desc)
+          : '<div class="minecraft-bedrock-lock">' + renderMinecraftSVG(item.grid) + '</div>');
         
     var rarityHtml = unlocked
       ? '<span class="badge-rarity-pill pill-' + item.rarity.toLowerCase() + '">' + item.rarity + '</span>'
@@ -3451,6 +3451,7 @@ function renderSettings(){
   setText('settings-difficulty',DIFFICULTY_LABELS[STATE.player.difficulty]||'Beginner');
   updateThemeUI(document.body.classList.contains('dark-theme'));
   updateRefillBtn();
+  var sndToggle = ge("settings-sound-toggle"); if (sndToggle && window.GameFX) sndToggle.checked = window.GameFX.isSoundEnabled();
 }
 
 // Hearts refill via cooldown (4 hours) — not a free button.
@@ -4271,7 +4272,10 @@ function submitLessonTests() {
       if (passCountEl) passCountEl.textContent = (allPassed ? tests.length : 0) + '/' + tests.length;
 
       if (allPassed) {
+        if (window.GameFX) { window.GameFX.playBlockBreak(); window.GameFX.flyXpOrbs(); window.GameFX.mascotReact("bounce"); }
         showRecapOverlay();
+      } else {
+        if (window.GameFX) { window.GameFX.playGentleOops(); window.GameFX.mascotReact("shake"); }
       }
     })
     .catch(function(err) {

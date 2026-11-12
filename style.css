@@ -8140,3 +8140,174 @@ body.dark-theme .recap-card {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   PHASE 3: MINECRAFT-INSPIRED ORIGINAL ART, MASCOT & TROPHY ROOM
+   ═════════════════════════════════════════════════════════════════ */
+
+/* ── Glowing XP Orbs ── */
+.game-xp-orb {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  background: #10B981;
+  border: 2px solid #34D399;
+  border-radius: 2px;
+  box-shadow: 0 0 10px #10B981, 0 0 20px rgba(16, 185, 129, 0.6);
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* ── JavaBot Mascot Companion ── */
+.javabot-mascot {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 900;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  user-select: none;
+}
+
+.mascot-avatar {
+  width: 52px;
+  height: 52px;
+  background: var(--bg-card, #FFFFFF);
+  border: 2.5px solid var(--ink, #18181B);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0px var(--ink, #18181B);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+}
+
+body.dark-theme .mascot-avatar {
+  background: #18181F;
+}
+
+.mascot-avatar:hover {
+  transform: translate(-2px, -3px) scale(1.05);
+  box-shadow: 6px 6px 0px var(--ink, #18181B);
+}
+
+.mascot-avatar.bounce {
+  animation: mascotBounce 0.6s ease-in-out;
+}
+
+.mascot-avatar.shake {
+  animation: mascotShake 0.4s ease-in-out;
+}
+
+.mascot-avatar.nod {
+  animation: mascotNod 0.8s ease-in-out;
+}
+
+@keyframes mascotBounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-16px) scale(1.1); }
+  60% { transform: translateY(-6px); }
+}
+
+@keyframes mascotShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes mascotNod {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-8deg); }
+  70% { transform: rotate(8deg); }
+}
+
+.mascot-bubble {
+  background: var(--bg-card, #FFFFFF);
+  border: 2px solid var(--ink, #18181B);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-1, #18181B);
+  box-shadow: 3px 3px 0px var(--ink, #18181B);
+  margin-bottom: 0.6rem;
+  max-width: 220px;
+  line-height: 1.4;
+  position: relative;
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.dark-theme .mascot-bubble {
+  background: #18181F;
+}
+
+.mascot-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  border-right: 2px solid var(--ink, #18181B);
+  border-bottom: 2px solid var(--ink, #18181B);
+  transform: rotate(45deg);
+}
+
+/* ── Trophy Room Silhouettes ── */
+.trophy-silhouette-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-silhouette {
+  filter: brightness(0) opacity(0.35);
+  transform: scale(0.9);
+}
+
+.badge-lock-overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24, 24, 27, 0.7);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+}
+
+.badge-unlock-hint {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary, #71717A);
+  text-align: center;
+  margin-top: 0.35rem;
+  max-width: 130px;
+  line-height: 1.25;
+}
+
+/* ── Legal Disclaimer Footer ── */
+.mojang-disclaimer {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-secondary, #71717A);
+  padding: 1.25rem 1rem;
+  border-top: 1px solid var(--border-subtle, #E4E4E7);
+  background: var(--bg-primary, #FAFAFA);
+  font-weight: 600;
+}
+
+body.dark-theme .mojang-disclaimer {
+  background: #0B0B0E;
+  border-top-color: #27272A;
+  color: #71717A;
+}
