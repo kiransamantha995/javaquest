@@ -733,12 +733,20 @@
     };
   }
 
-  function toggleChat() {
+  var _lastToggleChatTime = 0;
+  function toggleChat(forceState) {
+    var now = Date.now();
+    if (typeof forceState !== 'boolean' && (now - _lastToggleChatTime < 280)) {
+      return;
+    }
+    _lastToggleChatTime = now;
+
     var panel = document.getElementById('chat-panel');
     var fab = document.getElementById('ai-chat-fab');
     if (!panel) return;
-    var isHidden = panel.classList.contains('hidden');
-    if (isHidden) {
+
+    var shouldOpen = (typeof forceState === 'boolean') ? forceState : panel.classList.contains('hidden');
+    if (shouldOpen) {
       panel.classList.remove('hidden');
       if (fab) fab.classList.add('chat-open');
       updateChatContextPill();
@@ -1115,10 +1123,22 @@
     updateWatcherUI();
 
     var fab = document.getElementById('ai-chat-fab');
-    if (fab) fab.addEventListener('click', toggleChat);
+    if (fab && !fab._hasAiListener) {
+      fab._hasAiListener = true;
+      fab.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleChat();
+      });
+    }
 
     var closeBtn = document.getElementById('chat-close-btn');
-    if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+    if (closeBtn && !closeBtn._hasAiListener) {
+      closeBtn._hasAiListener = true;
+      closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleChat(false);
+      });
+    }
 
     var clearBtn = document.getElementById('chat-clear-btn');
     if (clearBtn) clearBtn.addEventListener('click', clearChat);

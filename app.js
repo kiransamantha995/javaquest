@@ -5136,8 +5136,22 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   // ── AI CHAT ───────────────────────────────────────────────────
-  var fab=ge('ai-chat-fab');     if(fab)fab.addEventListener('click',function(){ if(typeof toggleChat==='function') toggleChat(); });
-  var chc=ge('chat-close-btn'); if(chc)chc.addEventListener('click',function(){ if(typeof toggleChat==='function') toggleChat(); });
+  var fab=ge('ai-chat-fab');
+  if(fab && !fab._hasAiListener){
+    fab._hasAiListener = true;
+    fab.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(typeof window.toggleChat==='function') window.toggleChat();
+    });
+  }
+  var chc=ge('chat-close-btn');
+  if(chc && !chc._hasAiListener){
+    chc._hasAiListener = true;
+    chc.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(typeof window.toggleChat==='function') window.toggleChat(false);
+    });
+  }
   var clr=ge('chat-clear-btn'); if(clr)clr.addEventListener('click',function(){ if(typeof clearChat==='function') clearChat(); else if(typeof clearChatHistory==='function') clearChatHistory(); });
   var chs=ge('chat-send-btn');  if(chs)chs.addEventListener('click',function(e){ e.preventDefault(); if(typeof sendChatMessage==='function') sendChatMessage(); });
   var chi=ge('chat-input');

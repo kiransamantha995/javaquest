@@ -3221,7 +3221,7 @@ body {
 
 /* ═══ AI CHAT (JAVABOT — VISIBLE ONLY AFTER LOGIN) ═════════════ */
 .ai-chat-wrapper {
-  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
 }
 .ai-chat-fab {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -3257,8 +3257,10 @@ body {
 
 /* Chat Drawer Popup */
 .chat-panel {
-  position: absolute; bottom: 3.5rem; right: 0;
+  position: absolute; bottom: 4.2rem; right: 0;
   width: 380px; max-width: calc(100vw - 2rem); height: 520px;
+  max-height: calc(100vh - 6rem);
+  z-index: 10000;
   background: #FFFFFF;
   border: 3px solid var(--ink);
   border-radius: 18px;
