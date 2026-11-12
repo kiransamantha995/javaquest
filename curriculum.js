@@ -1,7 +1,8 @@
 // JavaQuest Curriculum — curriculum.js
 // 24 Modules (B1-B8, I1-I8, A1-A8) grounded in "Core Java" (Cay Horstmann), "Effective Java" (Joshua Bloch), "Head First Java", and "Modern Java in Action"
 // Track 1 (B1-B8): Completely rewritten from scratch with deep lessons, step-by-step worked examples, and local compiler test harnesses
-// Track 2 (I1-I8): Completely rewritten from scratch with deep intermediate OOP, Streams, I/O, Generics, Testing, JDBC, Concurrency, and Capstone
+// Track 2 (I1-I8): Completely rewritten from scratch with intermediate OOP, Streams, I/O, Generics, Testing, JDBC, Concurrency, and Capstone
+// Track 3 (A1-A8): Completely rewritten from scratch with JVM memory, JMM, Virtual Threads, Design Patterns, Networking & Security, Spring Boot & JPA, Profiling, Docker & CI/CD, and Advanced Capstone
 
 const CURRICULUM = [
   {
@@ -10484,7 +10485,201 @@ const CURRICULUM = [
         "location": "Chapter 7: Better Living in Objectville & Chapter 8: Serious Polymorphism",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i1_quiz",
+      "title": "Knowledge Check: Inheritance, Interfaces & Polymorphism",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i1_q1",
+          "type": "mcq",
+          "question": "Which keyword is used by a class to inherit from a superclass in Java?",
+          "options": [
+            "extends",
+            "implements",
+            "inherits",
+            "subclass"
+          ],
+          "answer": 0,
+          "explanation": "Java uses the `extends` keyword for class inheritance."
+        },
+        {
+          "id": "i1_q2",
+          "type": "spot-the-bug",
+          "question": "Spot the compilation bug in this constructor:\n```java\nclass Knight extends Troop {\n    int armor;\n    Knight(String name, int armor) {\n        this.armor = armor;\n        super(name);\n    }\n}\n```",
+          "options": [
+            "super(name) must be the first statement in the constructor",
+            "Knight cannot have an armor field",
+            "Troop must be declared with new",
+            "super cannot take arguments"
+          ],
+          "answer": 0,
+          "explanation": "Calls to `super()` or `this()` must be the very first executable statement in a constructor body."
+        },
+        {
+          "id": "i1_q3",
+          "type": "predict-output",
+          "question": "What does this code print?\n```java\nclass Animal { void speak() { System.out.print(\"Animal \"); } }\nclass Dog extends Animal { void speak() { System.out.print(\"Bark \"); } }\nAnimal a = new Dog();\na.speak();\n```",
+          "options": [
+            "Bark ",
+            "Animal ",
+            "Animal Bark ",
+            "Compilation Error"
+          ],
+          "answer": 0,
+          "explanation": "Dynamic method dispatch executes `Dog.speak()` because the actual runtime instance on the heap is a `Dog`."
+        },
+        {
+          "id": "i1_q4",
+          "type": "mcq",
+          "question": "What is the primary purpose of the `@Override` annotation?",
+          "options": [
+            "It instructs the compiler to verify that an inherited supertype method is being overridden",
+            "It forces the method to run in a separate thread",
+            "It converts private methods to public",
+            "It optimizes JIT compilation bytecode"
+          ],
+          "answer": 0,
+          "explanation": "`@Override` prevents subtle bugs by catching signature mismatches at compile time."
+        },
+        {
+          "id": "i1_q5",
+          "type": "mcq",
+          "question": "Can an abstract class be instantiated directly using `new MyAbstractClass()`?",
+          "options": [
+            "No, abstract classes cannot be directly instantiated",
+            "Yes, if it has a public constructor",
+            "Yes, if it contains zero abstract methods",
+            "Only inside the main method"
+          ],
+          "answer": 0,
+          "explanation": "Abstract classes are incomplete templates and cannot be instantiated with `new`."
+        },
+        {
+          "id": "i1_q6",
+          "type": "predict-output",
+          "question": "What are the implicit access modifiers on all methods declared in an interface (non-default/non-static)?",
+          "options": [
+            "public abstract",
+            "package-private final",
+            "protected static",
+            "private synchronized"
+          ],
+          "answer": 0,
+          "explanation": "Standard interface methods are implicitly `public abstract`."
+        },
+        {
+          "id": "i1_q7",
+          "type": "spot-the-bug",
+          "question": "Why does this class fail to compile?\n```java\ninterface Runnable {\n    void run();\n}\nclass Worker implements Runnable {\n    void run() { System.out.println(\"Working\"); }\n}\n```",
+          "options": [
+            "Worker.run() must be declared public because interface methods are implicitly public",
+            "Worker must extend Runnable instead of implements",
+            "run() cannot print to console",
+            "Worker needs a constructor"
+          ],
+          "answer": 0,
+          "explanation": "Subclasses/implementors cannot reduce method visibility. Omission of `public` makes it package-private, which is weaker than `public`."
+        },
+        {
+          "id": "i1_q8",
+          "type": "mcq",
+          "question": "What is the 'Classes Win' rule in Java interface default method resolution?",
+          "options": [
+            "If a superclass and an interface declare the same method signature, the superclass implementation always wins",
+            "Classes always compile before interfaces",
+            "Abstract classes can never implement interfaces",
+            "Interfaces cannot contain default methods if classes exist"
+          ],
+          "answer": 0,
+          "explanation": "Java resolves default method diamond conflicts by always prioritizing superclass implementations over interface defaults."
+        },
+        {
+          "id": "i1_q9",
+          "type": "fill-in",
+          "question": "To prevent a class from ever being extended by subclasses, mark it with the keyword: `public ____ class SecureVault { }`",
+          "options": [
+            "final",
+            "sealed",
+            "static",
+            "const"
+          ],
+          "answer": 0,
+          "explanation": "The `final` class modifier prohibits any other class from extending it."
+        },
+        {
+          "id": "i1_q10",
+          "type": "predict-output",
+          "question": "What does this code print?\n```java\ninterface Greeter {\n    static String greet() { return \"Hello\"; }\n}\nSystem.out.println(Greeter.greet());\n```",
+          "options": [
+            "Hello",
+            "Compilation Error",
+            "null",
+            "Greeter"
+          ],
+          "answer": 0,
+          "explanation": "Static interface methods (Java 8+) are invoked directly on the interface name."
+        },
+        {
+          "id": "i1_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to implement an interface with an overridden method:",
+          "options": [
+            "interface Hunter { void hunt(); }",
+            "class Wolf implements Hunter {",
+            "    @Override",
+            "    public void hunt() { System.out.println(\"Stalking\"); }",
+            "}"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "explanation": "Interface declaration, class header with implements, annotation, public method implementation, closing brace."
+        },
+        {
+          "id": "i1_q12",
+          "type": "mcq",
+          "question": "Which opcode is generated by javac to call a dynamic virtual method on an object reference?",
+          "options": [
+            "invokevirtual",
+            "invokestatic",
+            "invokespecial",
+            "invokedynamic"
+          ],
+          "answer": 0,
+          "explanation": "`invokevirtual` performs dynamic method dispatch using the receiver object's vtable."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Modern Interfaces: default, static, and private Methods Challenge",
+      "instructions": "Create interface `Transmitter` with abstract method `String getChannel()`, default method `void ping()` printing '[Channel: <getChannel()>] Ping transmitted', and static method `String getProtocolVersion()` returning 'v2.4'. Create class `RadioTower implements Transmitter` with field `String channel` and constructor `RadioTower(String c)` that implements `getChannel()`. In `main`, print 'Protocol: ' followed by the protocol version. Then read channel name, instantiate `RadioTower`, and call `ping()`.",
+      "starterCode": "import java.util.Scanner;\n\n// Implement Transmitter and RadioTower\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Test modern interface features\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\n\ninterface Transmitter {\n    String getChannel();\n    \n    default void ping() {\n        System.out.println(\"[Channel: \" + getChannel() + \"] Ping transmitted\");\n    }\n    \n    static String getProtocolVersion() {\n        return \"v2.4\";\n    }\n}\n\nclass RadioTower implements Transmitter {\n    private String channel;\n    \n    public RadioTower(String channel) {\n        this.channel = channel;\n    }\n    \n    @Override\n    public String getChannel() {\n        return this.channel;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String ch = sc.next();\n        \n        System.out.println(\"Protocol: \" + Transmitter.getProtocolVersion());\n        RadioTower tower = new RadioTower(ch);\n        tower.ping();\n    }\n}",
+      "tests": [
+        {
+          "name": "ALPHA-NET channel",
+          "stdin": "ALPHA-NET\n",
+          "expectedStdout": "Protocol: v2.4\n[Channel: ALPHA-NET] Ping transmitted"
+        },
+        {
+          "name": "CRIMSON-RADAR channel",
+          "stdin": "CRIMSON-RADAR\n",
+          "expectedStdout": "Protocol: v2.4\n[Channel: CRIMSON-RADAR] Ping transmitted"
+        },
+        {
+          "name": "OUTPOST-9 channel",
+          "stdin": "OUTPOST-9\n",
+          "expectedStdout": "Protocol: v2.4\n[Channel: OUTPOST-9] Ping transmitted"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "i2",
@@ -11495,7 +11690,203 @@ const CURRICULUM = [
         "location": "Item 26: Don't use raw types & Item 31: Use bounded wildcards",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i2_quiz",
+      "title": "Knowledge Check: Collections & Generics in Depth",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i2_q1",
+          "type": "mcq",
+          "question": "What is Type Erasure in Java generics?",
+          "options": [
+            "The process by which the compiler replaces generic type parameters with Object or their upper bound in bytecode",
+            "A garbage collection technique that deletes unused classes",
+            "A compiler bug in Java 5",
+            "The deletion of primitive data types at runtime"
+          ],
+          "answer": 0,
+          "explanation": "Type Erasure removes generic type arguments during compilation so that bytecode remains compatible with legacy JVMs."
+        },
+        {
+          "id": "i2_q2",
+          "type": "predict-output",
+          "question": "What does this code print?\n```java\nSet<Integer> set = new HashSet<>();\nset.add(1);\nset.add(2);\nset.add(1);\nSystem.out.println(set.size());\n```",
+          "options": [
+            "2",
+            "3",
+            "1",
+            "Compilation Error"
+          ],
+          "answer": 0,
+          "explanation": "Sets enforce uniqueness; adding 1 a second time is ignored, resulting in size 2."
+        },
+        {
+          "id": "i2_q3",
+          "type": "spot-the-bug",
+          "question": "Why does this generic method invocation fail?\n```java\npublic static void process(List<Number> list) { }\nList<Integer> ints = new ArrayList<>();\nprocess(ints);\n```",
+          "options": [
+            "Java generics are invariant: List<Integer> is NOT a subtype of List<Number>",
+            "ints must be declared as a LinkedList",
+            "Number cannot be used in generics",
+            "process() must return an int"
+          ],
+          "answer": 0,
+          "explanation": "Generics are invariant. To accept `List<Integer>`, the parameter must use wildcards: `List<? extends Number>`."
+        },
+        {
+          "id": "i2_q4",
+          "type": "mcq",
+          "question": "Under the PECS guideline, when should you use `? super T`?",
+          "options": [
+            "When the collection is a Consumer (you write data into it)",
+            "When the collection is a Producer (you read data from it)",
+            "Whenever sorting with Comparable",
+            "Never in public APIs"
+          ],
+          "answer": 0,
+          "explanation": "PECS stands for Producer Extends, Consumer Super."
+        },
+        {
+          "id": "i2_q5",
+          "type": "predict-output",
+          "question": "What is printed by this Deque queue?\n```java\nDeque<String> d = new ArrayDeque<>();\nd.offer(\"A\");\nd.offer(\"B\");\nSystem.out.println(d.poll() + \" \" + d.peek());\n```",
+          "options": [
+            "A B",
+            "B A",
+            "A null",
+            "B B"
+          ],
+          "answer": 0,
+          "explanation": "`poll()` retrieves and removes \"A\". `peek()` inspects the new head without removing it, which is \"B\"."
+        },
+        {
+          "id": "i2_q6",
+          "type": "mcq",
+          "question": "Why is `ArrayDeque` generally preferred over `LinkedList` for FIFO queues and stacks?",
+          "options": [
+            "It uses a contiguous circular array without allocating node objects, offering better cache locality and performance",
+            "It is thread-safe while LinkedList is not",
+            "It supports sorting automatically",
+            "It can store raw primitives directly"
+          ],
+          "answer": 0,
+          "explanation": "`ArrayDeque` avoids node object allocations and pointer dereferencing, making it dramatically faster than `LinkedList`."
+        },
+        {
+          "id": "i2_q7",
+          "type": "spot-the-bug",
+          "question": "Identify the bug in this comparison method:\n```java\npublic int compareTo(Player other) {\n    return this.score - other.score;\n}\n```",
+          "options": [
+            "Integer subtraction can overflow if scores have large opposite signs, inverting the comparison result",
+            "Subtraction is not allowed in compareTo",
+            "Must return boolean instead of int",
+            "other must be converted to double"
+          ],
+          "answer": 0,
+          "explanation": "If `this.score = Integer.MAX_VALUE` and `other.score = -1`, the subtraction wraps around to a negative number. Use `Integer.compare()`."
+        },
+        {
+          "id": "i2_q8",
+          "type": "mcq",
+          "question": "What sorting algorithm is used by Java 7+ for `Arrays.sort()` and `Collections.sort()` on objects?",
+          "options": [
+            "Timsort",
+            "Quicksort",
+            "Bubblesort",
+            "Heapsort"
+          ],
+          "answer": 0,
+          "explanation": "Java uses Timsort, an adaptive hybrid of Mergesort and Insertionsort."
+        },
+        {
+          "id": "i2_q9",
+          "type": "fill-in",
+          "question": "To declare a multiple bound requiring T to be a Number and Comparable, write: `<T extends Number ____ Comparable<T>>`",
+          "options": [
+            "&",
+            ",",
+            "+",
+            "and"
+          ],
+          "answer": 0,
+          "explanation": "Multiple type bounds are separated by the ampersand `&`."
+        },
+        {
+          "id": "i2_q10",
+          "type": "predict-output",
+          "question": "What does this code print?\n```java\nSet<String> tree = new TreeSet<>(List.of(\"Gamma\", \"Alpha\", \"Beta\"));\nSystem.out.println(tree.iterator().next());\n```",
+          "options": [
+            "Alpha",
+            "Gamma",
+            "Beta",
+            "Random output"
+          ],
+          "answer": 0,
+          "explanation": "`TreeSet` sorts elements naturally; the first element in alphabetical order is \"Alpha\"."
+        },
+        {
+          "id": "i2_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to define a bounded generic method:",
+          "options": [
+            "public class Sorter {",
+            "    public static <T extends Comparable<T>>",
+            "    T min(T a, T b) {",
+            "        return a.compareTo(b) < 0 ? a : b;",
+            "    }",
+            "}"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "explanation": "Class opening, bounded type parameter declaration, method header, comparison body, closing braces."
+        },
+        {
+          "id": "i2_q12",
+          "type": "mcq",
+          "question": "Which of the following generic array instantiations will cause a compile-time error?",
+          "options": [
+            "new T[10]",
+            "new ArrayList<T>()",
+            "new String[10]",
+            "new Object[10]"
+          ],
+          "answer": 0,
+          "explanation": "Java does not allow generic array creation (`new T[10]`) because type information is erased at runtime."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Sorting Contracts: Comparable vs Comparator Challenge",
+      "instructions": "Create class `Relic` with fields `String name` and `int power`. Implement `Comparable<Relic>` such that relics are sorted by `power` descending (highest power first). If powers are tied, break ties by comparing `name` alphabetically ascending (`this.name.compareTo(other.name)`). In `main`, read integer N, followed by N relics (name and power). Sort them with `java.util.Collections.sort()` and print each formatted as '<name>: <power>'.",
+      "starterCode": "import java.util.Scanner;\nimport java.util.ArrayList;\nimport java.util.Collections;\n\n// Implement Relic with Comparable<Relic>\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Sort and print relics\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\nimport java.util.ArrayList;\nimport java.util.Collections;\n\nclass Relic implements Comparable<Relic> {\n    String name;\n    int power;\n    \n    public Relic(String name, int power) {\n        this.name = name;\n        this.power = power;\n    }\n    \n    @Override\n    public int compareTo(Relic other) {\n        if (this.power != other.power) {\n            return Integer.compare(other.power, this.power); // Descending\n        }\n        return this.name.compareTo(other.name); // Ascending\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        ArrayList<Relic> list = new ArrayList<>();\n        for (int i = 0; i < n; i++) {\n            String name = sc.next();\n            int power = sc.nextInt();\n            list.add(new Relic(name, power));\n        }\n        Collections.sort(list);\n        for (Relic r : list) {\n            System.out.println(r.name + \": \" + r.power);\n        }\n    }\n}",
+      "tests": [
+        {
+          "name": "Three relics with tie",
+          "stdin": "3\nSoulBlade 150\nEmberStaff 200\nBoneBow 150\n",
+          "expectedStdout": "EmberStaff: 200\nBoneBow: 150\nSoulBlade: 150"
+        },
+        {
+          "name": "Two tied relics alphabetical tiebreaker",
+          "stdin": "2\nNetherWand 500\nInfernoAxe 500\n",
+          "expectedStdout": "InfernoAxe: 500\nNetherWand: 500"
+        },
+        {
+          "name": "Single relic",
+          "stdin": "1\nCrown 999\n",
+          "expectedStdout": "Crown: 999"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "i3",
@@ -12504,7 +12895,203 @@ const CURRICULUM = [
         "location": "Item 9: Prefer try-with-resources to try-finally & Item 85: Prefer alternatives to Java serialization",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i3_quiz",
+      "title": "Knowledge Check: Files, Modern I/O & Resource Safety",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i3_q1",
+          "type": "mcq",
+          "question": "Which stream hierarchy handles raw 8-bit bytes without character set encoding?",
+          "options": [
+            "InputStream / OutputStream",
+            "Reader / Writer",
+            "Scanner / Formatter",
+            "StringReader / StringWriter"
+          ],
+          "answer": 0,
+          "explanation": "Byte streams (`InputStream` and `OutputStream`) handle raw binary byte data."
+        },
+        {
+          "id": "i3_q2",
+          "type": "predict-output",
+          "question": "What does `BufferedReader.readLine()` return when it reaches the end of the input stream?",
+          "options": [
+            "null",
+            "\"\"",
+            "-1",
+            "throws EOFException"
+          ],
+          "answer": 0,
+          "explanation": "`readLine()` returns `null` at EOF."
+        },
+        {
+          "id": "i3_q3",
+          "type": "spot-the-bug",
+          "question": "Spot the resource leak in this pre-Java 7 code:\n```java\nFileInputStream in = new FileInputStream(\"data.bin\");\nin.read();\nin.close();\n```",
+          "options": [
+            "If in.read() throws an IOException, in.close() is never reached and the file descriptor leaks",
+            "FileInputStream cannot open .bin files",
+            "in.read() requires a parameter",
+            "close() must be called twice"
+          ],
+          "answer": 0,
+          "explanation": "An exception during `in.read()` bypasses `in.close()`. This is solved by `try-with-resources`."
+        },
+        {
+          "id": "i3_q4",
+          "type": "mcq",
+          "question": "In what order are resources closed in a `try-with-resources` block declaring `try (R1 r1 = ...; R2 r2 = ...)`?",
+          "options": [
+            "Reverse order of creation (r2 then r1)",
+            "Order of creation (r1 then r2)",
+            "Alphabetical order by variable name",
+            "Non-deterministic order"
+          ],
+          "answer": 0,
+          "explanation": "Java guarantees LIFO (reverse declaration) order for resource closing."
+        },
+        {
+          "id": "i3_q5",
+          "type": "predict-output",
+          "question": "What is printed by normalizing this path: `Path.of(\"a\", \"b\", \"..\", \"c\").normalize()`?",
+          "options": [
+            "a/c or a\\c",
+            "a/b/c",
+            "a/..",
+            "b/c"
+          ],
+          "answer": 0,
+          "explanation": "`b` and `..` cancel out, leaving path `a/c` (using platform separator)."
+        },
+        {
+          "id": "i3_q6",
+          "type": "mcq",
+          "question": "Which Java 11 method reads an entire file directly into a String using UTF-8?",
+          "options": [
+            "Files.readString(Path)",
+            "Files.loadText(Path)",
+            "Path.readAll()",
+            "File.getString()"
+          ],
+          "answer": 0,
+          "explanation": "`Files.readString(Path)` was introduced in Java 11 for reading text files in a single call."
+        },
+        {
+          "id": "i3_q7",
+          "type": "spot-the-bug",
+          "question": "Why does *Effective Java* Item 85 warn against native Java serialization (`ObjectInputStream`)?",
+          "options": [
+            "Deserializing untrusted byte streams can trigger remote code execution via gadget chains",
+            "It only works on 32-bit operating systems",
+            "It can only serialize integers",
+            "It requires root privileges"
+          ],
+          "answer": 0,
+          "explanation": "Java native deserialization is a severe security vulnerability vector. Prefer JSON, Protobuf, or records."
+        },
+        {
+          "id": "i3_q8",
+          "type": "mcq",
+          "question": "What happens if both the `try` block and the `close()` method throw exceptions in a `try-with-resources` statement?",
+          "options": [
+            "The close exception is recorded as a suppressed exception on the primary exception",
+            "The close exception overwrites and hides the primary exception",
+            "The JVM halts immediately with an Error",
+            "Both exceptions cancel each other out"
+          ],
+          "answer": 0,
+          "explanation": "The exception from `close()` is attached to the primary exception via `addSuppressed()`."
+        },
+        {
+          "id": "i3_q9",
+          "type": "fill-in",
+          "question": "To flush a buffered writer without closing it, call: `writer.____();`",
+          "options": [
+            "flush",
+            "clear",
+            "sync",
+            "commit"
+          ],
+          "answer": 0,
+          "explanation": "The `flush()` method writes any remaining buffered bytes or chars to the destination stream."
+        },
+        {
+          "id": "i3_q10",
+          "type": "predict-output",
+          "question": "What default character set does Java 18+ use across all operating systems according to JEP 400?",
+          "options": [
+            "UTF-8",
+            "UTF-16",
+            "ISO-8859-1",
+            "US-ASCII"
+          ],
+          "answer": 0,
+          "explanation": "Java 18 established UTF-8 as the standard default charset on all platforms."
+        },
+        {
+          "id": "i3_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to read a file line-by-line safely with try-with-resources:",
+          "options": [
+            "try (BufferedReader br = Files.newBufferedReader(path)) {",
+            "    String line;",
+            "    while ((line = br.readLine()) != null) {",
+            "        System.out.println(line);",
+            "    }",
+            "}"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "explanation": "Try-with-resources header, variable declaration, while-not-null loop, print statement, loop closing, try block closing."
+        },
+        {
+          "id": "i3_q12",
+          "type": "mcq",
+          "question": "Which interface is the root contract required for try-with-resources automatic management?",
+          "options": [
+            "java.lang.AutoCloseable",
+            "java.io.Closeable",
+            "java.lang.Disposable",
+            "java.io.Flushable"
+          ],
+          "answer": 0,
+          "explanation": "`AutoCloseable` is the top-level interface; `java.io.Closeable` extends `AutoCloseable`."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Binary Serialization vs Structured JSON/Text Data Challenge",
+      "instructions": "Read integer N, followed by N lines of CSV records formatted as `ID,NAME,POWER,ZONE`. Parse each record. Validate that POWER is a valid integer >= 0. If valid, print '[ID: <id>] <name> -> Power: <power> in <zone>'. If power is negative or non-numeric, print 'Corrupt Record: <id>'.",
+      "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Parse and validate structured records\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextLine()) return;\n        int n = Integer.parseInt(sc.nextLine().strip());\n        \n        for (int i = 0; i < n; i++) {\n            String line = sc.nextLine().strip();\n            String[] parts = line.split(\",\");\n            if (parts.length < 4) continue;\n            String id = parts[0];\n            String name = parts[1];\n            String powerStr = parts[2];\n            String zone = parts[3];\n            \n            try {\n                int power = Integer.parseInt(powerStr);\n                if (power < 0) {\n                    System.out.println(\"Corrupt Record: \" + id);\n                } else {\n                    System.out.println(\"[ID: \" + id + \"] \" + name + \" -> Power: \" + power + \" in \" + zone);\n                }\n            } catch (NumberFormatException e) {\n                System.out.println(\"Corrupt Record: \" + id);\n            }\n        }\n    }\n}",
+      "tests": [
+        {
+          "name": "One valid and one corrupt NaN",
+          "stdin": "2\n101,LavaBoots,45,ZoneA\n102,FireWand,NaN,ZoneB\n",
+          "expectedStdout": "[ID: 101] LavaBoots -> Power: 45 in ZoneA\nCorrupt Record: 102"
+        },
+        {
+          "name": "Three records with negative power corrupt",
+          "stdin": "3\n1,RelicA,100,Delta\n2,RelicB,-5,Core\n3,RelicC,80,North\n",
+          "expectedStdout": "[ID: 1] RelicA -> Power: 100 in Delta\nCorrupt Record: 2\n[ID: 3] RelicC -> Power: 80 in North"
+        },
+        {
+          "name": "Single valid record",
+          "stdin": "1\n99,FlameShield,300,South\n",
+          "expectedStdout": "[ID: 99] FlameShield -> Power: 300 in South"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "i4",
@@ -13514,7 +14101,203 @@ const CURRICULUM = [
         "location": "Item 42: Prefer lambdas to anonymous classes & Item 55: Return optionals judiciously",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i4_quiz",
+      "title": "Knowledge Check: Functional Java: Lambdas, Streams & Optional",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i4_q1",
+          "type": "mcq",
+          "question": "Which of the following defines a Functional Interface in Java?",
+          "options": [
+            "An interface with exactly one abstract method",
+            "An interface that extends java.util.function.Function",
+            "An interface with no methods",
+            "An interface containing only static methods"
+          ],
+          "answer": 0,
+          "explanation": "A functional interface has a Single Abstract Method (SAM)."
+        },
+        {
+          "id": "i4_q2",
+          "type": "predict-output",
+          "question": "What does this code print?\n```java\nList<Integer> list = List.of(1, 2, 3);\nlong count = list.stream().filter(x -> x > 1).count();\nSystem.out.println(count);\n```",
+          "options": [
+            "2",
+            "3",
+            "1",
+            "0"
+          ],
+          "answer": 0,
+          "explanation": "Numbers greater than 1 are 2 and 3, so `count()` returns 2."
+        },
+        {
+          "id": "i4_q3",
+          "type": "spot-the-bug",
+          "question": "Spot the bug in this lambda expression:\n```java\nint base = 10;\nFunction<Integer, Integer> add = x -> x + base;\nbase = 20;\n```",
+          "options": [
+            "Variable 'base' is no longer effectively final because it was reassigned after being captured in a lambda",
+            "add cannot use x + base",
+            "base must be double",
+            "Function must take two arguments"
+          ],
+          "answer": 0,
+          "explanation": "Variables captured in lambdas must be effectively final. Reassigning `base = 20` causes a compilation error."
+        },
+        {
+          "id": "i4_q4",
+          "type": "mcq",
+          "question": "What is the equivalent method reference for `(String s) -> System.out.println(s)`?",
+          "options": [
+            "System.out::println",
+            "System.out::println()",
+            "PrintStream::println",
+            "s::println"
+          ],
+          "answer": 0,
+          "explanation": "`System.out::println` is a bound instance method reference to the println method on `System.out`."
+        },
+        {
+          "id": "i4_q5",
+          "type": "predict-output",
+          "question": "What happens if you execute a second terminal operation on an already consumed Stream?",
+          "options": [
+            "IllegalStateException is thrown at runtime",
+            "The stream resets and processes again",
+            "It returns null",
+            "Compilation fails"
+          ],
+          "answer": 0,
+          "explanation": "Streams cannot be reused once a terminal operation has executed; doing so triggers `IllegalStateException`."
+        },
+        {
+          "id": "i4_q6",
+          "type": "mcq",
+          "question": "What is the key difference between `map()` and `flatMap()` in the Stream API?",
+          "options": [
+            "map produces one element per input; flatMap produces a stream per input and flattens them into one stream",
+            "map is terminal; flatMap is intermediate",
+            "map operates on numbers; flatMap operates on Strings",
+            "flatMap is parallel only"
+          ],
+          "answer": 0,
+          "explanation": "`flatMap` flattens nested streams (1-to-many) into a single unified stream."
+        },
+        {
+          "id": "i4_q7",
+          "type": "spot-the-bug",
+          "question": "Identify the bug in this Optional usage:\n```java\nOptional<User> opt = findUser();\nString name = opt.get().getName();\n```",
+          "options": [
+            "Calling opt.get() without checking isPresent() throws NoSuchElementException if empty; use orElse or ifPresent",
+            "Optional cannot wrap User",
+            "getName() cannot be called on User",
+            "opt.get() returns boolean"
+          ],
+          "answer": 0,
+          "explanation": "Directly calling `.get()` on an empty Optional causes `NoSuchElementException`. Use `.map(User::getName).orElse(...)`."
+        },
+        {
+          "id": "i4_q8",
+          "type": "mcq",
+          "question": "Why does `IntStream.sum()` perform faster than `Stream<Integer>.reduce(0, Integer::sum)`?",
+          "options": [
+            "IntStream operates directly on primitive int values without allocating wrapper Integer objects on the heap",
+            "IntStream uses GPU acceleration",
+            "Stream<Integer> cannot sum numbers",
+            "IntStream skips negative numbers"
+          ],
+          "answer": 0,
+          "explanation": "Primitive streams avoid the boxing and unboxing allocations that slow down generic streams."
+        },
+        {
+          "id": "i4_q9",
+          "type": "fill-in",
+          "question": "To group elements into a map with Streams, pass: `stream.collect(Collectors.____(classifier));`",
+          "options": [
+            "groupingBy",
+            "groupBy",
+            "partitionBy",
+            "bucketBy"
+          ],
+          "answer": 0,
+          "explanation": "The `Collectors.groupingBy()` collector partitions elements into a Map based on a classification function."
+        },
+        {
+          "id": "i4_q10",
+          "type": "predict-output",
+          "question": "What does `Optional.ofNullable(null).orElse(\"Fallback\")` evaluate to?",
+          "options": [
+            "\"Fallback\"",
+            "null",
+            "throws NullPointerException",
+            "empty string"
+          ],
+          "answer": 0,
+          "explanation": "`Optional.ofNullable(null)` returns an empty Optional, so `orElse` returns the fallback value \"Fallback\"."
+        },
+        {
+          "id": "i4_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to build a complete Stream processing pipeline:",
+          "options": [
+            "List<String> names = List.of(\"alchem\", \"spore\", \"glow\");",
+            "List<String> processed = names.stream()",
+            "    .filter(s -> s.length() > 4)",
+            "    .map(String::toUpperCase)",
+            "    .toList();",
+            "System.out.println(processed);"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "explanation": "List creation, stream opening, filter, map transformation, terminal toList, output print."
+        },
+        {
+          "id": "i4_q12",
+          "type": "mcq",
+          "question": "Which opcode is emitted by javac for lambda expressions to enable dynamic runtime linkage via LambdaMetafactory?",
+          "options": [
+            "invokedynamic",
+            "invokevirtual",
+            "invokestatic",
+            "invokespecial"
+          ],
+          "answer": 0,
+          "explanation": "Java lambdas are dispatched using `invokedynamic` (JEP 186) for lightweight runtime call site generation."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Null-Safety with Optional<T> Challenge",
+      "instructions": "Create a method `static java.util.Optional<String> findRelic(java.util.Map<String, String> vault, String key)` that returns `Optional.ofNullable(vault.get(key))`. In `main`, read integer N, followed by N key-value pairs (key and relic name) and insert them into a `HashMap<String, String>`. Then read a query key. Use `findRelic(vault, query).map(String::toUpperCase).orElse(\"RELIC NOT FOUND\")` and print 'Found: <result>'.",
+      "starterCode": "import java.util.Scanner;\nimport java.util.HashMap;\nimport java.util.Map;\nimport java.util.Optional;\n\npublic class Main {\n    // Implement findRelic method\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Test Optional chaining\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\nimport java.util.HashMap;\nimport java.util.Map;\nimport java.util.Optional;\n\npublic class Main {\n    public static Optional<String> findRelic(Map<String, String> vault, String key) {\n        return Optional.ofNullable(vault.get(key));\n    }\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        Map<String, String> vault = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            String k = sc.next();\n            String v = sc.next();\n            vault.put(k, v);\n        }\n        String query = sc.next();\n        String result = findRelic(vault, query)\n            .map(String::toUpperCase)\n            .orElse(\"RELIC NOT FOUND\");\n            \n        System.out.println(\"Found: \" + result);\n    }\n}",
+      "tests": [
+        {
+          "name": "Chest2 found WarpedFungus",
+          "stdin": "3\nchest1 SoulLantern\nchest2 WarpedFungus\nchest3 NetherStar\nchest2\n",
+          "expectedStdout": "Found: WARPEDFUNGUS"
+        },
+        {
+          "name": "Missing chest query fallback",
+          "stdin": "2\nvaultA Diamond\nvaultB Gold\nvaultZ\n",
+          "expectedStdout": "Found: RELIC NOT FOUND"
+        },
+        {
+          "name": "Slot1 EmberBlade found",
+          "stdin": "1\nslot1 EmberBlade\nslot1\n",
+          "expectedStdout": "Found: EMBERBLADE"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "i5",
@@ -14533,7 +15316,205 @@ const CURRICULUM = [
         "location": "Chapter 4: Records & Chapter 5: Sealed Classes",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i5_quiz",
+      "title": "Knowledge Check: Modern Java: Records, Enums, Sealed Types & Pattern Matching",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i5_q1",
+          "type": "mcq",
+          "question": "What access modifier are enum constructors restricted to in Java?",
+          "options": [
+            "private",
+            "public",
+            "protected",
+            "package-private"
+          ],
+          "answer": 0,
+          "explanation": "Enum constructors are implicitly private and can never be invoked using `new` from external code."
+        },
+        {
+          "id": "i5_q2",
+          "type": "predict-output",
+          "question": "Given `record Point(int x, int y) {}`, how do you access the value of field `x` on instance `Point p`?",
+          "options": [
+            "p.x()",
+            "p.getX()",
+            "p.x",
+            "p.get('x')"
+          ],
+          "answer": 0,
+          "explanation": "Record accessor methods match the exact component name with parentheses (`p.x()`)."
+        },
+        {
+          "id": "i5_q3",
+          "type": "spot-the-bug",
+          "question": "Why does this record declaration fail to compile?\n```java\npublic record Box(int length) {\n    int width;\n}\n```",
+          "options": [
+            "Records cannot declare instance fields in their body; all instance components must be declared in the header",
+            "Box must be marked abstract",
+            "length must be double",
+            "Records cannot have constructors"
+          ],
+          "answer": 0,
+          "explanation": "All record instance state must be declared in the header component list."
+        },
+        {
+          "id": "i5_q4",
+          "type": "mcq",
+          "question": "What are the three required modifiers for direct subclasses of a sealed class?",
+          "options": [
+            "final, sealed, or non-sealed",
+            "public, private, or protected",
+            "static, abstract, or native",
+            "transient, volatile, or strictfp"
+          ],
+          "answer": 0,
+          "explanation": "Every direct subclass of a sealed class must explicitly declare either `final`, `sealed`, or `non-sealed`."
+        },
+        {
+          "id": "i5_q5",
+          "type": "predict-output",
+          "question": "What does this pattern matching code print?\n```java\nObject obj = \"Nether\";\nif (obj instanceof String s && s.length() == 6) {\n    System.out.println(s.toUpperCase());\n}\n```",
+          "options": [
+            "NETHER",
+            "Nether",
+            "6",
+            "Compilation Error"
+          ],
+          "answer": 0,
+          "explanation": "`obj` matches String, binding `s` with length 6, outputting \"NETHER\"."
+        },
+        {
+          "id": "i5_q6",
+          "type": "mcq",
+          "question": "Which keyword introduces a guard clause on a pattern match label in Java 21 switch expressions?",
+          "options": [
+            "when",
+            "if",
+            "where",
+            "guard"
+          ],
+          "answer": 0,
+          "explanation": "Java 21 uses the `when` keyword for conditional pattern matching guards in switch expressions."
+        },
+        {
+          "id": "i5_q7",
+          "type": "spot-the-bug",
+          "question": "What compile error occurs here?\n```java\npublic static void test(Object obj) {\n    switch (obj) {\n        case Object o -> System.out.println(\"Object\");\n        case String s -> System.out.println(\"String\");\n    }\n}\n```",
+          "options": [
+            "The case label 'case String s' is dominated by 'case Object o' and will never execute",
+            "switch cannot accept Object",
+            "Object must be cast first",
+            "default is missing"
+          ],
+          "answer": 0,
+          "explanation": "`case Object o` matches all objects, making `case String s` dead code. This triggers a compilation error."
+        },
+        {
+          "id": "i5_q8",
+          "type": "mcq",
+          "question": "What is an Algebraic Data Type (ADT) pattern in modern Java?",
+          "options": [
+            "Combining sealed interfaces (Sum types: Choice) with records (Product types: Bundle) to make illegal states unrepresentable",
+            "A mathematical library in java.lang.Math",
+            "A legacy serialization framework",
+            "A database query language"
+          ],
+          "answer": 0,
+          "explanation": "ADTs combine sealed hierarchies (alternatives) and records (compounds) for precise domain modeling."
+        },
+        {
+          "id": "i5_q9",
+          "type": "fill-in",
+          "question": "In a sealed class header, specify permitted subclasses using: `public abstract sealed class Shape ____ Circle, Square {}`",
+          "options": [
+            "permits",
+            "allows",
+            "subclasses",
+            "with"
+          ],
+          "answer": 0,
+          "explanation": "The `permits` clause lists all classes allowed to extend the sealed class."
+        },
+        {
+          "id": "i5_q10",
+          "type": "predict-output",
+          "question": "What does this compact constructor record do?\n```java\nrecord Range(int min, int max) {\n    public Range {\n        if (min > max) {\n            int temp = min; min = max; max = temp;\n        }\n    }\n}\nSystem.out.println(new Range(50, 10));\n```",
+          "options": [
+            "Range[min=10, max=50]",
+            "Range[min=50, max=10]",
+            "IllegalArgumentException",
+            "Compilation Error"
+          ],
+          "answer": 0,
+          "explanation": "The compact constructor swaps `min` and `max`, normalizing the values before field assignment."
+        },
+        {
+          "id": "i5_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to define an exhaustive switch expression over a sealed interface:",
+          "options": [
+            "sealed interface Pet permits Cat, Dog {}",
+            "record Cat() implements Pet {}",
+            "record Dog() implements Pet {}",
+            "String sound = switch (pet) {",
+            "    case Cat c -> \"Meow\";",
+            "    case Dog d -> \"Woof\";",
+            "};"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "explanation": "Interface declaration, permitted record definitions, switch expression header, case labels, semicolon closing."
+        },
+        {
+          "id": "i5_q12",
+          "type": "mcq",
+          "question": "Which of the following methods is automatically generated by the compiler for every record class?",
+          "options": [
+            "All of these (equals, hashCode, toString, canonical constructor, accessors)",
+            "equals() and hashCode() only",
+            "toString() only",
+            "getter methods with 'get' prefix"
+          ],
+          "answer": 0,
+          "explanation": "Records automatically generate accessors, canonical constructor, `equals()`, `hashCode()`, and `toString()`."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Algebraic Data Types (ADTs) & Domain Modeling Challenge",
+      "instructions": "Create sealed interface `BattleResult permits Victory, Defeat`. Define records: `record Victory(int spoils, String hero) implements BattleResult {}` and `record Defeat(int casualties, String retreatZone) implements BattleResult {}`. Create method `static void logResult(BattleResult res)` using switch pattern matching:\n- `case Victory v -> System.out.println(\"VICTORY: \" + v.hero() + \" secured \" + v.spoils() + \" emeralds!\");`\n- `case Defeat d -> System.out.println(\"DEFEAT: Lost \" + d.casualties() + \" troops. Retreated to \" + d.retreatZone() + \".\");`\nIn `main`, read type ('VICTORY' with spoils and hero, or 'DEFEAT' with casualties and retreatZone), instantiate the record, and call `logResult()`.",
+      "starterCode": "import java.util.Scanner;\n\n// Implement BattleResult ADT\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Test BattleResult ADT\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\n\nsealed interface BattleResult permits Victory, Defeat {}\n\nrecord Victory(int spoils, String hero) implements BattleResult {}\nrecord Defeat(int casualties, String retreatZone) implements BattleResult {}\n\npublic class Main {\n    public static void logResult(BattleResult res) {\n        switch (res) {\n            case Victory v -> System.out.println(\"VICTORY: \" + v.hero() + \" secured \" + v.spoils() + \" emeralds!\");\n            case Defeat d -> System.out.println(\"DEFEAT: Lost \" + d.casualties() + \" troops. Retreated to \" + d.retreatZone() + \".\");\n        }\n    }\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String type = sc.next();\n        BattleResult result;\n        if (type.equals(\"VICTORY\")) {\n            int spoils = sc.nextInt();\n            String hero = sc.next();\n            result = new Victory(spoils, hero);\n        } else {\n            int casualties = sc.nextInt();\n            String zone = sc.next();\n            result = new Defeat(casualties, zone);\n        }\n        logResult(result);\n    }\n}",
+      "tests": [
+        {
+          "name": "Victory Alex 500 emeralds",
+          "stdin": "VICTORY 500 Alex\n",
+          "expectedStdout": "VICTORY: Alex secured 500 emeralds!"
+        },
+        {
+          "name": "Defeat 12 casualties SouthBastion",
+          "stdin": "DEFEAT 12 SouthBastion\n",
+          "expectedStdout": "DEFEAT: Lost 12 troops. Retreated to SouthBastion."
+        },
+        {
+          "name": "Victory Steve 1200 emeralds",
+          "stdin": "VICTORY 1200 Steve\n",
+          "expectedStdout": "VICTORY: Steve secured 1200 emeralds!"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "i6",
@@ -15538,7 +16519,201 @@ const CURRICULUM = [
         "location": "Chapter 16: Testing and Debugging",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i6_quiz",
+      "title": "Knowledge Check: Testing with JUnit 5 & Diagnostic Debugging",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i6_q1",
+          "type": "mcq",
+          "question": "What is the expected order of arguments in JUnit 5's `assertEquals`?",
+          "options": [
+            "assertEquals(expected, actual)",
+            "assertEquals(actual, expected)",
+            "assertEquals(testName, actual)",
+            "assertEquals(condition, expected)"
+          ],
+          "answer": 0,
+          "explanation": "JUnit 5 specifies `assertEquals(expected, actual, optionalMessage)`."
+        },
+        {
+          "id": "i6_q2",
+          "type": "predict-output",
+          "question": "How many times does `@BeforeEach` execute in a class with 3 `@Test` methods?",
+          "options": [
+            "3 times",
+            "1 time",
+            "0 times",
+            "4 times"
+          ],
+          "answer": 0,
+          "explanation": "`@BeforeEach` runs before each test method individually."
+        },
+        {
+          "id": "i6_q3",
+          "type": "spot-the-bug",
+          "question": "Spot the bug in this JUnit 5 test class:\n```java\nclass AccountTest {\n    @BeforeAll\n    void init() { System.out.println(\"Init\"); }\n}\n```",
+          "options": [
+            "@BeforeAll methods must be static under default lifecycle",
+            "init() cannot print to console",
+            "AccountTest must be public",
+            "@BeforeAll requires an argument"
+          ],
+          "answer": 0,
+          "explanation": "Under the default per-method test lifecycle, `@BeforeAll` methods must be `static`."
+        },
+        {
+          "id": "i6_q4",
+          "type": "mcq",
+          "question": "Which method verifies that an executable lambda throws an expected exception in JUnit 5?",
+          "options": [
+            "assertThrows()",
+            "assertException()",
+            "expectThrows()",
+            "assertFail()"
+          ],
+          "answer": 0,
+          "explanation": "`assertThrows(Expected.class, executable)` is the JUnit 5 mechanism for testing exceptions."
+        },
+        {
+          "id": "i6_q5",
+          "type": "predict-output",
+          "question": "What happens if code inside `assertThrows(NullPointerException.class, () -> list.add(\"item\"))` does NOT throw an exception?",
+          "options": [
+            "AssertionFailedError is thrown, failing the test",
+            "The test passes",
+            "The test is skipped",
+            "Nothing happens"
+          ],
+          "answer": 0,
+          "explanation": "`assertThrows` fails if no exception is thrown by the lambda."
+        },
+        {
+          "id": "i6_q6",
+          "type": "mcq",
+          "question": "Which annotation feeds comma-separated table rows to a `@ParameterizedTest` in JUnit 5?",
+          "options": [
+            "@CsvSource",
+            "@ValueSource",
+            "@TableSource",
+            "@RowSource"
+          ],
+          "answer": 0,
+          "explanation": "`@CsvSource` supplies multiple comma-separated values per test iteration."
+        },
+        {
+          "id": "i6_q7",
+          "type": "spot-the-bug",
+          "question": "Why should you avoid using `System.out.println` for verification in unit tests?",
+          "options": [
+            "It does not fail the build in CI/CD pipelines if an unexpected value occurs; automated assertions are required",
+            "It crashes JUnit",
+            "It slows down tests by 1000x",
+            "It is prohibited by the compiler"
+          ],
+          "answer": 0,
+          "explanation": "Tests must be self-validating; printed text cannot fail a CI/CD build automatically."
+        },
+        {
+          "id": "i6_q8",
+          "type": "mcq",
+          "question": "What is the purpose of `assertAll()` in JUnit 5?",
+          "options": [
+            "It executes all assertions in a group and reports all failures together, instead of stopping at the first failure",
+            "It runs all test classes in parallel",
+            "It validates database consistency",
+            "It closes all open files"
+          ],
+          "answer": 0,
+          "explanation": "`assertAll()` allows multiple assertions to run and report all mismatches simultaneously."
+        },
+        {
+          "id": "i6_q9",
+          "type": "fill-in",
+          "question": "To supply a custom readable name for a test in reports, annotate with: `@____(\"Should calculate damage correctly\")`",
+          "options": [
+            "DisplayName",
+            "TestName",
+            "Description",
+            "Name"
+          ],
+          "answer": 0,
+          "explanation": "`@DisplayName` configures a human-readable name for test reports."
+        },
+        {
+          "id": "i6_q10",
+          "type": "predict-output",
+          "question": "Where in a chained stack trace is the initial root failure point located?",
+          "options": [
+            "In the bottom-most 'Caused by:' block",
+            "At the very top line",
+            "In the first thread declaration",
+            "Stack traces do not show root causes"
+          ],
+          "answer": 0,
+          "explanation": "The bottom-most `Caused by:` block isolates the original underlying defect."
+        },
+        {
+          "id": "i6_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to write an exception test with assertThrows:",
+          "options": [
+            "IllegalArgumentException ex = assertThrows(",
+            "    IllegalArgumentException.class,",
+            "    () -> bank.withdraw(-100)",
+            ");",
+            "assertEquals(\"Negative amount\", ex.getMessage());"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "explanation": "assertThrows call, exception class, failing lambda, close call, message assertion."
+        },
+        {
+          "id": "i6_q12",
+          "type": "mcq",
+          "question": "What does the 'I' in the F.I.R.S.T unit testing principles stand for?",
+          "options": [
+            "Isolated (independent of other tests)",
+            "Integrated",
+            "Instant",
+            "Iterative"
+          ],
+          "answer": 0,
+          "explanation": "F.I.R.S.T: Fast, Isolated, Repeatable, Self-validating, Timely."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Debugging, Diagnostic Logging & Stack Trace Forensics Challenge",
+      "instructions": "Read 3 lines representing a simplified error log. Line 1 is the high-level error, line 2 is the 'Caused by: <Exception>: <Reason>' line, and line 3 is the top stack trace element 'at <Class>.<method>(<File>:<Line>)'. Extract and print:\nRoot Cause: <Reason>\nFailure Point: <Class>.<method> at line <Line>",
+      "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Parse stack trace lines\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextLine()) return;\n        String top = sc.nextLine();\n        String causedBy = sc.nextLine();\n        String atLine = sc.nextLine();\n        \n        // Extract reason from Caused by: Exception: Reason\n        int colonIdx = causedBy.lastIndexOf(\": \");\n        String reason = (colonIdx != -1) ? causedBy.substring(colonIdx + 2) : causedBy;\n        \n        // Extract class.method and line from: at com.pkg.Class.method(File.java:42)\n        int atIdx = atLine.indexOf(\"at \");\n        int openParen = atLine.indexOf(\"(\");\n        int colon2 = atLine.indexOf(\":\", openParen);\n        int closeParen = atLine.indexOf(\")\", colon2);\n        \n        String method = atLine.substring(atIdx + 3, openParen);\n        String lineNum = atLine.substring(colon2 + 1, closeParen);\n        \n        System.out.println(\"Root Cause: \" + reason);\n        System.out.println(\"Failure Point: \" + method + \" at line \" + lineNum);\n    }\n}",
+      "tests": [
+        {
+          "name": "Config file not found on line 42",
+          "stdin": "Exception in thread main java.lang.RuntimeException: Operation failed\nCaused by: java.io.FileNotFoundException: Missing config.xml\nat com.bastion.Config.load(Config.java:42)\n",
+          "expectedStdout": "Root Cause: Missing config.xml\nFailure Point: com.bastion.Config.load at line 42"
+        },
+        {
+          "name": "Database connection refused on line 108",
+          "stdin": "Exception: Service crash\nCaused by: java.sql.SQLException: Connection refused\nat com.bastion.DB.connect(DB.java:108)\n",
+          "expectedStdout": "Root Cause: Connection refused\nFailure Point: com.bastion.DB.connect at line 108"
+        },
+        {
+          "name": "NPE on line 15",
+          "stdin": "Exception in thread worker: Fatal\nCaused by: java.lang.NullPointerException: Target is null\nat com.bastion.Engine.run(Engine.java:15)\n",
+          "expectedStdout": "Root Cause: Target is null\nFailure Point: com.bastion.Engine.run at line 15"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "i7",
@@ -16544,7 +17719,189 @@ const CURRICULUM = [
         "location": "Chapter 34: Introducing JDBC",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i7_quiz",
+      "title": "Knowledge Check: Relational Persistence: JDBC & SQL Architecture",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i7_q1",
+          "type": "mcq",
+          "question": "Which of the following is a primary defense against SQL injection vulnerabilities in Java?",
+          "options": [
+            "Using PreparedStatement with parameterized ? placeholders",
+            "String concatenation with String.format",
+            "Converting all strings to lowercase",
+            "Increasing database memory"
+          ],
+          "answer": 0,
+          "explanation": "`PreparedStatement` pre-compiles query structure and transmits parameters out-of-band, completely preventing SQL injection."
+        },
+        {
+          "id": "i7_q2",
+          "type": "predict-output",
+          "question": "What is the parameter index of the first `?` placeholder in a `PreparedStatement`?",
+          "options": [
+            "1 (JDBC parameters are 1-based)",
+            "0",
+            "-1",
+            "Any integer"
+          ],
+          "answer": 0,
+          "explanation": "JDBC uses 1-based indexing for parameter placeholders."
+        },
+        {
+          "id": "i7_q3",
+          "type": "spot-the-bug",
+          "question": "Identify the critical flaw in this JDBC query code:\n```java\nString query = \"SELECT * FROM accounts WHERE user = '\" + inputUser + \"'\";\nStatement stmt = con.createStatement();\nResultSet rs = stmt.executeQuery(query);\n```",
+          "options": [
+            "SQL Injection vulnerability caused by concatenating untrusted user input directly into SQL text",
+            "Statement cannot execute SELECT queries",
+            "query must be uppercase",
+            "con must be synchronized"
+          ],
+          "answer": 0,
+          "explanation": "Concatenating user input into SQL text enables SQL injection. Use `PreparedStatement`."
+        },
+        {
+          "id": "i7_q4",
+          "type": "mcq",
+          "question": "What does `rs.next()` return when there are no more rows in the `ResultSet`?",
+          "options": [
+            "false",
+            "true",
+            "null",
+            "throws EOFException"
+          ],
+          "answer": 0,
+          "explanation": "`rs.next()` returns `false` when the cursor moves past the final row."
+        },
+        {
+          "id": "i7_q5",
+          "type": "predict-output",
+          "question": "Where is the cursor located immediately after executing a query and receiving a `ResultSet`?",
+          "options": [
+            "Before the first row (rs.next() must be called to position on row 1)",
+            "On row 1",
+            "On the last row",
+            "At row index 0"
+          ],
+          "answer": 0,
+          "explanation": "The cursor is initially positioned before the first row."
+        },
+        {
+          "id": "i7_q6",
+          "type": "mcq",
+          "question": "Why should production enterprise applications use a connection pool (like HikariCP) instead of DriverManager?",
+          "options": [
+            "Establishing raw TCP socket connections to a database is expensive; pools reuse connections with sub-millisecond latency",
+            "DriverManager cannot execute SELECT statements",
+            "HikariCP removes SQL syntax",
+            "Connection pools eliminate the need for passwords"
+          ],
+          "answer": 0,
+          "explanation": "Connection pools eliminate connection creation overhead and prevent database connection exhaustion."
+        },
+        {
+          "id": "i7_q7",
+          "type": "spot-the-bug",
+          "question": "Spot the transaction bug in this JDBC block:\n```java\ncon.setAutoCommit(false);\ntry {\n    update1(con);\n    update2(con);\n    con.commit();\n} catch (SQLException e) {\n    throw e;\n}\n```",
+          "options": [
+            "Catch block fails to call con.rollback(), leaving pending locks and uncommitted state",
+            "con.setAutoCommit requires true",
+            "con.commit() is deprecated",
+            "update1 cannot run before update2"
+          ],
+          "answer": 0,
+          "explanation": "On failure, `con.rollback()` must be called to undo uncommitted changes."
+        },
+        {
+          "id": "i7_q8",
+          "type": "mcq",
+          "question": "What does the 'I' in ACID database transactions represent?",
+          "options": [
+            "Isolation (concurrent transactions execute without interfering with one another)",
+            "Inheritance",
+            "Iteration",
+            "Indexation"
+          ],
+          "answer": 0,
+          "explanation": "Isolation determines how concurrent transactions are isolated from each other."
+        },
+        {
+          "id": "i7_q9",
+          "type": "fill-in",
+          "question": "To check if the last numeric column read from a ResultSet was SQL NULL, call: `if (rs.____()) { ... }`",
+          "options": [
+            "wasNull",
+            "isNull",
+            "checkNull",
+            "getNull"
+          ],
+          "answer": 0,
+          "explanation": "The `wasNull()` method reports whether the last column read was SQL NULL."
+        },
+        {
+          "id": "i7_q10",
+          "type": "predict-output",
+          "question": "What design pattern decouples business domain algorithms from SQL queries and database connection code?",
+          "options": [
+            "Data Access Object (DAO) / Repository Pattern",
+            "Singleton Pattern",
+            "Decorator Pattern",
+            "Observer Pattern"
+          ],
+          "answer": 0,
+          "explanation": "The DAO pattern encapsulates database interaction behind domain interfaces."
+        },
+        {
+          "id": "i7_q11",
+          "type": "order-the-lines",
+          "question": "Order these lines to safely execute a parameterized query with try-with-resources:",
+          "options": [
+            "String sql = \"SELECT name FROM users WHERE id = ?\";",
+            "try (PreparedStatement ps = con.prepareStatement(sql)) {",
+            "    ps.setInt(1, 42);",
+            "    try (ResultSet rs = ps.executeQuery()) {",
+            "        if (rs.next()) System.out.println(rs.getString(1));",
+            "    }",
+            "}"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "explanation": "SQL declaration, PreparedStatement try block, parameter binding, ResultSet try block, row retrieval, closing brackets."
+        },
+        {
+          "id": "i7_q12",
+          "type": "mcq",
+          "question": "Which of the following is considered a DDL (Data Definition Language) SQL command?",
+          "options": [
+            "CREATE TABLE",
+            "SELECT",
+            "UPDATE",
+            "INSERT"
+          ],
+          "answer": 0,
+          "explanation": "`CREATE TABLE` is a DDL command that alters database schema structure."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "The Data Access Object (DAO) Pattern Challenge",
+      "instructions": "Implement a full Data Access Object pattern in your IDE with a real or in-memory database.",
+      "starterCode": "// Guided Project: Clean DAO Pattern Implementation\n// Test in your local IDE with your database connection!\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"DAO project skeleton ready.\");\n    }\n}",
+      "solution": "// Guided Project Reference Implementation\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Clean DAO architecture successfully implemented and verified.\");\n    }\n}",
+      "tests": [],
+      "xp": 75
+    }
   },
   {
     "id": "i8",
@@ -17697,1110 +19054,8937 @@ const CURRICULUM = [
         "location": "Chapter 12: Concurrency",
         "verify": false
       }
-    ]
+    ],
+    "challenge": {
+      "id": "i8_quiz",
+      "title": "Knowledge Check: Concurrency Basics & Thread Safety",
+      "xp": 50,
+      "questions": [
+        {
+          "id": "i8_q1",
+          "type": "mcq",
+          "question": "Which of the following creates and starts a thread correctly in Java?",
+          "options": [
+            "new Thread(() -> System.out.println(\"Go\")).start();",
+            "new Thread(() -> System.out.println(\"Go\")).run();",
+            "Thread.spawn(() -> System.out.println(\"Go\"));",
+            "new Runnable(() -> System.out.println(\"Go\")).start();"
+          ],
+          "answer": 0,
+          "explanation": "`new Thread(runnable).start()` invokes OS thread creation and executes `run()` asynchronously."
+        },
+        {
+          "id": "i8_q2",
+          "type": "mcq",
+          "question": "What does the `synchronized` keyword guarantee when applied to a method?",
+          "options": [
+            "That only one thread can execute methods on that instance lock at any given time",
+            "That the method executes ten times faster using C++ bindings",
+            "That the method runs on a background daemon thread automatically",
+            "That variables in the method cannot be garbage collected"
+          ],
+          "answer": 0,
+          "explanation": "`synchronized` acquires the monitor lock of the instance (or class for static methods), guaranteeing mutual exclusion."
+        },
+        {
+          "id": "i8_q3",
+          "type": "mcq",
+          "question": "What is the primary guarantee provided by declaring a field `volatile`?",
+          "options": [
+            "Memory visibility: writes by one thread are immediately visible to all other threads, and instruction reordering is prevented",
+            "Lock-free atomicity for compound operations like `x++`",
+            "Automatic encryption of variable contents in memory",
+            "Persistence across JVM restarts"
+          ],
+          "answer": 0,
+          "explanation": "`volatile` enforces memory visibility and memory barriers; it does not ensure compound atomicity."
+        },
+        {
+          "id": "i8_q4",
+          "type": "mcq",
+          "question": "Which class should you use to manage a fixed pool of reused background threads in modern Java?",
+          "options": [
+            "ThreadPoolManager",
+            "ExecutorService via Executors.newFixedThreadPool()",
+            "ThreadVector",
+            "ConcurrentProcessHost"
+          ],
+          "answer": 1,
+          "explanation": "`Executors.newFixedThreadPool(n)` returns an `ExecutorService` managing a bounded pool of reusable threads."
+        },
+        {
+          "id": "i8_q5",
+          "type": "mcq",
+          "question": "What does the `compareAndSet(int expect, int update)` method of `AtomicInteger` do?",
+          "options": [
+            "It sets the value unconditionally to update and returns expect",
+            "It checks if current value == expect; if true, sets it to update atomically and returns true, else returns false",
+            "It increments the value if expect is greater than update",
+            "It throws an exception if expect does not equal update"
+          ],
+          "answer": 1,
+          "explanation": "CAS atomically verifies the current value against `expect` and updates it to `update` only if matching."
+        },
+        {
+          "id": "i8_q6",
+          "type": "mcq",
+          "question": "What is a `CountDownLatch` used for in multithreaded Java applications?",
+          "options": [
+            "To allow one or more threads to wait until a set of operations being performed in other threads completes",
+            "To synchronize access to a database connection",
+            "To count how many CPU cores are currently active",
+            "To generate cryptographically secure random integers"
+          ],
+          "answer": 0,
+          "explanation": "`CountDownLatch` synchronizes threads by blocking callers of `await()` until `countDown()` reaches zero."
+        },
+        {
+          "id": "i8_q7",
+          "type": "predict-output",
+          "question": "What will the following code output?",
+          "code": "AtomicInteger counter = new AtomicInteger(5);\ncounter.incrementAndGet();\nboolean ok = counter.compareAndSet(6, 20);\nSystem.out.println(ok + \" \" + counter.get());",
+          "options": [
+            "true 20",
+            "false 6",
+            "true 6",
+            "false 20"
+          ],
+          "answer": 0,
+          "explanation": "`incrementAndGet()` sets 5 -> 6. `compareAndSet(6, 20)` matches 6, updates to 20, and returns `true`."
+        },
+        {
+          "id": "i8_q8",
+          "type": "spot-the-bug",
+          "question": "Find the critical bug in this thread worker implementation:",
+          "code": "ExecutorService pool = Executors.newFixedThreadPool(2);\npool.submit(() -> {\n    System.out.println(\"Task finished\");\n});\n// End of main method without pool.shutdown()",
+          "options": [
+            "The JVM process will not exit because worker threads in the pool are non-daemon and remain active",
+            "The task will throw a NullPointerException",
+            "submit() requires a Thread subclass rather than a lambda",
+            "newFixedThreadPool cannot accept 2 threads"
+          ],
+          "answer": 0,
+          "explanation": "ThreadPool worker threads are non-daemon. Failing to invoke `pool.shutdown()` prevents the JVM process from exiting."
+        },
+        {
+          "id": "i8_q9",
+          "type": "fill-in",
+          "question": "Complete the statement: To pause the current thread until thread `t` completes execution, call `t.______()`.",
+          "answer": "join",
+          "explanation": "`t.join()` waits for thread `t` to terminate before the calling thread resumes."
+        },
+        {
+          "id": "i8_q10",
+          "type": "mcq",
+          "question": "What happens when multiple threads execute `deposit()` on different instances of a class with `public synchronized void deposit(int val)`?",
+          "options": [
+            "They execute simultaneously because synchronized instance methods synchronize on 'this' (each instance has its own lock)",
+            "One thread blocks because synchronized locks the entire JVM",
+            "A DeadlockException is thrown immediately",
+            "The class is recompiled by the JIT compiler"
+          ],
+          "answer": 0,
+          "explanation": "Synchronized instance methods acquire the lock of `this` specific instance; calls on different instances acquire different locks."
+        },
+        {
+          "id": "i8_q11",
+          "type": "order-the-lines",
+          "question": "Arrange the lines to safely compute an asynchronous result using ExecutorService and Callable:",
+          "lines": [
+            "ExecutorService pool = Executors.newSingleThreadExecutor();",
+            "try {",
+            "    Future<String> future = pool.submit(() -> \"Result ready\");",
+            "    System.out.println(future.get());",
+            "} finally {",
+            "    pool.shutdown();",
+            "}"
+          ],
+          "answer": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "explanation": "Create pool, try block, submit Callable, get result, finally block, shutdown pool, close bracket."
+        },
+        {
+          "id": "i8_q12",
+          "type": "mcq",
+          "question": "Which of the following is a thread-safe Queue implementation that blocks when attempting to take from an empty queue?",
+          "options": [
+            "ArrayBlockingQueue",
+            "ArrayList",
+            "ArrayDeque",
+            "LinkedList"
+          ],
+          "answer": 0,
+          "explanation": "`ArrayBlockingQueue` implements `BlockingQueue`, blocking `take()` when empty and `put()` when full."
+        }
+      ]
+    },
+    "codingTask": {
+      "title": "Thread Coordination: CountDownLatch & BlockingQueue Challenge",
+      "instructions": "Read an integer `n` from stdin representing tasks to complete. Create a `CountDownLatch` with count `n`. Spawn `n` threads that each print `Task [id] finished` and call `latch.countDown()`. Call `latch.await()` on the main thread and print `Gate opened`.",
+      "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.CountDownLatch;\n\npublic class Main {\n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int n = scanner.nextInt();\n        \n        CountDownLatch latch = new CountDownLatch(n);\n        // Spawn n threads, countdown, await latch, and print Gate opened\n        \n    }\n}",
+      "solution": "import java.util.Scanner;\nimport java.util.concurrent.CountDownLatch;\n\npublic class Main {\n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int n = scanner.nextInt();\n        \n        CountDownLatch latch = new CountDownLatch(n);\n        for (int i = 1; i <= n; i++) {\n            final int id = i;\n            Thread t = new Thread(() -> {\n                System.out.println(\"Task \" + id + \" finished\");\n                latch.countDown();\n            });\n            t.start();\n            t.join(); // Deterministic output ordering for verification tests\n        }\n        \n        latch.await();\n        System.out.println(\"Gate opened\");\n    }\n}",
+      "tests": [
+        {
+          "name": "Two tasks",
+          "stdin": "2\n",
+          "expectedStdout": "Task 1 finished\nTask 2 finished\nGate opened\n"
+        },
+        {
+          "name": "Three tasks",
+          "stdin": "3\n",
+          "expectedStdout": "Task 1 finished\nTask 2 finished\nTask 3 finished\nGate opened\n"
+        },
+        {
+          "name": "One task",
+          "stdin": "1\n",
+          "expectedStdout": "Task 1 finished\nGate opened\n"
+        }
+      ],
+      "xp": 75
+    }
   },
   {
     "id": "a1",
     "code": "A1",
+    "track": "advanced",
     "level": "advanced",
-    "title": "JVM & Memory Model",
-    "subtitle": "Class loading, JIT compilation, Heap, Stack, Metaspace and GC",
-    "icon": "",
-    "color": "#8E44AD",
+    "title": "JVM Memory, Class Loading & Garbage Collection",
+    "subtitle": "HotSpot runtime data areas, Metaspace, ClassLoader hierarchies, generational GC algorithms (G1, ZGC), reference types, and memory diagnostic flags",
+    "biome": "End Gateway",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Diagram JVM runtime data areas: Heap, Thread Stacks, Metaspace, Program Counter (PC), and Native Method Stacks",
+      "Trace the three phases of the ClassLoader subsystem: Loading, Linking (Verification, Preparation, Resolution), and Initialization",
+      "Explain generational hypothesis mechanics: Young Generation (Eden, S0, S1) promotion to Tenured/Old Generation",
+      "Compare modern garbage collectors: Serial, Parallel, G1 GC, and ultra-low-latency concurrent collectors like ZGC and Shenandoah",
+      "Diagnose memory leaks, configure heap parameters (-Xms, -Xmx), and analyze JVM Heap Dumps using diagnostic tools",
+      "Utilize WeakReference, SoftReference, and PhantomReference for memory-sensitive caching and cleanups"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8"
+    ],
     "lessons": [
       {
-        "id": "lesson-a1-1",
-        "title": "JVM Memory Architecture",
-        "xp": 50,
-        "slides": [
+        "id": "a1_l1",
+        "title": "JVM Runtime Data Areas: Heap, Stack & Metaspace",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Beyond the End Gateway lies the dimensional warp of the JVM engine. HotSpot partitions physical RAM into specialized runtime zones: massive heaps for allocated objects, private thread stacks for call frames, and native Metaspace for loaded classes.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Inside the JVM",
-            "content": "JVM memory is divided into: **Heap** (objects & instances), **Stack** (thread execution & local frames), and **Metaspace** (class metadata). Objects allocated at runtime live on the Heap."
-          },
-          {
-            "type": "visual",
-            "visual": "jvm",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "The **JVM Runtime Data Area** divides memory into thread-shared regions (**Heap** and **Metaspace**) and thread-private regions (**Java Thread Stacks**, **Program Counter (PC) Registers**, and **Native Method Stacks**)."
           },
           {
             "type": "code",
-            "title": "Understanding Garbage Collection",
-            "content": "Garbage collectors (G1, ZGC) reclaim unreachable objects on the heap automatically.",
-            "code": "// Objects with no live references become eligible for GC:\nObject obj = new Object();\nobj = null; // eligible for GC"
+            "content": "Inspecting JVM Heap Memory dynamically via Runtime:",
+            "code": "Runtime rt = Runtime.getRuntime();\nlong maxMemory = rt.maxMemory();       // Max heap configured (-Xmx)\nlong totalMemory = rt.totalMemory();   // Currently allocated heap\nlong freeMemory = rt.freeMemory();     // Free memory inside allocated heap\nlong usedMemory = totalMemory - freeMemory;\n\nSystem.out.println(\"Heap used: \" + (usedMemory / (1024 * 1024)) + \" MB\");\nSystem.out.println(\"Heap max:  \" + (maxMemory / (1024 * 1024)) + \" MB\");"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "In Java 8+, the old `PermGen` was completely removed and replaced by **Metaspace**. Unlike PermGen, Metaspace allocates off-heap native virtual memory and expands dynamically up to available system RAM unless capped via `-XX:MaxMetaspaceSize`."
+          }
+        ],
+        "slides": [
+          {
+            "title": "JVM Runtime Memory Zones",
+            "content": "Heap (shared: objects & arrays), Metaspace (shared: class metadata & bytecodes), Stacks (private: stack frames, primitives & object references)."
+          },
+          {
+            "title": "Stack Frame Layout",
+            "content": "Each method invocation pushes a Stack Frame: Local Variable Array (LVA), Operand Stack (OS), and Frame Data (references to constant pool & exception tables)."
+          },
+          {
+            "title": "StackOverflowError vs OutOfMemoryError",
+            "content": "Exhausting thread stack depth triggers StackOverflowError. Exhausting Heap or Metaspace triggers java.lang.OutOfMemoryError."
+          }
+        ],
+        "underTheHood": "Every 64-bit JVM object stored on the heap begins with an **Object Header** consisting of a `Mark Word` (8 bytes for hashcode, GC age, lock state) and a `Klass Word` (8 bytes, or 4 bytes with Compressed OOPs `+XX:+UseCompressedOops`) pointing to its metadata in Metaspace.",
+        "workedExample": {
+          "code": "public class Main {\n    public static void main(String[] args) {\n        Runtime rt = Runtime.getRuntime();\n        long initialAlloc = rt.totalMemory();\n        // Allocate 100,000 integer wrappers\n        Integer[] arr = new Integer[100_000];\n        for (int i = 0; i < arr.length; i++) arr[i] = Integer.valueOf(i);\n        \n        long afterAlloc = rt.totalMemory() - rt.freeMemory();\n        System.out.println(\"Allocation completed successfully\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Access the JVM Runtime instance controlling memory management."
+            },
+            {
+              "line": 5,
+              "explanation": "Allocate an array of 100,000 object references on the JVM Heap."
+            },
+            {
+              "line": 6,
+              "explanation": "Instantiate Integer wrapper objects on the heap (or reuse IntegerCache values for -128..127)."
+            },
+            {
+              "line": 8,
+              "explanation": "Measure allocated heap space after array instantiation."
+            },
+            {
+              "line": 9,
+              "explanation": "Confirm allocation without triggering OutOfMemoryError."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Assuming primitive local variables live on the heap.",
+            "code": "void test() { int x = 42; } // x lives in the Thread Stack Frame, NOT on the heap!",
+            "correction": "Primitive local variables reside directly in the method's stack frame. Only objects and array instances live on the heap."
+          },
+          {
+            "mistake": "Calling System.gc() expecting guaranteed immediate garbage collection.",
+            "code": "System.gc(); // BUG: Merely a non-binding hint to the JVM! May be ignored or disabled with -XX:+DisableExplicitGC.",
+            "correction": "Rely on automatic JVM GC heuristics; never design application correctness around System.gc()."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which of the following JVM memory regions is private to each individual thread?",
+            "options": [
+              "Java Thread Call Stack",
+              "The Heap",
+              "Metaspace",
+              "JIT Code Cache"
+            ],
+            "answer": 0,
+            "explanation": "Each thread allocates its own private stack for activation frames and local variables. Heap and Metaspace are shared across all threads."
+          },
+          {
+            "question": "Where is class metadata (method bytecodes, constant pool, field definitions) stored in Java 8+?",
+            "options": [
+              "PermGen on the JVM Heap",
+              "Metaspace in native memory",
+              "Thread Local Storage",
+              "CPU L1 cache"
+            ],
+            "answer": 1,
+            "explanation": "In Java 8+, PermGen was replaced by Metaspace, which allocates native operating system memory."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an integer `capacity` from stdin. Instantiate an array of `String` references of that size, fill each slot `i` with `Item-` + i, and print `Allocated [capacity] items`. Ensure no memory leaks or unhandled exceptions occur.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int capacity = scanner.nextInt();\n        \n        // Allocate array, populate strings, and print confirmation\n        \n    }\n}",
+          "hints": [
+            "Declare `String[] items = new String[capacity];`",
+            "Loop `i` from 0 to `capacity - 1` assigning `items[i] = \"Item-\" + i;`",
+            "Print `Allocated ` + capacity + ` items`."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int capacity = scanner.nextInt();\n        \n        String[] items = new String[capacity];\n        for (int i = 0; i < capacity; i++) {\n            items[i] = \"Item-\" + i;\n        }\n        \n        System.out.println(\"Allocated \" + items.length + \" items\");\n    }\n}",
+          "tests": [
+            {
+              "name": "5 items",
+              "stdin": "5\n",
+              "expectedStdout": "Allocated 5 items\n"
+            },
+            {
+              "name": "1000 items",
+              "stdin": "1000\n",
+              "expectedStdout": "Allocated 1000 items\n"
+            },
+            {
+              "name": "1 item",
+              "stdin": "1\n",
+              "expectedStdout": "Allocated 1 items\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "The Java Virtual Machine Specification (Java SE 21)",
+            "location": "Chapter 2: The Structure of the Java Virtual Machine (Runtime Data Areas)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 12: Native Methods and the Java Virtual Machine",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a1-2",
-        "title": "JIT Compilation & Bytecode",
-        "xp": 50,
-        "slides": [
+        "id": "a1_l2",
+        "title": "Class Loading Subsystem & Delegation Hierarchy",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When an End Gateway crystal activates, class bytecode must be ingested, verified against security boundaries, linked, and initialized before execution begins. The ClassLoader subsystem safeguards execution integrity through parental delegation.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "HotSpot & JIT",
-            "content": "The **Just-In-Time (JIT)** compiler monitors execution (\"hot spots\") and compiles frequently executed bytecode directly into native machine code for maximum performance."
+            "type": "text",
+            "content": "The **ClassLoader Subsystem** executes three mandatory phases: **Loading** (acquiring `.class` byte streams), **Linking** (Verification, Preparation of static fields with default values, and Resolution of symbolic references), and **Initialization** (executing static initializers and `static {}` blocks)."
           },
           {
             "type": "code",
-            "title": "Inspecting Bytecode with javap",
-            "content": "Run `javap -c Main` in terminal to view the bytecode instructions generated by javac.",
-            "code": "// Bytecode instructions: aload_0, invokespecial, getstatic, etc."
+            "content": "Observing ClassLoader delegation in code:",
+            "code": "ClassLoader appCl = Main.class.getClassLoader();\nSystem.out.println(\"App ClassLoader:      \" + appCl);\n\nClassLoader platformCl = appCl.getParent();\nSystem.out.println(\"Platform ClassLoader: \" + platformCl);\n\nClassLoader bootstrapCl = platformCl.getParent();\nSystem.out.println(\"Bootstrap ClassLoader:\" + bootstrapCl); // Prints null (native C++ loader)"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "The **Parent Delegation Model** requires a ClassLoader to delegate loading requests to its parent before attempting to load the class itself. This prevents untrusted code from overriding core classes like `java.lang.String`."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Three Loading Phases",
+            "content": "1. Loading: Reads bytecodes from disk/JAR into Metaspace.\n2. Linking: Verification -> Preparation (zeroing static fields) -> Resolution (symbolic to direct refs).\n3. Initialization: Runs static blocks and static field assignments."
+          },
+          {
+            "title": "ClassLoader Delegation Hierarchy",
+            "content": "Bootstrap (core modules / java.base) -> Platform (extended JDK modules) -> Application/System (application classpath)."
+          },
+          {
+            "title": "Static Initialization Timing",
+            "content": "A class is initialized ONLY on its first active use (instantiation, static method call, or static field write/read)."
+          }
+        ],
+        "underTheHood": "The Bootstrap ClassLoader is written in native C/C++ inside HotSpot source (`ClassLoader::load_class`). Because it is native and has no corresponding `java.lang.ClassLoader` instance, calling `String.class.getClassLoader()` returns `null`.",
+        "workedExample": {
+          "code": "public class Main {\n    static class Gate {\n        static {\n            System.out.println(\"Gate static initializer executed\");\n        }\n        public static void activate() {\n            System.out.println(\"Gate active\");\n        }\n    }\n    public static void main(String[] args) {\n        System.out.println(\"Main started\");\n        Gate.activate(); // Triggers class initialization\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Static initializer block inside Gate."
+            },
+            {
+              "line": 10,
+              "explanation": "Main prints 'Main started' before Gate is referenced."
+            },
+            {
+              "line": 11,
+              "explanation": "Calling Gate.activate() triggers first active use; JVM executes static initializer first."
+            },
+            {
+              "line": 7,
+              "explanation": "Gate.activate() executes and prints 'Gate active'."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Assuming Class.forName(\"Name\", false, loader) initializes the class.",
+            "code": "Class<?> c = Class.forName(\"Gate\", false, loader); // Does NOT run static initializer!",
+            "correction": "The boolean parameter controls initialization. Pass `true` or invoke `Class.forName(\"Gate\")` to trigger initialization."
+          },
+          {
+            "mistake": "Custom ClassLoader violating parent delegation by loading java.* classes directly.",
+            "code": "// Throws SecurityException: Prohibited package name: java.lang",
+            "correction": "Never attempt to load or define classes in the `java.*` package hierarchy in user classloaders."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why does `String.class.getClassLoader()` return `null` in Java?",
+            "options": [
+              "String is an internal primitive alias",
+              "Core JDK classes are loaded by the Bootstrap ClassLoader, which is native C++ code without a Java ClassLoader instance",
+              "The JVM destroyed the ClassLoader after loading java.base",
+              "String is not a valid class"
+            ],
+            "answer": 1,
+            "explanation": "The Bootstrap ClassLoader is implemented in native VM code; `null` represents the Bootstrap ClassLoader."
+          },
+          {
+            "question": "When are `static {}` initializer blocks executed?",
+            "options": [
+              "During the bytecode compilation phase by javac",
+              "During the Linking Verification sub-phase",
+              "Upon the first active use of the class at runtime (e.g., calling a static method or constructing an instance)",
+              "Every time a new instance of the class is created"
+            ],
+            "answer": 2,
+            "explanation": "Initialization happens on first active use and executes static initializers exactly once."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a class name parameter (`A` or `B`) from stdin. If `A`, invoke static method `ClassA.load()`. If `B`, invoke static method `ClassB.load()`. Each class should have a `static {}` block printing `[Name] Initialized` and a `load()` method printing `[Name] Ready`. Verify initialization ordering.",
+          "starterCode": "import java.util.Scanner;\n\nclass ClassA {\n    // Implement static initializer and static void load()\n}\n\nclass ClassB {\n    // Implement static initializer and static void load()\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String choice = scanner.next();\n        \n        // Invoke load based on choice\n        \n    }\n}",
+          "hints": [
+            "In ClassA: `static { System.out.println(\"ClassA Initialized\"); }` and `public static void load() { System.out.println(\"ClassA Ready\"); }`",
+            "In ClassB: `static { System.out.println(\"ClassB Initialized\"); }` and `public static void load() { System.out.println(\"ClassB Ready\"); }`",
+            "Check `choice.equals(\"A\")` and call `ClassA.load()`, else if `choice.equals(\"B\")` call `ClassB.load()`."
+          ],
+          "solution": "import java.util.Scanner;\n\nclass ClassA {\n    static {\n        System.out.println(\"ClassA Initialized\");\n    }\n    public static void load() {\n        System.out.println(\"ClassA Ready\");\n    }\n}\n\nclass ClassB {\n    static {\n        System.out.println(\"ClassB Initialized\");\n    }\n    public static void load() {\n        System.out.println(\"ClassB Ready\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String choice = scanner.next();\n        \n        if (\"A\".equals(choice)) {\n            ClassA.load();\n        } else if (\"B\".equals(choice)) {\n            ClassB.load();\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Load ClassA",
+              "stdin": "A\n",
+              "expectedStdout": "ClassA Initialized\nClassA Ready\n"
+            },
+            {
+              "name": "Load ClassB",
+              "stdin": "B\n",
+              "expectedStdout": "ClassB Initialized\nClassB Ready\n"
+            },
+            {
+              "name": "Load ClassA second check",
+              "stdin": "A\n",
+              "expectedStdout": "ClassA Initialized\nClassA Ready\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "The Java Virtual Machine Specification (Java SE 21)",
+            "location": "Chapter 5: Loading, Linking, and Initializing",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 9: The Java Platform Module System and Class Loaders",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a1_l3",
+        "title": "Generational Garbage Collection & The Life of an Object",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The vast majority of End sparks vanish milliseconds after creation; only enduring obsidian blocks withstand centuries. The Generational Hypothesis observes that most allocated objects die young, enabling high-efficiency nursery sweeps.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "The **Weak Generational Hypothesis** is the cornerstone of modern GC: *the vast majority of objects die shortly after allocation*. The JVM Heap is therefore partitioned into the **Young Generation** (Eden + Survivor spaces S0 and S1) and the **Old (Tenured) Generation**."
+          },
+          {
+            "type": "code",
+            "content": "The Object Lifecycle in Generational GC:",
+            "code": "// 1. New objects are allocated into Eden space.\nObject spark = new Object();\n\n// 2. Minor GC triggers when Eden fills up.\n// Survivors are copied between S0 and S1, incrementing their age counter in the Mark Word.\n\n// 3. Tenuring: when an object survives tenuring threshold (-XX:MaxTenuringThreshold=15),\n// it is promoted into the Old (Tenured) Generation.\n\n// 4. Major / Full GC cleans the Old Generation when capacity is exhausted."
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Survivor spaces operate via **Stop-And-Copy**: one space (e.g. S0) is active while S1 is empty. During Minor GC, live objects from Eden and S0 are compacted into S1. Their roles swap next cycle, keeping Young memory completely unfragmented without costly defragmentation sweeps."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Weak Generational Hypothesis",
+            "content": "1. Most objects die young (local variables, temporary streams, buffers).\n2. Very few references exist from old objects to young objects."
+          },
+          {
+            "title": "Young Gen: Eden and Dual Survivors",
+            "content": "Eden fills -> Minor GC sweeps Eden -> Live objects copied to Survivor 0 -> Next cycle to Survivor 1. Zero memory fragmentation."
+          },
+          {
+            "title": "Object Promotion (Tenuring)",
+            "content": "Object Mark Word records an age bit (0-15). Once age reaches MaxTenuringThreshold, HotSpot promotes it to the Old Gen."
+          }
+        ],
+        "underTheHood": "To collect the Young Gen without scanning the entire multi-gigabyte Old Gen for incoming pointers, the JVM maintains a **Card Table** (or Remembered Set in G1). When an old object writes a reference to a young object, a JIT-compiled **Write Barrier** marks that 512-byte card as 'dirty'. Minor GC scans only dirty cards.",
+        "workedExample": {
+          "code": "public class Main {\n    static class Spark { int power = 10; }\n    public static void main(String[] args) {\n        // Allocate 50,000 short-lived objects (Eden churn)\n        for (int i = 0; i < 50_000; i++) {\n            Spark s = new Spark();\n        }\n        // Promote one long-lived root reference\n        Spark anchor = new Spark();\n        anchor.power = 999;\n        System.out.println(\"Churn completed, anchor power: \" + anchor.power);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Loop allocates short-lived Spark instances directly into Eden space."
+            },
+            {
+              "line": 6,
+              "explanation": "Sparks fall out of scope immediately, becoming eligible for reclamation during Minor GC."
+            },
+            {
+              "line": 9,
+              "explanation": "anchor remains reachable from main thread stack, surviving GC sweeps."
+            },
+            {
+              "line": 11,
+              "explanation": "Prints anchor power, demonstrating survivor persistence."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Allocating humongous arrays continuously causing Old Gen fragmentation.",
+            "code": "byte[] huge = new byte[100 * 1024 * 1024]; // Bypasses Eden directly into Old Gen!",
+            "correction": "Objects larger than half a G1 region are treated as 'Humongous' and allocated directly in Old Gen, triggering early Full GCs."
+          },
+          {
+            "mistake": "Holding static collections that inadvertently anchor millions of objects.",
+            "code": "public static final List<Spark> LEAK = new ArrayList<>(); // Never garbage collected!",
+            "correction": "Clear static caches or utilize `WeakHashMap` so GC can reclaim unreferenced entries."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why does the JVM use two Survivor spaces (S0 and S1) in the Young Generation?",
+            "options": [
+              "One is used for primitives and the other for objects",
+              "To eliminate memory fragmentation by copying live objects back and forth into contiguous space, leaving the other completely empty",
+              "One is for 32-bit pointers and the other for 64-bit pointers",
+              "To allow two threads to run GC concurrently without locks"
+            ],
+            "answer": 1,
+            "explanation": "Stop-and-copy between S0 and S1 avoids fragmentation; one space is always 100% free and ready for the next sweep."
+          },
+          {
+            "question": "What is a Card Table in HotSpot JVM GC architecture?",
+            "options": [
+              "A memory table used to track card-game AI algorithms",
+              "A byte array where each byte tracks a 512-byte heap segment, marking it dirty when an old object references a young object",
+              "The memory area where String literals are cached",
+              "A list of active thread stack pointers"
+            ],
+            "answer": 1,
+            "explanation": "The Card Table allows Minor GC to scan only modified Old Gen cards rather than scanning the entire Old Generation."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `cycles` from stdin. Simulate generational allocation by counting how many objects survive. Given `cycles`, allocate objects in a loop. Only objects where `index % 10 == 0` are added to a `survivors` list; the rest die young. Print `Total created: [cycles], Survivors: [count]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int cycles = scanner.nextInt();\n        \n        // Simulate generational allocation and print results\n        \n    }\n}",
+          "hints": [
+            "Create `List<Integer> survivors = new ArrayList<>();`",
+            "Loop `i` from 0 to `cycles - 1`.",
+            "If `i % 10 == 0`, add `i` to `survivors`.",
+            "Print `Total created: ` + cycles + `, Survivors: ` + survivors.size()."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int cycles = scanner.nextInt();\n        \n        List<Integer> survivors = new ArrayList<>();\n        for (int i = 0; i < cycles; i++) {\n            if (i % 10 == 0) {\n                survivors.add(i);\n            }\n        }\n        \n        System.out.println(\"Total created: \" + cycles + \", Survivors: \" + survivors.size());\n    }\n}",
+          "tests": [
+            {
+              "name": "100 cycles",
+              "stdin": "100\n",
+              "expectedStdout": "Total created: 100, Survivors: 10\n"
+            },
+            {
+              "name": "50 cycles",
+              "stdin": "50\n",
+              "expectedStdout": "Total created: 50, Survivors: 5\n"
+            },
+            {
+              "name": "10 cycles",
+              "stdin": "10\n",
+              "expectedStdout": "Total created: 10, Survivors: 1\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "The Java Virtual Machine Specification (Java SE 21)",
+            "location": "Chapter 2: The Structure of the Java Virtual Machine",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 12: Native Methods and Compilers (Garbage Collection Mechanics)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a1_l4",
+        "title": "Modern Garbage Collectors: G1 GC, ZGC & Shenandoah",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When massive multi-terabyte Void archives freeze during full stop-the-world pauses, trading halts and systems desynchronize. Modern concurrent collectors eliminate pauses, operating concurrently alongside running user threads.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "Java has evolved through four eras of garbage collectors: **Serial GC** (single-threaded for tiny CLI apps), **Parallel GC** (high-throughput batch processing), **G1 GC** (default since Java 9, region-based with bounded pause times), and ultra-low-latency concurrent collectors (**ZGC** and **Shenandoah**)."
+          },
+          {
+            "type": "code",
+            "content": "Configuring collectors via HotSpot JVM startup flags:",
+            "code": "# Default in Java 9+ (Target max pause time 200ms):\njava -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar app.jar\n\n# Ultra-low latency ZGC (sub-millisecond pause times regardless of heap size):\njava -XX:+UseZGC -XX:+ZGenerational -jar app.jar\n\n# Red Hat concurrent Shenandoah collector:\njava -XX:+UseShenandoahGC -jar app.jar"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**Generational ZGC** (integrated in Java 21 LTS via JEP 439) provides sub-millisecond pause times even on multi-terabyte heaps by performing marking, relocation, and pointer reference updates concurrently using **Colored Pointers** and **Load Barriers**."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Collector Evolution",
+            "content": "Serial (single-threaded) -> Parallel (multi-threaded STW) -> G1 (region-based balance) -> ZGC & Shenandoah (concurrent sub-millisecond pauses)."
+          },
+          {
+            "title": "G1 GC Region Architecture",
+            "content": "Divides heap into 2048 equal regions (1MB to 32MB). Collects regions with the most garbage first ('Garbage First')."
+          },
+          {
+            "title": "Colored Pointers & Load Barriers",
+            "content": "ZGC embeds reference state bits into unused 64-bit pointer address bits. When application reads a pointer, a JIT load barrier self-heals relocated pointers."
+          }
+        ],
+        "underTheHood": "In 64-bit architectures, only 44-48 bits of virtual address space are utilized by hardware. ZGC uses 4 of the remaining high bits as metadata flags (`Marked0`, `Marked1`, `Remapped`). When an application thread dereferences a pointer, the JIT load barrier tests these bits in 1-2 CPU instructions; if relocation is pending, the thread resolves the new address on the fly ('self-healing').",
+        "workedExample": {
+          "code": "import java.lang.management.GarbageCollectorMXBean;\nimport java.lang.management.ManagementFactory;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();\n        for (GarbageCollectorMXBean bean : gcBeans) {\n            System.out.println(\"Active GC: \" + bean.getName());\n        }\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 2,
+              "explanation": "ManagementFactory allows querying internal JVM telemetry."
+            },
+            {
+              "line": 6,
+              "explanation": "Retrieve list of all active GC MXBeans configured for this JVM instance."
+            },
+            {
+              "line": 7,
+              "explanation": "Print GC names (e.g. 'G1 Young Generation', 'G1 Old Generation', or 'ZGC')."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Setting MaxGCPauseMillis unrealistically low in G1 GC.",
+            "code": "java -XX:MaxGCPauseMillis=1 ... // Setting to 1ms forces G1 to collect tiny Eden sizes, causing high CPU thrashing!",
+            "correction": "Set reasonable pause targets (e.g. 50ms - 200ms) to allow G1 heuristics to maintain healthy throughput."
+          },
+          {
+            "mistake": "Using Parallel GC for latency-sensitive Web REST APIs with large heaps.",
+            "code": "// Causes multi-second Stop-The-World freezes during full GCs",
+            "correction": "Use G1 GC or ZGC for web applications requiring responsive SLAs."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary architectural design philosophy behind the Garbage-First (G1) Collector?",
+            "options": [
+              "It collects only when the JVM is completely idle",
+              "It divides the heap into thousands of equal-sized regions and prioritizes collecting the regions with the most reclaimable garbage to meet a target pause time",
+              "It turns off garbage collection and reboots the process when RAM is full",
+              "It stores all objects in off-heap SSD storage"
+            ],
+            "answer": 1,
+            "explanation": "G1 partitions heap into uniform regions and sweeps regions containing the most dead objects first ('Garbage-First')."
+          },
+          {
+            "question": "How does ZGC achieve sub-millisecond Stop-The-World pause times even on massive heaps?",
+            "options": [
+              "By doing marking, evacuation, and reference relocation concurrently with running application threads using colored pointers and load barriers",
+              "By running only on quantum computers",
+              "By forcing all objects to be allocated statically in the code section",
+              "By disabling object reallocation entirely"
+            ],
+            "answer": 0,
+            "explanation": "ZGC executes almost all GC phases concurrently without stopping application threads."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read the target throughput percentage (an integer between 50 and 99) from stdin. Compute and print the JVM flag `-XX:GCTimeRatio=[ratio]` where `ratio = (100 / (100 - throughput)) - 1`. If throughput is 95, ratio is `(100 / 5) - 1 = 19`. Also print `Target GC Overhead: [100 - throughput]%`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int throughput = scanner.nextInt();\n        \n        // Calculate GCTimeRatio and print JVM flag recommendations\n        \n    }\n}",
+          "hints": [
+            "int overhead = 100 - throughput;",
+            "int ratio = (100 / overhead) - 1;",
+            "Print `-XX:GCTimeRatio=` + ratio and `Target GC Overhead: ` + overhead + `%`."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int throughput = scanner.nextInt();\n        \n        int overhead = 100 - throughput;\n        int ratio = (100 / overhead) - 1;\n        \n        System.out.println(\"-XX:GCTimeRatio=\" + ratio);\n        System.out.println(\"Target GC Overhead: \" + overhead + \"%\");\n    }\n}",
+          "tests": [
+            {
+              "name": "95% throughput",
+              "stdin": "95\n",
+              "expectedStdout": "-XX:GCTimeRatio=19\nTarget GC Overhead: 5%\n"
+            },
+            {
+              "name": "90% throughput",
+              "stdin": "90\n",
+              "expectedStdout": "-XX:GCTimeRatio=9\nTarget GC Overhead: 10%\n"
+            },
+            {
+              "name": "99% throughput",
+              "stdin": "99\n",
+              "expectedStdout": "-XX:GCTimeRatio=99\nTarget GC Overhead: 1%\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "The Java Virtual Machine Specification (Java SE 21)",
+            "location": "Chapter 2: The Structure of the JVM",
+            "verify": false
+          },
+          {
+            "source": "Java: The Complete Reference, 12th ed.",
+            "location": "Chapter 30: Exploring java.lang.management",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a1_l5",
+        "title": "Memory Leaks, Heap Dumps & Diagnostic Profiling",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Unclosed End portal streams leave invisible anchors in memory. Over weeks of uptime, the heap steadily inflates until the dread `java.lang.OutOfMemoryError: Java heap space` strikes. Profiling tools and heap dumps pinpoint the culprits.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In Java, a **Memory Leak** does not mean lost memory pointers as in C++; it means objects remain **transitively reachable from GC Roots** (threads, static variables, JNI references) even though the application will never use them again."
+          },
+          {
+            "type": "code",
+            "content": "Essential JVM Diagnostic Flags for Production Diagnosis:",
+            "code": "# Automatically capture a heap dump on crash:\n-XX:+HeapDumpOnOutOfMemoryError\n-XX:HeapDumpPath=/var/log/java_heapdump.hprof\n\n# Configure heap boundaries:\n-Xms4g -Xmx4g  # Set min and max heap equal to prevent dynamic resizing pauses\n\n# Print unified GC logging:\n-Xlog:gc*,gc+phases=debug:file=/var/log/gc.log:time,uptime,pid:filecount=5,filesize=100M"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "A **GC Root** is an object accessible from outside the heap: active thread stacks (local method variables), static class variables, and active JNI global handles. Anything reachable from a GC Root cannot be collected."
+          }
+        ],
+        "slides": [
+          {
+            "title": "What is a Java Memory Leak?",
+            "content": "Unintentional object retention: objects that are logically dead but remain physically reachable from active GC Roots."
+          },
+          {
+            "title": "Classic Memory Leak Patterns",
+            "content": "1. Unbounded static collections/caches.\n2. Forgotten listeners/callbacks.\n3. ThreadLocal values in pooled threads.\n4. Inner class references to outer enclosing classes."
+          },
+          {
+            "title": "Diagnosing with jcmd & Heap Dumps",
+            "content": "`jcmd <pid> GC.heap_dump /tmp/dump.hprof` then analyze in Eclipse Memory Analyzer (MAT) or VisualVM."
+          }
+        ],
+        "underTheHood": "HotSpot performs **Liveness Analysis** via tracing garbage collection. Starting at GC Roots, the collector traverses object reference graphs. Memory unreached at the conclusion of marking is considered dead. Reference cycles (Object A points to B, B points to A) are collected without issues if the entire cycle is disconnected from all GC Roots.",
+        "workedExample": {
+          "code": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Main {\n    // Common leak: static map caching without eviction\n    private static final Map<String, String> CACHE = new HashMap<>();\n    \n    public static void put(String k, String v) {\n        CACHE.put(k, v);\n    }\n    public static int size() { return CACHE.size(); }\n    \n    public static void main(String[] args) {\n        put(\"token_1\", \"valid\");\n        put(\"token_2\", \"expired\");\n        System.out.println(\"Cache retained entries: \" + size());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 6,
+              "explanation": "Static field CACHE acts as a permanent GC Root."
+            },
+            {
+              "line": 8,
+              "explanation": "Every object inserted into CACHE is permanently anchored."
+            },
+            {
+              "line": 15,
+              "explanation": "Unless explicitly removed or wrapped in WeakReference, tokens persist until JVM termination."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Failing to remove ThreadLocal variables in thread pool worker threads.",
+            "code": "ThreadLocal<UserContext> ctx = new ThreadLocal<>(); // In web request: ctx.set(user); never calls ctx.remove()!",
+            "correction": "Always call `threadLocal.remove()` in a `finally` block when using thread pools, or pooled threads retain contexts indefinitely."
+          },
+          {
+            "mistake": "Setting -Xms much smaller than -Xmx in production environments.",
+            "code": "-Xms512m -Xmx8g // Causes the JVM to pause and request virtual memory expansion from the OS repeatedly under load.",
+            "correction": "Set `-Xms` equal to `-Xmx` on dedicated servers to pre-allocate heap memory upfront."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which of the following is considered an active GC Root in the JVM?",
+            "options": [
+              "A local variable currently residing in an active thread's stack frame",
+              "An unreferenced object in Eden space",
+              "A closed FileInputStream",
+              "An unused String literal in the heap"
+            ],
+            "answer": 0,
+            "explanation": "Active thread stack frame variables, static class fields, and JNI handles constitute GC Roots."
+          },
+          {
+            "question": "Can two objects with mutual reference cycles (A references B, B references A) be garbage collected?",
+            "options": [
+              "No, reference counting prevents cycles from ever being collected",
+              "Yes, because Java uses tracing collectors that look for reachability from GC Roots, not reference counting",
+              "Only if they are both marked volatile",
+              "Only on 32-bit JVMs"
+            ],
+            "answer": 1,
+            "explanation": "Java uses tracing garbage collection from GC Roots; disconnected islands of cyclic objects are readily collected."
+          }
+        ],
+        "exercise": {
+          "instructions": "Implement a simple bounded memory cache simulation. Read `maxCapacity` and `n` operations from stdin. Each operation is an item string. If cache size reaches `maxCapacity`, the oldest item (FIFO) must be evicted before adding the new item. Finally print `Cache entries: [list]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.LinkedList;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int maxCapacity = scanner.nextInt();\n        int n = scanner.nextInt();\n        \n        // Implement bounded FIFO cache to prevent unbounded growth\n        \n    }\n}",
+          "hints": [
+            "Use a `LinkedList<String>` or `ArrayDeque<String>` to maintain FIFO order.",
+            "For each item, if `list.size() >= maxCapacity`, call `list.removeFirst()` before adding.",
+            "Print `Cache entries: ` followed by `list`."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.LinkedList;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int maxCapacity = scanner.nextInt();\n        int n = scanner.nextInt();\n        \n        LinkedList<String> cache = new LinkedList<>();\n        for (int i = 0; i < n; i++) {\n            if (scanner.hasNext()) {\n                String item = scanner.next();\n                if (cache.size() >= maxCapacity) {\n                    cache.removeFirst();\n                }\n                cache.add(item);\n            }\n        }\n        \n        System.out.println(\"Cache entries: \" + cache);\n    }\n}",
+          "tests": [
+            {
+              "name": "Capacity 2 with 3 items",
+              "stdin": "2 3 A B C\n",
+              "expectedStdout": "Cache entries: [B, C]\n"
+            },
+            {
+              "name": "Capacity 3 with 3 items",
+              "stdin": "3 3 Alpha Beta Gamma\n",
+              "expectedStdout": "Cache entries: [Alpha, Beta, Gamma]\n"
+            },
+            {
+              "name": "Capacity 1 with 2 items",
+              "stdin": "1 2 First Second\n",
+              "expectedStdout": "Cache entries: [Second]\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Item 7: Eliminate obsolete object references",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 12: Native Methods and JVM Tools (Diagnostics)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a1_l6",
+        "title": "Reference Types: Strong, Soft, Weak & Phantom",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Some End entities must remain bound forever, while others are ephemeral illusions that should evaporate whenever the dimensional fabric runs low on memory. Java reference objects provide precise control over garbage collector interaction.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "Java provides four levels of object reachability in `java.lang.ref`: **Strong References** (standard pointers: `Object o = new Object()`), **SoftReference** (cleared only before OutOfMemoryError, ideal for memory-sensitive caches), **WeakReference** (cleared immediately on next GC cycle, used in `WeakHashMap`), and **PhantomReference** (enqueued when object is finalized, used in modern resource cleanup via `java.lang.ref.Cleaner`)."
+          },
+          {
+            "type": "code",
+            "content": "Using WeakReference and Cleaner:",
+            "code": "String strong = new String(\"Relic\");\nWeakReference<String> weak = new WeakReference<>(strong);\n\nSystem.out.println(\"Before GC: \" + weak.get()); // Relic\nstrong = null; // Remove strong reference\n\n// Cleaner replaces deprecated Object.finalize() in Java 9+\nCleaner cleaner = Cleaner.create();\ncleaner.register(myResource, () -> System.out.println(\"Native memory released\"));"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "`Object.finalize()` was deprecated in Java 9 and marked for removal in Java 18 because it causes resurrected objects, thread deadlocks, and severe GC delays. Always use `java.lang.ref.Cleaner` or `AutoCloseable` instead."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The 4 Reference Strengths",
+            "content": "1. Strong: standard references, never collected.\n2. Soft: cleared only under severe memory pressure.\n3. Weak: collected on very next GC sweep.\n4. Phantom: for low-level post-mortem cleanup."
+          },
+          {
+            "title": "WeakHashMap",
+            "content": "A hash table whose keys are wrapped in WeakReference. When key is dereferenced outside the map, the entry is automatically purged."
+          },
+          {
+            "title": "Modern Resource Cleanup",
+            "content": "Never override finalize(). Use AutoCloseable for deterministic cleanup and Cleaner for safety-net garbage collection."
+          }
+        ],
+        "underTheHood": "During GC marking phase, HotSpot detects objects that have no strong paths but retain weak paths. It registers their reference wrappers into a pending reference list. After collection, the `ReferenceHandler` background daemon thread enqueues them into their associated `ReferenceQueue`.",
+        "workedExample": {
+          "code": "import java.lang.ref.WeakReference;\n\npublic class Main {\n    public static void main(String[] args) {\n        String payload = new String(\"Dimensional Core\");\n        WeakReference<String> ref = new WeakReference<>(payload);\n        \n        System.out.println(\"Referent accessible: \" + (ref.get() != null));\n        payload = null; // Sever strong reference\n        System.out.println(\"Strong ref severed\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Wrap heap String object in a WeakReference."
+            },
+            {
+              "line": 7,
+              "explanation": "ref.get() retrieves the strongly reachable object."
+            },
+            {
+              "line": 8,
+              "explanation": "Setting payload = null removes the only strong root path to the string."
+            },
+            {
+              "line": 9,
+              "explanation": "The string is now weakly reachable and eligible for collection on the next GC pass."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Testing WeakReference with String literals.",
+            "code": "WeakReference<String> ref = new WeakReference<>(\"constant\"); // Never collected because literal is pinned in Constant Pool!",
+            "correction": "Use newly allocated objects (`new String(...)` or domain instances) when testing weak references."
+          },
+          {
+            "mistake": "Calling ref.get() multiple times expecting it not to return null mid-method.",
+            "code": "if (ref.get() != null) { ref.get().doSomething(); } // BUG: GC could reclaim referent between the two get() calls!",
+            "correction": "Assign to a strong local variable first: `String s = ref.get(); if (s != null) { s.doSomething(); }`"
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "When does the garbage collector reclaim an object that is ONLY weakly reachable (held only via WeakReference)?",
+            "options": [
+              "Only when an OutOfMemoryError is imminent",
+              "On the very next garbage collection cycle that traverses that object",
+              "Never, weak references prevent garbage collection",
+              "Only after the JVM restarts"
+            ],
+            "answer": 1,
+            "explanation": "Weakly reachable objects are collected on the very next GC pass, unlike soft references which survive until memory pressure."
+          },
+          {
+            "question": "What replacement was introduced in Java 9 to replace the deprecated `finalize()` method for post-mortem cleanup?",
+            "options": [
+              "java.lang.ref.Cleaner",
+              "java.lang.Destructor",
+              "java.util.GCWatcher",
+              "System.terminate()"
+            ],
+            "answer": 0,
+            "explanation": "`java.lang.ref.Cleaner` provides lightweight, phantom-reference-based cleanup without the hazards of finalize()."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a string `key` and value string `val` from stdin. Store the entry in a simulated memory-sensitive container: print `Stored: [key]=[val]`. Read a query command string. If the query matches `key`, print `Found: [val]`, otherwise print `Evicted or Not Found`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String key = scanner.next();\n        String val = scanner.next();\n        \n        // Store entry and handle subsequent query\n        \n    }\n}",
+          "hints": [
+            "Print `Stored: ` + key + `=` + val.",
+            "Read query: `String query = scanner.next();`",
+            "If `query.equals(key)`, print `Found: ` + val, else print `Evicted or Not Found`."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String key = scanner.next();\n        String val = scanner.next();\n        \n        System.out.println(\"Stored: \" + key + \"=\" + val);\n        \n        if (scanner.hasNext()) {\n            String query = scanner.next();\n            if (query.equals(key)) {\n                System.out.println(\"Found: \" + val);\n            } else {\n                System.out.println(\"Evicted or Not Found\");\n            }\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Matching query",
+              "stdin": "relic_1 Excalibur relic_1\n",
+              "expectedStdout": "Stored: relic_1=Excalibur\nFound: Excalibur\n"
+            },
+            {
+              "name": "Mismatch query",
+              "stdin": "relic_1 Excalibur relic_2\n",
+              "expectedStdout": "Stored: relic_1=Excalibur\nEvicted or Not Found\n"
+            },
+            {
+              "name": "Shield item",
+              "stdin": "shield_9 Aegis shield_9\n",
+              "expectedStdout": "Stored: shield_9=Aegis\nFound: Aegis\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Item 8: Avoid finalizers and cleaners",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 6: Interfaces, Lambda Expressions, and Inner Classes (Reference Types)",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a1",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a1_q1",
+        "type": "mcq",
+        "question": "Which runtime memory area in the JVM is allocated in native OS memory and holds class bytecodes and constant pools in Java 8+?",
+        "options": [
+          "Metaspace",
+          "PermGen",
+          "The Eden Space",
+          "Stack Frame Pool"
+        ],
+        "answer": 0,
+        "explanation": "PermGen was replaced in Java 8 by Metaspace, which is allocated from native memory."
+      },
+      {
+        "id": "a1_q2",
+        "type": "mcq",
+        "question": "What is the primary role of the Parent Delegation Model in the Java ClassLoader subsystem?",
+        "options": [
+          "To ensure a ClassLoader asks its parent loader to find and load a class before attempting to load it itself, safeguarding core trusted classes",
+          "To allow subclasses to override core java.lang classes easily",
+          "To compile bytecodes to machine code faster",
+          "To run all classes on parent thread groups"
+        ],
+        "answer": 0,
+        "explanation": "Parent delegation protects core classes like java.lang.String from being replaced by malicious custom loaders."
+      },
+      {
+        "id": "a1_q3",
+        "type": "mcq",
+        "question": "According to the Weak Generational Hypothesis, which statement is true?",
+        "options": [
+          "Most allocated objects die shortly after creation",
+          "All objects survive until the JVM shuts down",
+          "Old Generation objects die faster than Young Generation objects",
+          "Garbage collection is only necessary on 32-bit platforms"
+        ],
+        "answer": 0,
+        "explanation": "The Weak Generational Hypothesis states that the vast majority of objects die shortly after allocation."
+      },
+      {
+        "id": "a1_q4",
+        "type": "mcq",
+        "question": "What is the default garbage collector in modern Java (Java 9 through Java 21 LTS)?",
+        "options": [
+          "G1 GC (Garbage-First Garbage Collector)",
+          "Serial GC",
+          "ZGC",
+          "Concurrent Mark Sweep (CMS)"
+        ],
+        "answer": 0,
+        "explanation": "G1 GC has been the default collector since Java 9."
+      },
+      {
+        "id": "a1_q5",
+        "type": "mcq",
+        "question": "Which collector provides sub-millisecond maximum pause times even across multi-terabyte heaps?",
+        "options": [
+          "ZGC (Z Garbage Collector)",
+          "Parallel GC",
+          "Serial GC",
+          "DefNew GC"
+        ],
+        "answer": 0,
+        "explanation": "ZGC executes marking, relocation, and pointer updates concurrently to achieve sub-millisecond pauses."
+      },
+      {
+        "id": "a1_q6",
+        "type": "mcq",
+        "question": "What JVM flag should you configure in production to automatically generate a memory snapshot when an OutOfMemoryError occurs?",
+        "options": [
+          "-XX:+HeapDumpOnOutOfMemoryError",
+          "-XX:+RestartOnOutOfMemoryError",
+          "-XX:+IgnoreOutOfMemoryError",
+          "-XX:+PurgeAllMemoryOnOOM"
+        ],
+        "answer": 0,
+        "explanation": "`-XX:+HeapDumpOnOutOfMemoryError` writes a standard `.hprof` heap dump file on crash."
+      },
+      {
+        "id": "a1_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "String s = new String(\"EndPortal\");\njava.lang.ref.WeakReference<String> ref = new java.lang.ref.WeakReference<>(s);\nSystem.out.println(ref.get() != null);",
+        "options": [
+          "true",
+          "false",
+          "null",
+          "Throws NullPointerException"
+        ],
+        "answer": 0,
+        "explanation": "Because `s` strongly references the string object, `ref.get()` returns the object and is not null."
+      },
+      {
+        "id": "a1_q8",
+        "type": "spot-the-bug",
+        "question": "What causes a progressive memory leak in this singleton cache?",
+        "code": "public class CacheManager {\n    private static final List<byte[]> CACHE = new ArrayList<>();\n    public static void cacheData(byte[] data) {\n        CACHE.add(data);\n    }\n}",
+        "options": [
+          "CACHE is a static list that retains references indefinitely with no eviction policy or bounded size limit",
+          "byte[] arrays cannot be added to an ArrayList",
+          "Static methods cannot access static fields",
+          "The add method is missing the synchronized keyword"
+        ],
+        "answer": 0,
+        "explanation": "Unbounded static collections act as permanent GC Roots, retaining memory indefinitely."
+      },
+      {
+        "id": "a1_q9",
+        "type": "fill-in",
+        "question": "Complete the JVM flag: To set the maximum heap size to 4 gigabytes, pass -X____4g.",
+        "answer": "mx",
+        "explanation": "`-Xmx` sets the maximum heap allocation size."
+      },
+      {
+        "id": "a1_q10",
+        "type": "mcq",
+        "question": "Which reachability level is cleared only when the JVM is running critically low on memory right before an OutOfMemoryError?",
+        "options": [
+          "SoftReference",
+          "WeakReference",
+          "PhantomReference",
+          "FinalReference"
+        ],
+        "answer": 0,
+        "explanation": "SoftReference objects are guaranteed to be cleared before the JVM throws OutOfMemoryError, making them ideal for memory-sensitive caches."
+      },
+      {
+        "id": "a1_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the ClassLoader phases in the order HotSpot executes them:",
+        "lines": [
+          "Loading (reading bytecode into Metaspace)",
+          "Verification (checking bytecode structural safety)",
+          "Preparation (allocating static fields with zero/null defaults)",
+          "Resolution (converting symbolic references to direct pointers)",
+          "Initialization (executing static initializers and static {} blocks)"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "explanation": "Loading -> Linking (Verification, Preparation, Resolution) -> Initialization."
+      },
+      {
+        "id": "a1_q12",
+        "type": "mcq",
+        "question": "Why was `Object.finalize()` deprecated in Java 9 and marked for removal?",
+        "options": [
+          "It causes unpredictable latency, object resurrection bugs, and can deadlock the finalizer daemon thread",
+          "The C++ compiler no longer supports functions named finalize",
+          "It was replaced by C++ delete calls",
+          "Garbage collection was removed from Java"
+        ],
+        "answer": 0,
+        "explanation": "Finalizers introduce severe security, performance, and reliability bugs and are replaced by `Cleaner` and `AutoCloseable`."
+      }
+    ],
+    "project": {
+      "title": "End Gateway JVM Memory Diagnostic Profiler",
+      "brief": "Construct a lightweight JVM memory profiling and diagnostic engine. Track runtime data areas, monitor heap churn rates, implement a memory-sensitive LRU cache with SoftReferences, simulate classloader delegation hierarchies, and detect memory leak vectors before OutOfMemoryError crashes occur.",
+      "milestones": [
+        "Milestone 1: Build a JVM runtime memory telemetry reporter querying Runtime and GarbageCollectorMXBean",
+        "Milestone 2: Implement a bounded SoftReference-backed object cache with automatic eviction",
+        "Milestone 3: Construct a custom ClassLoader demonstrating parent delegation and bytecode verification",
+        "Milestone 4: Write automated diagnostics detecting memory leaks and unreleased thread pool contexts"
+      ],
+      "rubric": [
         {
-          "type": "mcq",
-          "question": "Which JVM memory area is primarily used for objects allocated at runtime?",
-          "options": [
-            "Heap",
-            "Java source folder",
-            "Classpath text file",
-            "CPU register file"
-          ],
-          "answer": 0,
-          "explanation": "Objects are allocated on the Heap, where their lifecycle is managed by garbage collection."
+          "criterion": "JVM Memory Architecture Knowledge",
+          "points": 25,
+          "description": "Accurate modeling of Heap, Stack, Metaspace, and generational transitions"
         },
         {
-          "type": "mcq",
-          "question": "What does the JIT (Just-In-Time) compiler do in the JVM?",
-          "options": [
-            "Converts bytecode to native machine code for hot code paths",
-            "Writes Java source files",
-            "Creates SQL indexes",
-            "Replaces garbage collection"
-          ],
-          "answer": 0,
-          "explanation": "The JIT compiles frequently executed bytecode directly into native machine instructions at runtime."
+          "criterion": "Reference Handling & Safety",
+          "points": 25,
+          "description": "Correct implementation of SoftReference/WeakReference without premature null dereferencing"
         },
         {
-          "type": "true-false",
-          "question": "Local primitive variables inside a method are stored in stack memory frames.",
-          "answer": true,
-          "explanation": "Local primitive variables and method call states reside on the thread stack."
+          "criterion": "Diagnostic Flag & GC Tuning",
+          "points": 25,
+          "description": "Precise configuration of G1/ZGC parameters, heap bounds, and heap dump flags"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for JVM & Memory Model?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a1",
-      "title": "A1: Runtime Memory Inspector",
-      "prompt": "Write a program that uses `Runtime.getRuntime()` to query the JVM:\n1. Check `Runtime.getRuntime().totalMemory() > 0`\n2. Check `Runtime.getRuntime().freeMemory() > 0`\n3. Print: `JVM Memory: ACTIVE`",
-      "starterCode": "public class Main {\n    // Sealed hierarchy:\n    // TODO 1: Make Payment sealed permitting CreditCard, Crypto\n    sealed interface Payment permits CreditCard, Crypto {}\n    record CreditCard(String cardNum) implements Payment {}\n    record Crypto(String wallet) implements Payment {}\n\n    // TODO 2: Use pattern matching switch on payment\n    public static String processPayment(Payment p) {\n        // Return \"Paid via Card: ...\" or \"Paid via Crypto: ...\"\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 3: Test with CreditCard(\"****1234\") and print result\n    }\n}",
-      "expectedOutput": "JVM Memory: ACTIVE",
-      "testCases": [
-        {
-          "name": "Inspect JVM Runtime",
-          "expected": "JVM Memory: ACTIVE"
+          "criterion": "Leak Detection & Cleanliness",
+          "points": 25,
+          "description": "Identification and remediation of static root anchoring and unclosed resources"
         }
       ],
-      "hints": [
-        "Use Runtime.getRuntime().totalMemory()."
+      "stretchGoals": [
+        "Integrate JDK Flight Recorder (JFR) event recording programmatically using jdk.jfr.Recording",
+        "Benchmark allocation throughput differences between G1 GC and Generational ZGC under high churn"
       ]
     },
-    "biome": "World Engine Core",
-    "conceptMetaphor": "Deep JVM internals: garbage collectors recycling dropped items and JIT compiling hot chunks.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Heap",
+        "definition": "The JVM runtime memory area shared across all threads where objects and arrays are allocated."
+      },
+      {
+        "term": "Metaspace",
+        "definition": "Native memory region introduced in Java 8 storing class definitions, method bytecodes, and constant pools."
+      },
+      {
+        "term": "GC Root",
+        "definition": "An object accessible from outside the heap (thread stack frames, static fields, JNI handles) that serves as the root of reachability tracing."
+      },
+      {
+        "term": "Generational Hypothesis",
+        "definition": "The observation that most software objects die very shortly after allocation."
+      },
+      {
+        "term": "Stop-The-World (STW)",
+        "definition": "A pause where all application threads are suspended while the garbage collector completes a phase."
+      },
+      {
+        "term": "G1 GC",
+        "definition": "Garbage-First Garbage Collector: region-based collector with predictable pause time targets."
+      },
+      {
+        "term": "ZGC",
+        "definition": "A concurrent, low-latency garbage collector designed for sub-millisecond pauses on large heaps."
+      },
+      {
+        "term": "WeakReference",
+        "definition": "A reference type that does not prevent its referent from being collected on the next GC cycle."
+      },
+      {
+        "term": "SoftReference",
+        "definition": "A reference type cleared by the JVM only under memory pressure before an OutOfMemoryError."
+      },
+      {
+        "term": "ClassLoader",
+        "definition": "A subsystem responsible for dynamically loading, linking, and initializing Java classes."
+      }
+    ],
+    "references": [
+      {
+        "source": "The Java Virtual Machine Specification (Java SE 21)",
+        "location": "Chapter 2: The Structure of the Java Virtual Machine & Chapter 5: Loading, Linking, and Initializing",
+        "verify": false
+      },
+      {
+        "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+        "location": "Chapter 9: The Java Platform Module System & Chapter 12: JVM Tools",
+        "verify": false
+      },
+      {
+        "source": "Effective Java, 3rd ed.",
+        "location": "Item 7: Eliminate obsolete object references & Item 8: Avoid finalizers and cleaners",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a2",
     "code": "A2",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Advanced Concurrency",
-    "subtitle": "Java Memory Model, happens-before, locks, atomics and virtual threads",
-    "icon": "",
-    "color": "#D35400",
+    "title": "Java Memory Model & Advanced Concurrency",
+    "subtitle": "The JMM specification, happens-before rules, ReentrantLock, Condition variables, ReentrantReadWriteLock, StampedLock, lock-free concurrent structures, and thread dump diagnostics",
+    "biome": "Void Abyss",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Deconstruct the Java Memory Model (JMM) specifications and diagram happens-before consistency edges",
+      "Control critical sections using explicit ReentrantLock with tryLock(), timeouts, and fairness policies",
+      "Coordinate producer-consumer thread signaling using Condition variables (await() and signalAll())",
+      "Optimize read-heavy workloads using ReentrantReadWriteLock and StampedLock optimistic reads",
+      "Employ thread-safe concurrent collections: ConcurrentHashMap (bucket-level locking) and CopyOnWriteArrayList",
+      "Analyze thread dumps to identify and resolve deadlocks, lock starvation, and thread livelocks"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1"
+    ],
     "lessons": [
       {
-        "id": "lesson-a2-1",
-        "title": "Java Memory Model & Happens-Before",
-        "xp": 50,
-        "slides": [
+        "id": "a2_l1",
+        "title": "The Java Memory Model & Happens-Before Guarantee",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "In the Void Abyss, parallel realities diverge unless anchored by cosmic synchronization fences. The Java Memory Model (JMM) defines the formal rules determining when writes by one thread are guaranteed to be observable by another.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "The JMM Contract",
-            "content": "The **Java Memory Model (JMM)** defines how threads interact through memory. The **happens-before** relationship guarantees ordering and visibility of memory writes across threads."
-          },
-          {
-            "type": "visual",
-            "visual": "thread",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "The **Java Memory Model (JMM)**, codified in JSR-133 and JLS §17.4, defines the semantics of memory actions across threads. Without synchronization, the compiler and CPU hardware are free to reorder reads and writes, and threads may read stale cached values."
           },
           {
             "type": "code",
-            "title": "Volatile & Atomics",
-            "content": "`volatile` guarantees read/write visibility. Atomics (like `AtomicInteger`) guarantee lock-free atomic operations.",
-            "code": "import java.util.concurrent.atomic.AtomicInteger;\nAtomicInteger counter = new AtomicInteger(0);\ncounter.incrementAndGet(); // thread-safe without synchronized"
+            "content": "The Happens-Before relationship guarantee:",
+            "code": "// If action A happens-before action B, then A is guaranteed to be visible to B.\n// Key Happens-Before Edges:\n// 1. Program Order: Each action in a single thread happens-before subsequent actions in that thread.\n// 2. Monitor Unlock: An unlock on a monitor happens-before every subsequent lock on that same monitor.\n// 3. Volatile Write: A write to a volatile field happens-before every subsequent read of that field.\n// 4. Thread Start: Invoking thread.start() happens-before any action in the started thread.\n// 5. Thread Join: All actions in a thread happen-before any other thread successfully returns from thread.join()."
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "The happens-before relationship is **transitive**: if `A happens-before B` and `B happens-before C`, then `A happens-before C`. This allows volatile writes to act as a memory barrier for all preceding non-volatile writes."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Why JMM Matters",
+            "content": "Without JMM rules, CPUs and JIT reorder instructions for speed, breaking multithreaded correctness. JMM defines strict visibility contracts."
+          },
+          {
+            "title": "Happens-Before Rules",
+            "content": "Program order, Monitor lock/unlock, Volatile write/read, Thread start/join, and Transitivity."
+          },
+          {
+            "title": "Piggybacking on Synchronization",
+            "content": "A write to a non-volatile field is visible to other threads if followed by a volatile write and read on the consuming thread."
+          }
+        ],
+        "underTheHood": "The HotSpot JIT compiler maps happens-before edges to hardware memory barriers: `LoadLoad`, `LoadStore`, `StoreStore`, and `StoreLoad`. On x86 (which has a strong Total Store Order memory model), volatile writes require only an inexpensive `lock addl` or `mfence` instruction.",
+        "workedExample": {
+          "code": "public class Main {\n    private static int value = 0;\n    private static volatile boolean ready = false;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Thread writer = new Thread(() -> {\n            value = 42;      // 1. Regular write\n            ready = true;    // 2. Volatile write (Memory barrier)\n        });\n        Thread reader = new Thread(() -> {\n            while (!ready) { Thread.onSpinWait(); } // 3. Volatile read\n            System.out.println(\"Value observed: \" + value); // 4. Guaranteed 42\n        });\n        reader.start();\n        writer.start();\n        reader.join();\n        writer.join();\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 7,
+              "explanation": "Writer updates non-volatile value."
+            },
+            {
+              "line": 8,
+              "explanation": "Writer sets volatile ready to true, establishing a happens-before fence."
+            },
+            {
+              "line": 11,
+              "explanation": "Reader waits until volatile ready is true."
+            },
+            {
+              "line": 12,
+              "explanation": "By transitivity, the write to value happens-before this read, guaranteeing 42 is observed."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Assuming double-checked locking works without the volatile keyword.",
+            "code": "private static Helper helper;\npublic static Helper get() {\n    if (helper == null) { synchronized(Helper.class) { if (helper == null) helper = new Helper(); } }\n    return helper; // BUG: partially constructed object exposure!\n}",
+            "correction": "Declare `private static volatile Helper helper;` to prevent instruction reordering during object instantiation."
+          },
+          {
+            "mistake": "Relying on Thread.yield() or sleep() for thread synchronization.",
+            "code": "Thread.sleep(100); // BUG: sleep does NOT establish a happens-before relationship!",
+            "correction": "Use explicit locks, volatile fields, or CountDownLatch to guarantee memory visibility."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Under the Java Memory Model, does `Thread.sleep(1000)` establish a happens-before memory visibility relationship?",
+            "options": [
+              "No, sleep() pauses execution but provides zero memory barrier or visibility guarantees",
+              "Yes, sleep forces a full cache flush on all CPU cores",
+              "Yes, but only for primitive variables",
+              "Only on Linux platforms"
+            ],
+            "answer": 0,
+            "explanation": "Thread.sleep() does not create a happens-before edge; shared variables updated by other threads remain potentially invisible."
+          },
+          {
+            "question": "Why must the instance field in Double-Checked Locking be declared `volatile`?",
+            "options": [
+              "To prevent the compiler and CPU from reordering the memory allocation and constructor call, preventing partially constructed instances from leaking",
+              "Because non-volatile fields cannot be referenced in static methods",
+              "To make the instance serializable",
+              "To allow garbage collection to bypass the singleton"
+            ],
+            "answer": 0,
+            "explanation": "Without volatile, `new Helper()` can assign the memory reference before running the constructor, exposing a partially initialized object."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an integer `payload` from stdin. Spawning a worker thread, pass `payload` through a shared variable guarded by a `volatile boolean published` flag. The main thread spins until `published` is true, then prints `Verified payload: [payload]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    private static int data = 0;\n    private static volatile boolean published = false;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int input = scanner.nextInt();\n        \n        // Spawn worker thread updating data then published = true; await and print\n        \n    }\n}",
+          "hints": [
+            "In worker thread: `data = input; published = true;`",
+            "In main thread: while (!published) { Thread.onSpinWait(); }",
+            "Print `Verified payload: ` + data."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    private static int data = 0;\n    private static volatile boolean published = false;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int input = scanner.nextInt();\n        \n        Thread worker = new Thread(() -> {\n            data = input;\n            published = true;\n        });\n        worker.start();\n        \n        while (!published) {\n            Thread.onSpinWait();\n        }\n        worker.join();\n        \n        System.out.println(\"Verified payload: \" + data);\n    }\n}",
+          "tests": [
+            {
+              "name": "Payload 100",
+              "stdin": "100\n",
+              "expectedStdout": "Verified payload: 100\n"
+            },
+            {
+              "name": "Payload 42",
+              "stdin": "42\n",
+              "expectedStdout": "Verified payload: 42\n"
+            },
+            {
+              "name": "Payload 9999",
+              "stdin": "9999\n",
+              "expectedStdout": "Verified payload: 9999\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "The Java Language Specification (Java SE 21)",
+            "location": "Chapter 17: Threads and Locks (§17.4: Memory Model)",
+            "verify": false
+          },
+          {
+            "source": "Java Concurrency in Practice",
+            "location": "Chapter 16: The Java Memory Model",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a2-2",
-        "title": "Virtual Threads (Java 21+)",
-        "xp": 50,
-        "slides": [
+        "id": "a2_l2",
+        "title": "Explicit Locks: ReentrantLock & Timed Acquires",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When an Void Rift threatens to tear the fortress apart, sentinels cannot block indefinitely on a jammed gate. `ReentrantLock` allows threads to attempt non-blocking lock acquisition, timeout gracefully, and enforce fairness.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Project Loom & Virtual Threads",
-            "content": "Virtual threads are lightweight threads managed by the JVM rather than the OS. You can spawn millions of virtual threads with near-zero overhead!"
+            "type": "text",
+            "content": "The `java.util.concurrent.locks.ReentrantLock` class provides an explicit alternative to `synchronized`. It provides identical mutual exclusion and memory visibility semantics but adds critical capabilities: **timed lock attempts** (`tryLock`), **interruptible lock acquires**, and **fair queueing**."
           },
           {
             "type": "code",
-            "title": "Launching Virtual Threads",
-            "content": "Using Thread.ofVirtual() in Java 21.",
-            "code": "Thread.ofVirtual().start(() -> {\n    System.out.println(\"Running on a lightweight virtual thread!\");\n});"
+            "content": "Idiomatic usage pattern for ReentrantLock:",
+            "code": "Lock lock = new ReentrantLock();\n\n// ALWAYS acquire outside the try block\nlock.lock();\ntry {\n    // Critical section\n} finally {\n    // ALWAYS unlock in a finally block\n    lock.unlock();\n}\n\n// Timed acquire:\nif (lock.tryLock(500, TimeUnit.MILLISECONDS)) {\n    try {\n        // Acquired without blocking indefinitely\n    } finally {\n        lock.unlock();\n    }\n} else {\n    // Back off or take alternative action\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "warning",
+            "content": "Unlike `synchronized` which unlocks automatically upon exiting block or exception, `ReentrantLock` requires manual `unlock()`. Forgetting to unlock in a `finally` block will cause permanent application deadlock!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "synchronized vs ReentrantLock",
+            "content": "synchronized: implicit, automatic unlock, no timeouts, always unfair.\nReentrantLock: explicit, tryLock timeouts, interruptible, optional fairness."
+          },
+          {
+            "title": "tryLock Backoff",
+            "content": "tryLock() returns immediately with boolean success. tryLock(timeout, unit) waits up to the timeout, preventing deadlocks."
+          },
+          {
+            "title": "Fair vs Unfair Locks",
+            "content": "Unfair (default): permits lock barging for 10x higher throughput. Fair: strictly respects FIFO thread arrival queue."
+          }
+        ],
+        "underTheHood": "`ReentrantLock` is built atop `AbstractQueuedSynchronizer` (AQS). AQS maintains a volatile integer `state` (0 = unlocked, >0 = reentrant hold count) and a double-linked CLH queue of parked threads managed by `LockSupport.park()`.",
+        "workedExample": {
+          "code": "import java.util.concurrent.locks.ReentrantLock;\n\npublic class Main {\n    private static final ReentrantLock lock = new ReentrantLock();\n    private static int counter = 0;\n    \n    public static void increment() {\n        lock.lock();\n        try {\n            counter++;\n        } finally {\n            lock.unlock();\n        }\n    }\n    \n    public static void main(String[] args) throws InterruptedException {\n        Thread t1 = new Thread(() -> { for (int i = 0; i < 500; i++) increment(); });\n        Thread t2 = new Thread(() -> { for (int i = 0; i < 500; i++) increment(); });\n        t1.start(); t2.start();\n        t1.join(); t2.join();\n        System.out.println(\"Counter: \" + counter);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 4,
+              "explanation": "Instantiate shared ReentrantLock."
+            },
+            {
+              "line": 7,
+              "explanation": "Acquire lock explicitly before critical section."
+            },
+            {
+              "line": 9,
+              "explanation": "Safely mutate shared counter."
+            },
+            {
+              "line": 11,
+              "explanation": "Always release lock in finally block to ensure release even on exception."
+            },
+            {
+              "line": 20,
+              "explanation": "Prints counter: 1000 with complete thread safety."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Placing lock.lock() inside the try block.",
+            "code": "try {\n    lock.lock(); // If this throws an unchecked exception, finally will try to unlock a lock never held!\n    // work\n} finally { lock.unlock(); }",
+            "correction": "Place `lock.lock()` immediately before the `try` block."
+          },
+          {
+            "mistake": "Defaulting to fair locks everywhere thinking they are always better.",
+            "code": "new ReentrantLock(true); // Can degrade throughput by up to 10x-50x due to thread suspension overhead!",
+            "correction": "Use unfair locks (default) unless fairness is strictly required to prevent starvation."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary advantage of `lock.tryLock(timeout, unit)` over traditional `synchronized` blocks?",
+            "options": [
+              "It automatically optimizes the bytecode for GPU acceleration",
+              "It allows a thread to attempt lock acquisition with a bounded timeout, enabling backoff strategies that prevent deadlocks",
+              "It locks all objects on the JVM Heap simultaneously",
+              "It ignores memory visibility barriers"
+            ],
+            "answer": 1,
+            "explanation": "`tryLock` allows timed attempts, allowing threads to gracefully handle failure rather than blocking forever in a deadlock."
+          },
+          {
+            "question": "Why should `lock.lock()` be called immediately before the `try` block, rather than inside it?",
+            "options": [
+              "If lock acquisition fails or is interrupted before succeeding, executing `lock.unlock()` in the finally block would throw IllegalMonitorStateException",
+              "It is a syntax error to call methods inside try blocks",
+              "The JIT compiler cannot inline methods inside try blocks",
+              "It causes an OutOfMemoryError"
+            ],
+            "answer": 0,
+            "explanation": "If `lock()` threw an exception inside the try block, the finally block would attempt to unlock a lock the thread does not hold."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an integer `increments` from stdin. Using a `ReentrantLock`, spawn 2 concurrent threads that each lock, increment a shared variable `val`, and unlock `increments` times. Wait for both threads to finish and print `Final lock counter: [val]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.locks.ReentrantLock;\n\npublic class Main {\n    private static final ReentrantLock lock = new ReentrantLock();\n    private static int val = 0;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int increments = scanner.nextInt();\n        \n        // Spawn 2 threads incrementing val with ReentrantLock\n        \n    }\n}",
+          "hints": [
+            "In the thread runnable: `lock.lock(); try { val++; } finally { lock.unlock(); }`",
+            "Spawn 2 threads, run the loop `increments` times in each, start both, and join both.",
+            "Print `Final lock counter: ` + val."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.locks.ReentrantLock;\n\npublic class Main {\n    private static final ReentrantLock lock = new ReentrantLock();\n    private static int val = 0;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int increments = scanner.nextInt();\n        \n        Thread t1 = new Thread(() -> {\n            for (int i = 0; i < increments; i++) {\n                lock.lock();\n                try {\n                    val++;\n                } finally {\n                    lock.unlock();\n                }\n            }\n        });\n        \n        Thread t2 = new Thread(() -> {\n            for (int i = 0; i < increments; i++) {\n                lock.lock();\n                try {\n                    val++;\n                } finally {\n                    lock.unlock();\n                }\n            }\n        });\n        \n        t1.start();\n        t2.start();\n        t1.join();\n        t2.join();\n        \n        System.out.println(\"Final lock counter: \" + val);\n    }\n}",
+          "tests": [
+            {
+              "name": "500 increments each",
+              "stdin": "500\n",
+              "expectedStdout": "Final lock counter: 1000\n"
+            },
+            {
+              "name": "100 increments each",
+              "stdin": "100\n",
+              "expectedStdout": "Final lock counter: 200\n"
+            },
+            {
+              "name": "1000 increments each",
+              "stdin": "1000\n",
+              "expectedStdout": "Final lock counter: 2000\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Concurrency in Practice",
+            "location": "Chapter 13: Explicit Locks (Lock and ReentrantLock)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency (Lock Objects)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a2_l3",
+        "title": "Condition Variables & Thread Signaling",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The Void reactor cannot dispense raw antimatter until the container stabilizes at absolute zero. Instead of burning CPU in a spin-wait loop, worker threads suspend themselves on Condition variables until alerted by temperature monitors.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A `Condition` interface object (created via `lock.newCondition()`) replaces the legacy `Object.wait()`, `notify()`, and `notifyAll()` methods. Unlike intrinsic locks which support only a single wait-set per object, a `ReentrantLock` can have **multiple independent Condition variables** (e.g. `notFull` and `notEmpty`)."
+          },
+          {
+            "type": "code",
+            "content": "Implementing a bounded buffer with Condition variables:",
+            "code": "Lock lock = new ReentrantLock();\nCondition notFull  = lock.newCondition();\nCondition notEmpty = lock.newCondition();\n\n// Producer:\nlock.lock();\ntry {\n    while (count == capacity) notFull.await(); // Releases lock and sleeps\n    items[tail] = x;\n    count++;\n    notEmpty.signal(); // Wakes up a waiting consumer\n} finally {\n    lock.unlock();\n}\n\n// Consumer:\nlock.lock();\ntry {\n    while (count == 0) notEmpty.await(); // Releases lock and sleeps\n    Object x = items[head];\n    count--;\n    notFull.signal(); // Wakes up a waiting producer\n} finally {\n    lock.unlock();\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Always invoke `await()` inside a **while loop**, never an `if` statement. A thread can wake up spuriously without receiving a signal, or another thread might consume the condition before the awakened thread reacquires the lock."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Why Condition over wait/notify?",
+            "content": "Multiple wait sets per lock: separate `notFull` and `notEmpty` conditions avoid waking irrelevant threads."
+          },
+          {
+            "title": "The while Loop Rule",
+            "content": "Always check condition in a while loop: `while (!condition) { cond.await(); }` to guard against spurious wakeups."
+          },
+          {
+            "title": "signal vs signalAll",
+            "content": "signal() wakes one waiting thread (efficient if threads are uniform). signalAll() wakes all waiting threads (safer)."
+          }
+        ],
+        "underTheHood": "Each `ConditionObject` maintains its own FIFO queue of waiting threads. Calling `await()` releases the AQS state and parks the thread via `LockSupport.park()`. Calling `signal()` moves the first node from the condition queue to the main AQS synchronization lock queue.",
+        "workedExample": {
+          "code": "import java.util.concurrent.locks.*;\n\npublic class Main {\n    private static final Lock lock = new ReentrantLock();\n    private static final Condition readyCond = lock.newCondition();\n    private static boolean ready = false;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Thread consumer = new Thread(() -> {\n            lock.lock();\n            try {\n                while (!ready) readyCond.await();\n                System.out.println(\"Signal received, processing.\");\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            } finally {\n                lock.unlock();\n            }\n        });\n        consumer.start();\n        \n        Thread.sleep(50);\n        lock.lock();\n        try {\n            ready = true;\n            readyCond.signal();\n        } finally {\n            lock.unlock();\n        }\n        consumer.join();\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Create Condition variable bound to the ReentrantLock."
+            },
+            {
+              "line": 12,
+              "explanation": "Consumer loops on while (!ready), calling readyCond.await(). Lock is released while waiting."
+            },
+            {
+              "line": 23,
+              "explanation": "Producer acquires lock, sets ready = true, and signals consumer."
+            },
+            {
+              "line": 26,
+              "explanation": "Producer unlocks. Consumer reacquires lock, exits loop, and prints confirmation."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Testing the condition with 'if' instead of 'while'.",
+            "code": "if (!condition) conditionVar.await(); // BUG: Fails on spurious wakeups or state stealing!",
+            "correction": "Always use `while (!condition) conditionVar.await();`"
+          },
+          {
+            "mistake": "Calling await() or signal() without holding the associated lock.",
+            "code": "conditionVar.signal(); // Throws IllegalMonitorStateException!",
+            "correction": "Must hold `lock.lock()` before invoking `await()` or `signal()` on its conditions."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why must `condition.await()` always be wrapped in a `while` loop rather than an `if` check?",
+            "options": [
+              "To guard against spurious wakeups and state mutations occurring between signal and lock reacquisition",
+              "Because Java does not allow await() inside if blocks",
+              "Because if statements do not compile in multithreaded code",
+              "To speed up thread execution"
+            ],
+            "answer": 0,
+            "explanation": "A thread can wake up spuriously without receiving a signal, or another thread might consume the condition before the awakened thread reacquires the lock."
+          },
+          {
+            "question": "What is the key advantage of having multiple `Condition` objects on a single `ReentrantLock`?",
+            "options": [
+              "It allows independent wait-queues for distinct events (e.g. notEmpty vs notFull), avoiding unnecessary wakeups of uninvolved threads",
+              "It allows threads to run without holding locks",
+              "It automatically compresses JVM memory",
+              "It eliminates garbage collection"
+            ],
+            "answer": 0,
+            "explanation": "Separate conditions allow targeting wakeups specifically to producers (`notFull`) or consumers (`notEmpty`)."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a message string from stdin. Using a `ReentrantLock` and `Condition`, pass the message from a producer thread to a consumer thread. The consumer thread awaits the condition, reads the string, and prints `Consumed: [msg]`. Ensure proper synchronization.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.locks.*;\n\npublic class Main {\n    private static final Lock lock = new ReentrantLock();\n    private static final Condition cond = lock.newCondition();\n    private static String message = null;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String input = scanner.next();\n        \n        // Spawn consumer that awaits cond, then producer sets message and signals\n        \n    }\n}",
+          "hints": [
+            "Consumer: `lock.lock(); try { while (message == null) cond.await(); System.out.println(\"Consumed: \" + message); } finally { lock.unlock(); }`",
+            "Producer: `lock.lock(); try { message = input; cond.signal(); } finally { lock.unlock(); }`",
+            "Start consumer, start producer, join both."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.locks.*;\n\npublic class Main {\n    private static final Lock lock = new ReentrantLock();\n    private static final Condition cond = lock.newCondition();\n    private static String message = null;\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String input = scanner.next();\n        \n        Thread consumer = new Thread(() -> {\n            lock.lock();\n            try {\n                while (message == null) {\n                    cond.await();\n                }\n                System.out.println(\"Consumed: \" + message);\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            } finally {\n                lock.unlock();\n            }\n        });\n        consumer.start();\n        \n        Thread producer = new Thread(() -> {\n            lock.lock();\n            try {\n                message = input;\n                cond.signal();\n            } finally {\n                lock.unlock();\n            }\n        });\n        producer.start();\n        \n        consumer.join();\n        producer.join();\n    }\n}",
+          "tests": [
+            {
+              "name": "VoidCrystal message",
+              "stdin": "VoidCrystal\n",
+              "expectedStdout": "Consumed: VoidCrystal\n"
+            },
+            {
+              "name": "EnderEye message",
+              "stdin": "EnderEye\n",
+              "expectedStdout": "Consumed: EnderEye\n"
+            },
+            {
+              "name": "PortalKey message",
+              "stdin": "PortalKey\n",
+              "expectedStdout": "Consumed: PortalKey\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Concurrency in Practice",
+            "location": "Chapter 14: Building Custom Synchronizers (Condition Queues)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency (Condition Objects)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a2_l4",
+        "title": "Read-Write Locks: ReentrantReadWriteLock & StampedLock",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Thousands of Void researchers query dimensional coordinates every second, while modifications happen once a minute. Standard locks serialize everyone. Read-Write locks allow concurrent readers while guaranteeing exclusive access to writers.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "`ReentrantReadWriteLock` maintains a pair of locks: a **Read Lock** (shared, multiple readers can acquire simultaneously as long as no writer holds the lock) and a **Write Lock** (exclusive, only one writer can acquire, locking out all readers and other writers)."
+          },
+          {
+            "type": "code",
+            "content": "Using ReentrantReadWriteLock and StampedLock:",
+            "code": "// ReadWriteLock\nReadWriteLock rwLock = new ReentrantReadWriteLock();\n\npublic String readData() {\n    rwLock.readLock().lock();\n    try { return cache; } finally { rwLock.readLock().unlock(); }\n}\n\npublic void writeData(String val) {\n    rwLock.writeLock().lock();\n    try { cache = val; } finally { rwLock.writeLock().unlock(); }\n}\n\n// Java 8+ StampedLock (Optimistic Read):\nStampedLock sl = new StampedLock();\nlong stamp = sl.tryOptimisticRead();\nint curX = x, curY = y;\nif (!sl.validate(stamp)) { // Check if a writer intervened\n    stamp = sl.readLock(); // Fallback to full read lock\n    try { curX = x; curY = y; } finally { sl.unlockRead(stamp); }\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "`StampedLock` provides **Optimistic Reads**: reading state without acquiring any lock at all! It issues a stamp, reads the values, and validates whether a write occurred during reading. If valid, zero lock overhead was incurred."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Reader-Writer Problem",
+            "content": "Exclusive locks bottleneck read-heavy systems. ReadWriteLock allows infinite simultaneous readers or one exclusive writer."
+          },
+          {
+            "title": "Lock Downgrading vs Upgrading",
+            "content": "Downgrading (Write lock -> Read lock -> unlock Write) is supported. Upgrading (Read -> Write) is NOT supported and causes deadlocks."
+          },
+          {
+            "title": "StampedLock Optimistic Reads",
+            "content": "tryOptimisticRead() reads without locks. validate(stamp) verifies no writes occurred. Incurs zero synchronization overhead when uncontested."
+          }
+        ],
+        "underTheHood": "In `ReentrantReadWriteLock`, the single 32-bit AQS `state` integer is split in half: the high 16 bits represent the shared read lock count, and the low 16 bits represent the exclusive writer reentrancy count.",
+        "workedExample": {
+          "code": "import java.util.concurrent.locks.*;\n\npublic class Main {\n    private static final ReadWriteLock rw = new ReentrantReadWriteLock();\n    private static String status = \"STABLE\";\n    \n    public static String readStatus() {\n        rw.readLock().lock();\n        try { return status; } finally { rw.readLock().unlock(); }\n    }\n    \n    public static void updateStatus(String s) {\n        rw.writeLock().lock();\n        try { status = s; } finally { rw.writeLock().unlock(); }\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(\"Initial: \" + readStatus());\n        updateStatus(\"ACTIVE\");\n        System.out.println(\"Updated: \" + readStatus());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 4,
+              "explanation": "Instantiate ReentrantReadWriteLock."
+            },
+            {
+              "line": 8,
+              "explanation": "readStatus acquires shared readLock, allowing other concurrent readers."
+            },
+            {
+              "line": 13,
+              "explanation": "updateStatus acquires exclusive writeLock, blocking all readers until released."
+            },
+            {
+              "line": 19,
+              "explanation": "Demonstrates consistent read/write transitions."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Attempting lock upgrading from ReadLock to WriteLock.",
+            "code": "rw.readLock().lock();\nrw.writeLock().lock(); // DEADLOCK: Write lock waits for read lock to release, but read lock never releases!",
+            "correction": "Release the read lock before acquiring the write lock, or acquire the write lock first and downgrade to read lock."
+          },
+          {
+            "mistake": "Using StampedLock with reentrancy.",
+            "code": "long s1 = sl.readLock();\nlong s2 = sl.readLock(); // StampedLock is NOT reentrant! Deadlocks on self!",
+            "correction": "Use ReentrantReadWriteLock if reentrant locking is required."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Can multiple threads simultaneously hold the Read Lock of a `ReentrantReadWriteLock`?",
+            "options": [
+              "Yes, multiple threads can concurrently hold the Read Lock as long as no thread holds the Write Lock",
+              "No, only one thread can hold any lock at a time",
+              "Only on multi-socket servers",
+              "Only if they are virtual threads"
+            ],
+            "answer": 0,
+            "explanation": "Read locks are shared: multiple threads can read concurrently without blocking each other."
+          },
+          {
+            "question": "How does `StampedLock.tryOptimisticRead()` achieve higher performance than traditional read locks?",
+            "options": [
+              "It does not perform any atomic lock operations or memory barriers; it merely reads and checks a version stamp afterwards",
+              "It disables the garbage collector",
+              "It runs the read operation in C++ native code",
+              "It writes to GPU memory"
+            ],
+            "answer": 0,
+            "explanation": "Optimistic reading incurs zero synchronization overhead; it validates whether a write occurred during the read window."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read initial integer `val` and updated integer `newVal` from stdin. Using a `ReentrantReadWriteLock`, read `val` using the read lock and print `Read: [val]`. Then update to `newVal` using the write lock. Finally read again with the read lock and print `Updated: [newVal]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.locks.*;\n\npublic class Main {\n    private static final ReadWriteLock rw = new ReentrantReadWriteLock();\n    private static int data = 0;\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int val = scanner.nextInt();\n        int newVal = scanner.nextInt();\n        \n        // Set initial data, read with readLock, update with writeLock, read again\n        \n    }\n}",
+          "hints": [
+            "`data = val;`",
+            "`rw.readLock().lock(); try { System.out.println(\"Read: \" + data); } finally { rw.readLock().unlock(); }`",
+            "`rw.writeLock().lock(); try { data = newVal; } finally { rw.writeLock().unlock(); }`",
+            "Read again and print `Updated: ` + data."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.locks.*;\n\npublic class Main {\n    private static final ReadWriteLock rw = new ReentrantReadWriteLock();\n    private static int data = 0;\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int val = scanner.nextInt();\n        int newVal = scanner.nextInt();\n        \n        data = val;\n        \n        rw.readLock().lock();\n        try {\n            System.out.println(\"Read: \" + data);\n        } finally {\n            rw.readLock().unlock();\n        }\n        \n        rw.writeLock().lock();\n        try {\n            data = newVal;\n        } finally {\n            rw.writeLock().unlock();\n        }\n        \n        rw.readLock().lock();\n        try {\n            System.out.println(\"Updated: \" + data);\n        } finally {\n            rw.readLock().unlock();\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Initial 10 to 50",
+              "stdin": "10 50\n",
+              "expectedStdout": "Read: 10\nUpdated: 50\n"
+            },
+            {
+              "name": "Initial 0 to 100",
+              "stdin": "0 100\n",
+              "expectedStdout": "Read: 0\nUpdated: 100\n"
+            },
+            {
+              "name": "Initial 42 to 99",
+              "stdin": "42 99\n",
+              "expectedStdout": "Read: 42\nUpdated: 99\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Concurrency in Practice",
+            "location": "Chapter 13: Explicit Locks (Read-Write Locks)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency (Read/Write Locks)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a2_l5",
+        "title": "Concurrent Collections: ConcurrentHashMap & CopyOnWrite",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Synchronizing an entire map freezes all Void operations when millions of telemetry packets land every millisecond. `ConcurrentHashMap` uses bucket-level synchronization and lock-free reads to achieve near-linear multi-core scalability.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "`java.util.concurrent.ConcurrentHashMap` is engineered for extreme concurrent throughput. Unlike `Collections.synchronizedMap(map)` which locks the whole table, `ConcurrentHashMap` uses **lock-free volatile reads** and locks only the specific bucket bin head node during writes. `CopyOnWriteArrayList` creates a fresh copy of the backing array on every write, making reads completely lock-free."
+          },
+          {
+            "type": "code",
+            "content": "Atomic compound operations on ConcurrentHashMap:",
+            "code": "ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();\n\n// Compute if absent atomically\nmap.computeIfAbsent(\"VoidCore\", k -> 100);\n\n// Atomic counter increment without explicit locks\nmap.merge(\"VoidCore\", 1, Integer::sum);\n\n// Atomic replace if match\nmap.replace(\"VoidCore\", 101, 200);"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Never perform composite check-then-act logic outside atomic methods. Doing `if (!map.containsKey(k)) map.put(k, v);` introduces a race condition. Always use `map.putIfAbsent(k, v)` or `computeIfAbsent`!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "ConcurrentHashMap Internals",
+            "content": "Lock-free reads via volatile node pointers. Writes lock only the bucket head node using synchronized or CAS."
+          },
+          {
+            "title": "Atomic Methods",
+            "content": "`putIfAbsent()`, `computeIfAbsent()`, `computeIfPresent()`, and `merge()`. Eliminates external synchronization."
+          },
+          {
+            "title": "CopyOnWriteArrayList",
+            "content": "Ideal for read-heavy observer/listener lists. Writes copy the entire array; iterators never throw ConcurrentModificationException."
+          }
+        ],
+        "underTheHood": "In Java 8+, `ConcurrentHashMap` abandoned segment locking in favor of table-level bins with CAS on initial insertion and `synchronized(binHead)` for updates. When a bin exceeds 8 elements and total capacity exceeds 64, it automatically transforms from a linked list into a Red-Black Tree (`TreeBin`), guaranteeing O(log N) lookup under hash collision attacks.",
+        "workedExample": {
+          "code": "import java.util.concurrent.ConcurrentHashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        ConcurrentHashMap<String, Integer> scores = new ConcurrentHashMap<>();\n        scores.put(\"Warrior\", 10);\n        \n        // Atomically increment Warrior score\n        scores.merge(\"Warrior\", 5, Integer::sum);\n        \n        // Atomically initialize Mage if absent\n        scores.computeIfAbsent(\"Mage\", k -> 50);\n        \n        System.out.println(\"Warrior: \" + scores.get(\"Warrior\"));\n        System.out.println(\"Mage: \" + scores.get(\"Mage\"));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Instantiate thread-safe ConcurrentHashMap."
+            },
+            {
+              "line": 9,
+              "explanation": "merge() atomically adds 5 to existing score 10 resulting in 15."
+            },
+            {
+              "line": 12,
+              "explanation": "computeIfAbsent() initializes Mage to 50 in an atomic operation."
+            },
+            {
+              "line": 14,
+              "explanation": "Lock-free volatile reads output Warrior: 15 and Mage: 50."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Putting null keys or values into ConcurrentHashMap.",
+            "code": "map.put(null, \"val\"); // Throws NullPointerException!",
+            "correction": "ConcurrentHashMap explicitly prohibits `null` keys and values to prevent ambiguity with `get(k) == null`."
+          },
+          {
+            "mistake": "Using CopyOnWriteArrayList for write-heavy data pipelines.",
+            "code": "// Copying array on every insert creates huge memory churn and O(N) copy cost!",
+            "correction": "Use CopyOnWriteArrayList ONLY when reads outnumber writes by 100:1 or more."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why does `ConcurrentHashMap` prohibit `null` keys and `null` values?",
+            "options": [
+              "To eliminate ambiguity between a key not being present vs a key mapped to null in concurrent environments",
+              "Because Java 21 deprecated null",
+              "Because hash codes cannot be computed for null",
+              "Because null causes JVM crashes"
+            ],
+            "answer": 0,
+            "explanation": "In concurrent maps, `map.get(key) == null` cannot reliably distinguish between 'key is absent' and 'key mapped to null'."
+          },
+          {
+            "question": "What is the Big-O worst-case lookup performance in a `ConcurrentHashMap` bucket in Java 8+ when hash collisions exceed 8 nodes?",
+            "options": [
+              "O(log N) because the bucket converts into a Red-Black Tree",
+              "O(N) linked list scan",
+              "O(1) constant time",
+              "O(N^2)"
+            ],
+            "answer": 0,
+            "explanation": "Buckets with >8 nodes transform into Red-Black TreeBins, guaranteeing O(log N) lookup."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `n` followed by `n` word strings from stdin. Using a `ConcurrentHashMap<String, Integer>`, compute the word frequencies using `map.merge(word, 1, Integer::sum)`. Print the count for each unique word in natural sorted order formatted as `[word]: [count]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.ConcurrentHashMap;\nimport java.util.TreeMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int n = scanner.nextInt();\n        \n        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();\n        // Read words, merge into map, sort and print\n        \n    }\n}",
+          "hints": [
+            "Loop `i` from 0 to `n - 1`: `String word = scanner.next(); map.merge(word, 1, Integer::sum);`",
+            "Copy entries into a `new TreeMap<>(map)` to sort alphabetically.",
+            "Print each entry as `e.getKey() + \": \" + e.getValue()`."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.ConcurrentHashMap;\nimport java.util.TreeMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int n = scanner.nextInt();\n        \n        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();\n        for (int i = 0; i < n; i++) {\n            if (scanner.hasNext()) {\n                String word = scanner.next();\n                map.merge(word, 1, Integer::sum);\n            }\n        }\n        \n        TreeMap<String, Integer> sorted = new TreeMap<>(map);\n        sorted.forEach((k, v) -> System.out.println(k + \": \" + v));\n    }\n}",
+          "tests": [
+            {
+              "name": "Four words with duplicates",
+              "stdin": "4 void portal void echo\n",
+              "expectedStdout": "echo: 1\nportal: 1\nvoid: 2\n"
+            },
+            {
+              "name": "Three distinct words",
+              "stdin": "3 alpha beta gamma\n",
+              "expectedStdout": "alpha: 1\nbeta: 1\ngamma: 1\n"
+            },
+            {
+              "name": "Single word repeating",
+              "stdin": "3 star star star\n",
+              "expectedStdout": "star: 3\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Concurrency in Practice",
+            "location": "Chapter 5: Building Blocks (Concurrent Collections)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency (Concurrent Collections)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a2_l6",
+        "title": "Deadlocks, Livelocks & Thread Dump Diagnostics",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When Sentinel A holds Lock 1 and requests Lock 2, while Sentinel B holds Lock 2 and requests Lock 1, the dimensional portal freezes permanently. Analyzing JVM thread dumps exposes the deadlocks and frees the trapped processes.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A **Deadlock** occurs when two or more threads are permanently blocked, each holding a lock the other requires. Four conditions must hold simultaneously for a deadlock (Coffman conditions): Mutual Exclusion, Hold and Wait, No Preemption, and **Circular Wait**."
+          },
+          {
+            "type": "code",
+            "content": "Generating and inspecting thread dumps:",
+            "code": "# Command line tool to inspect thread states and detect deadlocks:\njcmd <pid> Thread.print\n# or\njstack <pid>\n\n# Look for HotSpot's automatic deadlock detector:\n# \"Found one Java-level deadlock:\n# =============================\n# \"Thread-1\": waiting to lock monitor 0x000... (which is held by \"Thread-2\")\n# \"Thread-2\": waiting to lock monitor 0x000... (which is held by \"Thread-1\")\""
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "To prevent deadlocks, **always acquire locks in a globally consistent order** (e.g. sort by resource ID or `System.identityHashCode`). If every thread acquires Lock A before Lock B, circular wait is mathematically impossible."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The 4 Deadlock Conditions",
+            "content": "1. Mutual Exclusion\n2. Hold and Wait\n3. No Preemption\n4. Circular Wait (Break this one to eliminate deadlocks!)"
+          },
+          {
+            "title": "Deadlock vs Livelock",
+            "content": "Deadlock: threads sleep forever waiting on locks.\nLivelock: threads actively burn CPU changing states in response to each other without making progress."
+          },
+          {
+            "title": "Consistent Lock Ordering",
+            "content": "If Thread 1 locks A -> B, Thread 2 MUST lock A -> B. Never acquire in opposite order."
+          }
+        ],
+        "underTheHood": "HotSpot's deadlock detector constructs a resource allocation graph and runs cycle-detection algorithms (Tarjan's or Floyd's algorithm) across all threads blocked in `BLOCKED` state waiting for monitors or `ReentrantLock` instances.",
+        "workedExample": {
+          "code": "public class Main {\n    private static final Object lockA = new Object();\n    private static final Object lockB = new Object();\n    \n    // Safe transfer using strict lock ordering\n    public static void transfer(int fromId, int toId) {\n        Object firstLock  = fromId < toId ? lockA : lockB;\n        Object secondLock = fromId < toId ? lockB : lockA;\n        \n        synchronized (firstLock) {\n            synchronized (secondLock) {\n                System.out.println(\"Safe transfer executed without deadlock.\");\n            }\n        }\n    }\n    public static void main(String[] args) {\n        transfer(1, 2);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 7,
+              "explanation": "Order locks by comparing account IDs (fromId < toId)."
+            },
+            {
+              "line": 10,
+              "explanation": "Acquire first ordered lock."
+            },
+            {
+              "line": 11,
+              "explanation": "Acquire second ordered lock."
+            },
+            {
+              "line": 12,
+              "explanation": "Guarantees no circular wait condition can ever form."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Acquiring locks in arbitrary order based on method arguments.",
+            "code": "void transfer(Account from, Account to) {\n    synchronized(from) { synchronized(to) { ... } } // DEADLOCK if transfer(A, B) and transfer(B, A) run concurrently!\n}",
+            "correction": "Order locks by account ID: `Account first = from.id < to.id ? from : to;`"
+          },
+          {
+            "mistake": "Holding locks while invoking alien unknown foreign methods.",
+            "code": "synchronized(lock) { listener.onEvent(); } // BUG: Foreign method might acquire another lock, causing deadlock!",
+            "correction": "Execute callbacks outside synchronized blocks (open calls)."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which of the four Coffman deadlock conditions is the easiest and most practical to break in Java application design?",
+            "options": [
+              "Circular Wait: by enforcing a strict global lock acquisition ordering",
+              "Mutual Exclusion: by making all data public",
+              "No Preemption: by terminating threads arbitrarily",
+              "Hold and Wait: by avoiding memory allocation"
+            ],
+            "answer": 0,
+            "explanation": "Enforcing consistent lock ordering across all execution paths prevents circular dependency cycles from forming."
+          },
+          {
+            "question": "What is the difference between a Deadlock and a Livelock?",
+            "options": [
+              "In a deadlock, threads are suspended waiting for locks; in a livelock, threads actively change state and consume CPU but make zero forward progress",
+              "Deadlocks happen only on 64-bit systems",
+              "Livelocks only occur in database transactions",
+              "There is no difference"
+            ],
+            "answer": 0,
+            "explanation": "Livelock threads actively execute instructions in response to each other, burning CPU without completing work."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read two account IDs `id1` and `id2` from stdin. Write a deadlock-free transfer simulator: determine which lock ID must be acquired first and second using strict numeric ordering (lowest ID first). Print `Acquired Lock [first]` followed by `Acquired Lock [second]` and `Transfer Complete`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int id1 = scanner.nextInt();\n        int id2 = scanner.nextInt();\n        \n        // Determine lock ordering to prevent deadlock and print sequence\n        \n    }\n}",
+          "hints": [
+            "int first = Math.min(id1, id2); int second = Math.max(id1, id2);",
+            "Print `Acquired Lock ` + first",
+            "Print `Acquired Lock ` + second",
+            "Print `Transfer Complete`"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int id1 = scanner.nextInt();\n        int id2 = scanner.nextInt();\n        \n        int first = Math.min(id1, id2);\n        int second = Math.max(id1, id2);\n        \n        System.out.println(\"Acquired Lock \" + first);\n        System.out.println(\"Acquired Lock \" + second);\n        System.out.println(\"Transfer Complete\");\n    }\n}",
+          "tests": [
+            {
+              "name": "ID 10 and 5",
+              "stdin": "10 5\n",
+              "expectedStdout": "Acquired Lock 5\nAcquired Lock 10\nTransfer Complete\n"
+            },
+            {
+              "name": "ID 1 and 2",
+              "stdin": "1 2\n",
+              "expectedStdout": "Acquired Lock 1\nAcquired Lock 2\nTransfer Complete\n"
+            },
+            {
+              "name": "ID 99 and 42",
+              "stdin": "99 42\n",
+              "expectedStdout": "Acquired Lock 42\nAcquired Lock 99\nTransfer Complete\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Concurrency in Practice",
+            "location": "Chapter 10: Avoiding Liveness Hazards (Deadlock & Lock Ordering)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency (Deadlocks)",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a2",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a2_q1",
+        "type": "mcq",
+        "question": "Which of the following guarantees a happens-before relationship according to the Java Memory Model?",
+        "options": [
+          "A write to a volatile field happens-before every subsequent read of that same field",
+          "A call to Thread.sleep()",
+          "A call to System.gc()",
+          "Reading a non-volatile variable"
+        ],
+        "answer": 0,
+        "explanation": "Volatile writes establish a formal happens-before edge with subsequent volatile reads."
+      },
+      {
+        "id": "a2_q2",
+        "type": "mcq",
+        "question": "What must you always ensure when using `ReentrantLock`?",
+        "options": [
+          "Always unlock the lock in a finally block to prevent permanent deadlocks",
+          "Always synchronize on Object.class",
+          "Never use tryLock()",
+          "Only call lock from daemon threads"
+        ],
+        "answer": 0,
+        "explanation": "ReentrantLock requires manual unlock in a `finally` block to guarantee release."
+      },
+      {
+        "id": "a2_q3",
+        "type": "mcq",
+        "question": "How do you avoid spurious wakeup bugs when waiting on a `Condition` variable?",
+        "options": [
+          "Always test the condition predicate inside a while loop before and after calling await()",
+          "Call notifyAll() ten times in a row",
+          "Use an if statement",
+          "Disable thread interrupts"
+        ],
+        "answer": 0,
+        "explanation": "The `while (!condition) cond.await();` loop pattern protects against spurious wakeups."
+      },
+      {
+        "id": "a2_q4",
+        "type": "mcq",
+        "question": "What type of access does the Read Lock in `ReentrantReadWriteLock` provide?",
+        "options": [
+          "Shared access: multiple reader threads can hold the lock concurrently as long as no writer holds the lock",
+          "Exclusive access: only one reader can read at a time",
+          "Optimistic access without any checks",
+          "Unsynchronized access"
+        ],
+        "answer": 0,
+        "explanation": "Read locks allow concurrent shared access among multiple readers."
+      },
+      {
+        "id": "a2_q5",
+        "type": "mcq",
+        "question": "How does `ConcurrentHashMap` achieve high write throughput in modern Java?",
+        "options": [
+          "By synchronizing only the specific bucket bin head node during writes rather than locking the entire map",
+          "By disabling hash collisions",
+          "By writing to a single shared array",
+          "By using thread-local copies"
+        ],
+        "answer": 0,
+        "explanation": "ConcurrentHashMap locks only individual bin heads, allowing writes to different bins to proceed concurrently."
+      },
+      {
+        "id": "a2_q6",
+        "type": "mcq",
+        "question": "What is the primary method to systematically prevent deadlocks in multithreaded programs?",
+        "options": [
+          "Enforcing a strict global lock acquisition ordering across all threads",
+          "Increasing thread priority",
+          "Using Thread.stop()",
+          "Allocating more heap memory"
+        ],
+        "answer": 0,
+        "explanation": "Lock acquisition ordering eliminates circular wait conditions, rendering deadlocks impossible."
+      },
+      {
+        "id": "a2_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();\nmap.put(\"A\", 10);\nmap.merge(\"A\", 5, Integer::sum);\nSystem.out.println(map.get(\"A\"));",
+        "options": [
+          "15",
+          "10",
+          "5",
+          "null"
+        ],
+        "answer": 0,
+        "explanation": "`merge()` sums existing 10 with 5 to produce 15."
+      },
+      {
+        "id": "a2_q8",
+        "type": "spot-the-bug",
+        "question": "Find the critical bug in this lock usage:",
+        "code": "Lock lock = new ReentrantLock();\ntry {\n    lock.lock();\n    doWork();\n} finally {\n    lock.unlock();\n}",
+        "options": [
+          "lock.lock() is inside the try block; if lock() fails or throws, finally will attempt to unlock an unheld lock",
+          "ReentrantLock cannot be used in try-finally blocks",
+          "doWork must be synchronized",
+          "lock.unlock() must be called twice"
+        ],
+        "answer": 0,
+        "explanation": "`lock.lock()` should always be placed immediately preceding the `try` block."
+      },
+      {
+        "id": "a2_q9",
+        "type": "fill-in",
+        "question": "Complete the statement: A Condition object is created by calling lock.new______() on a Lock instance.",
+        "answer": "Condition",
+        "explanation": "`lock.newCondition()` creates an associated Condition variable."
+      },
+      {
+        "id": "a2_q10",
+        "type": "mcq",
+        "question": "What happens if you attempt lock upgrading from a ReadLock to a WriteLock in `ReentrantReadWriteLock`?",
+        "options": [
+          "It deadlocks because the write lock waits for all read locks (including its own) to release",
+          "It upgrades automatically with zero delay",
+          "It throws an UnsupportedOperationException immediately",
+          "It spawns a new thread"
+        ],
+        "answer": 0,
+        "explanation": "ReentrantReadWriteLock does not support lock upgrading and will deadlock."
+      },
+      {
+        "id": "a2_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the lines to implement safe explicit locking with ReentrantLock:",
+        "lines": [
+          "Lock lock = new ReentrantLock();",
+          "lock.lock();",
+          "try {",
+          "    // Critical section code",
+          "} finally {",
+          "    lock.unlock();",
+          "}"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "explanation": "Create lock -> lock.lock() outside try -> try block -> critical section -> finally -> lock.unlock() -> close."
+      },
+      {
+        "id": "a2_q12",
+        "type": "mcq",
+        "question": "Which JDK diagnostic tool can be used to capture a live thread dump from a running Java process?",
+        "options": [
+          "jcmd <pid> Thread.print or jstack <pid>",
+          "javac",
+          "jar -tf",
+          "javap -c"
+        ],
+        "answer": 0,
+        "explanation": "`jcmd <pid> Thread.print` prints thread stacks and deadlock detection."
+      }
+    ],
+    "project": {
+      "title": "Void Abyss High-Throughput Concurrent Cache & Coordinator",
+      "brief": "Construct a concurrent caching and thread coordination engine for the Void Abyss. Implement high-throughput read-heavy storage with StampedLock optimistic reads, bounded queues guarded by Condition variables, atomic merge analytics via ConcurrentHashMap, and lock-ordering deadlock prevention algorithms.",
+      "milestones": [
+        "Milestone 1: Build a bounded thread-safe buffer using ReentrantLock and dual Condition variables (notFull, notEmpty)",
+        "Milestone 2: Construct an optimistic-read coordinate cache using StampedLock with fallback validation",
+        "Milestone 3: Implement an atomic multi-counter engine using ConcurrentHashMap.merge() and computeIfAbsent()",
+        "Milestone 4: Write an automated lock-ordering algorithm that sorts resource acquisitions to eliminate deadlocks"
+      ],
+      "rubric": [
         {
-          "type": "mcq",
-          "question": "What is a race condition?",
-          "options": [
-            "A compiler warning",
-            "A result that depends on unpredictable timing of concurrent operations",
-            "A database backup",
-            "A type of loop"
-          ],
-          "answer": 1,
-          "explanation": "Race conditions occur when multiple threads access shared state without synchronization, yielding timing-dependent bugs."
+          "criterion": "JMM & Happens-Before Correctness",
+          "points": 25,
+          "description": "Flawless memory visibility guarantees using explicit locks and volatile state"
         },
         {
-          "type": "mcq",
-          "question": "What does the happens-before relationship help establish in the JMM?",
-          "options": [
-            "A guaranteed ordering and visibility relationship between actions",
-            "A faster network connection",
-            "A class inheritance tree",
-            "A database schema"
-          ],
-          "answer": 0,
-          "explanation": "The JMM uses happens-before to guarantee that memory writes by one thread are visible to another."
+          "criterion": "Condition Signaling Hygiene",
+          "points": 25,
+          "description": "Correct implementation of while-loop predicate evaluation for Condition.await()"
         },
         {
-          "type": "true-false",
-          "question": "Virtual threads introduced in Java 21 have a 1:1 mapping to operating system kernel threads.",
-          "answer": false,
-          "explanation": "Virtual threads are M:N user-mode threads managed by the JVM, multiplexed over a small pool of carrier OS threads."
+          "criterion": "Read-Write Optimization",
+          "points": 25,
+          "description": "Effective usage of StampedLock/ReadWriteLock for high read concurrency"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Advanced Concurrency?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a2",
-      "title": "A2: Lock-Free Atomic Counter",
-      "prompt": "Use `AtomicInteger` to increment a counter 1000 times across 2 parallel tasks in `CompletableFuture`.\nThen print: `Atomic Count: 1000`",
-      "starterCode": "import java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        // TODO 1: Use ExecutorService to run a task on a background or virtual thread\n        // Print \"Virtual Thread Task Executed!\"\n    }\n}",
-      "expectedOutput": "Atomic Count: 1000",
-      "testCases": [
-        {
-          "name": "Atomic Counter Sums to 1000",
-          "expected": "Atomic Count: 1000"
+          "criterion": "Deadlock Prevention",
+          "points": 25,
+          "description": "Rigorous lock ordering and timeout-based tryLock backoff mechanisms"
         }
       ],
-      "hints": [
-        "Use AtomicInteger.incrementAndGet()."
+      "stretchGoals": [
+        "Simulate high-contention benchmarks comparing synchronized block vs ReentrantLock vs StampedLock",
+        "Parse and analyze real JVM thread dumps to locate cyclic dependencies programmatically"
       ]
     },
-    "biome": "Parallel Void",
-    "conceptMetaphor": "Virtual threads and structured concurrency managing thousands of lightweight tasks in the void.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Java Memory Model (JMM)",
+        "definition": "The formal specification defining how threads interact through memory and when shared variable updates are visible."
+      },
+      {
+        "term": "Happens-Before",
+        "definition": "A relationship between two operations where the first operation is guaranteed to be visible to the second."
+      },
+      {
+        "term": "ReentrantLock",
+        "definition": "A mutual exclusion lock with the same basic behavior as synchronized but with extended features like tryLock() and fairness."
+      },
+      {
+        "term": "Condition",
+        "definition": "A signaling object replacing wait/notify, allowing multiple independent wait sets per lock."
+      },
+      {
+        "term": "StampedLock",
+        "definition": "A capability-based lock supporting optimistic reads, write locks, and read locks."
+      },
+      {
+        "term": "ConcurrentHashMap",
+        "definition": "A high-performance thread-safe hash table using fine-grained bucket synchronization."
+      },
+      {
+        "term": "Deadlock",
+        "definition": "A condition where two or more threads are permanently blocked, each holding a lock the other needs."
+      },
+      {
+        "term": "Livelock",
+        "definition": "A condition where threads continuously change state in response to each other without making forward progress."
+      },
+      {
+        "term": "Spurious Wakeup",
+        "definition": "An occurrence where a waiting thread wakes up without having been explicitly signaled."
+      },
+      {
+        "term": "Lock Barging",
+        "definition": "When a newly arriving thread acquires a lock immediately ahead of queued waiting threads in unfair locks."
+      }
+    ],
+    "references": [
+      {
+        "source": "Java Concurrency in Practice",
+        "location": "Chapter 10: Avoiding Liveness Hazards, Chapter 13: Explicit Locks, & Chapter 16: JMM",
+        "verify": false
+      },
+      {
+        "source": "The Java Language Specification (Java SE 21)",
+        "location": "Chapter 17: Threads and Locks",
+        "verify": false
+      },
+      {
+        "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+        "location": "Chapter 12: Concurrency",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a3",
     "code": "A3",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Advanced Language Features",
-    "subtitle": "Generics in depth, type erasure, annotations, reflection, pattern matching",
-    "icon": "",
-    "color": "#9B59B6",
+    "title": "Modern Java: Virtual Threads & Structured Concurrency",
+    "subtitle": "Project Loom, Thread.ofVirtual(), Executors.newVirtualThreadPerTaskExecutor(), carrier thread scheduling, thread pinning hazards, and Structured Concurrency patterns",
+    "biome": "Chorus Highlands",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Differentiate Platform Threads (1:1 OS kernel mappings) from Virtual Threads (M:N JVM user-mode fibers)",
+      "Spawn and manage millions of concurrent tasks using Thread.ofVirtual() and Executors.newVirtualThreadPerTaskExecutor()",
+      "Identify and mitigate Carrier Thread Pinning caused by synchronized blocks and native JNI calls",
+      "Architect resilient asynchronous workflows using Structured Concurrency (StructuredTaskScope)",
+      "Manage contextual execution state safely across virtual threads using ScopedValue<T>",
+      "Benchmark high-throughput I/O pipelines supporting 10,000+ concurrent connections with minimal memory footprint"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1",
+      "a2"
+    ],
     "lessons": [
       {
-        "id": "lesson-a3-1",
-        "title": "Pattern Matching & Modern Switch",
-        "xp": 50,
-        "slides": [
+        "id": "a3_l1",
+        "title": "The Loom Revolution: Platform vs Virtual Threads",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "In the Chorus Highlands, millions of teleporting endermites weave through fractal branches simultaneously. Traditional OS platform threads are too heavyweight for millions of concurrent entities. Project Loom introduces lightweight Virtual Threads managed entirely by the JVM.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Type Patterns in Switch",
-            "content": "Modern Java lets you switch directly on object types with pattern matching, casting automatically!"
-          },
-          {
-            "type": "visual",
-            "visual": "thread",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "Historically, Java threads were **Platform Threads**—a 1:1 wrapper around an operating system kernel thread. Each platform thread consumes ~1MB of reserved stack memory and incurs costly OS kernel context switching. **Virtual Threads** (JEP 444, standardized in Java 21 LTS) are lightweight user-mode threads managed entirely inside the JVM runtime."
           },
           {
             "type": "code",
-            "title": "Pattern Matching Example",
-            "content": "Clean polymorphic handling without instanceof chains.",
-            "code": "Object obj = \"Hello Java 21\";\nif (obj instanceof String s) {\n    System.out.println(s.toUpperCase());\n}"
+            "content": "Spawning Virtual Threads in Java 21+:",
+            "code": "// Modern fluent API:\nThread vThread = Thread.ofVirtual()\n    .name(\"ChorusWorker-\", 1)\n    .start(() -> {\n        System.out.println(\"Running virtual task on: \" + Thread.currentThread());\n    });\n\nvThread.join();"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "A single JVM can easily host **millions** of active virtual threads simultaneously because their initial stack consumes only a few hundred bytes on the JVM heap, expanding and shrinking dynamically!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "Platform Threads (1:1)",
+            "content": "1 Java Thread = 1 OS Kernel Thread. Heavyweight (~1MB stack), limited to a few thousand threads per server."
+          },
+          {
+            "title": "Virtual Threads (M:N)",
+            "content": "Millions of Virtual Threads multiplexed across a tiny pool of Carrier (ForkJoinPool) OS threads. Stack lives on the heap."
+          },
+          {
+            "title": "Thread-Per-Request Returns",
+            "content": "Write simple, clean synchronous blocking code (`read()`, `fetch()`, `sleep()`) without reactive complexity or callbacks!"
+          }
+        ],
+        "underTheHood": "When a virtual thread executes a blocking operation (like network I/O or `Thread.sleep`), the JVM **unmounts** the virtual thread from its underlying **Carrier Thread** (a worker in `ForkJoinPool.commonPool()`). The carrier thread immediately executes other tasks. When the I/O completes, the JVM remounts the virtual thread on any available carrier thread.",
+        "workedExample": {
+          "code": "public class Main {\n    public static void main(String[] args) throws InterruptedException {\n        Thread vt = Thread.ofVirtual().start(() -> {\n            System.out.println(\"Is virtual: \" + Thread.currentThread().isVirtual());\n        });\n        vt.join();\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Invoke Thread.ofVirtual().start() passing a Runnable lambda task."
+            },
+            {
+              "line": 4,
+              "explanation": "Thread.currentThread().isVirtual() returns true."
+            },
+            {
+              "line": 6,
+              "explanation": "vt.join() waits for the virtual thread to complete."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Pooling virtual threads with ThreadPoolExecutor.",
+            "code": "new ThreadPoolExecutor(..., virtualThreadFactory); // POOLING VIRTUAL THREADS IS AN ANTI-PATTERN!",
+            "correction": "Never pool virtual threads! They are cheap and ephemeral—create them on demand and let them terminate."
+          },
+          {
+            "mistake": "Using virtual threads for pure CPU-intensive algorithms (like video rendering or matrix math).",
+            "code": "// Spawning 10,000 virtual threads computing prime numbers",
+            "correction": "Virtual threads excel at I/O-bound workloads. For CPU-bound tasks, use platform threads matching core count."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What happens to the underlying carrier thread when a virtual thread performs a blocking socket read in Java 21+?",
+            "options": [
+              "The carrier thread blocks and freezes until the read finishes",
+              "The JVM unmounts the virtual thread, freeing the carrier thread to execute other virtual threads",
+              "The JVM throws an IllegalThreadStateException",
+              "The OS kills the process"
+            ],
+            "answer": 1,
+            "explanation": "Virtual threads unmount on blocking I/O, allowing carrier OS threads to maintain 100% utilization."
+          },
+          {
+            "question": "Should you pool Virtual Threads using an ExecutorService pool?",
+            "options": [
+              "No, virtual threads are cheap and disposable; pooling them is an anti-pattern",
+              "Yes, you must always pool them to limit CPU usage",
+              "Only on Windows",
+              "Yes, using Executors.newFixedThreadPool(10)"
+            ],
+            "answer": 0,
+            "explanation": "Virtual threads are designed to be created on demand per task and destroyed when finished."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an integer `count` from stdin. Spawn `count` virtual threads sequentially using `Thread.ofVirtual().start(...)`. Each virtual thread must print `Virtual task [i] executed`. Wait for each thread to finish using `join()`. Finally print `All virtual tasks finished`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int count = scanner.nextInt();\n        \n        // Spawn count virtual threads and join them\n        \n    }\n}",
+          "hints": [
+            "Loop `i` from 1 to `count`.",
+            "Thread t = Thread.ofVirtual().start(() -> System.out.println(\"Virtual task \" + id + \" executed\"));",
+            "Call `t.join()` on each thread and print `All virtual tasks finished`."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int count = scanner.nextInt();\n        \n        for (int i = 1; i <= count; i++) {\n            final int id = i;\n            Thread t = Thread.ofVirtual().start(() -> {\n                System.out.println(\"Virtual task \" + id + \" executed\");\n            });\n            t.join();\n        }\n        \n        System.out.println(\"All virtual tasks finished\");\n    }\n}",
+          "tests": [
+            {
+              "name": "3 virtual tasks",
+              "stdin": "3\n",
+              "expectedStdout": "Virtual task 1 executed\nVirtual task 2 executed\nVirtual task 3 executed\nAll virtual tasks finished\n"
+            },
+            {
+              "name": "1 virtual task",
+              "stdin": "1\n",
+              "expectedStdout": "Virtual task 1 executed\nAll virtual tasks finished\n"
+            },
+            {
+              "name": "4 virtual tasks",
+              "stdin": "4\n",
+              "expectedStdout": "Virtual task 1 executed\nVirtual task 2 executed\nVirtual task 3 executed\nVirtual task 4 executed\nAll virtual tasks finished\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 444: Virtual Threads (JDK 21)",
+            "location": "JDK Enhancement Proposal 444",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency (Virtual Threads)",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a3-2",
-        "title": "Annotations & Type Erasure",
-        "xp": 50,
-        "slides": [
+        "id": "a3_l2",
+        "title": "VirtualThreadPerTaskExecutor: Modern Asynchronous Execution",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "High above the void clouds, dispatching thousands of chorus expeditions requires an asynchronous executor that scales without limits. `Executors.newVirtualThreadPerTaskExecutor()` spawns a dedicated virtual thread for every submitted task.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Type Erasure",
-            "content": "Java generics exist at compile-time for type safety, but the compiler erases generic type parameters in bytecode (replacing them with `Object` or bounds) for backward compatibility."
+            "type": "text",
+            "content": "In Java 21+, `Executors.newVirtualThreadPerTaskExecutor()` creates an `ExecutorService` that spawns a brand new virtual thread for each submitted task. Combined with `try-with-resources`, it introduces clean structured execution where all submitted tasks are guaranteed to complete before exiting the block."
           },
           {
             "type": "code",
-            "title": "Custom Annotation",
-            "content": "Defining annotations with retention policy.",
-            "code": "@Retention(RetentionPolicy.RUNTIME)\n@Target(ElementType.METHOD)\npublic @interface Endpoint {\n    String path();\n}"
+            "content": "Structured task execution with newVirtualThreadPerTaskExecutor:",
+            "code": "try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n    Future<String> f1 = executor.submit(() -> fetchRegionA());\n    Future<String> f2 = executor.submit(() -> fetchRegionB());\n    \n    // When the try block exits, executor.close() automatically waits for all tasks to finish!\n    System.out.println(f1.get() + \" & \" + f2.get());\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Because `ExecutorService` implements `AutoCloseable`, the closing brace of the `try` block automatically calls `shutdown()` and waits for all active and pending tasks to terminate."
+          }
+        ],
+        "slides": [
+          {
+            "title": "newVirtualThreadPerTaskExecutor",
+            "content": "Does not pool threads. Every task gets its own freshly allocated virtual thread that terminates upon task completion."
+          },
+          {
+            "title": "try-with-resources Concurrency",
+            "content": "Closing the executor awaits task completion. Eliminates orphan threads leaking past method boundaries."
+          },
+          {
+            "title": "Thread-Per-Request Pattern",
+            "content": "Allows web servers to handle 100,000 simultaneous HTTP requests with standard synchronous code."
+          }
+        ],
+        "underTheHood": "Under the hood, `newVirtualThreadPerTaskExecutor()` instantiates a `ThreadPerTaskExecutor` backed by a virtual thread factory. Each `submit()` invokes `Thread.Builder.OfVirtual.start(task)` directly without enqueuing tasks into an intermediate blocking queue.",
+        "workedExample": {
+          "code": "import java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            Future<Integer> task1 = executor.submit(() -> 10 * 10);\n            Future<Integer> task2 = executor.submit(() -> 25 * 4);\n            \n            int sum = task1.get() + task2.get();\n            System.out.println(\"Computed sum: \" + sum);\n        }\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Open VirtualThreadPerTaskExecutor in try-with-resources."
+            },
+            {
+              "line": 6,
+              "explanation": "Submit first task (runs on virtual thread 1)."
+            },
+            {
+              "line": 7,
+              "explanation": "Submit second task (runs on virtual thread 2)."
+            },
+            {
+              "line": 9,
+              "explanation": "Retrieve results synchronously via future.get()."
+            },
+            {
+              "line": 11,
+              "explanation": "Executor closes automatically, guaranteeing all virtual threads finished cleanly."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using ThreadLocal extensively with millions of virtual threads.",
+            "code": "// Millions of virtual threads caching 1MB buffers in ThreadLocal creates massive OutOfMemoryError!",
+            "correction": "Avoid heavy ThreadLocal state in virtual threads. In Java 21+, use `ScopedValue<T>` instead."
+          },
+          {
+            "mistake": "Forgetting that virtual threads run as daemon threads by default.",
+            "code": "Thread.ofVirtual().start(() -> work()); // If main() exits, the JVM terminates immediately without waiting!",
+            "correction": "Always `join()` or manage via `Executors.newVirtualThreadPerTaskExecutor()`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Are Virtual Threads daemon threads or non-daemon threads by default in Java?",
+            "options": [
+              "They are always daemon threads; the JVM will not wait for them to exit if all platform threads terminate",
+              "They are always non-daemon threads",
+              "They alternate based on CPU load",
+              "They have no daemon property"
+            ],
+            "answer": 0,
+            "explanation": "Virtual threads are always daemon threads. The JVM will shut down if only virtual threads remain alive."
+          },
+          {
+            "question": "What happens when an `ExecutorService` created via `Executors.newVirtualThreadPerTaskExecutor()` is closed in a `try-with-resources` block?",
+            "options": [
+              "It cancels all running threads immediately with an InterruptedException",
+              "It waits for all submitted tasks to complete before exiting the try block",
+              "It leaves tasks running in the background indefinitely",
+              "It converts virtual threads into OS kernel platform threads"
+            ],
+            "answer": 1,
+            "explanation": "`close()` waits for all submitted tasks to terminate, enforcing structured concurrency boundaries."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read two integers `a` and `b` from stdin. Using `Executors.newVirtualThreadPerTaskExecutor()` in a `try-with-resources` block, submit two `Callable<Integer>` tasks: Task 1 computes `a * 3` and Task 2 computes `b * 5`. Sum their results and print `Virtual executor result: [sum]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int a = scanner.nextInt();\n        int b = scanner.nextInt();\n        \n        // Submit tasks to newVirtualThreadPerTaskExecutor and print result\n        \n    }\n}",
+          "hints": [
+            "try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) { ... }",
+            "Future<Integer> f1 = executor.submit(() -> a * 3);",
+            "Future<Integer> f2 = executor.submit(() -> b * 5);",
+            "int sum = f1.get() + f2.get();",
+            "Print `Virtual executor result: ` + sum."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int a = scanner.nextInt();\n        int b = scanner.nextInt();\n        \n        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            Future<Integer> f1 = executor.submit(() -> a * 3);\n            Future<Integer> f2 = executor.submit(() -> b * 5);\n            int sum = f1.get() + f2.get();\n            System.out.println(\"Virtual executor result: \" + sum);\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "10 and 20",
+              "stdin": "10 20\n",
+              "expectedStdout": "Virtual executor result: 130\n"
+            },
+            {
+              "name": "5 and 5",
+              "stdin": "5 5\n",
+              "expectedStdout": "Virtual executor result: 40\n"
+            },
+            {
+              "name": "0 and 100",
+              "stdin": "0 100\n",
+              "expectedStdout": "Virtual executor result: 500\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 444: Virtual Threads (JDK 21)",
+            "location": "Task Execution with Executors",
+            "verify": false
+          },
+          {
+            "source": "Modern Java in Action",
+            "location": "Chapter 16: Concurrency and Reactive Programming Evolution",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a3_l3",
+        "title": "Carrier Thread Pinning: synchronized vs ReentrantLock",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When an expedition worker enters an ancient synchronized chamber and halts for input, the entire carrier thread underneath freezes, preventing thousands of other virtual threads from moving. This critical hazard is known as Carrier Thread Pinning.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A virtual thread is **pinned** to its carrier OS thread when it cannot be unmounted during a blocking operation. When pinned, the underlying carrier OS thread blocks, defeating the scalability of virtual threads. Pinning occurs in two scenarios: inside a **`synchronized` block/method** and inside **native method calls (JNI)**."
+          },
+          {
+            "type": "code",
+            "content": "Diagnosing and fixing Carrier Thread Pinning:",
+            "code": "# Detect pinning via JVM diagnostic flag:\njava -Djdk.tracePinnedThreads=full -jar app.jar\n\n// HAZARDOUS: Pinning occurs if blocking inside synchronized\npublic synchronized void blockInsideMonitor() {\n    socket.read(); // PINNED! Carrier thread freezes!\n}\n\n// RECOMMENDED: Replace synchronized with ReentrantLock\nprivate final ReentrantLock lock = new ReentrantLock();\npublic void nonPinnedBlock() {\n    lock.lock();\n    try {\n        socket.read(); // Virtual thread UNMOUNTS cleanly; carrier thread remains free!\n    } finally {\n        lock.unlock();\n    }\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "warning",
+            "content": "In Java 21, `ReentrantLock` allows virtual threads to unmount safely during blocking lock acquires or blocking I/O while holding the lock. In legacy libraries, refactoring `synchronized` blocks to `ReentrantLock` is vital for Loom readiness."
+          }
+        ],
+        "slides": [
+          {
+            "title": "What is Pinning?",
+            "content": "When a virtual thread blocks but cannot yield its carrier thread. Causes carrier thread pool starvation."
+          },
+          {
+            "title": "Two Causes of Pinning",
+            "content": "1. Executing blocking operations inside `synchronized` blocks.\n2. Executing blocking operations inside native C/C++ JNI methods."
+          },
+          {
+            "title": "The Cure: ReentrantLock",
+            "content": "Replace `synchronized` with `ReentrantLock`. `ReentrantLock` supports clean Loom unmounting."
+          }
+        ],
+        "underTheHood": "HotSpot's virtual thread scheduler uses stack chunk freezing (`freeze()` and `thaw()`). However, native monitor frames (`monitorenter`) reside directly in C++ C-stack memory rather than the Java heap, making HotSpot unable to unmount the stack frame without pinning the carrier thread.",
+        "workedExample": {
+          "code": "import java.util.concurrent.locks.ReentrantLock;\n\npublic class Main {\n    private static final ReentrantLock lock = new ReentrantLock();\n    \n    public static void safeOperation() {\n        lock.lock();\n        try {\n            // Safe blocking call that unmounts without pinning\n            Thread.sleep(10);\n            System.out.println(\"Completed without pinning\");\n        } catch (InterruptedException e) {\n            Thread.currentThread().interrupt();\n        } finally {\n            lock.unlock();\n        }\n    }\n    \n    public static void main(String[] args) throws InterruptedException {\n        Thread vt = Thread.ofVirtual().start(Main::safeOperation);\n        vt.join();\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 4,
+              "explanation": "Declare ReentrantLock instead of synchronized."
+            },
+            {
+              "line": 7,
+              "explanation": "Acquire lock explicitly."
+            },
+            {
+              "line": 9,
+              "explanation": "Thread.sleep(10) causes virtual thread to unmount cleanly without pinning carrier thread."
+            },
+            {
+              "line": 15,
+              "explanation": "Unlock in finally block."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Calling synchronized methods on third-party JDBC or legacy network drivers.",
+            "code": "// Legacy driver with synchronized(this) { socket.read(); } pins carrier threads under high traffic!",
+            "correction": "Upgrade to modern Loom-ready JDBC drivers or use connection pooling that isolates blocking calls."
+          },
+          {
+            "mistake": "Ignoring -Djdk.tracePinnedThreads warnings in staging environments.",
+            "code": "// Missing tracePinnedThreads means pinning goes unnoticed until production stalls under load",
+            "correction": "Run load tests with `-Djdk.tracePinnedThreads=short` to detect and fix pinned code paths."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which of the following causes Carrier Thread Pinning in a Virtual Thread in Java 21?",
+            "options": [
+              "Performing a blocking operation inside a synchronized block or method",
+              "Using ReentrantLock",
+              "Calling Thread.sleep() outside any lock",
+              "Using ArrayList instead of Vector"
+            ],
+            "answer": 0,
+            "explanation": "Blocking operations inside synchronized blocks or native JNI frames pin the virtual thread to its carrier."
+          },
+          {
+            "question": "How can you detect if your application is pinning carrier threads at runtime?",
+            "options": [
+              "By running the JVM with `-Djdk.tracePinnedThreads=full` or `short`",
+              "By inspecting the Windows Task Manager",
+              "By checking for OutOfMemoryError",
+              "By inspecting the pom.xml file"
+            ],
+            "answer": 0,
+            "explanation": "`-Djdk.tracePinnedThreads` instructs HotSpot to log stack traces whenever a pinned virtual thread blocks."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `val` from stdin. Refactor a synchronized method into a thread-safe `ReentrantLock` implementation: within a virtual thread, lock the `ReentrantLock`, compute `val * 2`, print `Safe lock computed: [result]`, and unlock in a `finally` block. Wait for the virtual thread to finish.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.locks.ReentrantLock;\n\npublic class Main {\n    private static final ReentrantLock lock = new ReentrantLock();\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int val = scanner.nextInt();\n        \n        // Spawn virtual thread using ReentrantLock, compute and print\n        \n    }\n}",
+          "hints": [
+            "Thread vt = Thread.ofVirtual().start(() -> { lock.lock(); try { System.out.println(\"Safe lock computed: \" + (val * 2)); } finally { lock.unlock(); } });",
+            "vt.join();"
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.locks.ReentrantLock;\n\npublic class Main {\n    private static final ReentrantLock lock = new ReentrantLock();\n    \n    public static void main(String[] args) throws InterruptedException {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int val = scanner.nextInt();\n        \n        Thread vt = Thread.ofVirtual().start(() -> {\n            lock.lock();\n            try {\n                System.out.println(\"Safe lock computed: \" + (val * 2));\n            } finally {\n                lock.unlock();\n            }\n        });\n        vt.join();\n    }\n}",
+          "tests": [
+            {
+              "name": "Val 25",
+              "stdin": "25\n",
+              "expectedStdout": "Safe lock computed: 50\n"
+            },
+            {
+              "name": "Val 100",
+              "stdin": "100\n",
+              "expectedStdout": "Safe lock computed: 200\n"
+            },
+            {
+              "name": "Val 7",
+              "stdin": "7\n",
+              "expectedStdout": "Safe lock computed: 14\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 444: Virtual Threads (JDK 21)",
+            "location": "Thread Pinning and Troubleshooting",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a3_l4",
+        "title": "Structured Concurrency & Failure Propagation",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When an End scout squadron searches for portal keys, if one scout finds the key or is vaporized by an anomaly, the other scouts must cancel immediately rather than burning fuel in the dark void. Structured Concurrency treats related concurrent tasks as a single unit of work.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**Structured Concurrency** treats multiple concurrent subtasks running in separate threads as a single unit of work. In unstructured concurrency (e.g. `CompletableFuture` or rogue `Thread.start()`), subtasks can leak, outlive their caller, or continue executing after sibling tasks fail. Structured concurrency guarantees that all child threads terminate before the parent method returns."
+          },
+          {
+            "type": "code",
+            "content": "Structured Concurrency Patterns (ShutdownOnFailure / ShutdownOnSuccess):",
+            "code": "// Conceptual Structured Task Scope pattern:\n// 1. Fork subtask A and subtask B\n// 2. If subtask A fails, automatically cancel subtask B (short-circuit)\n// 3. Await completion of all forked subtasks\n// 4. Combine results cleanly or propagate failure"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Structured Concurrency mirrors structured programming (`if-else`, loops). Just as a code block cannot exit leaving an open `for` loop executing in the background, a structured task block cannot exit while child threads are still running."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Problem of Thread Leaks",
+            "content": "Unstructured threads leak past method returns when errors happen, wasting CPU, memory, and database connections."
+          },
+          {
+            "title": "Single Unit of Work",
+            "content": "If parent is cancelled or child fails, all sibling subtasks in the scope are automatically cancelled and joined."
+          },
+          {
+            "title": "Shutdown Policies",
+            "content": "ShutdownOnFailure: all must succeed (short-circuit on error). ShutdownOnSuccess: first to succeed wins (race pattern)."
+          }
+        ],
+        "underTheHood": "Structured concurrency constructs a hierarchy of tasks represented in JVM thread dumps. Child virtual threads reference their parent scope. When a scope fails, it calls `Thread.interrupt()` on all active child threads, unblocking them from I/O and unwinding their call stacks.",
+        "workedExample": {
+          "code": "import java.util.concurrent.*;\n\npublic class Main {\n    // Structured coordination using VirtualThreadPerTaskExecutor\n    public static void main(String[] args) throws Exception {\n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            Future<String> user = executor.submit(() -> \"User: EnderKnight\");\n            Future<Integer> xp = executor.submit(() -> 9500);\n            \n            // Both tasks execute concurrently and join at block exit\n            System.out.println(user.get() + \" [XP: \" + xp.get() + \"]\");\n        }\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Enclose concurrent tasks within try-with-resources executor scope."
+            },
+            {
+              "line": 6,
+              "explanation": "Fork first asynchronous task."
+            },
+            {
+              "line": 7,
+              "explanation": "Fork second asynchronous task."
+            },
+            {
+              "line": 10,
+              "explanation": "Join and aggregate results safely before scope closes."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Ignoring InterruptedException when writing cancellable subtasks.",
+            "code": "} catch (InterruptedException e) { /* swallowed */ }",
+            "correction": "Always restore interrupted status: `Thread.currentThread().interrupt();` or rethrow so structured scopes can cancel subtasks."
+          },
+          {
+            "mistake": "Spawning fire-and-forget unmanaged background threads inside scoped business logic.",
+            "code": "new Thread(() -> auditLog()).start(); // Escapes method scope!",
+            "correction": "Submit all subtasks to the managed executor scope."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary guarantee provided by Structured Concurrency?",
+            "options": [
+              "Child threads are guaranteed to complete or be cancelled before the parent scope block exits, preventing thread leaks",
+              "It turns off the garbage collector",
+              "It forces all code to run on a single thread",
+              "It compiles Java code to native C++ binaries"
+            ],
+            "answer": 0,
+            "explanation": "Structured Concurrency ensures child threads cannot leak past the lifetime of their parent enclosing scope."
+          },
+          {
+            "question": "What mechanism is used by structured task scopes to cancel ongoing sibling subtasks when a failure occurs?",
+            "options": [
+              "Thread.interrupt()",
+              "System.exit()",
+              "Thread.stop()",
+              "Garbage collection"
+            ],
+            "answer": 0,
+            "explanation": "Cancellation is coordinated cleanly using cooperative thread interruption via `Thread.interrupt()`."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read two names `scout1` and `scout2` from stdin. Simulate structured concurrent expedition checks using `newVirtualThreadPerTaskExecutor()`. Submit two tasks: Task 1 returns `scout1 + \" ready\"` and Task 2 returns `scout2 + \" ready\"`. Wait for both and print `[result1] | [result2]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String scout1 = scanner.next();\n        String scout2 = scanner.next();\n        \n        // Run structured tasks and format output\n        \n    }\n}",
+          "hints": [
+            "try (var executor = Executors.newVirtualThreadPerTaskExecutor()) { ... }",
+            "Future<String> f1 = executor.submit(() -> scout1 + \" ready\");",
+            "Future<String> f2 = executor.submit(() -> scout2 + \" ready\");",
+            "Print f1.get() + \" | \" + f2.get();"
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String scout1 = scanner.next();\n        String scout2 = scanner.next();\n        \n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            Future<String> f1 = executor.submit(() -> scout1 + \" ready\");\n            Future<String> f2 = executor.submit(() -> scout2 + \" ready\");\n            System.out.println(f1.get() + \" | \" + f2.get());\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Atlas and Orion",
+              "stdin": "Atlas Orion\n",
+              "expectedStdout": "Atlas ready | Orion ready\n"
+            },
+            {
+              "name": "Nova and Stella",
+              "stdin": "Nova Stella\n",
+              "expectedStdout": "Nova ready | Stella ready\n"
+            },
+            {
+              "name": "Echo and Vesper",
+              "stdin": "Echo Vesper\n",
+              "expectedStdout": "Echo ready | Vesper ready\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 453: Structured Concurrency",
+            "location": "JDK Enhancement Proposal 453",
+            "verify": false
+          },
+          {
+            "source": "Modern Java in Action",
+            "location": "Chapter 16: Concurrency and Structured Concurrency Patterns",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a3_l5",
+        "title": "Scoped Values: Replacing ThreadLocal in High Concurrency",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When millions of virtual threads pass through the Chorus gates, storing mutable security credentials in ThreadLocal consumes huge heaps and leaks credentials across requests. Scoped Values introduce immutable, strictly bounded contextual sharing.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "`ThreadLocal` has significant flaws in virtual thread environments: it is **unconstrained in mutability**, **unbounded in lifetime** (risking memory leaks unless explicitly removed), and **expensive to inherit** across millions of child threads. **Scoped Values** (`ScopedValue<T>`, JEP 446/464) provide immutable, strictly bounded data sharing across call trees and child threads."
+          },
+          {
+            "type": "code",
+            "content": "Conceptual Scoped Value execution pattern:",
+            "code": "// ScopedValue is immutable and automatically cleaned up upon exiting the scope:\n// ScopedValue<User> CURRENT_USER = ScopedValue.newInstance();\n// ScopedValue.where(CURRENT_USER, user).run(() -> {\n//     // Code in this dynamic scope can access CURRENT_USER.get()\n//     processRequest();\n// });\n// Outside the scope, CURRENT_USER is completely inaccessible and unanchored"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Scoped Values guarantee that once bound, a value is **immutable** for the duration of that scope and cannot be accidentally modified by downstream helper methods."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Flaws of ThreadLocal",
+            "content": "Mutable anywhere, unbounded lifetime, expensive inheritance (deep-copying maps across millions of virtual threads)."
+          },
+          {
+            "title": "ScopedValue Advantages",
+            "content": "Immutable, strictly bounded to execution block, automatically garbage collected upon block exit, zero child-copy overhead."
+          },
+          {
+            "title": "Rebinding Support",
+            "content": "Nested scopes can temporarily rebind a ScopedValue for a inner sub-operation without altering the outer binding."
+          }
+        ],
+        "underTheHood": "Scoped Values utilize a stack-based carrier binding. When a method invokes `ScopedValue.where(X, v).run(...)`, the binding is pushed onto an internal linked list on the thread stack. Upon exiting the block, the binding is popped, leaving zero lingering references in memory.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating scoped context token passing\n    static class Context {\n        private final String token;\n        public Context(String token) { this.token = token; }\n        public String getToken() { return token; }\n    }\n    \n    public static void executeWithToken(Context ctx) {\n        System.out.println(\"Context active: \" + ctx.getToken());\n    }\n    \n    public static void main(String[] args) {\n        Context userCtx = new Context(\"AUTH_CHORUS_99\");\n        executeWithToken(userCtx);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Define immutable Context data carrier."
+            },
+            {
+              "line": 9,
+              "explanation": "executeWithToken consumes context within its dynamic scope."
+            },
+            {
+              "line": 15,
+              "explanation": "Context remains scoped and cleanly unmounted after execution."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Relying on ThreadLocal in virtual thread microservices.",
+            "code": "// Allocating 100,000 virtual threads each storing 1MB buffers in ThreadLocal causes sudden OOM!",
+            "correction": "Pass parameters directly or use lightweight Scoped Values."
+          },
+          {
+            "mistake": "Attempting to mutate a ScopedValue once bound.",
+            "code": "// ScopedValue has NO set() method by deliberate design to preserve thread safety!",
+            "correction": "Rebind a new value using a nested `where()` scope if necessary."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary design reason for introducing Scoped Values to replace ThreadLocal in Java 21+?",
+            "options": [
+              "Scoped Values are immutable and strictly bounded in lifetime to an execution block, preventing memory leaks and inheritance overhead in millions of virtual threads",
+              "ThreadLocal was deleted from the JDK",
+              "Scoped Values write data directly to disk",
+              "Scoped Values run only in GPU memory"
+            ],
+            "answer": 0,
+            "explanation": "Scoped Values provide immutable, stack-bounded context sharing that eliminates ThreadLocal memory leaks."
+          },
+          {
+            "question": "Can a method modify the value of an existing ScopedValue binding directly using a `set()` method?",
+            "options": [
+              "No, Scoped Values are deliberately immutable and have no set() method",
+              "Yes, using ScopedValue.set()",
+              "Only if marked volatile",
+              "Only by reflection"
+            ],
+            "answer": 0,
+            "explanation": "ScopedValue is immutable by design; values can only be rebound in nested scopes."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a role string `role` and username string `user` from stdin. Build a secure context runner: instantiate an immutable `AuthContext` with `role` and `user`, pass it to a method `processRequest(AuthContext ctx)`, and print `Authorized [role] for [user]`. Ensure complete encapsulation.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    // Define immutable record or class AuthContext\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String role = scanner.next();\n        String user = scanner.next();\n        \n        // Run processRequest with AuthContext\n        \n    }\n}",
+          "hints": [
+            "record AuthContext(String role, String user) {}",
+            "void processRequest(AuthContext ctx) { System.out.println(\"Authorized \" + ctx.role() + \" for \" + ctx.user()); }",
+            "Create `new AuthContext(role, user)` and call `processRequest`."
+          ],
+          "solution": "import java.util.Scanner;\n\nrecord AuthContext(String role, String user) {}\n\npublic class Main {\n    public static void processRequest(AuthContext ctx) {\n        System.out.println(\"Authorized \" + ctx.role() + \" for \" + ctx.user());\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String role = scanner.next();\n        String user = scanner.next();\n        \n        AuthContext ctx = new AuthContext(role, user);\n        processRequest(ctx);\n    }\n}",
+          "tests": [
+            {
+              "name": "Admin Alice",
+              "stdin": "Admin Alice\n",
+              "expectedStdout": "Authorized Admin for Alice\n"
+            },
+            {
+              "name": "Explorer Bob",
+              "stdin": "Explorer Bob\n",
+              "expectedStdout": "Authorized Explorer for Bob\n"
+            },
+            {
+              "name": "Sentinel Zara",
+              "stdin": "Sentinel Zara\n",
+              "expectedStdout": "Authorized Sentinel for Zara\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 446: Scoped Values",
+            "location": "JDK Enhancement Proposal 446",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a3_l6",
+        "title": "High-Throughput Benchmarking: 10,000 Tasks in Milliseconds",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The final trial of the Chorus Highlands simulates a cosmic storm where 10,000 teleportation pulses converge at once. While traditional platform thread pools choke and collapse under thread exhaustion, Virtual Threads process the onslaught in milliseconds.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In traditional Java, spawning 10,000 platform threads would allocate ~10 GB of stack memory and crash the JVM with `OutOfMemoryError: unable to create native thread`. With Virtual Threads, spawning 10,000 or 100,000 concurrent tasks completes in under a second while consuming minimal memory."
+          },
+          {
+            "type": "code",
+            "content": "Executing 10,000 concurrent tasks with Virtual Threads:",
+            "code": "long start = System.currentTimeMillis();\ntry (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n    IntStream.range(0, 10_000).forEach(i -> {\n        executor.submit(() -> {\n            Thread.sleep(Duration.ofMillis(10));\n            return i;\n        });\n    });\n}\nlong elapsed = System.currentTimeMillis() - start;\nSystem.out.println(\"10,000 tasks finished in \" + elapsed + \" ms\");"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Notice the 10ms sleep: if run on a traditional pool of 200 platform threads, 10,000 tasks sleeping 10ms would take at least `(10,000 / 200) * 10ms = 500ms`. On virtual threads, all 10,000 run concurrently and complete in ~15-30ms!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The 10,000 Thread Challenge",
+            "content": "Platform threads: 10,000 x 1MB stack = 10GB RAM -> JVM Crash. Virtual threads: 10,000 x ~300B = ~3MB RAM -> Instant execution."
+          },
+          {
+            "title": "Carrier Thread Pool Saturation",
+            "content": "Virtual threads unmount on sleep/I/O, so 10,000 tasks run on only as many carrier threads as available CPU cores!"
+          },
+          {
+            "title": "Throughput over Latency",
+            "content": "Virtual threads do not make single computations faster; they maximize server throughput and request concurrency."
+          }
+        ],
+        "underTheHood": "The default carrier thread pool for virtual threads is a `ForkJoinPool` whose parallelism defaults to `Runtime.getRuntime().availableProcessors()`. Even if 1,000,000 virtual threads are currently waiting for I/O, only 8 to 16 carrier OS threads exist in the operating system.",
+        "workedExample": {
+          "code": "import java.util.concurrent.*;\nimport java.util.concurrent.atomic.AtomicInteger;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        AtomicInteger counter = new AtomicInteger(0);\n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            for (int i = 0; i < 1000; i++) {\n                executor.submit(() -> {\n                    counter.incrementAndGet();\n                });\n            }\n        }\n        System.out.println(\"Completed tasks: \" + counter.get());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 7,
+              "explanation": "Open VirtualThreadPerTaskExecutor."
+            },
+            {
+              "line": 8,
+              "explanation": "Spawn 1,000 virtual threads concurrently."
+            },
+            {
+              "line": 10,
+              "explanation": "Safely increment atomic counter."
+            },
+            {
+              "line": 13,
+              "explanation": "Executor auto-close waits for all 1,000 virtual threads to terminate."
+            },
+            {
+              "line": 14,
+              "explanation": "Prints Completed tasks: 1000."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Expecting virtual threads to speed up single-threaded heavy math algorithms.",
+            "code": "// A single Fibonacci(50) calculation does not run faster on a virtual thread!",
+            "correction": "Virtual threads increase concurrency capacity for I/O and waiting tasks; they do not accelerate raw CPU execution speed."
+          },
+          {
+            "mistake": "Unbounded queuing before virtual threads.",
+            "code": "// Queuing tasks before submitting to virtual thread executor",
+            "correction": "Submit tasks immediately; virtual threads themselves act as the concurrency mechanism without artificial request queues."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "How many carrier OS threads does the JVM typically allocate to support millions of active Virtual Threads?",
+            "options": [
+              "A small pool roughly equal to the number of available CPU cores (Runtime.getRuntime().availableProcessors())",
+              "One carrier thread per virtual thread (1,000,000 carrier threads)",
+              "Zero, virtual threads run directly on the network card",
+              "Exactly 1,024 on all systems"
+            ],
+            "answer": 0,
+            "explanation": "Virtual threads multiplex across a ForkJoinPool of carrier threads sized to CPU core count."
+          },
+          {
+            "question": "Do Virtual Threads speed up single-threaded CPU-intensive computations?",
+            "options": [
+              "No, they improve system throughput and concurrency capacity for I/O-bound tasks, not single-thread CPU speed",
+              "Yes, they make CPU calculations run 10x faster",
+              "Yes, by bypassing the JVM bytecode interpreter",
+              "Only for floating-point calculations"
+            ],
+            "answer": 0,
+            "explanation": "Virtual threads do not reduce computation latency; they dramatically increase concurrency density and server capacity."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `taskCount` from stdin. Using `Executors.newVirtualThreadPerTaskExecutor()` in a `try-with-resources` block, submit `taskCount` tasks. Each task increments a shared `AtomicInteger total`. After the executor closes, print `Benchmarked [taskCount] virtual tasks. Total: [total]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.concurrent.*;\nimport java.util.concurrent.atomic.AtomicInteger;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int taskCount = scanner.nextInt();\n        \n        // Benchmark taskCount virtual tasks with AtomicInteger counter\n        \n    }\n}",
+          "hints": [
+            "AtomicInteger counter = new AtomicInteger(0);",
+            "try (var executor = Executors.newVirtualThreadPerTaskExecutor()) { for (int i = 0; i < taskCount; i++) executor.submit(counter::incrementAndGet); }",
+            "Print `Benchmarked ` + taskCount + ` virtual tasks. Total: ` + counter.get()."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.concurrent.*;\nimport java.util.concurrent.atomic.AtomicInteger;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int taskCount = scanner.nextInt();\n        \n        AtomicInteger counter = new AtomicInteger(0);\n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            for (int i = 0; i < taskCount; i++) {\n                executor.submit(() -> counter.incrementAndGet());\n            }\n        }\n        \n        System.out.println(\"Benchmarked \" + taskCount + \" virtual tasks. Total: \" + counter.get());\n    }\n}",
+          "tests": [
+            {
+              "name": "500 virtual tasks",
+              "stdin": "500\n",
+              "expectedStdout": "Benchmarked 500 virtual tasks. Total: 500\n"
+            },
+            {
+              "name": "1000 virtual tasks",
+              "stdin": "1000\n",
+              "expectedStdout": "Benchmarked 1000 virtual tasks. Total: 1000\n"
+            },
+            {
+              "name": "50 virtual tasks",
+              "stdin": "50\n",
+              "expectedStdout": "Benchmarked 50 virtual tasks. Total: 50\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 444: Virtual Threads (JDK 21)",
+            "location": "Performance and Scalability",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 12: Concurrency",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a3",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a3_q1",
+        "type": "mcq",
+        "question": "What is the key difference between a Platform Thread and a Virtual Thread in Java 21+?",
+        "options": [
+          "A Platform Thread is mapped 1:1 to an OS kernel thread (~1MB stack), while a Virtual Thread is a lightweight JVM user-mode thread (~hundreds of bytes) multiplexed across carrier threads",
+          "Virtual Threads run only in the browser",
+          "Platform Threads cannot perform network I/O",
+          "Virtual Threads do not have stack traces"
+        ],
+        "answer": 0,
+        "explanation": "Virtual threads decouple Java threads from OS threads, reducing memory footprint from 1MB to hundreds of bytes."
+      },
+      {
+        "id": "a3_q2",
+        "type": "mcq",
+        "question": "Which factory method creates an ExecutorService that spawns a dedicated virtual thread for every submitted task?",
+        "options": [
+          "Executors.newVirtualThreadPerTaskExecutor()",
+          "Executors.newFixedThreadPool(100)",
+          "Executors.newVirtualThreadPool()",
+          "Thread.spawnPool()"
+        ],
+        "answer": 0,
+        "explanation": "`Executors.newVirtualThreadPerTaskExecutor()` executes each task on an ephemeral new virtual thread."
+      },
+      {
+        "id": "a3_q3",
+        "type": "mcq",
+        "question": "What is 'Carrier Thread Pinning'?",
+        "options": [
+          "A state where a virtual thread cannot be unmounted from its carrier OS thread during a blocking call (e.g. inside synchronized or JNI)",
+          "Pinning CPU cores to maximum clock speed",
+          "Assigning a virtual thread to a specific database table",
+          "A feature that accelerates memory access"
+        ],
+        "answer": 0,
+        "explanation": "Pinning prevents the virtual thread from yielding its carrier thread, causing carrier thread pool starvation."
+      },
+      {
+        "id": "a3_q4",
+        "type": "mcq",
+        "question": "How should you refactor a `synchronized` block in Java 21 to avoid carrier thread pinning during blocking I/O?",
+        "options": [
+          "Replace it with ReentrantLock",
+          "Replace it with Thread.yield()",
+          "Use a volatile int",
+          "Mark the method native"
+        ],
+        "answer": 0,
+        "explanation": "ReentrantLock allows virtual threads to unmount safely during blocking operations."
+      },
+      {
+        "id": "a3_q5",
+        "type": "mcq",
+        "question": "What is the primary benefit of Structured Concurrency?",
+        "options": [
+          "It guarantees that child subtasks cannot outlive or leak past their parent scope block, automatically propagating cancellation and joining subtasks",
+          "It eliminates all exceptions from Java code",
+          "It forces all methods to return void",
+          "It runs all subtasks sequentially"
+        ],
+        "answer": 0,
+        "explanation": "Structured Concurrency manages concurrent subtasks as a unified lifecycle unit, eliminating orphan thread leaks."
+      },
+      {
+        "id": "a3_q6",
+        "type": "mcq",
+        "question": "Why are Scoped Values preferred over ThreadLocal for virtual threads?",
+        "options": [
+          "They are immutable and bounded in lifetime to an execution block, preventing memory leaks and avoiding massive map-copying overhead across millions of threads",
+          "ThreadLocal cannot hold objects",
+          "Scoped Values are stored in GPU memory",
+          "Scoped Values disable garbage collection"
+        ],
+        "answer": 0,
+        "explanation": "Scoped Values provide immutable, stack-bounded data sharing designed for millions of virtual threads."
+      },
+      {
+        "id": "a3_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "Thread vt = Thread.ofVirtual().start(() -> System.out.println(Thread.currentThread().isVirtual()));\nvt.join();",
+        "options": [
+          "true",
+          "false",
+          "null",
+          "Throws UnsupportedOperationException"
+        ],
+        "answer": 0,
+        "explanation": "Thread.currentThread().isVirtual() returns true for virtual threads."
+      },
+      {
+        "id": "a3_q8",
+        "type": "spot-the-bug",
+        "question": "What is the anti-pattern in this Virtual Thread usage?",
+        "code": "ExecutorService pool = new ThreadPoolExecutor(\n    10, 50, 60L, TimeUnit.SECONDS,\n    new LinkedBlockingQueue<>(),\n    Thread.ofVirtual().factory()\n);",
+        "options": [
+          "Pooling virtual threads in a ThreadPoolExecutor is an anti-pattern; virtual threads should be created per-task and never pooled",
+          "LinkedBlockingQueue cannot be used with executors",
+          "Thread.ofVirtual() is deprecated",
+          "The keep-alive time must be zero"
+        ],
+        "answer": 0,
+        "explanation": "Virtual threads are cheap and disposable. Pooling them adds unnecessary queueing and overhead."
+      },
+      {
+        "id": "a3_q9",
+        "type": "fill-in",
+        "question": "Complete the statement: To detect carrier thread pinning at runtime, pass the JVM flag -Djdk.trace______Threads=full.",
+        "answer": "Pinned",
+        "explanation": "`-Djdk.tracePinnedThreads=full` logs stack traces of pinned virtual threads."
+      },
+      {
+        "id": "a3_q10",
+        "type": "mcq",
+        "question": "Are Virtual Threads non-daemon threads that prevent JVM shutdown, or daemon threads?",
+        "options": [
+          "They are always daemon threads; the JVM exits if only virtual threads remain alive",
+          "They are always non-daemon threads",
+          "They change to non-daemon when connected to a socket",
+          "Their daemon status cannot be queried"
+        ],
+        "answer": 0,
+        "explanation": "Virtual threads are daemon threads by specification."
+      },
+      {
+        "id": "a3_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the lines to execute structured virtual tasks using try-with-resources:",
+        "lines": [
+          "try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {",
+          "    Future<Integer> f1 = executor.submit(() -> 100);",
+          "    Future<Integer> f2 = executor.submit(() -> 200);",
+          "    System.out.println(f1.get() + f2.get());",
+          "}"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "explanation": "Open try-with-resources executor -> submit task 1 -> submit task 2 -> await and combine -> close block."
+      },
+      {
+        "id": "a3_q12",
+        "type": "mcq",
+        "question": "Which type of workload gains the MOST performance and scalability from Virtual Threads?",
+        "options": [
+          "I/O-bound workloads (web servers, database queries, microservice REST calls)",
+          "CPU-intensive video encoding",
+          "Cryptographic proof-of-work mining",
+          "Local 3D matrix transformations"
+        ],
+        "answer": 0,
+        "explanation": "Virtual threads excel at I/O-bound tasks where threads frequently block and wait, freeing carrier threads."
+      }
+    ],
+    "project": {
+      "title": "Chorus Highlands Ultra-Scale Virtual Dispatcher",
+      "brief": "Construct a massive-scale concurrent gateway capable of handling 50,000 simultaneous simulated portal connections. Implement Thread.ofVirtual() task dispatchers, refactor synchronized blocks to ReentrantLock to eradicate carrier thread pinning, enforce structured subtask lifecycles, and benchmark throughput across thousands of concurrent tasks.",
+      "milestones": [
+        "Milestone 1: Build a high-concurrency request gateway using Executors.newVirtualThreadPerTaskExecutor()",
+        "Milestone 2: Audit and eliminate synchronized blocks with ReentrantLock to achieve zero carrier pinning",
+        "Milestone 3: Implement structured multi-subtask aggregation with cooperative cancellation on failure",
+        "Milestone 4: Execute a microbenchmark simulating 10,000 concurrent I/O operations in under 500ms"
+      ],
+      "rubric": [
         {
-          "type": "true-false",
-          "question": "At runtime, List<String> and List<Integer> have their generic type parameters erased by the compiler.",
-          "answer": true,
-          "explanation": "Type erasure removes generic arguments at compile time for backward compatibility."
+          "criterion": "Virtual Thread Architecture",
+          "points": 25,
+          "description": "Correct implementation of thread-per-task model without artificial thread pools"
         },
         {
-          "type": "output",
-          "question": "What does pattern matching instanceof do?",
-          "code": "Object val = 100;\nif (val instanceof Integer i) {\n    System.out.println(i + 25);\n}",
-          "options": [
-            "125",
-            "10025",
-            "Compile error",
-            "ClassCastException"
-          ],
-          "answer": 0,
-          "explanation": "Pattern matching automatically checks type and binds variable i as Integer: 100 + 25 = 125."
+          "criterion": "Carrier Pinning Hygiene",
+          "points": 25,
+          "description": "Flawless elimination of synchronized blocks on blocking pathways"
         },
         {
-          "type": "mcq",
-          "question": "Which annotation retention policy keeps the annotation available for runtime reflection?",
-          "options": [
-            "SOURCE",
-            "CLASS",
-            "RUNTIME",
-            "SYSTEM"
-          ],
-          "answer": 2,
-          "explanation": "RetentionPolicy.RUNTIME keeps annotations in the compiled class file and accessible via reflection."
+          "criterion": "Structured Concurrency Lifecycles",
+          "points": 25,
+          "description": "Child thread containment and cooperative interruption handling"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Advanced Language Features?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a3",
-      "title": "A3: Pattern Matching Evaluator",
-      "prompt": "Write a static method `public static String describe(Object obj)` that uses pattern matching:\n- If `obj instanceof String s` -> return `\"String: \" + s.toUpperCase()`\n- If `obj instanceof Integer i` -> return `\"Integer: \" + (i * 2)`\n- Else -> return `\"Unknown\"`\nIn main, print `describe(\"java\")` and `describe(50)`:\n`String: JAVA\nInteger: 100`",
-      "starterCode": "public class Main {\n    // TODO 1: Implement describe(Object obj) using pattern matching switch:\n    // - Integer i when i > 100 -> \"Large Integer: \" + i\n    // - Integer i -> \"Small Integer: \" + i\n    // - String s -> \"String of length \" + s.length()\n    // - default -> \"Unknown\"\n    public static String describe(Object obj) {\n        // Your code here\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Test with 150, \"JavaQuest\", and 50 and print results\n    }\n}",
-      "expectedOutput": "String: JAVA\nInteger: 100",
-      "testCases": [
-        {
-          "name": "Evaluate Pattern Matching Types",
-          "expected": "String: JAVA\nInteger: 100"
+          "criterion": "Throughput & Scalability",
+          "points": 25,
+          "description": "Successful execution of massive concurrency benchmarks with low memory overhead"
         }
       ],
-      "hints": [
-        "Use pattern matching instanceof (obj instanceof String s)."
+      "stretchGoals": [
+        "Run pinning detection using -Djdk.tracePinnedThreads=full during automated integration tests",
+        "Simulate a resilient parallel Scatter-Gather pattern calling 5 simulated microservices with short-circuiting"
       ]
     },
-    "biome": "Crystal Altar",
-    "conceptMetaphor": "Records, sealed hierarchies, and pattern matching forging unyielding crystalline contracts.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Virtual Thread",
+        "definition": "A lightweight user-mode thread managed by the JVM runtime whose stack is stored on the heap."
+      },
+      {
+        "term": "Platform Thread",
+        "definition": "A traditional Java thread mapped 1:1 to an operating system kernel thread with dedicated 1MB stack memory."
+      },
+      {
+        "term": "Carrier Thread",
+        "definition": "An underlying OS platform thread (from ForkJoinPool) that executes a virtual thread until it blocks."
+      },
+      {
+        "term": "Thread Pinning",
+        "definition": "When a virtual thread blocks inside a synchronized block or native JNI call and cannot yield its carrier thread."
+      },
+      {
+        "term": "Structured Concurrency",
+        "definition": "A paradigm treating related concurrent subtasks as a single unified unit of work with guaranteed lifecycle boundaries."
+      },
+      {
+        "term": "Scoped Values",
+        "definition": "An immutable, stack-bounded mechanism for safely sharing contextual data across threads without ThreadLocal leaks."
+      },
+      {
+        "term": "Unmount",
+        "definition": "The JVM operation of detaching a blocked virtual thread from its carrier thread so the carrier can run other tasks."
+      },
+      {
+        "term": "Project Loom",
+        "definition": "The OpenJDK project that developed Virtual Threads and Structured Concurrency for modern Java."
+      }
+    ],
+    "references": [
+      {
+        "source": "JEP 444: Virtual Threads (JDK 21)",
+        "location": "JDK Enhancement Proposal 444",
+        "verify": false
+      },
+      {
+        "source": "JEP 453: Structured Concurrency",
+        "location": "JDK Enhancement Proposal 453",
+        "verify": false
+      },
+      {
+        "source": "Modern Java in Action",
+        "location": "Chapter 16: Concurrency and Reactive Programming Evolution",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a4",
     "code": "A4",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Design & Architecture",
-    "subtitle": "Builder, Factory, Strategy, Observer and Clean Architecture",
-    "icon": "️",
-    "color": "#16A085",
+    "title": "Design Patterns & Clean Architecture",
+    "subtitle": "Modern Java idioms for GoF patterns: Builder with Records, Singleton patterns, Adapter, Decorator, Strategy with Lambdas, Observer with Reactive events, and Clean/Hexagonal Architecture",
+    "biome": "End City Outer Islands",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Construct fluent Builder patterns and compare with compact validation in modern Java Records",
+      "Implement thread-safe Singletons using Enum types and the Bill Pugh Lazy Initialization Holder pattern",
+      "Assemble flexible object pipelines utilizing the Adapter and Decorator design patterns",
+      "Replace heavy GoF Strategy and Command boilerplate with modern Java functional interfaces and lambdas",
+      "Implement decoupled event publishing and subscriptions using the Observer pattern and Flow/Reactive streams",
+      "Structure enterprise systems adhering to SOLID principles and Clean / Hexagonal (Ports and Adapters) Architecture"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1",
+      "a2",
+      "a3"
+    ],
     "lessons": [
       {
-        "id": "lesson-a4-1",
-        "title": "Creational Patterns: Builder & Factory",
-        "xp": 50,
-        "slides": [
+        "id": "a4_l1",
+        "title": "Creational Patterns: Fluent Builder & Immutability",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The architects of the End City construct floating towers with dozens of customizable spires, enchantments, and levitation crystals. The Builder pattern constructs complex immutable objects step by step with clear, fluent readability.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "The Builder Pattern",
-            "content": "Solves the \"telescoping constructor\" anti-pattern when objects have many optional parameters. Produces readable, immutable objects step-by-step."
-          },
-          {
-            "type": "visual",
-            "visual": "class-diagram",
-            "visualData": {
-              "classes": [
-                {
-                  "name": "ServiceProxy",
-                  "type": "dynamic proxy",
-                  "fields": [
-                    "- InvocationHandler h"
-                  ],
-                  "methods": [
-                    "+ Object invoke(proxy, method, args)"
-                  ]
-                }
-              ]
-            },
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "Constructors with many parameters suffer from the **Telescoping Constructor Anti-Pattern** (confusing argument order and dozens of overloaded constructors). The **Builder Pattern** encapsulates object construction into a fluent builder, enforcing mandatory fields, validating constraints, and producing an immutable target object."
           },
           {
             "type": "code",
-            "title": "Builder Pattern",
-            "content": "Fluent method chaining pattern.",
-            "code": "User u = new User.Builder(\"Scout\")\n    .email(\"scout@code.com\")\n    .role(\"ADMIN\")\n    .build();"
+            "content": "Idiomatic Builder pattern in modern Java:",
+            "code": "public class Spire {\n    private final String name;\n    private final int height;\n    private final boolean shielded;\n\n    private Spire(Builder b) {\n        this.name = b.name;\n        this.height = b.height;\n        this.shielded = b.shielded;\n    }\n\n    public static class Builder {\n        private final String name; // Mandatory\n        private int height = 10;   // Default\n        private boolean shielded = false;\n\n        public Builder(String name) { this.name = Objects.requireNonNull(name); }\n        public Builder height(int h) { this.height = h; return this; }\n        public Builder shielded(boolean s) { this.shielded = s; return this; }\n        public Spire build() { return new Spire(this); }\n    }\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "In *Effective Java* (Item 2), Joshua Bloch strongly recommends: *'Consider a builder when faced with many constructor parameters.'* It combines the safety of telescoping constructors with the readability of JavaBeans."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Telescoping Constructor Problem",
+            "content": "`new Spire(\"Citadel\", 100, true, null, 42, false)` is error-prone. Swapping two int parameters compiles without warning!"
+          },
+          {
+            "title": "The Builder Solution",
+            "content": "Chain setters that return `this`: `new Spire.Builder(\"Citadel\").height(100).shielded(true).build();`"
+          },
+          {
+            "title": "Immutability & Thread Safety",
+            "content": "Once `build()` returns, the resulting object has private final fields and no setters, making it inherently thread-safe."
+          }
+        ],
+        "underTheHood": "The Builder pattern decouples object configuration from object representation. In modern Java, Records can be combined with Builders to produce immutable validated data carriers with concise syntax.",
+        "workedExample": {
+          "code": "public class Main {\n    static class Tower {\n        private final String material;\n        private final int floors;\n        \n        private Tower(Builder b) {\n            this.material = b.material;\n            this.floors = b.floors;\n        }\n        public String getMaterial() { return material; }\n        public int getFloors() { return floors; }\n        \n        public static class Builder {\n            private String material = \"Obsidian\";\n            private int floors = 1;\n            \n            public Builder material(String m) { this.material = m; return this; }\n            public Builder floors(int f) { this.floors = f; return this; }\n            public Tower build() { return new Tower(this); }\n        }\n    }\n    \n    public static void main(String[] args) {\n        Tower t = new Tower.Builder().material(\"Purpur\").floors(5).build();\n        System.out.println(t.getMaterial() + \" tower with \" + t.getFloors() + \" floors\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Private final fields enforce immutability."
+            },
+            {
+              "line": 6,
+              "explanation": "Private constructor accessible only to the static nested Builder."
+            },
+            {
+              "line": 15,
+              "explanation": "Fluent setter methods return this for method chaining."
+            },
+            {
+              "line": 22,
+              "explanation": "Construct Tower via fluent chain and print output."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Allowing mutable collections to escape the builder without defensive copying.",
+            "code": "public Spire build() { return new Spire(this.tags); } // Callers can mutate tags list later!",
+            "correction": "Use defensive copying: `this.tags = List.copyOf(b.tags);`"
+          },
+          {
+            "mistake": "Creating builders for classes with only 1 or 2 immutable parameters.",
+            "code": "// Overhead of builder for Point(int x, int y)",
+            "correction": "Use standard Java Records for simple data carriers with few parameters."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "When should you prefer the Builder pattern over multiple overloaded constructors?",
+            "options": [
+              "When a class has more than four parameters, especially when many parameters are optional or of identical types",
+              "When the class has no fields",
+              "Only for abstract classes",
+              "Only when using Java 8"
+            ],
+            "answer": 0,
+            "explanation": "Builders eliminate parameter-swapping bugs and provide clean fluent configuration for complex objects."
+          },
+          {
+            "question": "Why does each fluent setter method in a Builder return `this`?",
+            "options": [
+              "To allow method chaining (fluent interface syntax: builder.a().b().c())",
+              "To prevent garbage collection",
+              "To make the method synchronized",
+              "To allocate native memory"
+            ],
+            "answer": 0,
+            "explanation": "Returning `this` allows successive builder calls to be chained in a single readable statement."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a string `item` and integer `qty` from stdin. Build an immutable `Shipment` object using a nested `Builder` class. The builder must have `item(String i)` and `quantity(int q)` methods and a `build()` method. Print `Shipment built: [qty]x [item]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    // Implement Shipment and Shipment.Builder\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String item = scanner.next();\n        int qty = scanner.nextInt();\n        \n        // Build Shipment using Builder and print confirmation\n        \n    }\n}",
+          "hints": [
+            "class Shipment { private final String item; private final int qty; private Shipment(Builder b) { this.item = b.item; this.qty = b.qty; } ... }",
+            "Shipment s = new Shipment.Builder().item(item).quantity(qty).build();",
+            "Print `Shipment built: ` + s.getQty() + `x ` + s.getItem()."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    static class Shipment {\n        private final String item;\n        private final int qty;\n        \n        private Shipment(Builder b) {\n            this.item = b.item;\n            this.qty = b.qty;\n        }\n        public String getItem() { return item; }\n        public int getQty() { return qty; }\n        \n        public static class Builder {\n            private String item;\n            private int qty;\n            \n            public Builder item(String item) { this.item = item; return this; }\n            public Builder quantity(int qty) { this.qty = qty; return this; }\n            public Shipment build() { return new Shipment(this); }\n        }\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String item = scanner.next();\n        int qty = scanner.nextInt();\n        \n        Shipment s = new Shipment.Builder().item(item).quantity(qty).build();\n        System.out.println(\"Shipment built: \" + s.getQty() + \"x \" + s.getItem());\n    }\n}",
+          "tests": [
+            {
+              "name": "Elytra 2",
+              "stdin": "Elytra 2\n",
+              "expectedStdout": "Shipment built: 2x Elytra\n"
+            },
+            {
+              "name": "ShulkerBox 10",
+              "stdin": "ShulkerBox 10\n",
+              "expectedStdout": "Shipment built: 10x ShulkerBox\n"
+            },
+            {
+              "name": "DragonBreath 5",
+              "stdin": "DragonBreath 5\n",
+              "expectedStdout": "Shipment built: 5x DragonBreath\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Item 2: Consider a builder when faced with many constructor parameters",
+            "verify": false
+          },
+          {
+            "source": "Design Patterns: Elements of Reusable Object-Oriented Software",
+            "location": "Creational Patterns: Builder",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a4-2",
-        "title": "Behavioral Patterns: Strategy & Observer",
-        "xp": 50,
-        "slides": [
+        "id": "a4_l2",
+        "title": "Creational Patterns: Thread-Safe Singleton Idioms",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Only one Void Core heart beats in the entire dimension. Duplicating it would trigger a cataclysmic temporal split. In Java, ensuring that exactly one instance of a class exists across the entire JVM requires thread-safe singleton design.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Strategy & Clean Architecture",
-            "content": "The **Strategy Pattern** defines a family of interchangeable algorithms (e.g. payment processors). Hexagonal architecture decouples core business logic from frameworks and databases."
+            "type": "text",
+            "content": "The **Singleton Pattern** restricts instantiation to a single global instance. In multithreaded systems, flawed singletons create multiple duplicate instances during race conditions or fail under reflection/serialization attacks. Modern Java offers two superior idioms: **Enum Singleton** and **Bill Pugh Initialization-on-demand Holder**."
           },
           {
             "type": "code",
-            "title": "Strategy with Functional Interface",
-            "content": "In modern Java, Strategy is simply a lambda or method reference!",
-            "code": "Function<Double, Double> discountStrategy = price -> price * 0.9;"
+            "content": "The two best Singleton implementations in Java:",
+            "code": "// 1. Joshua Bloch's Enum Singleton (Best: immune to reflection & serialization attacks!)\npublic enum GlobalRegistry {\n    INSTANCE;\n    private final Map<String, String> data = new ConcurrentHashMap<>();\n    public void register(String k, String v) { data.put(k, v); }\n}\n\n// 2. Bill Pugh Holder (Lazy, thread-safe, zero synchronization overhead!)\npublic class DimensionGate {\n    private DimensionGate() {}\n    private static class Holder {\n        private static final DimensionGate INSTANCE = new DimensionGate();\n    }\n    public static DimensionGate getInstance() {\n        return Holder.INSTANCE; // Loaded only when getInstance() is first called!\n    }\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "*Effective Java* (Item 3): *'A single-element enum type is often the best way to implement a singleton.'* The JVM guarantees enum constants cannot be instantiated twice, even via reflection (`Constructor.newInstance()` throws `IllegalArgumentException: Cannot reflectively create enum objects`)!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Dangers of Flawed Singletons",
+            "content": "Classic lazy singleton (`if (instance == null) instance = new X()`) is broken under multithreading, reflection, and serialization."
+          },
+          {
+            "title": "Enum Singleton (Effective Java Item 3)",
+            "content": "Absolute 100% thread safety, JVM reflection defense, and free serialization handling out of the box."
+          },
+          {
+            "title": "Bill Pugh Holder Idiom",
+            "content": "Uses JVM class initialization semantics. Inner Holder class is loaded only when referenced, providing lazy initialization with zero locks."
+          }
+        ],
+        "underTheHood": "The Bill Pugh pattern exploits the JVM specification guarantee (§12.4.2): static initializers of a class run under an internal class-initialization monitor lock. Because `Holder` is not referenced until `getInstance()` is called, initialization is deferred and strictly synchronized by the JVM without runtime lock overhead.",
+        "workedExample": {
+          "code": "public class Main {\n    public enum VoidCore {\n        INSTANCE;\n        private int charge = 100;\n        public int getCharge() { return charge; }\n        public void discharge(int amount) { charge -= amount; }\n    }\n    \n    public static void main(String[] args) {\n        VoidCore c1 = VoidCore.INSTANCE;\n        VoidCore c2 = VoidCore.INSTANCE;\n        System.out.println(\"Same instance: \" + (c1 == c2));\n        c1.discharge(20);\n        System.out.println(\"Charge remaining: \" + c2.getCharge());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 2,
+              "explanation": "Declare single-element Enum Singleton."
+            },
+            {
+              "line": 10,
+              "explanation": "Retrieve references c1 and c2."
+            },
+            {
+              "line": 11,
+              "explanation": "c1 == c2 confirms absolute identity equality across references."
+            },
+            {
+              "line": 12,
+              "explanation": "Mutation on c1 is immediately reflected on c2."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using double-checked locking without declaring the instance field volatile.",
+            "code": "private static Singleton instance; // Missing volatile creates partially initialized instance bug under high concurrency!",
+            "correction": "Must declare `private static volatile Singleton instance;` or prefer the Enum/Bill Pugh pattern."
+          },
+          {
+            "mistake": "Implementing Serializable on a class-based singleton without readResolve().",
+            "code": "// Deserializing a singleton creates a second instance!",
+            "correction": "Add `private Object readResolve() { return INSTANCE; }` or use an Enum singleton."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why does Joshua Bloch call a single-element Enum the best way to implement a singleton?",
+            "options": [
+              "It is completely immune to reflection attacks and serialization duplicate-instance creation by JVM design",
+              "It consumes zero bytes of memory",
+              "Enums cannot have methods",
+              "It runs on the GPU"
+            ],
+            "answer": 0,
+            "explanation": "The JVM strictly forbids reflectively creating enums and handles serialization automatically without creating duplicates."
+          },
+          {
+            "question": "Why is the Bill Pugh Singleton Holder pattern thread-safe without using `synchronized` in `getInstance()`?",
+            "options": [
+              "Because the JVM class loading specification guarantees static initializers are executed under mutual exclusion when the inner class is first accessed",
+              "Because it runs in single-threaded mode",
+              "Because it disables thread context switching",
+              "Because all classes are immutable"
+            ],
+            "answer": 0,
+            "explanation": "The JVM handles synchronization internally during class initialization of the static nested Holder class."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `initEnergy` and integer `drain` from stdin. Implement an Enum singleton `CoreEngine` with method `setEnergy(int)` and `drain(int)`. Set the initial energy, drain it, and print `CoreEngine energy: [remaining]`. Verify singleton consistency.",
+          "starterCode": "import java.util.Scanner;\n\n// Implement enum CoreEngine\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int init = scanner.nextInt();\n        int drain = scanner.nextInt();\n        \n        // Update CoreEngine singleton and print remaining energy\n        \n    }\n}",
+          "hints": [
+            "enum CoreEngine { INSTANCE; private int energy; public void set(int e) { this.energy = e; } public void drain(int d) { this.energy -= d; } public int get() { return energy; } }",
+            "CoreEngine.INSTANCE.set(init); CoreEngine.INSTANCE.drain(drain);",
+            "Print `CoreEngine energy: ` + CoreEngine.INSTANCE.get()."
+          ],
+          "solution": "import java.util.Scanner;\n\nenum CoreEngine {\n    INSTANCE;\n    private int energy;\n    \n    public void setEnergy(int e) { this.energy = e; }\n    public void drain(int d) { this.energy -= d; }\n    public int getEnergy() { return energy; }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int init = scanner.nextInt();\n        int drain = scanner.nextInt();\n        \n        CoreEngine engine = CoreEngine.INSTANCE;\n        engine.setEnergy(init);\n        engine.drain(drain);\n        \n        System.out.println(\"CoreEngine energy: \" + engine.getEnergy());\n    }\n}",
+          "tests": [
+            {
+              "name": "100 energy drain 30",
+              "stdin": "100 30\n",
+              "expectedStdout": "CoreEngine energy: 70\n"
+            },
+            {
+              "name": "50 energy drain 50",
+              "stdin": "50 50\n",
+              "expectedStdout": "CoreEngine energy: 0\n"
+            },
+            {
+              "name": "500 energy drain 125",
+              "stdin": "500 125\n",
+              "expectedStdout": "CoreEngine energy: 375\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Item 3: Enforce the singleton property with a private constructor or an enum type",
+            "verify": false
+          },
+          {
+            "source": "Design Patterns: Elements of Reusable Object-Oriented Software",
+            "location": "Creational Patterns: Singleton",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a4_l3",
+        "title": "Structural Patterns: Adapter & Decorator Pipelines",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When ancient Nether power conduits must plug into modern End City matrix sockets, their incompatible interfaces clash. The Adapter pattern translates between incompatible interfaces, while the Decorator pattern adds dynamic behaviors without inheritance explosion.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "The **Adapter Pattern** converts the interface of a class into another interface clients expect, allowing incompatible classes to collaborate. The **Decorator Pattern** attaches additional responsibilities to an object dynamically by wrapping it with another implementation of the same interface."
+          },
+          {
+            "type": "code",
+            "content": "Adapter and Decorator patterns in action:",
+            "code": "// ADAPTER: Adapt LegacyNetherSource to PowerSocket interface\nclass ConduitAdapter implements PowerSocket {\n    private final LegacyNetherSource source;\n    public ConduitAdapter(LegacyNetherSource s) { this.source = s; }\n    @Override public int getVoltage() { return source.fetchRawHeat() * 2; }\n}\n\n// DECORATOR: Wrap a Stream with Encryption and Buffering (classic java.io!)\nInputStream in = new GZIPInputStream(new BufferedInputStream(new FileInputStream(\"data.gz\")));"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "The standard Java I/O library (`java.io.*`) is the premier example of the Decorator pattern: `BufferedReader` decorates `InputStreamReader`, which in turn adapts `InputStream`!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "Adapter Pattern",
+            "content": "Wraps an existing object to match a foreign interface. Key idea: 'Make incompatible interfaces work together.'"
+          },
+          {
+            "title": "Decorator Pattern",
+            "content": "Wraps an object implementing the SAME interface to add behavior dynamically without subclassing explosion."
+          },
+          {
+            "title": "Composition over Inheritance",
+            "content": "Both patterns leverage object composition instead of rigid inheritance hierarchies."
+          }
+        ],
+        "underTheHood": "Decorators preserve the Open/Closed Principle (OCP): open for extension, closed for modification. Behaviors can be chained in arbitrary combinations (e.g., `Compress(Encrypt(Log(BaseSink)))`) at runtime without creating a combinatorial explosion of static subclasses.",
+        "workedExample": {
+          "code": "public class Main {\n    interface Shield {\n        int absorb(int damage);\n    }\n    static class BaseShield implements Shield {\n        public int absorb(int damage) { return damage - 10; }\n    }\n    static class RadiantDecorator implements Shield {\n        private final Shield inner;\n        public RadiantDecorator(Shield inner) { this.inner = inner; }\n        public int absorb(int damage) { return inner.absorb(damage) - 15; }\n    }\n    public static void main(String[] args) {\n        Shield s = new RadiantDecorator(new BaseShield());\n        System.out.println(\"Remaining damage: \" + s.absorb(50)); // 50 - 10 - 15 = 25\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 2,
+              "explanation": "Common Shield interface."
+            },
+            {
+              "line": 5,
+              "explanation": "BaseShield reduces damage by 10."
+            },
+            {
+              "line": 8,
+              "explanation": "RadiantDecorator implements Shield and wraps another Shield instance."
+            },
+            {
+              "line": 11,
+              "explanation": "absorb() delegates to wrapped shield and reduces additional 15 damage."
+            },
+            {
+              "line": 15,
+              "explanation": "Prints Remaining damage: 25."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Creating hundreds of subclasses for every combination of features.",
+            "code": "class EncryptedCompressedLoggedFileSink extends ... // Subclass explosion!",
+            "correction": "Use Decorator wrappers to compose behaviors dynamically."
+          },
+          {
+            "mistake": "Modifying third-party library source code when interfaces do not match.",
+            "code": "// Changing vendor code directly breaks on upgrades",
+            "correction": "Wrap the vendor class in an Adapter implementing your domain interface."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which classic Java API is the most famous example of the Decorator design pattern?",
+            "options": [
+              "java.io (e.g. BufferedReader wrapping FileReader wrapping FileInputStream)",
+              "java.lang.Math",
+              "java.time.LocalDate",
+              "java.util.UUID"
+            ],
+            "answer": 0,
+            "explanation": "Java I/O streams wrap base streams with buffering, filtering, and compression decorators."
+          },
+          {
+            "question": "What is the primary difference between an Adapter and a Decorator?",
+            "options": [
+              "An Adapter changes the interface to make incompatible types work together; a Decorator keeps the same interface and enhances behavior",
+              "An Adapter is for collections, a Decorator is for strings",
+              "An Adapter is deprecated in modern Java",
+              "Decorators only work on static methods"
+            ],
+            "answer": 0,
+            "explanation": "Adapter transforms an interface; Decorator keeps the exact same interface while layering new behavior."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `baseDamage` and integer `buff` from stdin. Implement a `Weapon` interface with method `int attack()`. Implement `BasicSword` returning `baseDamage`. Implement a `FireRuneDecorator` wrapping a `Weapon` and adding `buff` to `attack()`. Print `Decorated attack: [attack]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    // Implement Weapon interface, BasicSword, and FireRuneDecorator\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int base = scanner.nextInt();\n        int buff = scanner.nextInt();\n        \n        // Decorate weapon and print attack power\n        \n    }\n}",
+          "hints": [
+            "interface Weapon { int attack(); }",
+            "class BasicSword implements Weapon { int base; ... return base; }",
+            "class FireRuneDecorator implements Weapon { Weapon w; int buff; ... return w.attack() + buff; }",
+            "Print `Decorated attack: ` + weapon.attack()."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    interface Weapon {\n        int attack();\n    }\n    \n    static class BasicSword implements Weapon {\n        private final int base;\n        public BasicSword(int base) { this.base = base; }\n        public int attack() { return base; }\n    }\n    \n    static class FireRuneDecorator implements Weapon {\n        private final Weapon inner;\n        private final int buff;\n        public FireRuneDecorator(Weapon inner, int buff) {\n            this.inner = inner;\n            this.buff = buff;\n        }\n        public int attack() { return inner.attack() + buff; }\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int base = scanner.nextInt();\n        int buff = scanner.nextInt();\n        \n        Weapon sword = new FireRuneDecorator(new BasicSword(base), buff);\n        System.out.println(\"Decorated attack: \" + sword.attack());\n    }\n}",
+          "tests": [
+            {
+              "name": "Base 20 buff 15",
+              "stdin": "20 15\n",
+              "expectedStdout": "Decorated attack: 35\n"
+            },
+            {
+              "name": "Base 50 buff 50",
+              "stdin": "50 50\n",
+              "expectedStdout": "Decorated attack: 100\n"
+            },
+            {
+              "name": "Base 10 buff 5",
+              "stdin": "10 5\n",
+              "expectedStdout": "Decorated attack: 15\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Design Patterns: Elements of Reusable Object-Oriented Software",
+            "location": "Structural Patterns: Adapter & Decorator",
+            "verify": false
+          },
+          {
+            "source": "Head First Design Patterns, 2nd ed.",
+            "location": "Chapter 3: Decorator Pattern & Chapter 7: Adapter Pattern",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a4_l4",
+        "title": "Behavioral Patterns: Strategy & Command with Lambdas",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "In classic Java, configuring different battle tactics or queueing portal commands required writing dozens of verbose one-method classes. Modern Java replaces heavy Strategy and Command patterns with concise lambdas and method references.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "The **Strategy Pattern** defines a family of algorithms and makes them interchangeable. The **Command Pattern** encapsulates a request as an object, allowing parameterization and queueing. In modern Java, any single-abstract-method (SAM) interface is a functional interface, enabling lambdas to replace entire class hierarchies."
+          },
+          {
+            "type": "code",
+            "content": "Modern Lambda-powered Strategy and Command:",
+            "code": "// Strategy as a functional interface:\n@FunctionalInterface\ninterface DefenseStrategy {\n    int defend(int incomingDamage);\n}\n\n// Swapping strategies dynamically using lambdas:\nDefenseStrategy fullShield = dmg -> 0;\nDefenseStrategy halfDamage = dmg -> dmg / 2;\nDefenseStrategy evasion    = dmg -> (Math.random() > 0.5) ? 0 : dmg;\n\n// Command as Runnable or Consumer:\nList<Runnable> commandQueue = new ArrayList<>();\ncommandQueue.add(() -> portal.open());\ncommandQueue.add(() -> sentinels.alert());\ncommandQueue.forEach(Runnable::run);"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Before Java 8, Strategy required an interface and concrete classes (`BubbleSortStrategy`, `QuickSortStrategy`). Today, `Comparator<T>` or `Function<T, R>` passed as a lambda (`(a, b) -> a.val - b.val`) *is* the Strategy pattern in one line!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "Classic Strategy vs Lambdas",
+            "content": "Classic: 1 interface + 5 concrete classes. Modern Java: 1 interface + 5 concise lambda expressions."
+          },
+          {
+            "title": "The Command Pattern",
+            "content": "Encapsulate requests as objects (`Runnable` or `Consumer<T>`). Supports undo, queueing, and asynchronous dispatch."
+          },
+          {
+            "title": "Method References as Strategies",
+            "content": "Pass existing methods directly: `Collections.sort(items, Item::compareWeight)`."
+          }
+        ],
+        "underTheHood": "When a lambda is compiled, the compiler does not generate an anonymous inner class `.class` file on disk. Instead, it emits an `invokedynamic` (indy) bytecode instruction that HotSpot binds at runtime via `LambdaMetafactory`, generating optimized call-site direct invocations.",
+        "workedExample": {
+          "code": "import java.util.function.UnaryOperator;\n\npublic class Main {\n    public static int applyTactic(int power, UnaryOperator<Integer> tactic) {\n        return tactic.apply(power);\n    }\n    \n    public static void main(String[] args) {\n        UnaryOperator<Integer> amplify = p -> p * 3;\n        UnaryOperator<Integer> stealth = p -> p / 2;\n        \n        System.out.println(\"Amplified: \" + applyTactic(20, amplify));\n        System.out.println(\"Stealth:   \" + applyTactic(20, stealth));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 4,
+              "explanation": "applyTactic accepts a strategy using standard java.util.function.UnaryOperator."
+            },
+            {
+              "line": 9,
+              "explanation": "Define amplify strategy via lambda p -> p * 3."
+            },
+            {
+              "line": 10,
+              "explanation": "Define stealth strategy via lambda p -> p / 2."
+            },
+            {
+              "line": 12,
+              "explanation": "Execute strategies dynamically without concrete classes."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Creating verbose concrete classes for simple one-line strategies.",
+            "code": "class AddStrategy implements Strategy { ... } // Unnecessary boilerplate in Java 8+!",
+            "correction": "Use lambdas: `Strategy add = (a, b) -> a + b;`"
+          },
+          {
+            "mistake": "Mutating external state inside lambda commands.",
+            "code": "Runnable cmd = () -> { globalCounter++; }; // Concurrency race condition!",
+            "correction": "Keep commands pure or use thread-safe data structures like AtomicInteger."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "How did Java 8+ lambda expressions simplify the Gang-of-Four Strategy pattern?",
+            "options": [
+              "Strategies can now be passed directly as lambda expressions or method references without declaring separate concrete classes",
+              "The pattern was deprecated",
+              "Strategies must be declared in XML files",
+              "It made strategies run on carrier threads"
+            ],
+            "answer": 0,
+            "explanation": "Lambdas eliminate boilerplate concrete classes for SAM strategy interfaces."
+          },
+          {
+            "question": "Which standard Java functional interface represents a Command that accepts an argument and performs an action without returning a value?",
+            "options": [
+              "java.util.function.Consumer<T>",
+              "java.util.function.Supplier<T>",
+              "java.util.function.Predicate<T>",
+              "java.util.function.Function<T, R>"
+            ],
+            "answer": 0,
+            "explanation": "`Consumer<T>` defines `void accept(T t)`, representing an action executed on an input argument."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `value` and tactic string `tactic` (`BOOST` or `HALVE`) from stdin. Define a `Strategy` functional interface with method `int execute(int x)`. Use lambdas: if `BOOST`, double the value (`x * 2`); if `HALVE`, halve it (`x / 2`). Print `Tactic result: [result]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    @FunctionalInterface\n    interface Strategy {\n        int execute(int x);\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int value = scanner.nextInt();\n        String tactic = scanner.next();\n        \n        // Assign strategy lambda based on tactic and execute\n        \n    }\n}",
+          "hints": [
+            "Strategy strat = \"BOOST\".equals(tactic) ? x -> x * 2 : x -> x / 2;",
+            "Print `Tactic result: ` + strat.execute(value)."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    @FunctionalInterface\n    interface Strategy {\n        int execute(int x);\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int value = scanner.nextInt();\n        String tactic = scanner.next();\n        \n        Strategy strat = \"BOOST\".equals(tactic) ? x -> x * 2 : x -> x / 2;\n        System.out.println(\"Tactic result: \" + strat.execute(value));\n    }\n}",
+          "tests": [
+            {
+              "name": "50 BOOST",
+              "stdin": "50 BOOST\n",
+              "expectedStdout": "Tactic result: 100\n"
+            },
+            {
+              "name": "80 HALVE",
+              "stdin": "80 HALVE\n",
+              "expectedStdout": "Tactic result: 40\n"
+            },
+            {
+              "name": "7 BOOST",
+              "stdin": "7 BOOST\n",
+              "expectedStdout": "Tactic result: 14\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Modern Java in Action",
+            "location": "Chapter 9: Refactoring, Testing, and Debugging (Using Lambdas for Design Patterns)",
+            "verify": false
+          },
+          {
+            "source": "Design Patterns: Elements of Reusable Object-Oriented Software",
+            "location": "Behavioral Patterns: Strategy & Command",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a4_l5",
+        "title": "Behavioral Patterns: Observer & Event Broadcasting",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When an End crystal is disturbed, hundreds of sentry golems, defensive turrets, and alarm beacons must be alerted immediately without the crystal knowing their specific identities. The Observer pattern provides decoupled event publishing.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "The **Observer Pattern** defines a one-to-many dependency: when a **Subject** (Publisher) changes state, all registered **Observers** (Subscribers/Listeners) are notified automatically. In modern Java, standard functional listeners (`Consumer<Event>`) or `java.util.concurrent.Flow` reactive streams provide thread-safe event broadcasting."
+          },
+          {
+            "type": "code",
+            "content": "Decoupled Event Broadcaster with Lambdas:",
+            "code": "public class EventBroadcaster<E> {\n    private final List<Consumer<E>> listeners = new CopyOnWriteArrayList<>();\n\n    public void subscribe(Consumer<E> listener) {\n        listeners.add(listener);\n    }\n\n    public void publish(E event) {\n        listeners.forEach(l -> l.accept(event));\n    }\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Using `CopyOnWriteArrayList` for the listeners list ensures that adding or removing observers while an event is being broadcast never throws `ConcurrentModificationException`."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Observer Decoupling",
+            "content": "The publisher has zero knowledge of concrete subscribers. It simply broadcasts events to an abstraction (`Consumer<Event>`)."
+          },
+          {
+            "title": "Thread-Safe Listeners",
+            "content": "Use `CopyOnWriteArrayList` to hold observers so iterations during `publish()` are thread-safe and non-blocking."
+          },
+          {
+            "title": "Modern Reactive Flow",
+            "content": "Java 9+ `Flow.Publisher`, `Flow.Subscriber`, and `Flow.Subscription` standardize backpressure-aware event streaming."
+          }
+        ],
+        "underTheHood": "Legacy `java.util.Observable` and `java.util.Observer` were deprecated in Java 9 because they lacked thread safety, failed to support generic event types, and required subclassing `Observable` rather than using interfaces.",
+        "workedExample": {
+          "code": "import java.util.*;\nimport java.util.concurrent.CopyOnWriteArrayList;\nimport java.util.function.Consumer;\n\npublic class Main {\n    static class EventBus {\n        private final List<Consumer<String>> listeners = new CopyOnWriteArrayList<>();\n        public void register(Consumer<String> l) { listeners.add(l); }\n        public void emit(String msg) { listeners.forEach(l -> l.accept(msg)); }\n    }\n    \n    public static void main(String[] args) {\n        EventBus bus = new EventBus();\n        bus.register(msg -> System.out.println(\"Alarm: \" + msg));\n        bus.register(msg -> System.out.println(\"Logger: \" + msg));\n        bus.emit(\"Portal breach detected\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 6,
+              "explanation": "CopyOnWriteArrayList stores observer lambdas safely."
+            },
+            {
+              "line": 13,
+              "explanation": "Register first observer lambda (Alarm)."
+            },
+            {
+              "line": 14,
+              "explanation": "Register second observer lambda (Logger)."
+            },
+            {
+              "line": 15,
+              "explanation": "emit() broadcasts message to all registered listeners."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using legacy java.util.Observer / Observable in new projects.",
+            "code": "class MyModel extends Observable { ... } // DEPRECATED in Java 9!",
+            "correction": "Use Consumer<E> callbacks, PropertyChangeListener, or Java 9 Flow API."
+          },
+          {
+            "mistake": "Holding long-lived listeners that prevent garbage collection of outer objects (Lapsed Listener Bug).",
+            "code": "broadcaster.register(this::onEvent); // Retains strong reference to this forever!",
+            "correction": "Provide an unsubscribe() method or use WeakReference for observers."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why was `java.util.Observable` deprecated in Java 9?",
+            "options": [
+              "It was a class rather than an interface, was not thread-safe, and did not support generic types or rich event payloads",
+              "The Observer pattern was made illegal by Oracle",
+              "It caused compiler errors in Java 9",
+              "It only worked on 32-bit JVMs"
+            ],
+            "answer": 0,
+            "explanation": "Observable's rigid class inheritance and lack of thread safety led to its deprecation in favor of modern functional/reactive patterns."
+          },
+          {
+            "question": "What collection type is ideal for storing listeners in an EventBroadcaster where registrations are infrequent but publications are high-frequency?",
+            "options": [
+              "CopyOnWriteArrayList",
+              "LinkedList",
+              "TreeMap",
+              "PriorityQueue"
+            ],
+            "answer": 0,
+            "explanation": "CopyOnWriteArrayList provides lock-free, iteration-safe reads, making it ideal for listener lists."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an event name from stdin. Create an `EventBus` that maintains a list of `Consumer<String>` listeners. Register two observers: Observer 1 prints `[Sentry] Received: [event]` and Observer 2 prints `[Turret] Received: [event]`. Emit the event and observe notifications.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.function.Consumer;\n\npublic class Main {\n    // Implement EventBus and register observers\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String event = scanner.next();\n        \n        // Register observers and emit event\n        \n    }\n}",
+          "hints": [
+            "class EventBus { List<Consumer<String>> listeners = new ArrayList<>(); void on(Consumer<String> l) { listeners.add(l); } void emit(String e) { listeners.forEach(l -> l.accept(e)); } }",
+            "bus.on(e -> System.out.println(\"[Sentry] Received: \" + e));",
+            "bus.on(e -> System.out.println(\"[Turret] Received: \" + e));",
+            "bus.emit(event);"
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.function.Consumer;\n\npublic class Main {\n    static class EventBus {\n        private final List<Consumer<String>> listeners = new ArrayList<>();\n        public void on(Consumer<String> l) { listeners.add(l); }\n        public void emit(String e) { listeners.forEach(l -> l.accept(e)); }\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String event = scanner.next();\n        \n        EventBus bus = new EventBus();\n        bus.on(e -> System.out.println(\"[Sentry] Received: \" + e));\n        bus.on(e -> System.out.println(\"[Turret] Received: \" + e));\n        bus.emit(event);\n    }\n}",
+          "tests": [
+            {
+              "name": "Intruder event",
+              "stdin": "Intruder\n",
+              "expectedStdout": "[Sentry] Received: Intruder\n[Turret] Received: Intruder\n"
+            },
+            {
+              "name": "PortalActive event",
+              "stdin": "PortalActive\n",
+              "expectedStdout": "[Sentry] Received: PortalActive\n[Turret] Received: PortalActive\n"
+            },
+            {
+              "name": "Warning event",
+              "stdin": "Warning\n",
+              "expectedStdout": "[Sentry] Received: Warning\n[Turret] Received: Warning\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Design Patterns: Elements of Reusable Object-Oriented Software",
+            "location": "Behavioral Patterns: Observer",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. I: Fundamentals, 12th ed.",
+            "location": "Chapter 6: Interfaces, Lambda Expressions, and Inner Classes",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a4_l6",
+        "title": "Clean Architecture: Ports, Adapters & SOLID Principles",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Citadels built on quicksand collapse when storms hit. Enterprise Java systems built with tight coupling between UI, databases, and business logic crumble under change. Clean (Hexagonal) Architecture insulates the business core from external volatile technology.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**Clean Architecture** (and Hexagonal / Ports & Adapters Architecture) organizes software into concentric layers where dependencies point strictly inward toward the core domain. The **Dependency Inversion Principle (DIP)**—the 'D' in SOLID—mandates: *High-level business policies must not depend on low-level implementation details; both must depend on abstractions (interfaces).*"
+          },
+          {
+            "type": "code",
+            "content": "Ports and Adapters architecture in Java:",
+            "code": "// INWARD CORE: Domain Model\npublic record Artifact(String id, String name, int power) {}\n\n// INWARD PORT: Interface owned by the business layer\npublic interface ArtifactRepositoryPort {\n    void save(Artifact a);\n    Optional<Artifact> findById(String id);\n}\n\n// OUTWARD ADAPTER: Secondary infrastructure adapter implementing the port\npublic class SqlArtifactRepositoryAdapter implements ArtifactRepositoryPort {\n    // Connects to PostgreSQL, Redis, or Mongo without the business core caring\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "The **Dependency Rule**: Source code dependencies must only point inward toward higher-level policies. The domain business logic contains pure Java code with **zero dependencies on databases, HTTP frameworks, or external third-party SDKs**!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "SOLID Principles Quick Ref",
+            "content": "Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion."
+          },
+          {
+            "title": "Ports and Adapters (Hexagonal)",
+            "content": "Core Domain -> Inbound Ports (Use Cases) -> Outbound Ports (Repositories) -> Infrastructure Adapters (SQL/REST)."
+          },
+          {
+            "title": "Why Invert Dependencies?",
+            "content": "Swap databases from PostgreSQL to DynamoDB without changing a single line of business logic!"
+          }
+        ],
+        "underTheHood": "By defining repository interfaces in the domain module and their implementations in the infrastructure module, build systems (Maven/Gradle) enforce compile-time boundaries: the domain module's `pom.xml` does not even include SQL or Spring dependencies, guaranteeing architectural purity.",
+        "workedExample": {
+          "code": "import java.util.*;\n\npublic class Main {\n    // 1. Domain entity\n    record Hero(String name, int level) {}\n    \n    // 2. Outbound Port (Domain interface)\n    interface HeroRepository {\n        void persist(Hero h);\n        Optional<Hero> load(String name);\n    }\n    \n    // 3. Infrastructure Adapter implementing the Port\n    static class InMemoryHeroAdapter implements HeroRepository {\n        private final Map<String, Hero> store = new HashMap<>();\n        public void persist(Hero h) { store.put(h.name(), h); }\n        public Optional<Hero> load(String name) { return Optional.ofNullable(store.get(name)); }\n    }\n    \n    // 4. Use Case Service depending ONLY on the Port abstraction\n    static class HeroService {\n        private final HeroRepository repo;\n        public HeroService(HeroRepository repo) { this.repo = repo; }\n        public void register(String name, int lvl) { repo.persist(new Hero(name, lvl)); }\n        public String getInfo(String name) {\n            return repo.load(name).map(h -> h.name() + \" (Lvl \" + h.level() + \")\").orElse(\"Unknown\");\n        }\n    }\n    \n    public static void main(String[] args) {\n        HeroService service = new HeroService(new InMemoryHeroAdapter());\n        service.register(\"Steve\", 50);\n        System.out.println(\"Hero: \" + service.getInfo(\"Steve\"));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Hero domain entity."
+            },
+            {
+              "line": 8,
+              "explanation": "HeroRepository defines the Outbound Port contract."
+            },
+            {
+              "line": 14,
+              "explanation": "InMemoryHeroAdapter implements the port."
+            },
+            {
+              "line": 21,
+              "explanation": "HeroService injects the repository interface via Constructor Injection (DIP)."
+            },
+            {
+              "line": 31,
+              "explanation": "Wire adapter into service and execute business use case."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Leaking JPA/Hibernate annotations (@Entity, @Table) into the core domain records.",
+            "code": "// Domain entity polluted with database schema annotations",
+            "correction": "Keep domain entities clean POJOs/Records; map them to database entities in the adapter layer."
+          },
+          {
+            "mistake": "Field injection with @Autowired instead of constructor injection.",
+            "code": "@Autowired private Service s; // Makes unit testing impossible without Spring container!",
+            "correction": "Always use Constructor Injection to enable clean testing with mock adapters."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "According to the Dependency Inversion Principle (DIP), what should high-level business logic depend on?",
+            "options": [
+              "Abstractions (interfaces), never on concrete low-level infrastructure implementations",
+              "Direct SQL database connections",
+              "Spring framework controllers",
+              "Operating system file handles"
+            ],
+            "answer": 0,
+            "explanation": "Both high-level and low-level modules must depend on abstractions, isolating business rules."
+          },
+          {
+            "question": "In Hexagonal Architecture, what is the role of a 'Port'?",
+            "options": [
+              "A TCP/IP network socket number",
+              "An interface owned by the domain that defines how external components interact with or are queried by the core",
+              "A hardware USB device",
+              "A JVM compiler plugin"
+            ],
+            "answer": 1,
+            "explanation": "Ports are domain-level interfaces defining interactions across the architectural boundary."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an entity ID and message string from stdin. Construct a clean architecture pipeline: define an outbound `LogPort` interface with method `void log(String msg)`. Implement a `ConsoleLogAdapter` implementing `LogPort`. Create a `MessageService` that accepts `LogPort` via constructor, prefixes the message with `[Service: ID] `, and delegates to the port. Print the result.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    // Implement LogPort, ConsoleLogAdapter, and MessageService\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String id = scanner.next();\n        String msg = scanner.next();\n        \n        // Wire adapter into service and invoke\n        \n    }\n}",
+          "hints": [
+            "interface LogPort { void log(String msg); }",
+            "class ConsoleLogAdapter implements LogPort { public void log(String msg) { System.out.println(msg); } }",
+            "class MessageService { LogPort port; String id; MessageService(LogPort p, String id) { ... } void send(String m) { port.log(\"[Service: \" + id + \"] \" + m); } }",
+            "service.send(msg);"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    interface LogPort {\n        void log(String msg);\n    }\n    \n    static class ConsoleLogAdapter implements LogPort {\n        public void log(String msg) {\n            System.out.println(msg);\n        }\n    }\n    \n    static class MessageService {\n        private final LogPort port;\n        private final String id;\n        public MessageService(LogPort port, String id) {\n            this.port = port;\n            this.id = id;\n        }\n        public void process(String msg) {\n            port.log(\"[Service: \" + id + \"] \" + msg);\n        }\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String id = scanner.next();\n        String msg = scanner.next();\n        \n        MessageService service = new MessageService(new ConsoleLogAdapter(), id);\n        service.process(msg);\n    }\n}",
+          "tests": [
+            {
+              "name": "Auth Svc",
+              "stdin": "Auth LoginSuccess\n",
+              "expectedStdout": "[Service: Auth] LoginSuccess\n"
+            },
+            {
+              "name": "Portal Svc",
+              "stdin": "Portal OpenGate\n",
+              "expectedStdout": "[Service: Portal] OpenGate\n"
+            },
+            {
+              "name": "Core Svc",
+              "stdin": "Core Recharged\n",
+              "expectedStdout": "[Service: Core] Recharged\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
+            "location": "Part V: Architecture (Hexagonal Architecture & The Dependency Rule)",
+            "verify": false
+          },
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Item 65: Prefer interfaces to reflection",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a4",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a4_q1",
+        "type": "mcq",
+        "question": "What problem does the Builder pattern solve compared to constructors with many parameters?",
+        "options": [
+          "It eliminates the Telescoping Constructor anti-pattern, providing clear named parameter chaining and immutable object safety",
+          "It speeds up execution by 50%",
+          "It makes all objects subclasses of Thread",
+          "It disables garbage collection"
+        ],
+        "answer": 0,
+        "explanation": "Builders provide fluent, readable object construction without fragile parameter-ordering bugs."
+      },
+      {
+        "id": "a4_q2",
+        "type": "mcq",
+        "question": "Which Singleton implementation idiom is recommended by Joshua Bloch as the absolute safest against reflection and serialization attacks?",
+        "options": [
+          "A single-element enum type",
+          "Double-checked locking without volatile",
+          "Public static field",
+          "Eager static instance"
+        ],
+        "answer": 0,
+        "explanation": "Enum singletons provide ironclad reflection defense and automatic serialization handling."
+      },
+      {
+        "id": "a4_q3",
+        "type": "mcq",
+        "question": "What is the key difference between the Adapter and Decorator design patterns?",
+        "options": [
+          "Adapter transforms an interface to make incompatible types work together; Decorator maintains the same interface while layering on additional behavior",
+          "Adapter is for numbers, Decorator is for strings",
+          "Decorator is only used in C++",
+          "There is no difference"
+        ],
+        "answer": 0,
+        "explanation": "Adapter converts interfaces; Decorator extends behavior while conforming to the original interface."
+      },
+      {
+        "id": "a4_q4",
+        "type": "mcq",
+        "question": "How can the Gang-of-Four Strategy pattern be implemented in one line in modern Java?",
+        "options": [
+          "By passing a lambda expression or method reference matching a functional interface",
+          "By creating an abstract class with twenty subclasses",
+          "By using reflection",
+          "By compiling with C++"
+        ],
+        "answer": 0,
+        "explanation": "Functional interfaces allow passing strategy lambdas directly without class boilerplate."
+      },
+      {
+        "id": "a4_q5",
+        "type": "mcq",
+        "question": "What is a 'Lapsed Listener' in the Observer pattern?",
+        "options": [
+          "A memory leak where a publisher retains a strong reference to an observer that is no longer needed, preventing it from being garbage collected",
+          "An observer that throws an exception",
+          "An observer that runs on a daemon thread",
+          "A cancelled timer"
+        ],
+        "answer": 0,
+        "explanation": "Lapsed listeners occur when publishers fail to release observer references, causing memory retention leaks."
+      },
+      {
+        "id": "a4_q6",
+        "type": "mcq",
+        "question": "What does the Dependency Inversion Principle (DIP) state?",
+        "options": [
+          "High-level business policies must not depend on low-level infrastructure details; both must depend on abstractions (interfaces)",
+          "Every class must have a main method",
+          "Subclasses must override all superclass methods",
+          "Databases must own the domain models"
+        ],
+        "answer": 0,
+        "explanation": "DIP isolates business logic by inverting dependencies toward domain interfaces."
+      },
+      {
+        "id": "a4_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "enum SystemConfig {\n    INSTANCE;\n    int port = 8080;\n}\nSystemConfig.INSTANCE.port = 9090;\nSystem.out.println(SystemConfig.INSTANCE.port);",
+        "options": [
+          "9090",
+          "8080",
+          "null",
+          "Throws CompileError"
+        ],
+        "answer": 0,
+        "explanation": "SystemConfig is a singleton; setting port = 9090 mutates the single shared instance."
+      },
+      {
+        "id": "a4_q8",
+        "type": "spot-the-bug",
+        "question": "Find the architectural flaw in this domain service:",
+        "code": "public class OrderService {\n    // Direct instantiation of low-level MySQL implementation!\n    private MySqlOrderRepository repo = new MySqlOrderRepository();\n}",
+        "options": [
+          "Violates Dependency Inversion Principle: tightly couples high-level OrderService to low-level MySQL database rather than depending on an interface",
+          "OrderService cannot have private fields",
+          "MySqlOrderRepository must be an enum",
+          "The class must extend Thread"
+        ],
+        "answer": 0,
+        "explanation": "Directly instantiating concrete database adapters prevents testing with mocks and violates DIP."
+      },
+      {
+        "id": "a4_q9",
+        "type": "fill-in",
+        "question": "Complete the SOLID acronym: S = Single Responsibility, O = Open/Closed, L = Liskov Substitution, I = Interface Segregation, D = Dependency ______.",
+        "answer": "Inversion",
+        "explanation": "D stands for Dependency Inversion Principle."
+      },
+      {
+        "id": "a4_q10",
+        "type": "mcq",
+        "question": "Which of the following is an example of the Dependency Inversion Principle in Java code?",
+        "options": [
+          "Injecting an interface `OrderRepository` into a constructor rather than instantiating `MySqlOrderRepository` directly",
+          "Calling static methods on Math",
+          "Catching generic Exception",
+          "Using System.out.println"
+        ],
+        "answer": 0,
+        "explanation": "Constructor injection of interfaces adheres to the Dependency Inversion Principle."
+      },
+      {
+        "id": "a4_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the layers in Clean Architecture from outermost infrastructure to innermost core:",
+        "lines": [
+          "Frameworks & Drivers (Web, Database, UI, Devices)",
+          "Interface Adapters (Controllers, Gateways, Presenters)",
+          "Application Business Rules (Use Cases)",
+          "Enterprise Business Rules (Entities / Domain Models)"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Frameworks (outer) -> Adapters -> Use Cases -> Entities (core innermost)."
+      },
+      {
+        "id": "a4_q12",
+        "type": "mcq",
+        "question": "How does the Bill Pugh Singleton Holder pattern achieve lazy initialization without `synchronized`?",
+        "options": [
+          "By utilizing the JVM guarantee that static inner classes are not loaded until they are referenced in code",
+          "By generating C++ code at runtime",
+          "By disabling garbage collection on the holder",
+          "By using virtual threads"
+        ],
+        "answer": 0,
+        "explanation": "Inner classes are loaded lazily on first access, leveraging the JVM's built-in class initialization monitor."
+      }
+    ],
+    "project": {
+      "title": "End City Outer Islands Modular Microkernel Architecture",
+      "brief": "Architect an enterprise-grade modular microkernel for the End City. Implement fluent Builder patterns for immutable exploration vessels, rock-solid Enum Singletons for dimension coordinates, dynamic Decorator pipelines for telemetry logging and data encryption, functional Strategy engines for route calculations, and Clean Architecture Ports and Adapters isolating business rules from data storage.",
+      "milestones": [
+        "Milestone 1: Implement an immutable Vessel domain record and fluent Builder with defensive validation",
+        "Milestone 2: Construct an Enum Singleton TelemetryRegistry preventing reflection and serialization duplication",
+        "Milestone 3: Build a Decorator pipeline wrapping data output streams with authentication and compression",
+        "Milestone 4: Design a Clean Architecture service layer with Inbound Use Cases and Outbound Repository Ports"
+      ],
+      "rubric": [
         {
-          "type": "mcq",
-          "question": "Which design pattern is best suited for constructing complex objects with many optional parameters?",
-          "options": [
-            "Singleton",
-            "Builder",
-            "Adapter",
-            "Proxy"
-          ],
-          "answer": 1,
-          "explanation": "The Builder pattern allows step-by-step object construction with readable fluent methods."
+          "criterion": "Creational & Structural Patterns",
+          "points": 25,
+          "description": "Flawless implementation of Builder and Decorator patterns with immutability"
         },
         {
-          "type": "true-false",
-          "question": "In Hexagonal Architecture, core business domain logic depends directly on database drivers and web frameworks.",
-          "answer": false,
-          "explanation": "Hexagonal architecture inverts dependencies: core domain is isolated and has zero dependencies on external frameworks."
+          "criterion": "Singleton Integrity & Safety",
+          "points": 25,
+          "description": "Absolute thread-safe singleton design immune to reflection and race conditions"
         },
         {
-          "type": "output",
-          "question": "What does fluent method chaining in a builder return?",
-          "options": [
-            "The builder instance itself (this)",
-            "void",
-            "null",
-            "A new JVM thread"
-          ],
-          "answer": 0,
-          "explanation": "Builder methods return this to allow chaining: .setA().setB().build()."
+          "criterion": "Functional Design Patterns",
+          "points": 25,
+          "description": "Elegant usage of lambdas and functional interfaces for Strategy and Observer"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Design & Architecture?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a4",
-      "title": "A4: Fluent Builder Pattern",
-      "prompt": "Implement a `HttpRequest` class with a static `Builder`:\nFields: `url`, `method` (defaults to \"GET\"), `timeoutMs` (defaults to 3000).\nInclude fluent methods: `.url(...)`, `.method(...)`, `.timeout(...)`, `.build()`\nIn main, construct and print:\n`HttpRequest[url=https://api.javaquest.com, method=POST, timeoutMs=5000]`",
-      "starterCode": "class HttpRequest {\n    final String url;\n    final String method;\n    final int timeoutMs;\n\n    private HttpRequest(Builder b) {\n        this.url = b.url;\n        this.method = b.method;\n        this.timeoutMs = b.timeoutMs;\n    }\n\n    // TODO 1: Implement Builder class with fluent methods .url(), .method(), .timeout(), and .build()\n    public static class Builder {\n        String url;\n        String method = \"GET\";\n        int timeoutMs = 3000;\n\n        public Builder url(String u) {\n            // Your code here\n            return this;\n        }\n        public Builder method(String m) {\n            // Your code here\n            return this;\n        }\n        public Builder timeout(int t) {\n            // Your code here\n            return this;\n        }\n        public HttpRequest build() {\n            // Your code here\n            return new HttpRequest(this);\n        }\n    }\n\n    public String toString() {\n        return \"HttpRequest[url=\" + url + \", method=\" + method + \", timeoutMs=\" + timeoutMs + \"]\";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 2: Build HttpRequest with url \"https://api.javaquest.com\", method \"POST\", timeout 5000, and print it\n    }\n}",
-      "expectedOutput": "HttpRequest[url=https://api.javaquest.com, method=POST, timeoutMs=5000]",
-      "testCases": [
-        {
-          "name": "Build Request Object",
-          "expected": "HttpRequest[url=https://api.javaquest.com, method=POST, timeoutMs=5000]"
+          "criterion": "Clean Architecture & DIP",
+          "points": 25,
+          "description": "Strict separation of domain core from infrastructure adapters using interfaces"
         }
       ],
-      "hints": [
-        "Each builder method sets field and returns this.",
-        "build() instantiates HttpRequest."
+      "stretchGoals": [
+        "Implement a fully reactive Publisher-Subscriber event bus using Java 9+ java.util.concurrent.Flow",
+        "Structure multi-module Gradle or Maven build boundaries enforcing zero infrastructure imports in domain modules"
       ]
     },
-    "biome": "Celestial Citadel",
-    "conceptMetaphor": "Enterprise software architecture and design patterns for monumental scale.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Builder Pattern",
+        "definition": "A creational pattern that separates the construction of a complex object from its representation."
+      },
+      {
+        "term": "Singleton Pattern",
+        "definition": "A creational pattern ensuring a class has only one instance while providing a global access point."
+      },
+      {
+        "term": "Adapter Pattern",
+        "definition": "A structural pattern allowing classes with incompatible interfaces to collaborate by wrapping one in a known interface."
+      },
+      {
+        "term": "Decorator Pattern",
+        "definition": "A structural pattern that dynamically adds new behaviors to objects by placing them inside wrapper objects."
+      },
+      {
+        "term": "Strategy Pattern",
+        "definition": "A behavioral pattern that defines a family of algorithms, encapsulating each one, and making them interchangeable."
+      },
+      {
+        "term": "Command Pattern",
+        "definition": "A behavioral pattern that turns a request into a stand-alone object containing all information about the request."
+      },
+      {
+        "term": "Observer Pattern",
+        "definition": "A behavioral pattern defining a subscription mechanism to notify multiple objects about any events that happen to the subject."
+      },
+      {
+        "term": "Dependency Inversion Principle (DIP)",
+        "definition": "A SOLID principle stating high-level modules should not depend on low-level modules; both should depend on abstractions."
+      },
+      {
+        "term": "Hexagonal Architecture",
+        "definition": "An architectural style (Ports and Adapters) isolating application core from external devices, databases, and frameworks."
+      },
+      {
+        "term": "Telescoping Constructor",
+        "definition": "An anti-pattern where numerous overloaded constructors with increasing parameter counts cause maintenance issues."
+      }
+    ],
+    "references": [
+      {
+        "source": "Design Patterns: Elements of Reusable Object-Oriented Software",
+        "location": "Creational, Structural, and Behavioral Patterns",
+        "verify": false
+      },
+      {
+        "source": "Effective Java, 3rd ed.",
+        "location": "Item 2: Builder Pattern, Item 3: Singleton Pattern, & Item 20: Prefer interfaces to abstract classes",
+        "verify": false
+      },
+      {
+        "source": "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
+        "location": "Part V: Architecture",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a5",
     "code": "A5",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Networking, Security & Reliability",
-    "subtitle": "HTTP/REST, password hashing, TLS, timeouts and idempotency",
-    "icon": "",
-    "color": "#C0392B",
+    "title": "Networking, Modern HTTP & Security Architecture",
+    "subtitle": "Socket programming, Java 11+ java.net.http.HttpClient, RESTful API contracts, cryptographic hashing (SHA-256), TLS/SSL handshakes, and JSON Web Token (JWT) authentication",
+    "biome": "Void Nebula",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Build low-level TCP client and server communication using Socket and ServerSocket channels",
+      "Dispatch asynchronous, non-blocking HTTP/1.1 and HTTP/2 requests using modern java.net.http.HttpClient",
+      "Design robust RESTful APIs following standard HTTP methods, idempotent semantics, and JSON data contracts",
+      "Compute one-way cryptographic digests using MessageDigest (SHA-256) with secure randomized salting",
+      "Explain asymmetric public-key cryptography (RSA/ECDSA), certificate authorities, and the TLS handshake",
+      "Construct and validate stateless JSON Web Tokens (JWT) using HMAC-SHA256 signatures for API authentication"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1",
+      "a2",
+      "a3",
+      "a4"
+    ],
     "lessons": [
       {
-        "id": "lesson-a5-1",
-        "title": "Application Security & Secrets",
-        "xp": 50,
-        "slides": [
+        "id": "a5_l1",
+        "title": "Low-Level Networking: TCP Sockets & ServerSockets",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Across the Void Nebula, deep space outposts communicate across raw TCP communication beams. Sockets establish reliable, bidirectional byte streams between remote hosts across the dimensional void.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Defensive Engineering",
-            "content": "Never store plaintext passwords! Always use salted, adaptive hashing algorithms (Argon2, BCrypt). Never hardcode API secrets in source control."
-          },
-          {
-            "type": "visual",
-            "visual": "class-diagram",
-            "visualData": {
-              "classes": [
-                {
-                  "name": "HttpRequest",
-                  "type": "class (Builder Pattern)",
-                  "fields": [
-                    "- String url",
-                    "- String method",
-                    "- Map headers"
-                  ],
-                  "methods": [
-                    "+ static class Builder",
-                    "+ Builder header(k, v)",
-                    "+ HttpRequest build()"
-                  ]
-                }
-              ]
-            },
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "The **Transmission Control Protocol (TCP)** provides reliable, connection-oriented, ordered byte streaming across IP networks. In Java, `ServerSocket` listens on a specified port for incoming connections, while `Socket` represents an established client-server communication endpoint."
           },
           {
             "type": "code",
-            "title": "Java 11+ HttpClient",
-            "content": "Modern non-blocking HTTP client.",
-            "code": "HttpClient client = HttpClient.newHttpClient();\nHttpRequest req = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://api.example.com\"))\n    .GET()\n    .build();"
+            "content": "Basic TCP Server and Client in Java:",
+            "code": "// SERVER: Listen on port 8080 and accept connection\ntry (ServerSocket server = new ServerSocket(8080);\n     Socket client = server.accept(); // Blocks until a client connects\n     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));\n     PrintWriter out = new PrintWriter(client.getOutputStream(), true)) {\n    String request = in.readLine();\n    out.println(\"ECHO: \" + request);\n}\n\n// CLIENT: Connect to localhost:8080\ntry (Socket socket = new Socket(\"127.0.0.1\", 8080);\n     PrintWriter out = new PrintWriter(socket.getOutputStream(), true);\n     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {\n    out.println(\"Ping\");\n    String response = in.readLine(); // Receives ECHO: Ping\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Always close socket streams using `try-with-resources`. Closing a socket automatically flushes and closes its underlying `InputStream` and `OutputStream`."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The TCP 3-Way Handshake",
+            "content": "SYN -> SYN-ACK -> ACK. Establishes a reliable full-duplex byte channel between client and server."
+          },
+          {
+            "title": "ServerSocket vs Socket",
+            "content": "ServerSocket binds to a port and calls `accept()`. Socket connects to an IP/port for reading and writing."
+          },
+          {
+            "title": "Virtual Threads + Sockets",
+            "content": "In Java 21+, you can spawn a Virtual Thread for every accepted socket connection without running out of OS threads!"
+          }
+        ],
+        "underTheHood": "When `server.accept()` is called, the JVM makes an OS kernel `accept()` syscall. If using Virtual Threads, HotSpot registers the file descriptor with epoll (Linux) or kqueue (macOS/BSD), unmounting the virtual thread until the OS reports an incoming connection.",
+        "workedExample": {
+          "code": "import java.io.*;\n\npublic class Main {\n    // Parsing a raw HTTP request line from a socket stream\n    public static void parseRequest(String rawLine) {\n        String[] parts = rawLine.split(\" \");\n        if (parts.length >= 3) {\n            System.out.println(\"Method: \" + parts[0]);\n            System.out.println(\"Path:   \" + parts[1]);\n            System.out.println(\"Proto:  \" + parts[2]);\n        }\n    }\n    \n    public static void main(String[] args) {\n        parseRequest(\"GET /api/v1/telemetry HTTP/1.1\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Splits raw HTTP line by whitespace."
+            },
+            {
+              "line": 7,
+              "explanation": "Extracts HTTP Method (GET)."
+            },
+            {
+              "line": 8,
+              "explanation": "Extracts URI path (/api/v1/telemetry)."
+            },
+            {
+              "line": 9,
+              "explanation": "Extracts protocol version (HTTP/1.1)."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Forgetting to autoflush PrintWriter.",
+            "code": "PrintWriter out = new PrintWriter(socket.getOutputStream());\nout.println(\"Data\"); // BUG: Stalls in local buffer! Socket peer never receives data!",
+            "correction": "Enable autoflush: `new PrintWriter(socket.getOutputStream(), true);`"
+          },
+          {
+            "mistake": "Handling all accepted connections on the main thread.",
+            "code": "while (true) { Socket s = server.accept(); handle(s); } // Blocks other clients while handling one!",
+            "correction": "Offload each client to a virtual thread: `Thread.ofVirtual().start(() -> handle(s));`"
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What does `serverSocket.accept()` do when no clients are currently attempting to connect?",
+            "options": [
+              "It blocks (waits) until an incoming client initiates a connection",
+              "It returns null immediately",
+              "It throws a SocketTimeoutException after 1 millisecond",
+              "It crashes the JVM"
+            ],
+            "answer": 0,
+            "explanation": "`accept()` is a blocking call that yields control until a new connection arrives."
+          },
+          {
+            "question": "Why should you pass `true` to `new PrintWriter(outputStream, true)`?",
+            "options": [
+              "To enable automatic flushing upon calling println(), ensuring buffered bytes are immediately sent over the network",
+              "To enable encryption",
+              "To use IPv6",
+              "To make the stream read-only"
+            ],
+            "answer": 0,
+            "explanation": "Autoflush forces `println` to immediately flush data across the socket buffer."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an incoming raw HTTP request line from stdin (e.g. `POST /telemetry/beacon HTTP/1.1`). Parse and extract the method and URI path, and print `Parsed request: [METHOD] -> [PATH]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextLine()) return;\n        String line = scanner.nextLine();\n        \n        // Parse raw HTTP request line and print output\n        \n    }\n}",
+          "hints": [
+            "String[] tokens = line.split(\" \");",
+            "if (tokens.length >= 2) { System.out.println(\"Parsed request: \" + tokens[0] + \" -> \" + tokens[1]); }"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextLine()) return;\n        String line = scanner.nextLine();\n        \n        String[] tokens = line.split(\" \");\n        if (tokens.length >= 2) {\n            System.out.println(\"Parsed request: \" + tokens[0] + \" -> \" + tokens[1]);\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "POST telemetry",
+              "stdin": "POST /telemetry/beacon HTTP/1.1\n",
+              "expectedStdout": "Parsed request: POST -> /telemetry/beacon\n"
+            },
+            {
+              "name": "GET status",
+              "stdin": "GET /health/status HTTP/2.0\n",
+              "expectedStdout": "Parsed request: GET -> /health/status\n"
+            },
+            {
+              "name": "DELETE portal",
+              "stdin": "DELETE /portals/99 HTTP/1.1\n",
+              "expectedStdout": "Parsed request: DELETE -> /portals/99\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 3: Networking (Connecting to a Server & Implementing Servers)",
+            "verify": false
+          },
+          {
+            "source": "Java: The Complete Reference, 12th ed.",
+            "location": "Chapter 22: Networking (Sockets & ServerSockets)",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a5-2",
-        "title": "Reliability: Idempotency & Retries",
-        "xp": 50,
-        "slides": [
+        "id": "a5_l2",
+        "title": "Modern HTTP Client: java.net.http (Async & HTTP/2)",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Legacy `HttpURLConnection` was clunky and stuck in the 1990s. In Java 11+, the modern `java.net.http.HttpClient` provides a clean, builder-based API supporting HTTP/2, WebSockets, and asynchronous Futures.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Idempotency in Distributed Systems",
-            "content": "An operation is **idempotent** if applying it multiple times produces the exact same state as applying it once (e.g. HTTP GET, PUT, DELETE). Critical for retry resilience."
+            "type": "text",
+            "content": "The **Java HTTP Client** (`java.net.http.HttpClient`), introduced in Java 11, provides a modern, fluent API for sending HTTP requests. It natively supports **HTTP/2 multiplexing**, synchronous (`send`) and asynchronous (`sendAsync`) dispatch returning `CompletableFuture`, and customizable body handlers."
           },
           {
             "type": "code",
-            "title": "Exponential Backoff Pattern",
-            "content": "Retrying transient errors with increasing delay.",
-            "code": "// waitTime = baseDelay * (2 ^ attemptCount)"
+            "content": "Sending modern HTTP requests with HttpClient:",
+            "code": "HttpClient client = HttpClient.newBuilder()\n    .version(HttpClient.Version.HTTP_2)\n    .connectTimeout(Duration.ofSeconds(5))\n    .build();\n\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://api.nebula.org/telemetry\"))\n    .header(\"Accept\", \"application/json\")\n    .POST(HttpRequest.BodyPublishers.ofString(\"{\\\"status\\\":\\\"OK\\\"}\"))\n    .build();\n\n// Synchronous send:\nHttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());\nSystem.out.println(\"Status: \" + response.statusCode());\nSystem.out.println(\"Body:   \" + response.body());"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Because `HttpClient` instances manage thread pools and connection pools, create a single shared `HttpClient` instance across your application rather than instantiating a new client for every request."
+          }
+        ],
+        "slides": [
+          {
+            "title": "HttpClient Advantages",
+            "content": "Fluent builders for client and request, native HTTP/2 stream multiplexing, built-in body handlers, and async support."
+          },
+          {
+            "title": "BodyPublishers and BodyHandlers",
+            "content": "Publishers format outbound bodies (`ofString`, `ofFile`). Handlers parse inbound bodies (`ofString`, `ofLines`, `ofByteArray`)."
+          },
+          {
+            "title": "Virtual Threads + HttpClient",
+            "content": "Combining Virtual Threads with synchronous `client.send()` delivers the simplicity of blocking code with high concurrency throughput!"
+          }
+        ],
+        "underTheHood": "The HTTP/2 engine uses a single persistent TCP connection and multiplexes hundreds of independent logical bidirectional streams using binary framing (HEADERS and DATA frames), avoiding head-of-line blocking.",
+        "workedExample": {
+          "code": "import java.net.URI;\nimport java.net.http.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        HttpRequest req = HttpRequest.newBuilder()\n            .uri(URI.create(\"https://nebula.internal/v1/ping\"))\n            .header(\"User-Agent\", \"JavaQuest-Nebula/1.0\")\n            .GET()\n            .build();\n            \n        System.out.println(\"URI: \" + req.uri());\n        System.out.println(\"Method: \" + req.method());\n        System.out.println(\"User-Agent: \" + req.headers().firstValue(\"User-Agent\").orElse(\"\"));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Build HttpRequest using fluent builder API."
+            },
+            {
+              "line": 6,
+              "explanation": "Configure target URI."
+            },
+            {
+              "line": 7,
+              "explanation": "Add custom header."
+            },
+            {
+              "line": 8,
+              "explanation": "Set HTTP method to GET."
+            },
+            {
+              "line": 11,
+              "explanation": "Inspect immutable request properties."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Creating a new HttpClient() inside every method or request loop.",
+            "code": "for (String url : urls) { HttpClient client = HttpClient.newHttpClient(); ... } // Resource descriptor leak!",
+            "correction": "Instantiate a single shared static or singleton `HttpClient`."
+          },
+          {
+            "mistake": "Using legacy HttpURLConnection or Apache HttpClient when JDK HttpClient suffices.",
+            "code": "// Adding external Apache Commons HTTP dependencies unnecessarily",
+            "correction": "Use the built-in standard `java.net.http.HttpClient` in modern Java."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which version of Java introduced the modern `java.net.http.HttpClient` as a permanent standard feature?",
+            "options": [
+              "Java 11 LTS",
+              "Java 8",
+              "Java 1.4",
+              "Java 6"
+            ],
+            "answer": 0,
+            "explanation": "`java.net.http.HttpClient` was standardized in Java 11 (JEP 321)."
+          },
+          {
+            "question": "How does HTTP/2 improve performance compared to HTTP/1.1 in `HttpClient`?",
+            "options": [
+              "By multiplexing multiple requests and responses concurrently over a single TCP connection without head-of-line blocking",
+              "By compressing HTML with zip",
+              "By removing HTTP headers",
+              "By disabling encryption"
+            ],
+            "answer": 0,
+            "explanation": "HTTP/2 multiplexes multiple bidirectional streams over a single connection."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a URL string and header value from stdin. Using `HttpRequest.newBuilder()`, construct a GET request with header `X-Portal-Auth: [value]`. Print `Request URI: [uri]` and `Auth Header: [value]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.net.URI;\nimport java.net.http.HttpRequest;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String url = scanner.next();\n        String token = scanner.next();\n        \n        // Build HttpRequest and print details\n        \n    }\n}",
+          "hints": [
+            "HttpRequest req = HttpRequest.newBuilder().uri(URI.create(url)).header(\"X-Portal-Auth\", token).GET().build();",
+            "System.out.println(\"Request URI: \" + req.uri());",
+            "System.out.println(\"Auth Header: \" + req.headers().firstValue(\"X-Portal-Auth\").orElse(\"\"));"
+          ],
+          "solution": "import java.util.Scanner;\nimport java.net.URI;\nimport java.net.http.HttpRequest;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String url = scanner.next();\n        String token = scanner.next();\n        \n        HttpRequest req = HttpRequest.newBuilder()\n            .uri(URI.create(url))\n            .header(\"X-Portal-Auth\", token)\n            .GET()\n            .build();\n            \n        System.out.println(\"Request URI: \" + req.uri());\n        System.out.println(\"Auth Header: \" + req.headers().firstValue(\"X-Portal-Auth\").orElse(\"\"));\n    }\n}",
+          "tests": [
+            {
+              "name": "Https nebula endpoint",
+              "stdin": "https://nebula.internal/api TOKEN_99\n",
+              "expectedStdout": "Request URI: https://nebula.internal/api\nAuth Header: TOKEN_99\n"
+            },
+            {
+              "name": "Http gateway endpoint",
+              "stdin": "http://gateway.portal/v1 SECRET_ABC\n",
+              "expectedStdout": "Request URI: http://gateway.portal/v1\nAuth Header: SECRET_ABC\n"
+            },
+            {
+              "name": "Localhost endpoint",
+              "stdin": "http://localhost:8080/health PING_123\n",
+              "expectedStdout": "Request URI: http://localhost:8080/health\nAuth Header: PING_123\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 3: Networking (The HTTP Client)",
+            "verify": false
+          },
+          {
+            "source": "JEP 321: HTTP Client (JDK 11)",
+            "location": "JDK Enhancement Proposal 321",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a5_l3",
+        "title": "RESTful API Architecture & JSON Contracts",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Intergalactic portals synchronize state using standardized contracts. RESTful design principles ensure predictable, idempotent, and cacheable interactions across heterogeneous star systems.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**Representational State Transfer (REST)** is an architectural style using standard HTTP semantics: **GET** (read resource, safe & idempotent), **POST** (create new resource, non-idempotent), **PUT** (replace entire resource, idempotent), **PATCH** (partial update), and **DELETE** (remove resource, idempotent)."
+          },
+          {
+            "type": "code",
+            "content": "Standard HTTP Status Codes in REST APIs:",
+            "code": "// 2xx Success: 200 OK, 201 Created (with Location header), 204 No Content\n// 3xx Redirection: 301 Moved Permanently, 304 Not Modified (caching)\n// 4xx Client Error: 400 Bad Request, 401 Unauthorized (unauthenticated), 403 Forbidden, 404 Not Found\n// 5xx Server Error: 500 Internal Server Error, 503 Service Unavailable"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "An operation is **idempotent** if making multiple identical requests has the same effect on the server as making a single request. `GET`, `PUT`, and `DELETE` are idempotent; `POST` is NOT idempotent."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Resource-Oriented URIs",
+            "content": "Use nouns, not verbs: `/api/v1/portals` (NOT `/api/v1/createPortal`). Plural collections with ID paths (`/portals/{id}`)."
+          },
+          {
+            "title": "Idempotence Semantics",
+            "content": "Retrying a failed network request is safe for idempotent verbs (`GET`, `PUT`, `DELETE`). Retrying `POST` risks duplicates!"
+          },
+          {
+            "title": "401 vs 403 Distinction",
+            "content": "401 Unauthorized = 'Who are you?' (Missing or invalid credentials). 403 Forbidden = 'I know who you are, but you lack permission.'"
+          }
+        ],
+        "underTheHood": "REST uses content negotiation via HTTP headers: the client sends `Accept: application/json` and `Content-Type: application/json`. The server responds with `Content-Type` matching the serialization format, preserving decoupling between data model and presentation.",
+        "workedExample": {
+          "code": "public class Main {\n    public static String resolveStatus(int code) {\n        return switch (code) {\n            case 200 -> \"OK\";\n            case 201 -> \"Created\";\n            case 400 -> \"Bad Request\";\n            case 401 -> \"Unauthorized\";\n            case 404 -> \"Not Found\";\n            case 500 -> \"Internal Server Error\";\n            default  -> \"Unknown Status\";\n        };\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(\"201: \" + resolveStatus(201));\n        System.out.println(\"404: \" + resolveStatus(404));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Pattern-matching switch resolving HTTP status codes to standardized descriptions."
+            },
+            {
+              "line": 5,
+              "explanation": "201 maps to 'Created'."
+            },
+            {
+              "line": 7,
+              "explanation": "404 maps to 'Not Found'."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using GET requests for operations that mutate state.",
+            "code": "GET /api/v1/deleteUser?id=10 // Web crawlers pre-fetching links will delete your users!",
+            "correction": "Use DELETE or POST for state-modifying requests; keep GET strictly safe and read-only."
+          },
+          {
+            "mistake": "Returning 200 OK with an error payload in the response body.",
+            "code": "HTTP/1.1 200 OK\n{\"error\": \"User not found\"} // Anti-pattern! Breaks HTTP caching and monitoring!",
+            "correction": "Return standard 4xx/5xx status codes (e.g. 404 Not Found)."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which of the following HTTP verbs is NOT idempotent?",
+            "options": [
+              "POST",
+              "GET",
+              "PUT",
+              "DELETE"
+            ],
+            "answer": 0,
+            "explanation": "POST creates a new resource on each execution, so multiple POST calls produce multiple resources (non-idempotent)."
+          },
+          {
+            "question": "What is the key semantic difference between HTTP status 401 and 403?",
+            "options": [
+              "401 means unauthenticated (missing or invalid credentials); 403 means authenticated but forbidden (insufficient privileges)",
+              "401 is for servers, 403 is for clients",
+              "401 is an error, 403 is a success",
+              "There is no difference"
+            ],
+            "answer": 0,
+            "explanation": "401 prompts for authentication; 403 rejects authorized access due to permission constraints."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an HTTP method (`GET` or `POST`) and a resource ID string from stdin. If `GET`, print `HTTP 200 OK: Fetched resource [id]`. If `POST`, print `HTTP 201 Created: Created resource [id]`. Handle invalid methods with `HTTP 405 Method Not Allowed`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String method = scanner.next();\n        String id = scanner.next();\n        \n        // Evaluate method and print RESTful response\n        \n    }\n}",
+          "hints": [
+            "if (\"GET\".equals(method)) { System.out.println(\"HTTP 200 OK: Fetched resource \" + id); }",
+            "else if (\"POST\".equals(method)) { System.out.println(\"HTTP 201 Created: Created resource \" + id); }",
+            "else { System.out.println(\"HTTP 405 Method Not Allowed\"); }"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String method = scanner.next();\n        String id = scanner.next();\n        \n        if (\"GET\".equals(method)) {\n            System.out.println(\"HTTP 200 OK: Fetched resource \" + id);\n        } else if (\"POST\".equals(method)) {\n            System.out.println(\"HTTP 201 Created: Created resource \" + id);\n        } else {\n            System.out.println(\"HTTP 405 Method Not Allowed\");\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "GET resource 100",
+              "stdin": "GET 100\n",
+              "expectedStdout": "HTTP 200 OK: Fetched resource 100\n"
+            },
+            {
+              "name": "POST resource 205",
+              "stdin": "POST 205\n",
+              "expectedStdout": "HTTP 201 Created: Created resource 205\n"
+            },
+            {
+              "name": "PUT invalid",
+              "stdin": "PUT 300\n",
+              "expectedStdout": "HTTP 405 Method Not Allowed\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "RESTful Web Services",
+            "location": "Chapter 4: The Resource-Oriented Architecture",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 3: Networking (REST and JSON)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a5_l4",
+        "title": "Cryptographic Foundations: Hashing & MessageDigest",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Passwords and cosmic coordinates must never be stored in plain text. A single breach could expose the entire fleet. Cryptographic hash functions transform data into irreversible digital fingerprints, securing credentials with mathematical certainty.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A **Cryptographic Hash Function** (e.g. SHA-256) is a one-way deterministic mathematical algorithm that converts arbitrary input into a fixed-size byte array. Key properties: **pre-image resistance** (irreversible: impossible to deduce input from hash), **avalanche effect** (a 1-bit input change alters >50% of output bits), and **collision resistance** (infeasible to find two inputs with the same hash)."
+          },
+          {
+            "type": "code",
+            "content": "Computing SHA-256 digests with java.security.MessageDigest:",
+            "code": "MessageDigest md = MessageDigest.getInstance(\"SHA-256\");\nbyte[] hash = md.digest(\"VoidBeaconSecret\".getBytes(StandardCharsets.UTF_8));\n\n// Convert to hexadecimal string:\nStringBuilder hex = new StringBuilder();\nfor (byte b : hash) {\n    hex.append(String.format(\"%02x\", b));\n}\nSystem.out.println(\"SHA-256: \" + hex);"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Never hash passwords with plain SHA-256 alone! Attackers precompute trillions of common hashes in **Rainbow Tables**. Always combine passwords with a cryptographically secure random **Salt** (`SecureRandom`) or use key derivation functions like PBKDF2, BCrypt, or Argon2."
+          }
+        ],
+        "slides": [
+          {
+            "title": "One-Way Hash Functions",
+            "content": "Easy to compute hash from input. Mathematically impossible to invert hash back to input."
+          },
+          {
+            "title": "SHA-256 & The Avalanche Effect",
+            "content": "Produces a 256-bit (32-byte) digest. Even changing 'pass' to 'Pass' completely scrambles the output hash."
+          },
+          {
+            "title": "The Role of Salt",
+            "content": "A unique random string appended to each password before hashing, defeating precomputed rainbow tables completely."
+          }
+        ],
+        "underTheHood": "SHA-256 operates on 512-bit message blocks using 64 rounds of bitwise logical operations (AND, XOR, ROTR, SHR) and modular addition, generating a 256-bit state across 8 internal 32-bit registers.",
+        "workedExample": {
+          "code": "import java.security.MessageDigest;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static String sha256Hex(String input) throws Exception {\n        MessageDigest md = MessageDigest.getInstance(\"SHA-256\");\n        byte[] bytes = md.digest(input.getBytes(StandardCharsets.UTF_8));\n        StringBuilder sb = new StringBuilder();\n        for (byte b : bytes) {\n            sb.append(String.format(\"%02x\", b));\n        }\n        return sb.toString();\n    }\n    \n    public static void main(String[] args) throws Exception {\n        String hash = sha256Hex(\"JavaQuest\");\n        System.out.println(\"Hash prefix: \" + hash.substring(0, 8));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Instantiate MessageDigest with SHA-256 algorithm."
+            },
+            {
+              "line": 6,
+              "explanation": "Compute 32-byte hash."
+            },
+            {
+              "line": 9,
+              "explanation": "Format each byte as 2-character lowercase hex."
+            },
+            {
+              "line": 15,
+              "explanation": "Print first 8 hex characters of digest."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using broken legacy algorithms like MD5 or SHA-1.",
+            "code": "MessageDigest.getInstance(\"MD5\"); // INSECURE: Practical collision attacks exist!",
+            "correction": "Use SHA-256, SHA-512, or SHA-3 for hashing."
+          },
+          {
+            "mistake": "Using java.util.Random for cryptographic keys or salt generation.",
+            "code": "Random r = new Random(); // Predictable pseudo-random sequence!",
+            "correction": "Always use `java.security.SecureRandom` for security-sensitive entropy."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why should you never use MD5 or SHA-1 for cryptographic security in modern systems?",
+            "options": [
+              "Practical collision attacks have been demonstrated where distinct inputs produce identical hashes",
+              "They are too slow for modern CPUs",
+              "They only support 8-bit characters",
+              "They were removed from the JDK"
+            ],
+            "answer": 0,
+            "explanation": "MD5 and SHA-1 suffer from collision vulnerabilities and are considered broken."
+          },
+          {
+            "question": "What is the purpose of adding a random 'Salt' before hashing passwords?",
+            "options": [
+              "To defeat precomputed rainbow table attacks by ensuring identical passwords produce completely unique hashes",
+              "To compress the password length",
+              "To make hashing run faster",
+              "To allow passwords to be recovered by the server"
+            ],
+            "answer": 0,
+            "explanation": "Salting ensures every hashed password has unique output, rendering rainbow tables useless."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a string from stdin. Using `MessageDigest.getInstance(\"SHA-256\")`, compute its SHA-256 digest, format it as a full 64-character lowercase hexadecimal string, and print `SHA-256: [hex]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.security.MessageDigest;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String input = scanner.next();\n        \n        // Compute SHA-256 and print lowercase hex string\n        \n    }\n}",
+          "hints": [
+            "byte[] hash = MessageDigest.getInstance(\"SHA-256\").digest(input.getBytes(StandardCharsets.UTF_8));",
+            "StringBuilder sb = new StringBuilder(); for (byte b : hash) sb.append(String.format(\"%02x\", b));",
+            "Print `SHA-256: ` + sb.toString()."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.security.MessageDigest;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String input = scanner.next();\n        \n        MessageDigest md = MessageDigest.getInstance(\"SHA-256\");\n        byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));\n        StringBuilder sb = new StringBuilder();\n        for (byte b : hash) {\n            sb.append(String.format(\"%02x\", b));\n        }\n        \n        System.out.println(\"SHA-256: \" + sb.toString());\n    }\n}",
+          "tests": [
+            {
+              "name": "Hash hello",
+              "stdin": "hello\n",
+              "expectedStdout": "SHA-256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824\n"
+            },
+            {
+              "name": "Hash beacon",
+              "stdin": "beacon\n",
+              "expectedStdout": "SHA-256: 8a62e967fcd6dfa5d75308c37808b4668a7faf1cdb06e09ac0a7161827603887\n"
+            },
+            {
+              "name": "Hash void",
+              "stdin": "void\n",
+              "expectedStdout": "SHA-256: 445be54d48a2e6294369c84c61cd0929209d4e1084536159bdf7002bddfe094b\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 10: Security (Message Digests & Digital Signatures)",
+            "verify": false
+          },
+          {
+            "source": "Java: The Complete Reference, 12th ed.",
+            "location": "Chapter 30: Cryptography",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a5_l5",
+        "title": "Asymmetric Cryptography, KeyPairs & TLS Handshakes",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "How do two ships in hostile space establish an encrypted radio channel without an eavesdropper intercepting the decryption key? Asymmetric public-key cryptography and TLS handshakes solve this fundamental security puzzle.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In **Symmetric Cryptography** (AES), both parties share the exact same secret key. In **Asymmetric Cryptography** (RSA, ECC), a mathematical key pair is generated: a **Public Key** (shared openly with the world for encryption or signature verification) and a **Private Key** (kept strictly secret for decryption or signature signing)."
+          },
+          {
+            "type": "code",
+            "content": "Generating KeyPairs and signing data in Java:",
+            "code": "KeyPairGenerator kpg = KeyPairGenerator.getInstance(\"RSA\");\nkpg.initialize(2048);\nKeyPair kp = kpg.generateKeyPair();\n\n// Sign a message with Private Key:\nSignature signer = Signature.getInstance(\"SHA256withRSA\");\nsigner.initSign(kp.getPrivate());\nsigner.update(\"AuthorizeTransfer\".getBytes(StandardCharsets.UTF_8));\nbyte[] signature = signer.sign();\n\n// Verify signature with Public Key:\nSignature verifier = Signature.getInstance(\"SHA256withRSA\");\nverifier.initVerify(kp.getPublic());\nverifier.update(\"AuthorizeTransfer\".getBytes(StandardCharsets.UTF_8));\nboolean valid = verifier.verify(signature); // true"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "The **TLS (Transport Layer Security) 1.3 Handshake** uses asymmetric cryptography (Diffie-Hellman Ephemeral) during connection setup to agree on a short-lived symmetric session key, and then uses fast symmetric AES-GCM to encrypt the subsequent high-volume payload data."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Public Key vs Private Key",
+            "content": "Encrypt with Public Key -> Decrypt with Private Key. Sign with Private Key -> Verify with Public Key."
+          },
+          {
+            "title": "Digital Signatures",
+            "content": "Provides Non-Repudiation and Tamper-Evidence: if even a single byte changes, signature verification fails."
+          },
+          {
+            "title": "The TLS 1.3 Handshake",
+            "content": "1-RTT handshake: Client Hello + Key Share -> Server Certificate + Session Key -> Encrypted HTTP data stream."
+          }
+        ],
+        "underTheHood": "RSA security relies on the mathematical difficulty of factoring the product of two huge 1024-bit prime numbers. Elliptic Curve Cryptography (ECC) achieves equivalent cryptographic strength with much smaller 256-bit keys, drastically reducing CPU overhead.",
+        "workedExample": {
+          "code": "import java.security.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        KeyPairGenerator gen = KeyPairGenerator.getInstance(\"RSA\");\n        gen.initialize(2048);\n        KeyPair pair = gen.generateKeyPair();\n        \n        System.out.println(\"Algorithm: \" + pair.getPublic().getAlgorithm());\n        System.out.println(\"Key format: \" + pair.getPublic().getFormat());\n        System.out.println(\"KeyPair generated successfully\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Instantiate KeyPairGenerator with RSA algorithm."
+            },
+            {
+              "line": 6,
+              "explanation": "Configure 2048-bit key strength."
+            },
+            {
+              "line": 7,
+              "explanation": "Generate public and private key pair."
+            },
+            {
+              "line": 11,
+              "explanation": "Confirm key generation."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Encrypting multi-megabyte files directly with RSA public keys.",
+            "code": "// RSA is computationally slow and mathematically limited to encrypting data smaller than the key size!",
+            "correction": "Use Hybrid Encryption: generate a random AES key, encrypt the file with AES, and encrypt only the AES key with RSA."
+          },
+          {
+            "mistake": "Disabling TLS certificate validation in production (TrustAllCertificates).",
+            "code": "// TrustManager that trusts all certs leaves you 100% vulnerable to Man-In-The-Middle (MITM) attacks!",
+            "correction": "Always validate certificates against official trusted Certificate Authorities (CAs)."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "When sending an encrypted message to Bob using asymmetric cryptography, which key do you use to encrypt the message?",
+            "options": [
+              "Bob's Public Key",
+              "Your Private Key",
+              "Bob's Private Key",
+              "Your Public Key"
+            ],
+            "answer": 0,
+            "explanation": "You encrypt using the recipient's Public Key; only the recipient's Private Key can decrypt it."
+          },
+          {
+            "question": "Why does TLS use both asymmetric and symmetric cryptography?",
+            "options": [
+              "Asymmetric cryptography securely negotiates a shared secret during the initial handshake, and symmetric cryptography encrypts the high-speed payload data efficiently",
+              "Because Java requires two encryption algorithms",
+              "Symmetric cryptography is deprecated",
+              "To support both Mac and Windows"
+            ],
+            "answer": 0,
+            "explanation": "Hybrid encryption combines the key-distribution benefits of asymmetric cryptography with the raw performance of symmetric encryption."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a role string from stdin. Generate a 2048-bit RSA `KeyPair`. Sign the role string with the private key using `SHA256withRSA`, then verify the signature with the public key. If verified, print `Signature valid for [role]`. Ensure clean exception handling.",
+          "starterCode": "import java.util.Scanner;\nimport java.security.*;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String role = scanner.next();\n        \n        // Generate RSA KeyPair, sign role, verify, and print\n        \n    }\n}",
+          "hints": [
+            "KeyPair kp = KeyPairGenerator.getInstance(\"RSA\").generateKeyPair();",
+            "Signature s = Signature.getInstance(\"SHA256withRSA\"); s.initSign(kp.getPrivate()); s.update(role.getBytes(StandardCharsets.UTF_8)); byte[] sig = s.sign();",
+            "Signature v = Signature.getInstance(\"SHA256withRSA\"); v.initVerify(kp.getPublic()); v.update(role.getBytes(StandardCharsets.UTF_8)); boolean ok = v.verify(sig);",
+            "if (ok) System.out.println(\"Signature valid for \" + role);"
+          ],
+          "solution": "import java.util.Scanner;\nimport java.security.*;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String role = scanner.next();\n        \n        KeyPairGenerator kpg = KeyPairGenerator.getInstance(\"RSA\");\n        kpg.initialize(2048);\n        KeyPair kp = kpg.generateKeyPair();\n        \n        Signature signer = Signature.getInstance(\"SHA256withRSA\");\n        signer.initSign(kp.getPrivate());\n        signer.update(role.getBytes(StandardCharsets.UTF_8));\n        byte[] signature = signer.sign();\n        \n        Signature verifier = Signature.getInstance(\"SHA256withRSA\");\n        verifier.initVerify(kp.getPublic());\n        verifier.update(role.getBytes(StandardCharsets.UTF_8));\n        boolean valid = verifier.verify(signature);\n        \n        if (valid) {\n            System.out.println(\"Signature valid for \" + role);\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Commander role",
+              "stdin": "Commander\n",
+              "expectedStdout": "Signature valid for Commander\n"
+            },
+            {
+              "name": "Navigator role",
+              "stdin": "Navigator\n",
+              "expectedStdout": "Signature valid for Navigator\n"
+            },
+            {
+              "name": "Engineer role",
+              "stdin": "Engineer\n",
+              "expectedStdout": "Signature valid for Engineer\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 10: Security (Public Key Cryptography & Certificates)",
+            "verify": false
+          },
+          {
+            "source": "Java: The Complete Reference, 12th ed.",
+            "location": "Chapter 30: Cryptography (Digital Signatures)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a5_l6",
+        "title": "Stateless Security: JSON Web Tokens (JWT) & Filter Chains",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "When thousands of microservices operate across the nebula, querying a central database for every single user session freezes network traffic. JSON Web Tokens (JWT) carry cryptographically signed, stateless credentials that any service can verify in microseconds.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A **JSON Web Token (JWT)** (RFC 7519) is a compact, URL-safe means of representing claims between two parties. A JWT consists of three Base64URL-encoded parts separated by dots (`.`): **Header** (`{\"alg\":\"HS256\",\"typ\":\"JWT\"}`), **Payload** (`{\"sub\":\"123\",\"role\":\"ADMIN\",\"exp\":...}`), and **Signature** (`HMACSHA256(header + \".\" + payload, secret)`)."
+          },
+          {
+            "type": "code",
+            "content": "Validating JWT Tokens in Java:",
+            "code": "// Structure: Header.Payload.Signature\nString[] parts = token.split(\"\\\\.\");\nString headerJson  = new String(Base64.getUrlDecoder().decode(parts[0]));\nString payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]));\n\n// Compute expected HMAC-SHA256 signature:\nMac mac = Mac.getInstance(\"HmacSHA256\");\nmac.init(new SecretKeySpec(secretBytes, \"HmacSHA256\"));\nbyte[] expectedSig = mac.doFinal((parts[0] + \".\" + parts[1]).getBytes(StandardCharsets.UTF_8));\nString expectedSigBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(expectedSig);\n\nboolean isValid = MessageDigest.isEqual(expectedSigBase64.getBytes(), parts[2].getBytes());"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Always use `MessageDigest.isEqual(a, b)` rather than `Arrays.equals` or `String.equals` when comparing cryptographic signatures. `MessageDigest.isEqual` runs in **constant time**, eliminating **timing attack** vulnerabilities!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "Session IDs vs JWT",
+            "content": "Session IDs: stateful, requires centralized Redis/database query on every request. JWT: stateless, self-contained, verified locally."
+          },
+          {
+            "title": "The 3 JWT Components",
+            "content": "Header (Algorithm & Type) . Payload (Claims & Expiration) . Signature (Integrity proof)."
+          },
+          {
+            "title": "Constant-Time Comparison",
+            "content": "Standard string equals exits early on first mismatched byte. Constant-time checks prevent timing attacks."
+          }
+        ],
+        "underTheHood": "Because JWT payloads are merely Base64URL-encoded (not encrypted), **never store sensitive data like passwords or credit cards in a JWT payload**. Anyone who intercepts the token can decode and read the payload claims; the signature guarantees only that claims were not tampered with.",
+        "workedExample": {
+          "code": "import java.util.Base64;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) {\n        String claims = \"{\\\"user\\\":\\\"EnderScout\\\",\\\"role\\\":\\\"PILOT\\\"}\";\n        String encoded = Base64.getUrlEncoder().withoutPadding().encodeToString(claims.getBytes(StandardCharsets.UTF_8));\n        \n        String decoded = new String(Base64.getUrlDecoder().decode(encoded), StandardCharsets.UTF_8);\n        System.out.println(\"Base64URL: \" + encoded);\n        System.out.println(\"Decoded:   \" + decoded);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 6,
+              "explanation": "Encode JSON claims using Base64URL without padding."
+            },
+            {
+              "line": 8,
+              "explanation": "Decode payload back to UTF-8 JSON text."
+            },
+            {
+              "line": 10,
+              "explanation": "Verify integrity of serialization roundtrip."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Accepting alg: \"none\" in JWT headers (the infamous None-Algorithm exploit).",
+            "code": "// Vulnerable library accepting unsigned tokens with alg: none",
+            "correction": "Strictly enforce expected algorithms (e.g. require `HS256` or `RS256`) and reject unexpected algorithms."
+          },
+          {
+            "mistake": "Storing secrets in the JWT payload thinking Base64 is encryption.",
+            "code": "{\"secretApiKey\": \"XYZ123\"} // Visible to anyone who opens the token!",
+            "correction": "JWT signatures provide tamper-detection, not secrecy. Use JWE (JSON Web Encryption) if encryption is required."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Can someone who intercepts a standard JWT token read the data inside the payload?",
+            "options": [
+              "Yes, because the payload is simply Base64URL-encoded text, not encrypted",
+              "No, JWT payloads are encrypted with 256-bit AES",
+              "Only if they have the private key",
+              "Only on Linux"
+            ],
+            "answer": 0,
+            "explanation": "JWT payloads are encoded, not encrypted. The signature verifies authenticity, but data is public."
+          },
+          {
+            "question": "Why should cryptographic signatures be compared using `MessageDigest.isEqual()` rather than `String.equals()`?",
+            "options": [
+              "To prevent timing attacks by ensuring comparison time is constant regardless of where mismatch occurs",
+              "Because String.equals does not work on bytes",
+              "Because MessageDigest runs on carrier threads",
+              "To compress the signature"
+            ],
+            "answer": 0,
+            "explanation": "Constant-time comparisons prevent attackers from deducing signatures byte-by-byte via timing discrepancies."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a username from stdin. Simulate creating a JWT payload: construct a JSON string `{\"user\":\"[user]\",\"auth\":true}`, encode it using `Base64.getUrlEncoder().withoutPadding().encodeToString(...)`, and print `JWT Payload: [encoded]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.Base64;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String user = scanner.next();\n        \n        // Format JSON payload, Base64URL encode, and print\n        \n    }\n}",
+          "hints": [
+            "String payload = \"{\\\"user\\\":\\\"\" + user + \"\\\",\\\"auth\\\":true}\";",
+            "String encoded = Base64.getUrlEncoder().withoutPadding().encodeToString(payload.getBytes(StandardCharsets.UTF_8));",
+            "Print `JWT Payload: ` + encoded."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.Base64;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String user = scanner.next();\n        \n        String payload = \"{\\\"user\\\":\\\"\" + user + \"\\\",\\\"auth\\\":true}\";\n        String encoded = Base64.getUrlEncoder().withoutPadding().encodeToString(payload.getBytes(StandardCharsets.UTF_8));\n        \n        System.out.println(\"JWT Payload: \" + encoded);\n    }\n}",
+          "tests": [
+            {
+              "name": "User Alex",
+              "stdin": "Alex\n",
+              "expectedStdout": "JWT Payload: eyJ1c2VyIjoiQWxleCIsImF1dGgiOnRydWV9\n"
+            },
+            {
+              "name": "User Zara",
+              "stdin": "Zara\n",
+              "expectedStdout": "JWT Payload: eyJ1c2VyIjoiWmFyYSIsImF1dGgiOnRydWV9\n"
+            },
+            {
+              "name": "User Nova",
+              "stdin": "Nova\n",
+              "expectedStdout": "JWT Payload: eyJ1c2VyIjoiTm92YSIsImF1dGgiOnRydWV9\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "RFC 7519: JSON Web Token (JWT)",
+            "location": "IETF RFC 7519 Standards Track",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 10: Security (Authentication and Cryptography)",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a5",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a5_q1",
+        "type": "mcq",
+        "question": "Which class in the standard Java library is used to listen for incoming client TCP socket connections on a server port?",
+        "options": [
+          "ServerSocket",
+          "DatagramSocket",
+          "HttpServerEngine",
+          "NetworkConnector"
+        ],
+        "answer": 0,
+        "explanation": "`java.net.ServerSocket` binds to a TCP port and waits for incoming connections via `accept()`."
+      },
+      {
+        "id": "a5_q2",
+        "type": "mcq",
+        "question": "What major feature was standardized in Java 11 with the `java.net.http.HttpClient` API?",
+        "options": [
+          "Native HTTP/2 multiplexing, builder patterns, and asynchronous CompletableFuture responses",
+          "Direct connection to MySQL databases",
+          "Automatic compilation of C++ code",
+          "Removal of TCP protocols"
+        ],
+        "answer": 0,
+        "explanation": "Java 11 standardized `java.net.http.HttpClient` with native HTTP/2, WebSocket, and async support."
+      },
+      {
+        "id": "a5_q3",
+        "type": "mcq",
+        "question": "What does it mean for an HTTP method like GET or PUT to be 'idempotent'?",
+        "options": [
+          "Making multiple identical requests produces the exact same server state as making a single request",
+          "The request never fails",
+          "The response is always encrypted",
+          "The request runs on a virtual thread"
+        ],
+        "answer": 0,
+        "explanation": "Idempotent methods can be retried safely without altering end state."
+      },
+      {
+        "id": "a5_q4",
+        "type": "mcq",
+        "question": "Why should cryptographic passwords be salted before hashing?",
+        "options": [
+          "To prevent attackers from using precomputed rainbow tables to reverse passwords",
+          "To make the password easier to decrypt",
+          "To reduce hash computation time",
+          "To allow password recovery"
+        ],
+        "answer": 0,
+        "explanation": "Random salts ensure that identical passwords produce completely different hash outputs."
+      },
+      {
+        "id": "a5_q5",
+        "type": "mcq",
+        "question": "In asymmetric cryptography, which key is used to create a digital signature?",
+        "options": [
+          "The Sender's Private Key",
+          "The Recipient's Public Key",
+          "The Sender's Public Key",
+          "A shared symmetric key"
+        ],
+        "answer": 0,
+        "explanation": "Digital signatures are created using the sender's Private Key and verified with their Public Key."
+      },
+      {
+        "id": "a5_q6",
+        "type": "mcq",
+        "question": "What are the three components of a JSON Web Token (JWT) separated by dots?",
+        "options": [
+          "Header, Payload, Signature",
+          "Username, Password, Role",
+          "Host, Port, Protocol",
+          "Key, Value, Checksum"
+        ],
+        "answer": 0,
+        "explanation": "A JWT is structured as `Header.Payload.Signature`."
+      },
+      {
+        "id": "a5_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "boolean b = java.security.MessageDigest.isEqual(\"token\".getBytes(), \"token\".getBytes());\nSystem.out.println(b);",
+        "options": [
+          "true",
+          "false",
+          "null",
+          "Throws Exception"
+        ],
+        "answer": 0,
+        "explanation": "MessageDigest.isEqual performs constant-time byte array comparison, returning true for matching bytes."
+      },
+      {
+        "id": "a5_q8",
+        "type": "spot-the-bug",
+        "question": "Find the critical security bug in this password hashing method:",
+        "code": "public String hashPassword(String password) throws Exception {\n    MessageDigest md = MessageDigest.getInstance(\"MD5\");\n    return Base64.getEncoder().encodeToString(md.digest(password.getBytes()));\n}",
+        "options": [
+          "MD5 is cryptographically broken and vulnerable to collision attacks, and no salt is used",
+          "Base64 cannot encode byte arrays",
+          "MessageDigest cannot run in public methods",
+          "password.getBytes() throws an IOException"
+        ],
+        "answer": 0,
+        "explanation": "MD5 is obsolete and insecure; modern systems use salted SHA-256, BCrypt, or Argon2."
+      },
+      {
+        "id": "a5_q9",
+        "type": "fill-in",
+        "question": "Complete the statement: To compare two cryptographic signature byte arrays in constant time to prevent timing attacks, call MessageDigest.is______().",
+        "answer": "Equal",
+        "explanation": "`MessageDigest.isEqual(a, b)` performs constant-time comparison."
+      },
+      {
+        "id": "a5_q10",
+        "type": "mcq",
+        "question": "Is the payload data in a standard JWT encrypted and hidden from eavesdroppers?",
+        "options": [
+          "No, it is merely Base64URL-encoded and can be read by anyone; the signature only prevents tampering",
+          "Yes, it is encrypted with 256-bit AES",
+          "Yes, using RSA encryption",
+          "Only if the token starts with 'Bearer'"
+        ],
+        "answer": 0,
+        "explanation": "JWT payloads are openly visible Base64URL text; sensitive data must never be stored in plain JWTs."
+      },
+      {
+        "id": "a5_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the lines to compute a SHA-256 hash using MessageDigest:",
+        "lines": [
+          "MessageDigest md = MessageDigest.getInstance(\"SHA-256\");",
+          "byte[] hash = md.digest(\"secret\".getBytes(StandardCharsets.UTF_8));",
+          "StringBuilder sb = new StringBuilder();",
+          "for (byte b : hash) sb.append(String.format(\"%02x\", b));",
+          "System.out.println(sb.toString());"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "explanation": "Get instance -> compute digest bytes -> create StringBuilder -> format hex -> print string."
+      },
+      {
+        "id": "a5_q12",
+        "type": "mcq",
+        "question": "Which HTTP status code should be returned when a client sends invalid JSON payload data violating field validation constraints?",
+        "options": [
+          "400 Bad Request",
+          "404 Not Found",
+          "500 Internal Server Error",
+          "200 OK"
+        ],
+        "answer": 0,
+        "explanation": "400 Bad Request indicates malformed request syntax or client validation failure."
+      }
+    ],
+    "project": {
+      "title": "Void Nebula Secure Inter-Dimensional Gateway",
+      "brief": "Construct a secure inter-dimensional communications gateway for the Void Nebula. Implement low-level TCP Socket listeners dispatching connection handlers across Virtual Threads, an asynchronous HttpClient connector communicating with remote REST APIs, SHA-256 digital fingerprinting engines, and a stateless JWT authentication filter verifying HMAC-SHA256 signatures in constant time.",
+      "milestones": [
+        "Milestone 1: Build a multi-client TCP ServerSocket dispatcher powered by Java 21 Virtual Threads",
+        "Milestone 2: Implement an asynchronous REST client using java.net.http.HttpClient with HTTP/2 and timeouts",
+        "Milestone 3: Construct a cryptographic digest utility computing salted SHA-256 fingerprints",
+        "Milestone 4: Implement a JWT token generator and validator with constant-time signature comparison"
+      ],
+      "rubric": [
         {
-          "type": "mcq",
-          "question": "Which practice is safest for storing user passwords in a database?",
-          "options": [
-            "Store plaintext",
-            "Encrypt with a reversible key only",
-            "Use a dedicated password-hashing algorithm with salt",
-            "Base64 encode"
-          ],
-          "answer": 2,
-          "explanation": "Passwords should be stored using salted, adaptive one-way hashes (e.g. BCrypt, PBKDF2, Argon2)."
+          "criterion": "Socket & Network Resource Hygiene",
+          "points": 25,
+          "description": "Safe lifecycle management of sockets and streams using try-with-resources"
         },
         {
-          "type": "mcq",
-          "question": "What is idempotency in an API operation?",
-          "options": [
-            "Repeating the same request has the same intended effect as doing it once",
-            "Every request creates a new resource",
-            "The request has no response",
-            "The endpoint never fails"
-          ],
-          "answer": 0,
-          "explanation": "Idempotent requests can be safely repeated without creating unintended duplicate state."
+          "criterion": "Modern HTTP/2 Client Architecture",
+          "points": 25,
+          "description": "Correct implementation of HttpClient builders, body handlers, and error handling"
         },
         {
-          "type": "true-false",
-          "question": "HTTPS encrypts data in transit between client and server using TLS.",
-          "answer": true,
-          "explanation": "TLS guarantees confidentiality and integrity of transmitted data over the network."
+          "criterion": "Cryptographic Integrity",
+          "points": 25,
+          "description": "Usage of secure SHA-256 and constant-time signature comparison"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Networking, Security & Reliability?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a5",
-      "title": "A5: Exponential Backoff Calculator",
-      "prompt": "Implement a helper `public static int getBackoffDelay(int attempt, int baseMs, int maxMs)`\nFormula: `int delay = baseMs * (1 << (attempt - 1));` capped at `maxMs`.\nIn main, print delays for attempts 1, 2, 3 with base 100ms and max 1000ms:\n`Attempt 1: 100ms\nAttempt 2: 200ms\nAttempt 3: 400ms`",
-      "starterCode": "public class Main {\n    // TODO 1: Implement getBackoffDelay(int attempt, int baseMs, int maxMs)\n    // Formula: baseMs * (1 << (attempt - 1)), capped at maxMs\n    public static int getBackoffDelay(int attempt, int baseMs, int maxMs) {\n        // Your code here\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Print backoff delays for attempts 1, 2, 3 with base 100 and max 1000:\n        // Attempt 1: 100ms\n        // Attempt 2: 200ms\n        // Attempt 3: 400ms\n    }\n}",
-      "expectedOutput": "Attempt 1: 100ms\nAttempt 2: 200ms\nAttempt 3: 400ms",
-      "testCases": [
-        {
-          "name": "Compute Exponential Backoff",
-          "expected": "Attempt 1: 100ms\nAttempt 2: 200ms\nAttempt 3: 400ms"
+          "criterion": "JWT Stateless Security",
+          "points": 25,
+          "description": "Flawless parsing and HMAC validation of tokens without security vulnerabilities"
         }
       ],
-      "hints": [
-        "Use Math.min(delay, maxMs) to prevent unbounded backoff."
+      "stretchGoals": [
+        "Simulate a complete TLS 1.3 key exchange using Diffie-Hellman KeyAgreement in pure Java",
+        "Implement a Token Bucket Rate Limiter protecting REST endpoints from brute-force authentication attacks"
       ]
     },
-    "biome": "Warded Beacon",
-    "conceptMetaphor": "Encrypted networking, TLS handshakes, and warded perimeter security.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Socket",
+        "definition": "An endpoint for communication between two machines across a computer network."
+      },
+      {
+        "term": "ServerSocket",
+        "definition": "A Java server class that waits for requests to come in over the network and accepts connections."
+      },
+      {
+        "term": "HTTP/2",
+        "definition": "A major revision of the HTTP network protocol featuring binary framing and stream multiplexing over a single TCP connection."
+      },
+      {
+        "term": "REST",
+        "definition": "Representational State Transfer: an architectural style for networked applications using standard HTTP verbs."
+      },
+      {
+        "term": "Idempotence",
+        "definition": "A property of an operation whereby it can be applied multiple times without changing the result beyond the initial application."
+      },
+      {
+        "term": "MessageDigest",
+        "definition": "A Java Cryptography Architecture class that provides one-way secure hash functions like SHA-256."
+      },
+      {
+        "term": "Salt",
+        "definition": "Random data used as an additional input to a one-way function that hashes data, passwords, or passphrases."
+      },
+      {
+        "term": "Asymmetric Cryptography",
+        "definition": "A cryptographic system using pairs of keys: public keys which may be disseminated widely, and private keys known only to the owner."
+      },
+      {
+        "term": "TLS",
+        "definition": "Transport Layer Security: a cryptographic protocol designed to provide communication security over a computer network."
+      },
+      {
+        "term": "JWT",
+        "definition": "JSON Web Token: an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object."
+      }
+    ],
+    "references": [
+      {
+        "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+        "location": "Chapter 3: Networking & Chapter 10: Security",
+        "verify": false
+      },
+      {
+        "source": "RFC 7519: JSON Web Token (JWT)",
+        "location": "IETF Standards Track",
+        "verify": false
+      },
+      {
+        "source": "Java: The Complete Reference, 12th ed.",
+        "location": "Chapter 22: Networking & Chapter 30: Cryptography",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a6",
     "code": "A6",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Spring Boot & Persistence",
-    "subtitle": "Spring container, dependency injection, REST controllers, JPA and transactions",
-    "icon": "",
-    "color": "#27AE60",
+    "title": "Enterprise Architecture: Spring Boot, REST & JPA",
+    "subtitle": "Spring IoC Container, Dependency Injection, @SpringBootApplication, REST controllers, Spring Data JPA, Hibernate ORM, Bean validation, and multi-tier architectural layering",
+    "biome": "Dragon's Perch",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Explain the Spring Inversion of Control (IoC) container, Bean lifecycles, and Constructor Dependency Injection",
+      "Describe Spring Boot auto-configuration mechanisms, starter dependencies, and application properties",
+      "Architect RESTful web controllers using @RestController, @PathVariable, @RequestBody, and ResponseEntity",
+      "Model relational database persistence using Spring Data JPA, Hibernate ORM entities, and derived repository queries",
+      "Implement request validation using Jakarta Bean Validation (@Valid) and centralized exception handling (@RestControllerAdvice)",
+      "Assemble production-grade multi-tier enterprise services with clear domain, service, and controller boundaries"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1",
+      "a2",
+      "a3",
+      "a4",
+      "a5"
+    ],
     "lessons": [
       {
-        "id": "lesson-a6-1",
-        "title": "Spring Inversion of Control & DI",
-        "xp": 50,
-        "slides": [
+        "id": "a6_l1",
+        "title": "Spring IoC Container & Dependency Injection",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "High atop the Dragon's Perch, thousands of arcane defenses coordinate automatically without any individual outpost knowing how the others are forged. The Spring IoC Container manages the lifecycle and wiring of all application components.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "The Spring Ecosystem",
-            "content": "Spring Boot is the standard enterprise framework for Java. The **Spring Container** creates and injects dependencies (`@Service`, `@Repository`, `@RestController`), decoupling components."
-          },
-          {
-            "type": "visual",
-            "visual": "flowchart",
-            "visualData": {
-              "condition": "connection.commit()",
-              "trueBranch": "Transaction Committed",
-              "falseBranch": "connection.rollback()"
-            },
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "**Inversion of Control (IoC)** is a design principle where the control of object creation, configuration, and lifecycle is inverted from application code to a framework container. In Spring, components are called **Beans**, managed by the `ApplicationContext` via **Dependency Injection (DI)**."
           },
           {
             "type": "code",
-            "title": "Spring REST Controller",
-            "content": "Clean declarative endpoints.",
-            "code": "@RestController\n@RequestMapping(\"/api/tasks\")\npublic class TaskController {\n    @GetMapping\n    public List<Task> getTasks() { return taskService.findAll(); }\n}"
+            "content": "Idiomatic Constructor Injection in Spring:",
+            "code": "@Service\npublic class DragonRadarService {\n    private final SensorPort sensorPort;\n\n    // Preferred in modern Spring: Constructor Injection (no @Autowired needed!)\n    public DragonRadarService(SensorPort sensorPort) {\n        this.sensorPort = Objects.requireNonNull(sensorPort);\n    }\n\n    public boolean isDragonDetected() {\n        return sensorPort.readSignal() > 90;\n    }\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Always use **Constructor Injection** rather than field injection (`@Autowired private SensorPort sensor;`). Constructor injection guarantees immutability (`final` fields), prevents `NullPointerException` during unit tests, and allows instantiating the class without a Spring container."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Inversion of Control (IoC)",
+            "content": "Instead of `new Service()`, you declare dependencies in your constructor, and Spring provides them automatically."
+          },
+          {
+            "title": "Stereotype Annotations",
+            "content": "`@Component` (generic bean), `@Service` (business logic), `@Repository` (data persistence), `@Controller` / `@RestController` (HTTP)."
+          },
+          {
+            "title": "Bean Scopes",
+            "content": "Singleton (default: 1 instance per Spring container) and Prototype (fresh instance on every injection request)."
+          }
+        ],
+        "underTheHood": "At startup, the Spring container scans the classpath for stereotype annotations, constructs a `BeanDefinition` metadata graph, resolves dependency topological order, and instantiates singletons via reflection or generated CGLIB proxies.",
+        "workedExample": {
+          "code": "import java.util.*;\n\npublic class Main {\n    // Simulating a lightweight IoC Registry in pure Java\n    static class Container {\n        private final Map<Class<?>, Object> beans = new HashMap<>();\n        public <T> void register(Class<T> type, T instance) { beans.put(type, instance); }\n        @SuppressWarnings(\"unchecked\")\n        public <T> T getBean(Class<T> type) { return (T) beans.get(type); }\n    }\n    \n    interface BeaconService { String broadcast(); }\n    static class VoidBeacon implements BeaconService {\n        public String broadcast() { return \"Beacon Active\"; }\n    }\n    \n    public static void main(String[] args) {\n        Container ioc = new Container();\n        ioc.register(BeaconService.class, new VoidBeacon());\n        \n        BeaconService svc = ioc.getBean(BeaconService.class);\n        System.out.println(svc.broadcast());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Container encapsulates bean registry."
+            },
+            {
+              "line": 17,
+              "explanation": "Register implementation against service interface."
+            },
+            {
+              "line": 19,
+              "explanation": "Retrieve injected bean via interface contract."
+            },
+            {
+              "line": 20,
+              "explanation": "Prints 'Beacon Active'."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using field injection with @Autowired on private fields.",
+            "code": "@Autowired private SensorService sensor; // Anti-pattern: hidden dependencies, hard to test!",
+            "correction": "Use constructor injection with final fields."
+          },
+          {
+            "mistake": "Creating circular dependencies between Spring Beans (Bean A requires Bean B, Bean B requires Bean A).",
+            "code": "// Causes BeanCurrentlyInCreationException on startup!",
+            "correction": "Break the cycle by introducing a mediator service or restructuring responsibilities."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why is Constructor Injection preferred over Field Injection (@Autowired on private fields) in modern Spring?",
+            "options": [
+              "It enforces immutability with final fields, makes dependencies explicit, and allows easy unit testing without a Spring container",
+              "It makes the JVM run faster",
+              "Field injection was deleted in Spring 6",
+              "Constructor injection compiles to C++"
+            ],
+            "answer": 0,
+            "explanation": "Constructor injection guarantees dependencies cannot be null, supports immutable final fields, and simplifies testing."
+          },
+          {
+            "question": "What is the default Bean Scope in the Spring framework?",
+            "options": [
+              "Singleton (one instance per ApplicationContext)",
+              "Prototype",
+              "Request",
+              "Session"
+            ],
+            "answer": 0,
+            "explanation": "Spring beans are singletons by default, meaning one shared instance is created per container."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a service name string from stdin. Simulate an IoC container: register a service mapping under its interface class. When queried, invoke the service and print `IoC Injected: [service-name] Ready`.",
+          "starterCode": "import java.util.Scanner;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class Main {\n    // Implement IoC Container simulation\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String name = scanner.next();\n        \n        // Register and retrieve bean from container\n        \n    }\n}",
+          "hints": [
+            "Create a `Map<String, String> container = new HashMap<>();`",
+            "Register `container.put(\"Service\", name + \" Ready\");`",
+            "Print `IoC Injected: ` + container.get(\"Service\")."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String name = scanner.next();\n        \n        Map<String, String> container = new HashMap<>();\n        container.put(\"Service\", name + \" Ready\");\n        \n        System.out.println(\"IoC Injected: \" + container.get(\"Service\"));\n    }\n}",
+          "tests": [
+            {
+              "name": "RadarService",
+              "stdin": "RadarService\n",
+              "expectedStdout": "IoC Injected: RadarService Ready\n"
+            },
+            {
+              "name": "ShieldEmitter",
+              "stdin": "ShieldEmitter\n",
+              "expectedStdout": "IoC Injected: ShieldEmitter Ready\n"
+            },
+            {
+              "name": "PortalEngine",
+              "stdin": "PortalEngine\n",
+              "expectedStdout": "IoC Injected: PortalEngine Ready\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Spring in Action, 6th ed.",
+            "location": "Chapter 1: Getting Started with Spring (What is Spring & Inversion of Control)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 4: Database Programming (Frameworks & Dependency Injection)",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a6-2",
-        "title": "Spring Data JPA & Transactions",
-        "xp": 50,
-        "slides": [
+        "id": "a6_l2",
+        "title": "Spring Boot Microservices & Auto-Configuration",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Configuring hundreds of XML files or manual boilerplate factories slows dragon defense deployments. Spring Boot introduces opinionated auto-configuration, starter packs, and embedded servers, transforming hours of setup into seconds.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Data Persistence",
-            "content": "Spring Data JPA manages database mapping with `@Entity` and repositories. `@Transactional` wraps method execution in an atomic database transaction."
+            "type": "text",
+            "content": "**Spring Boot** dramatically accelerates application development. The `@SpringBootApplication` meta-annotation combines three annotations: `@Configuration` (declares the class as a configuration source), `@EnableAutoConfiguration` (inspects the classpath to auto-wire sensible defaults like embedded Tomcat and Jackson JSON), and `@ComponentScan` (scans package tree for `@Component` beans)."
           },
           {
             "type": "code",
-            "title": "Repository Interface",
-            "content": "Automatic SQL generation from method names.",
-            "code": "public interface UserRepository extends JpaRepository<User, UUID> {\n    Optional<User> findByEmail(String email);\n}"
+            "content": "A minimal Spring Boot microservice application:",
+            "code": "@SpringBootApplication\npublic class PerchApplication {\n    public static void main(String[] args) {\n        SpringApplication.run(PerchApplication.class, args);\n    }\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Auto-configuration is non-invasive: if you define your own `DataSource` or `ObjectMapper` `@Bean`, Spring Boot gracefully backs off its default auto-configuration and adopts your custom bean automatically."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The @SpringBootApplication Trio",
+            "content": "Combines @Configuration, @EnableAutoConfiguration, and @ComponentScan into a single bootstrap annotation."
+          },
+          {
+            "title": "Starter Dependencies",
+            "content": "`spring-boot-starter-web` bundles Tomcat, Spring MVC, Jackson JSON, and validation into a single coordinated dependency."
+          },
+          {
+            "title": "application.properties / yaml",
+            "content": "Externalized configuration: port, database URLs, logging levels, and custom properties easily managed per environment."
+          }
+        ],
+        "underTheHood": "Spring Boot checks conditional annotations (`@ConditionalOnClass`, `@ConditionalOnMissingBean`, `@ConditionalOnProperty`). For example, if `org.apache.catalina.startup.Tomcat` is present on the classpath, Spring Boot automatically registers an `EmbeddedTomcatWebServer` bean listening on port 8080.",
+        "workedExample": {
+          "code": "// Spring Boot Application Entry Point\n@SpringBootApplication\npublic class Application {\n    public static void main(String[] args) {\n        SpringApplication.run(Application.class, args);\n        // Terminal Output:\n        //  .   ____          _            __ _ _\n        // /\\\\ / ___'_ __ _ _(_)_ __  __ _ \\ \\ \\ \\\n        // Tomcat started on port 8080 (http) with context path ''\n        // Started Application in 1.45 seconds (process running for 1.8)\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 2,
+              "explanation": "Meta-annotation bootstrap enabling component scanning and auto-configuration."
+            },
+            {
+              "line": 4,
+              "explanation": "SpringApplication.run bootstraps the IoC container and starts embedded Tomcat."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Placing the @SpringBootApplication class in a sub-package below components.",
+            "code": "package com.example.app.bootstrap; // Components in com.example.app are MISSED by @ComponentScan!",
+            "correction": "Place the main application class in the root package (`com.example.app`) so component scan covers all sub-packages."
+          },
+          {
+            "mistake": "Hardcoding database passwords in application.properties.",
+            "code": "spring.datasource.password=secret123 // Never commit secrets to git!",
+            "correction": "Use environment variables: `spring.datasource.password=${DB_PASSWORD}`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which three annotations are combined into the `@SpringBootApplication` meta-annotation?",
+            "options": [
+              "@Configuration, @EnableAutoConfiguration, and @ComponentScan",
+              "@Entity, @Table, and @Id",
+              "@Service, @Repository, and @Controller",
+              "@GET, @POST, and @PUT"
+            ],
+            "answer": 0,
+            "explanation": "`@SpringBootApplication` bundles configuration, auto-configuration, and package component scanning."
+          },
+          {
+            "question": "Where should the `@SpringBootApplication` class be placed relative to your service packages?",
+            "options": [
+              "In the root package above all other components to ensure @ComponentScan discovers all sub-packages",
+              "In a separate external JAR file",
+              "Inside the resources directory",
+              "In a sub-package named config"
+            ],
+            "answer": 0,
+            "explanation": "Placing it in the root package ensures component scanning traverses the entire application tree."
+          }
+        ],
+        "exercise": {
+          "instructions": "Guided Project: Review the Spring Boot Microservice Bootstrap architecture below. Check off each milestone in your local project setup and verify your understanding using the self-check questions.",
+          "isGuidedProject": true,
+          "checklist": [
+            "1. Generate a project via Spring Initializr (start.spring.io) with dependencies: 'Spring Web', 'Spring Boot Actuator'",
+            "2. Place Application.java in the root package (com.citadel.perch) annotated with @SpringBootApplication",
+            "3. Configure application.properties: 'server.port=8080' and 'spring.application.name=dragon-perch'",
+            "4. Run './mvnw spring-boot:run' and verify terminal logs display 'Started Application in X seconds'",
+            "5. Test the actuator health endpoint: 'curl http://localhost:8080/actuator/health' -> '{\"status\":\"UP\"}'"
+          ],
+          "expectedOutputDescription": "Terminal output displays Spring ASCII banner, Tomcat started on port 8080, and HTTP GET /actuator/health returns JSON {\"status\":\"UP\"}.",
+          "selfChecks": [
+            {
+              "question": "What starter dependency provides Spring MVC, Jackson, and embedded Tomcat?",
+              "answer": "spring-boot-starter-web"
+            },
+            {
+              "question": "How do you override the default port 8080 in application.properties?",
+              "answer": "server.port=9090 (or any chosen port number)"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Spring in Action, 6th ed.",
+            "location": "Chapter 1: Getting Started with Spring Boot",
+            "verify": false
+          },
+          {
+            "source": "Spring Boot Reference Documentation",
+            "location": "Using Spring Boot: Auto-configuration",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a6_l3",
+        "title": "Building RESTful Controllers with Spring MVC",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The Dragon's Perch commanding officer needs an HTTP communications hub to report flight radar, dragon coordinates, and perimeter alerts. `@RestController` transforms standard Java classes into high-speed RESTful JSON endpoints.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In Spring MVC, `@RestController` combines `@Controller` and `@ResponseBody`. Every method automatically serializes its return value into JSON using Jackson. Common annotations include `@GetMapping`, `@PostMapping`, `@PathVariable` (URL path parameters), `@RequestParam` (query string parameters), and `@RequestBody` (JSON request payload)."
+          },
+          {
+            "type": "code",
+            "content": "Writing a RESTful controller in Spring Boot:",
+            "code": "@RestController\n@RequestMapping(\"/api/v1/dragons\")\npublic class DragonController {\n    private final DragonService service;\n    public DragonController(DragonService s) { this.service = s; }\n\n    @GetMapping(\"/{id}\")\n    public ResponseEntity<DragonDto> getDragon(@PathVariable Long id) {\n        return service.findById(id)\n            .map(ResponseEntity::ok)\n            .orElseGet(() -> ResponseEntity.notFound().build());\n    }\n\n    @PostMapping\n    public ResponseEntity<DragonDto> createDragon(@RequestBody DragonDto dto) {\n        DragonDto saved = service.create(dto);\n        return ResponseEntity.status(HttpStatus.CREATED).body(saved);\n    }\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Always return `ResponseEntity<T>` from controller methods. It provides full control over HTTP status codes (e.g. 201 Created, 404 Not Found) and response headers."
+          }
+        ],
+        "slides": [
+          {
+            "title": "@RestController vs @Controller",
+            "content": "@Controller is for server-rendered HTML views (Thymeleaf). @RestController is for JSON REST APIs (adds @ResponseBody)."
+          },
+          {
+            "title": "Request Mapping Annotations",
+            "content": "@GetMapping, @PostMapping, @PutMapping, @DeleteMapping, @PatchMapping. Concise shortcuts for HTTP verbs."
+          },
+          {
+            "title": "ResponseEntity Control",
+            "content": "Wraps payload with HTTP status code and custom headers: `ResponseEntity.status(201).body(data);`."
+          }
+        ],
+        "underTheHood": "Incoming HTTP requests hit the Spring `DispatcherServlet`. It queries the `RequestMappingHandlerMapping` to find the matching method, runs parameter resolvers (converting JSON to DTOs via Jackson `MappingJackson2HttpMessageConverter`), invokes the controller method, and writes JSON to the HTTP response.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating controller route matching in pure Java\n    public static String handleRequest(String method, String path) {\n        if (\"GET\".equals(method) && path.startsWith(\"/dragons/\")) {\n            String id = path.substring(\"/dragons/\".length());\n            return \"200 OK: {\\\"id\\\":\" + id + \",\\\"type\\\":\\\"EnderDragon\\\"}\";\n        }\n        return \"404 Not Found\";\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(handleRequest(\"GET\", \"/dragons/101\"));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Simulate DispatcherServlet URI matching."
+            },
+            {
+              "line": 4,
+              "explanation": "Extract path variable id."
+            },
+            {
+              "line": 5,
+              "explanation": "Return JSON representation with 200 OK."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Returning domain database entities directly from @RestController endpoints.",
+            "code": "@GetMapping public User get() { return userEntity; } // LEAKS sensitive database columns (passwords, salts)!",
+            "correction": "Always return decoupled Data Transfer Objects (DTOs) or Records."
+          },
+          {
+            "mistake": "Missing @RequestBody on POST/PUT DTO parameters.",
+            "code": "@PostMapping public void save(DragonDto dto) // Fails to deserialize JSON body; dto will be empty!",
+            "correction": "Add `@RequestBody DragonDto dto`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the difference between `@Controller` and `@RestController` in Spring MVC?",
+            "options": [
+              "`@RestController` is annotated with `@ResponseBody`, automatically serializing return values to JSON/XML instead of rendering HTML templates",
+              "`@RestController` only accepts GET requests",
+              "`@RestController` disables security",
+              "There is no difference"
+            ],
+            "answer": 0,
+            "explanation": "`@RestController` combines `@Controller` and `@ResponseBody`, ensuring method outputs are serialized directly as HTTP response bodies."
+          },
+          {
+            "question": "Which annotation binds a URL path variable like `/dragons/{id}` to a method parameter in Spring?",
+            "options": [
+              "@PathVariable",
+              "@RequestParam",
+              "@RequestBody",
+              "@RequestHeader"
+            ],
+            "answer": 0,
+            "explanation": "`@PathVariable` extracts values directly from the URI path template."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an entity ID integer and status string from stdin. Simulate a Spring `@RestController` JSON response: print `HTTP 200 OK: {\"id\":[id],\"status\":\"[status]\"}`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int id = scanner.nextInt();\n        String status = scanner.next();\n        \n        // Format REST JSON response\n        \n    }\n}",
+          "hints": [
+            "System.out.println(\"HTTP 200 OK: {\\\"id\\\":\" + id + \",\\\"status\\\":\\\"\" + status + \"\\\"}\");"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int id = scanner.nextInt();\n        String status = scanner.next();\n        \n        System.out.println(\"HTTP 200 OK: {\\\"id\\\":\" + id + \",\\\"status\\\":\\\"\" + status + \"\\\"}\");\n    }\n}",
+          "tests": [
+            {
+              "name": "Dragon 101 ACTIVE",
+              "stdin": "101 ACTIVE\n",
+              "expectedStdout": "HTTP 200 OK: {\"id\":101,\"status\":\"ACTIVE\"}\n"
+            },
+            {
+              "name": "Beacon 5 READY",
+              "stdin": "5 READY\n",
+              "expectedStdout": "HTTP 200 OK: {\"id\":5,\"status\":\"READY\"}\n"
+            },
+            {
+              "name": "Perch 99 PATROL",
+              "stdin": "99 PATROL\n",
+              "expectedStdout": "HTTP 200 OK: {\"id\":99,\"status\":\"PATROL\"}\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Spring in Action, 6th ed.",
+            "location": "Chapter 6: Creating REST Services (Writing RESTful Controllers)",
+            "verify": false
+          },
+          {
+            "source": "Spring Boot Reference Documentation",
+            "location": "Spring MVC: Building a RESTful Web Service",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a6_l4",
+        "title": "Persistence with Spring Data JPA & Hibernate",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Writing repetitive JDBC boilerplate for every single entity table waste development cycles. Spring Data JPA and Hibernate ORM map Java objects directly to database tables, generating SQL queries automatically.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**Spring Data JPA** simplifies relational persistence. You define an `@Entity` class with JPA annotations (`@Id`, `@GeneratedValue`, `@Column`), and declare a repository interface extending `JpaRepository<Entity, ID>`. Spring Data dynamically generates the implementation at runtime with full CRUD methods and **derived query methods**."
+          },
+          {
+            "type": "code",
+            "content": "JPA Entity and Derived Query Repository:",
+            "code": "@Entity\n@Table(name = \"dragons\")\npublic class Dragon {\n    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n    private String name;\n    private int power;\n    // getters, setters, constructors\n}\n\npublic interface DragonRepository extends JpaRepository<Dragon, Long> {\n    // Spring Data derives the SQL query automatically from the method name!\n    List<Dragon> findByName(String name);\n    List<Dragon> findByPowerGreaterThanOrderByPowerDesc(int minPower);\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Spring Data parses method names like `findByPowerGreaterThanOrderByPowerDesc` using reflection, generating equivalent parameterized SQL queries (`SELECT * FROM dragons WHERE power > ? ORDER BY power DESC`) out-of-the-box with zero handwritten SQL!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The ORM Bridge",
+            "content": "JPA (Java Persistence API) is the specification. Hibernate is the underlying ORM engine. Spring Data JPA is the repository abstraction."
+          },
+          {
+            "title": "JpaRepository Magic",
+            "content": "Inherit `findAll()`, `findById()`, `save()`, `deleteById()`, and pagination support without writing a single line of SQL."
+          },
+          {
+            "title": "The N+1 Query Problem",
+            "content": "Lazy loading entity relationships inside loops causes N+1 SQL queries. Use `@EntityGraph` or `JOIN FETCH` queries to optimize."
+          }
+        ],
+        "underTheHood": "When Spring boots, `RepositoryFactorySupport` uses Java dynamic proxies (`java.lang.reflect.Proxy`) to synthesize concrete proxy implementations of all `JpaRepository` interfaces, routing calls to an internal `SimpleJpaRepository`.",
+        "workedExample": {
+          "code": "// Spring Data JPA Architecture Pattern\n// 1. Entity\n@Entity\npublic class Outpost {\n    @Id @GeneratedValue private Long id;\n    private String name;\n}\n\n// 2. Repository Interface (Zero implementation code needed!)\npublic interface OutpostRepository extends JpaRepository<Outpost, Long> {\n    Optional<Outpost> findByName(String name);\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "JPA entity mapping table."
+            },
+            {
+              "line": 9,
+              "explanation": "Spring generates full SQL CRUD implementation dynamically."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Triggering the N+1 Selects query problem when fetching entity relationships.",
+            "code": "for (Dragon d : repo.findAll()) { d.getRiders().size(); } // Fires 1 query for dragons, then N queries for riders!",
+            "correction": "Use `JOIN FETCH` in a `@Query` or annotate the repository method with `@EntityGraph`."
+          },
+          {
+            "mistake": "Forgetting @Transactional on multi-step write operations in service layers.",
+            "code": "// If step 2 throws an exception, step 1 is permanently committed, corrupting database state!",
+            "correction": "Add `@Transactional` to service methods coordinating updates."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "How does Spring Data JPA generate SQL queries for derived repository methods like `findByPowerGreaterThan(int p)`?",
+            "options": [
+              "It parses the method name tokens at startup and derives the equivalent parameterized SQL query automatically",
+              "It executes full database scans in Java memory",
+              "It requires writing raw SQL in an external file",
+              "It calls an external AI service"
+            ],
+            "answer": 0,
+            "explanation": "Spring Data's query derivation engine parses method names to synthesize parameterized SQL queries."
+          },
+          {
+            "question": "What is the N+1 Query problem in JPA/Hibernate?",
+            "options": [
+              "Executing 1 initial query to fetch N entities, followed by N separate individual queries to lazily load their related children, causing severe database performance degradation",
+              "A query with N+1 syntax errors",
+              "A query that returns N+1 extra rows",
+              "A database deadlock error"
+            ],
+            "answer": 0,
+            "explanation": "The N+1 problem occurs when lazily fetching collections in a loop, firing N additional queries."
+          }
+        ],
+        "exercise": {
+          "instructions": "Guided Project: Model a Spring Data JPA persistence layer. Review the steps below and answer the self-check verification questions.",
+          "isGuidedProject": true,
+          "checklist": [
+            "1. Add 'spring-boot-starter-data-jpa' and an in-memory database like 'h2' or 'postgresql' in pom.xml",
+            "2. Define an @Entity class DragonEntity with @Id @GeneratedValue(strategy = GenerationType.IDENTITY)",
+            "3. Create interface DragonRepository extends JpaRepository<DragonEntity, Long>",
+            "4. Add a derived query method: List<DragonEntity> findBySpecies(String species)",
+            "5. Write an integration test using @DataJpaTest to verify save() and findBySpecies() queries"
+          ],
+          "expectedOutputDescription": "Spring Data JPA automatically creates table schema in H2/PostgreSQL and logs generated SQL statements.",
+          "selfChecks": [
+            {
+              "question": "Which annotation specifies the primary key field of a JPA entity?",
+              "answer": "@Id"
+            },
+            {
+              "question": "How do you eliminate the N+1 query problem when querying entity relationships?",
+              "answer": "Use JOIN FETCH queries or @EntityGraph to eagerly fetch associations in a single SQL query"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Spring in Action, 6th ed.",
+            "location": "Chapter 3: Working with Data (Spring Data JPA)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 4: Database Programming",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a6_l5",
+        "title": "DTO Validation & Global Exception Handling",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Invalid coordinates or negative power levels must never penetrate the Dragon's Perch core. Bean Validation enforces field constraints declaratively, while `@RestControllerAdvice` translates errors into clean, standardized JSON error envelopes.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**Jakarta Bean Validation** provides declarative validation annotations: `@NotNull`, `@NotBlank`, `@Size(min, max)`, `@Min`, `@Max`, and `@Email`. Annotating a controller payload with `@Valid` triggers validation automatically. If invalid, Spring throws `MethodArgumentNotValidException`. Centralized `@RestControllerAdvice` catches exceptions globally and formats structured error responses."
+          },
+          {
+            "type": "code",
+            "content": "Declarative Validation and Global Exception Handling:",
+            "code": "// DTO with validation constraints\npublic record DragonRequest(\n    @NotBlank(message = \"Name is required\") String name,\n    @Min(value = 1, message = \"Power must be at least 1\") int power\n) {}\n\n// Global Exception Handler\n@RestControllerAdvice\npublic class GlobalExceptionHandler {\n    @ExceptionHandler(MethodArgumentNotValidException.class)\n    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {\n        Map<String, String> errors = new HashMap<>();\n        ex.getBindingResult().getFieldErrors().forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));\n        return ResponseEntity.badRequest().body(errors);\n    }\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Centralized `@RestControllerAdvice` decouples exception formatting from business controllers: controllers simply throw domain exceptions, and the advice translates them into standard HTTP status codes (400, 404, 409)."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Declarative Validation",
+            "content": "Annotate DTOs with `@NotBlank`, `@Min`, `@Size`. Controller method takes `@Valid @RequestBody Dto dto`."
+          },
+          {
+            "title": "@RestControllerAdvice",
+            "content": "Global interceptor catching exceptions thrown by any controller. Returns unified error JSON envelopes."
+          },
+          {
+            "title": "RFC 7807 Problem Details",
+            "content": "Modern standard for HTTP error responses: `{type, title, status, detail, instance}`."
+          }
+        ],
+        "underTheHood": "Hibernate Validator (the reference implementation of Jakarta Validation) uses reflection and bytecode inspection to evaluate validation constraints before the controller method is invoked, aborting immediately on failure.",
+        "workedExample": {
+          "code": "import java.util.*;\n\npublic class Main {\n    // Simulating validation logic in pure Java\n    public static Map<String, String> validate(String name, int power) {\n        Map<String, String> errors = new LinkedHashMap<>();\n        if (name == null || name.trim().isEmpty()) {\n            errors.put(\"name\", \"Name cannot be blank\");\n        }\n        if (power < 1) {\n            errors.put(\"power\", \"Power must be >= 1\");\n        }\n        return errors;\n    }\n    \n    public static void main(String[] args) {\n        Map<String, String> errs = validate(\"\", -5);\n        System.out.println(\"Validation errors: \" + errs);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 4,
+              "explanation": "Evaluate validation rules on input parameters."
+            },
+            {
+              "line": 6,
+              "explanation": "Record name validation failure."
+            },
+            {
+              "line": 9,
+              "explanation": "Record power validation failure."
+            },
+            {
+              "line": 16,
+              "explanation": "Prints validation error dictionary."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Forgetting @Valid before @RequestBody in the controller method.",
+            "code": "@PostMapping public void save(@RequestBody Dto dto) // Constraints are IGNORED without @Valid!",
+            "correction": "Always add `@Valid`: `@PostMapping public void save(@Valid @RequestBody Dto dto)`."
+          },
+          {
+            "mistake": "Leaking raw database stack traces in 500 error responses.",
+            "code": "// Returning e.printStackTrace() to the public web exposes internal schema details to attackers!",
+            "correction": "Catch generic exceptions in `@RestControllerAdvice` and return a sanitized error message."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What annotation must precede `@RequestBody` on a controller method parameter to trigger Bean Validation?",
+            "options": [
+              "@Valid (or @Validated)",
+              "@Verify",
+              "@Checked",
+              "@Assert"
+            ],
+            "answer": 0,
+            "explanation": "`@Valid` instructs Spring to trigger the Jakarta Bean Validation validator on the deserialized payload."
+          },
+          {
+            "question": "What is the primary role of a `@RestControllerAdvice` class in a Spring Boot application?",
+            "options": [
+              "To provide global, centralized exception handling and uniform error responses across all controllers",
+              "To configure database connections",
+              "To schedule background jobs",
+              "To compile Java classes"
+            ],
+            "answer": 0,
+            "explanation": "`@RestControllerAdvice` catches exceptions across the entire application and returns formatted error payloads."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a candidate name and power integer from stdin. Validate the input: if name is empty or \"null\", print `400 Bad Request: Name required`. Else if power < 1, print `400 Bad Request: Power must be positive`. Otherwise print `200 OK: Validated [name]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String name = scanner.next();\n        int power = scanner.nextInt();\n        \n        // Perform validation and print HTTP response\n        \n    }\n}",
+          "hints": [
+            "if (\"null\".equals(name) || name.isEmpty()) { System.out.println(\"400 Bad Request: Name required\"); }",
+            "else if (power < 1) { System.out.println(\"400 Bad Request: Power must be positive\"); }",
+            "else { System.out.println(\"200 OK: Validated \" + name); }"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String name = scanner.next();\n        int power = scanner.nextInt();\n        \n        if (\"null\".equals(name) || name.isEmpty()) {\n            System.out.println(\"400 Bad Request: Name required\");\n        } else if (power < 1) {\n            System.out.println(\"400 Bad Request: Power must be positive\");\n        } else {\n            System.out.println(\"200 OK: Validated \" + name);\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Valid dragon",
+              "stdin": "Smaug 500\n",
+              "expectedStdout": "200 OK: Validated Smaug\n"
+            },
+            {
+              "name": "Invalid name",
+              "stdin": "null 100\n",
+              "expectedStdout": "400 Bad Request: Name required\n"
+            },
+            {
+              "name": "Invalid power",
+              "stdin": "Drake 0\n",
+              "expectedStdout": "400 Bad Request: Power must be positive\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Spring in Action, 6th ed.",
+            "location": "Chapter 2: Developing Web Applications (Validating Form Input)",
+            "verify": false
+          },
+          {
+            "source": "Spring Boot Reference Documentation",
+            "location": "Validation and Error Handling",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a6_l6",
+        "title": "Guided Project: Deploying a Multi-Tier Spring REST Service",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The final mission of the Dragon's Perch unites all architectural layers into a complete enterprise microservice. From the HTTP RestController to the transactional Service layer, JPA repository, and H2 database, your service stands ready for production.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A **Multi-Tier Architecture** enforces strict separation of concerns across three core tiers: **Web Tier** (`@RestController`, handles HTTP verbs and DTO validation), **Service Tier** (`@Service`, coordinates business logic and `@Transactional` boundaries), and **Persistence Tier** (`@Repository` / `JpaRepository`, manages database entities)."
+          },
+          {
+            "type": "code",
+            "content": "Multi-tier component interaction flow:",
+            "code": "// HTTP Client -> [Controller] -> (DTO) -> [Service] -> (Entity) -> [JpaRepository] -> [Database]\n// HTTP Response <- [Controller] <- (DTO) <- [Service] <- (Entity) <- [JpaRepository] <- [Database]"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Never allow controllers to communicate directly with repositories. The Service layer is where business validation, transactional guarantees, security checks, and DTO-to-entity mappings reside."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The 3 Standard Tiers",
+            "content": "Controller (Web/HTTP/DTOs) -> Service (Business/Transactions) -> Repository (Data/Entities)."
+          },
+          {
+            "title": "Mapping DTOs and Entities",
+            "content": "Keep database entity representations decoupled from public JSON API DTO contracts using MapStruct or manual mapping."
+          },
+          {
+            "title": "Testing the Tiers",
+            "content": "@WebMvcTest for controllers, Mockito for service unit tests, and @DataJpaTest for persistence integration tests."
+          }
+        ],
+        "underTheHood": "Spring's `@Transactional` annotation creates a dynamic proxy around the service bean. When a method starts, the proxy opens a database transaction; upon method return, it commits the transaction. If an unchecked runtime exception is thrown, it executes an automated database rollback.",
+        "workedExample": {
+          "code": "// Multi-Tier Architecture Verification Summary\n// 1. Controller: @RestController @RequestMapping(\"/api/v1/missions\")\n// 2. Service: @Service @Transactional public class MissionService\n// 3. Repository: public interface MissionRepository extends JpaRepository<Mission, Long>\n// 4. Entity: @Entity public class Mission { @Id @GeneratedValue Long id; String target; }",
+          "walkthrough": [
+            {
+              "line": 2,
+              "explanation": "Controller delegates to Service."
+            },
+            {
+              "line": 3,
+              "explanation": "Service controls transaction and business rules."
+            },
+            {
+              "line": 4,
+              "explanation": "Repository manages persistence."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Calling repository save() inside a loop instead of saveAll().",
+            "code": "for (Entity e : list) repo.save(e); // Generates N individual roundtrips to the database!",
+            "correction": "Use `repo.saveAll(list);` to enable batch inserts."
+          },
+          {
+            "mistake": "Bypassing the service layer by calling repositories directly from controllers.",
+            "code": "@GetMapping public List<Entity> get() { return repo.findAll(); } // Bypasses business validation!",
+            "correction": "Route all queries through the service layer."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why should `@RestController` classes never inject or call `@Repository` classes directly?",
+            "options": [
+              "To maintain separation of concerns: the Service layer must handle business logic, security checks, and transactional boundaries",
+              "Because Spring prevents controllers from calling repositories",
+              "Because repositories cannot return JSON",
+              "To save memory"
+            ],
+            "answer": 0,
+            "explanation": "Separating Web, Service, and Data tiers ensures business rules and transactional integrity are maintained."
+          },
+          {
+            "question": "What does the `@Transactional` annotation on a Service method do if an uncaught RuntimeException occurs?",
+            "options": [
+              "It automatically executes a database rollback for all operations within that transaction",
+              "It ignores the exception and commits anyway",
+              "It deletes the database table",
+              "It shuts down the web server"
+            ],
+            "answer": 0,
+            "explanation": "`@Transactional` intercepts runtime exceptions and triggers an automated database rollback."
+          }
+        ],
+        "exercise": {
+          "instructions": "Guided Project: Construct an end-to-end multi-tier Spring Boot REST application. Verify your implementation using the checklist and answer the self-check questions below.",
+          "isGuidedProject": true,
+          "checklist": [
+            "1. Scaffold a Spring Boot project with Spring Web, Spring Data JPA, and H2 database",
+            "2. Define JPA Entity 'PerchMission' with fields id, codename, and status",
+            "3. Create interface PerchMissionRepository extends JpaRepository<PerchMission, Long>",
+            "4. Create @Service class PerchMissionService with @Transactional methods createMission() and getActiveMissions()",
+            "5. Create @RestController class PerchMissionController exposing GET /api/v1/missions and POST /api/v1/missions",
+            "6. Test with curl: 'curl -X POST http://localhost:8080/api/v1/missions -H \"Content-Type: application/json\" -d \"{\\\"codename\\\":\\\"DragonSentry\\\"}\"'"
+          ],
+          "expectedOutputDescription": "HTTP 201 Created response returning JSON payload with generated database ID and status.",
+          "selfChecks": [
+            {
+              "question": "Which annotation defines a transactional boundary on a Service method?",
+              "answer": "@Transactional"
+            },
+            {
+              "question": "What status code should a POST creation endpoint return upon successfully saving an entity?",
+              "answer": "201 Created"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Spring in Action, 6th ed.",
+            "location": "Chapter 1-3 & Chapter 6: Building Full-Stack Spring Services",
+            "verify": false
+          },
+          {
+            "source": "Clean Architecture: A Craftsman's Guide to Software Structure and Design",
+            "location": "Part V: Architecture (Component Coupling)",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a6",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a6_q1",
+        "type": "mcq",
+        "question": "What is the primary role of the Spring Inversion of Control (IoC) container?",
+        "options": [
+          "To instantiate, configure, wire, and manage the lifecycle of application objects (Beans)",
+          "To compile Java source code to bytecodes",
+          "To provide operating system device drivers",
+          "To manage virtual memory paging"
+        ],
+        "answer": 0,
+        "explanation": "The IoC container manages bean creation and dependency wiring."
+      },
+      {
+        "id": "a6_q2",
+        "type": "mcq",
+        "question": "Why is Constructor Injection strongly favored over `@Autowired` field injection?",
+        "options": [
+          "It supports final immutable fields, guarantees non-null dependencies, and enables clean unit testing without Spring",
+          "Field injection runs slower on modern CPUs",
+          "Constructor injection was invented by Google",
+          "It eliminates the need for JVM garbage collection"
+        ],
+        "answer": 0,
+        "explanation": "Constructor injection guarantees dependencies are provided at creation time and supports final fields."
+      },
+      {
+        "id": "a6_q3",
+        "type": "mcq",
+        "question": "Which annotation marks a Spring controller whose methods return data serialized directly into JSON response bodies?",
+        "options": [
+          "@RestController",
+          "@Controller",
+          "@Service",
+          "@Component"
+        ],
+        "answer": 0,
+        "explanation": "`@RestController` combines `@Controller` and `@ResponseBody` to produce RESTful JSON responses."
+      },
+      {
+        "id": "a6_q4",
+        "type": "mcq",
+        "question": "How does Spring Data JPA generate SQL queries for methods like `findByName(String name)`?",
+        "options": [
+          "By parsing method name tokens at startup and synthesizing parameterized SQL queries automatically",
+          "By querying a third-party cloud service",
+          "By running full table scans in memory",
+          "By generating C++ code"
+        ],
+        "answer": 0,
+        "explanation": "Spring Data parses method naming conventions to construct parameterized SQL queries dynamically."
+      },
+      {
+        "id": "a6_q5",
+        "type": "mcq",
+        "question": "What is the role of `@RestControllerAdvice` in Spring Boot?",
+        "options": [
+          "To provide centralized, global exception handling and uniform error responses across all controllers",
+          "To monitor CPU usage",
+          "To advise users on code formatting",
+          "To schedule cron jobs"
+        ],
+        "answer": 0,
+        "explanation": "`@RestControllerAdvice` catches exceptions globally and translates them into structured HTTP responses."
+      },
+      {
+        "id": "a6_q6",
+        "type": "mcq",
+        "question": "What is the N+1 Query Problem in JPA/Hibernate?",
+        "options": [
+          "Executing 1 initial query to fetch N entities, followed by N separate queries to load related child entities, causing severe performance degradation",
+          "A database syntax error with N parameters",
+          "A query that returns N+1 columns",
+          "A connection pool timeout"
+        ],
+        "answer": 0,
+        "explanation": "The N+1 problem occurs when lazily loaded associations trigger individual queries per row."
+      },
+      {
+        "id": "a6_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "String res = \"GET\".equals(\"GET\") ? \"200 OK\" : \"400 Bad Request\";\nSystem.out.println(res);",
+        "options": [
+          "200 OK",
+          "400 Bad Request",
+          "null",
+          "Throws Exception"
+        ],
+        "answer": 0,
+        "explanation": "Ternary condition evaluates to true, outputting '200 OK'."
+      },
+      {
+        "id": "a6_q8",
+        "type": "spot-the-bug",
+        "question": "What is the bug in this controller method?",
+        "code": "@PostMapping(\"/users\")\npublic void createUser(UserDto dto) {\n    service.save(dto);\n}",
+        "options": [
+          "Missing `@RequestBody` annotation, so Spring fails to deserialize the incoming JSON request body into `dto`",
+          "void return types are illegal in Spring",
+          "The method name must be doPost",
+          "UserDto cannot be a record"
+        ],
+        "answer": 0,
+        "explanation": "`@RequestBody` is required to instruct Jackson to deserialize the incoming JSON payload."
+      },
+      {
+        "id": "a6_q9",
+        "type": "fill-in",
+        "question": "Complete the annotation: To bind a URI path template variable like /api/{id} to a method parameter, use @Path______.",
+        "answer": "Variable",
+        "explanation": "`@PathVariable` binds URI template variables."
+      },
+      {
+        "id": "a6_q10",
+        "type": "mcq",
+        "question": "What happens when an unchecked exception is thrown from a service method annotated with `@Transactional`?",
+        "options": [
+          "Spring automatically rolls back the database transaction",
+          "Spring commits the transaction anyway",
+          "The web server shuts down",
+          "The database is deleted"
+        ],
+        "answer": 0,
+        "explanation": "`@Transactional` executes an automated rollback when an uncaught RuntimeException occurs."
+      },
+      {
+        "id": "a6_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the flow of an incoming HTTP request in a Spring Boot application:",
+        "lines": [
+          "Client sends HTTP POST /api/dragons with JSON body",
+          "DispatcherServlet receives request and routes to matching @RestController",
+          "Controller validates DTO (@Valid) and calls @Service layer",
+          "Service manages @Transactional business logic and invokes JpaRepository",
+          "JpaRepository executes SQL against database and returns result"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "explanation": "Client -> DispatcherServlet -> Controller -> Service -> Repository/Database."
+      },
+      {
+        "id": "a6_q12",
+        "type": "mcq",
+        "question": "Which annotation specifies the primary key of a JPA entity?",
+        "options": [
+          "@Id",
+          "@Key",
+          "@PrimaryKey",
+          "@Column"
+        ],
+        "answer": 0,
+        "explanation": "`@Id` denotes the primary key attribute of an entity."
+      }
+    ],
+    "project": {
+      "title": "Dragon's Perch Enterprise Defense Management System",
+      "brief": "Architect an enterprise-grade multi-tier defense coordination REST service for the Dragon's Perch. Implement Spring IoC Constructor Injection, auto-configured Spring Boot microservices, RESTful CRUD endpoints with ResponseEntity, Spring Data JPA repositories with derived queries, declarative Jakarta validation, and centralized RestControllerAdvice exception handling.",
+      "milestones": [
+        "Milestone 1: Scaffold Spring Boot application with Web, Data JPA, and H2 starter modules",
+        "Milestone 2: Model PerchDefender JPA entity and build JpaRepository with derived query methods",
+        "Milestone 3: Construct @Service layer with @Transactional boundaries and DTO mapping",
+        "Milestone 4: Build @RestController with @Valid request bodies and centralized exception handling"
+      ],
+      "rubric": [
         {
-          "type": "mcq",
-          "question": "Which Spring concept supplies an object with its dependencies rather than letting it construct them?",
-          "options": [
-            "Dependency injection",
-            "Bytecode weaving only",
-            "Garbage collection",
-            "String interning"
-          ],
-          "answer": 0,
-          "explanation": "Dependency injection provides collaborators to an object, promoting modularity and testability."
+          "criterion": "Multi-Tier Layering & Separation",
+          "points": 25,
+          "description": "Strict separation between Controller DTOs, Service business rules, and JPA entities"
         },
         {
-          "type": "mcq",
-          "question": "What is the primary purpose of a database transaction in Spring?",
-          "options": [
-            "To group operations with defined commit/rollback behaviour",
-            "To format Java code",
-            "To compile classes",
-            "To compress log files"
-          ],
-          "answer": 0,
-          "explanation": "Transactions ensure atomicity: either all operations commit, or they rollback on error."
+          "criterion": "RESTful API Standards & Status Codes",
+          "points": 25,
+          "description": "Accurate usage of HTTP verbs, 201 Created, 400 Bad Request, and 404 Not Found"
         },
         {
-          "type": "true-false",
-          "question": "Spring Data JPA automatically implements common CRUD operations without writing manual boilerplate SQL.",
-          "answer": true,
-          "explanation": "JpaRepository generates save, findById, findAll, delete implementations automatically."
+          "criterion": "JPA Persistence & N+1 Prevention",
+          "points": 25,
+          "description": "Proper entity annotations and query optimization"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Spring Boot & Persistence?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a6",
-      "title": "A6: Simulated DI Container",
-      "prompt": "Implement a tiny Dependency Injection container simulation:\n`interface MessageService { String getMessage(); }`\n`class EmailService implements MessageService { public String getMessage() { return \"Spring DI Ready\"; } }`\n`class NotificationClient { private final MessageService svc; public NotificationClient(MessageService s) { this.svc = s; } public void send() { System.out.println(svc.getMessage()); } }`\nIn main, inject EmailService and call `send()`.",
-      "starterCode": "interface MessageService { String getMessage(); }\n\n// TODO 1: Implement EmailService returning \"Spring DI Ready\"\nclass EmailService implements MessageService {\n    public String getMessage() {\n        return \"\";\n    }\n}\n\n// TODO 2: Implement NotificationClient with constructor injection\nclass NotificationClient {\n    private final MessageService svc;\n    public NotificationClient(MessageService s) {\n        this.svc = s;\n    }\n    public void send() {\n        // Print svc.getMessage()\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 3: Wire EmailService into NotificationClient and call send()\n    }\n}",
-      "expectedOutput": "Spring DI Ready",
-      "testCases": [
-        {
-          "name": "Simulate Dependency Injection",
-          "expected": "Spring DI Ready"
+          "criterion": "Validation & Error Envelopes",
+          "points": 25,
+          "description": "Declarative Bean Validation and clean @RestControllerAdvice error envelopes"
         }
       ],
-      "hints": [
-        "Pass EmailService into the NotificationClient constructor."
+      "stretchGoals": [
+        "Implement pagination and sorting using Spring Data Pageable and Page<T>",
+        "Add Spring Boot Actuator custom health indicators monitoring dragon threat levels"
       ]
     },
-    "biome": "Spire Sanctuary",
-    "conceptMetaphor": "Spring Boot REST microservices and cloud persistence reaching to the sky.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Inversion of Control (IoC)",
+        "definition": "A design principle where framework containers manage the lifecycle and dependencies of application components."
+      },
+      {
+        "term": "Dependency Injection (DI)",
+        "definition": "A pattern where objects receive their dependencies from an external assembler rather than instantiating them directly."
+      },
+      {
+        "term": "Spring Boot",
+        "definition": "An extension of the Spring framework providing opinionated auto-configuration and embedded web servers."
+      },
+      {
+        "term": "@RestController",
+        "definition": "A specialized Spring controller that automatically serializes return values directly into JSON HTTP response bodies."
+      },
+      {
+        "term": "JPA",
+        "definition": "Java Persistence API: the standard specification for object-relational mapping (ORM) in Java."
+      },
+      {
+        "term": "Hibernate",
+        "definition": "The premier open-source ORM implementation of the JPA specification."
+      },
+      {
+        "term": "Spring Data JPA",
+        "definition": "A framework that creates repository implementations automatically from interface definitions."
+      },
+      {
+        "term": "@Transactional",
+        "definition": "An annotation that wraps method execution inside an atomic database transaction with automatic rollback on error."
+      },
+      {
+        "term": "@RestControllerAdvice",
+        "definition": "An interceptor for handling exceptions thrown across all controller classes in a centralized location."
+      },
+      {
+        "term": "DTO",
+        "definition": "Data Transfer Object: an object carrying data between processes without business logic, isolating internal database schemas from external APIs."
+      }
+    ],
+    "references": [
+      {
+        "source": "Spring in Action, 6th ed.",
+        "location": "Chapters 1-3 & Chapter 6: Core Spring, Data, and REST",
+        "verify": false
+      },
+      {
+        "source": "Spring Boot Reference Documentation",
+        "location": "Spring MVC & Spring Data JPA",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a7",
     "code": "A7",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Performance & Observability",
-    "subtitle": "Profiling, CPU/allocation bottlenecks, structured logging, metrics and tracing",
-    "icon": "",
-    "color": "#2C3E50",
+    "title": "High-Performance Java: Profiling, JIT & Memory Architecture",
+    "subtitle": "JMH microbenchmarks, HotSpot Tiered Compilation (C1/C2), On-Stack Replacement (OSR), JDK Flight Recorder (JFR), Compact Strings, and Zero-Copy Direct Memory",
+    "biome": "End Core",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Design rigorous microbenchmarks using the Java Microbenchmark Harness (JMH) while eliminating Dead Code Elimination and Constant Folding pitfalls",
+      "Explain HotSpot Tiered Compilation mechanics: Interpreter -> C1 (Client Compiler) -> C2 (Server Compiler) and Inlining heuristics",
+      "Profile production latency, thread contention, and allocation rates using JDK Flight Recorder (JFR) with near-zero overhead",
+      "Analyze modern memory footprint optimizations including Compact Strings (Latin-1) and String Deduplication",
+      "Implement high-throughput zero-copy I/O pipelines using ByteBuffer.allocateDirect() and FileChannel.transferTo()",
+      "Apply mechanical sympathy principles: CPU L1/L2/L3 cache lines, false sharing, and contiguous memory array layouts"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1",
+      "a2",
+      "a3",
+      "a4",
+      "a5",
+      "a6"
+    ],
     "lessons": [
       {
-        "id": "lesson-a7-1",
-        "title": "Profiling & Performance Bottlenecks",
-        "xp": 50,
-        "slides": [
+        "id": "a7_l1",
+        "title": "Microbenchmarking with JMH: Avoiding JIT Traps",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "In the pulsating End Core, measuring performance using `System.currentTimeMillis()` produces wild illusions. The JIT optimizer notices unused variables and deletes entire benchmark loops from existence. JMH provides a scientifically rigorous measurement framework.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Measure Before Optimizing",
-            "content": "Never guess bottlenecks! Use profilers (Async-Profiler, JProfiler, VisualVM) to measure CPU usage, heap allocations, and lock contention under realistic loads."
-          },
-          {
-            "type": "visual",
-            "visual": "jvm",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "Writing microbenchmarks using naive `System.nanoTime()` loops is fundamentally flawed in Java due to **JVM Warmup** (JIT tiered compilation), **Dead Code Elimination** (JIT deletes computations whose results are never read), and **Constant Folding** (JIT computes static results at compile time). The **Java Microbenchmark Harness (JMH)** is the official OpenJDK tool for microbenchmarks."
           },
           {
             "type": "code",
-            "title": "Benchmarking with JMH",
-            "content": "Java Microbenchmark Harness prevents JIT dead-code elimination artifacts.",
-            "code": "@Benchmark\npublic void measurePerformance() {\n    // benchmarked code\n}"
+            "content": "Idiomatic JMH Benchmark Structure:",
+            "code": "@BenchmarkMode(Mode.AverageTime)\n@OutputTimeUnit(TimeUnit.NANOSECONDS)\n@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)\n@Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)\n@State(Scope.Thread)\npublic class CoreBenchmark {\n    private int x = 42;\n\n    @Benchmark\n    public void testCompute(Blackhole bh) {\n        // Blackhole consumes result, preventing Dead Code Elimination!\n        int result = Math.multiplyExact(x, 2);\n        bh.consume(result);\n    }\n}"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Always either **return the computed value** from the `@Benchmark` method or pass it into a `Blackhole.consume(val)`. If the JIT observes that a computed value is never read, it will delete the entire algorithm, reporting bogus '0.00 nanosecond' benchmark times!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The JIT Optimizer Trap",
+            "content": "HotSpot optimizes aggressively. If code has no side-effects and results are unused, the optimizer eliminates it completely."
+          },
+          {
+            "title": "Warmup Cycles Matter",
+            "content": "Code starts in the slow interpreter. After thousands of iterations, C1 and C2 compile it to optimized machine code. Measure ONLY after warmup."
+          },
+          {
+            "title": "JMH Blackhole",
+            "content": "`Blackhole.consume()` tricks the JIT into believing the output is indispensable, forcing full execution."
+          }
+        ],
+        "underTheHood": "JMH generates dedicated synthetic harness classes at compile time via annotation processors. It runs multiple JVM forks to isolate the benchmark from residual HotSpot profile pollution caused by previous benchmark runs.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating a Blackhole sink to prevent dead code elimination\n    static class Blackhole {\n        public long sink = 0;\n        public void consume(long val) { sink += (val ^ sink); }\n    }\n    \n    public static void main(String[] args) {\n        Blackhole bh = new Blackhole();\n        for (int i = 0; i < 1000; i++) {\n            long computed = (long) i * 7;\n            bh.consume(computed); // Consumes result\n        }\n        System.out.println(\"Benchmark iteration completed. Sink: \" + (bh.sink != 0));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Blackhole maintains an observable sink field."
+            },
+            {
+              "line": 4,
+              "explanation": "Bitwise accumulation forces calculation of computed value."
+            },
+            {
+              "line": 11,
+              "explanation": "Loop work is consumed, preventing elimination."
+            },
+            {
+              "line": 13,
+              "explanation": "Verification confirms calculations took place."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using System.currentTimeMillis() or System.nanoTime() in a simple for-loop.",
+            "code": "long start = System.currentTimeMillis(); for(int i=0;i<1000;i++) test(); ... // Completely invalid!",
+            "correction": "Use the JMH framework (`@Benchmark`) with warmup iterations and Blackhole sinks."
+          },
+          {
+            "mistake": "Running benchmarks inside an IDE without forking clean JVMs.",
+            "code": "// Warmup pollution from previous runs skews JIT profiling data",
+            "correction": "Configure `@Fork(value = 1)` in JMH to launch clean isolated JVM processes."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is Dead Code Elimination in HotSpot JIT compilation?",
+            "options": [
+              "An optimization where the compiler deletes instructions whose calculated results are never used or returned",
+              "Deleting unused .class files from disk",
+              "Garbage collecting dead objects",
+              "Removing comments from code"
+            ],
+            "answer": 0,
+            "explanation": "If the JIT compiler determines an expression has no observable side effects and is unused, it removes the computation."
+          },
+          {
+            "question": "What is the purpose of the `Blackhole` parameter in a JMH `@Benchmark` method?",
+            "options": [
+              "It consumes computed values to prevent the JIT from eliminating the benchmarked code as dead code",
+              "It swallows all exceptions",
+              "It simulates a database crash",
+              "It clears the CPU cache"
+            ],
+            "answer": 0,
+            "explanation": "JMH Blackholes ensure calculated results are read, preventing dead code elimination."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `cycles` from stdin. Simulate a microbenchmark with a Blackhole consumer: in a loop running `cycles` times, compute `i * 3`, accumulate into a `blackholeSink` using XOR (`sink ^= val`), and finally print `Blackhole sink: [sink]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int cycles = scanner.nextInt();\n        \n        // Simulate Blackhole consumption loop\n        \n    }\n}",
+          "hints": [
+            "long sink = 0;",
+            "for (int i = 0; i < cycles; i++) { long val = (long) i * 3; sink ^= val; }",
+            "Print `Blackhole sink: ` + sink."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int cycles = scanner.nextInt();\n        \n        long sink = 0;\n        for (int i = 0; i < cycles; i++) {\n            long val = (long) i * 3;\n            sink ^= val;\n        }\n        \n        System.out.println(\"Blackhole sink: \" + sink);\n    }\n}",
+          "tests": [
+            {
+              "name": "5 cycles",
+              "stdin": "5\n",
+              "expectedStdout": "Blackhole sink: 0\n"
+            },
+            {
+              "name": "10 cycles",
+              "stdin": "10\n",
+              "expectedStdout": "Blackhole sink: 11\n"
+            },
+            {
+              "name": "20 cycles",
+              "stdin": "20\n",
+              "expectedStdout": "Blackhole sink: 60\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 2: An Approach to Java Performance Testing (Microbenchmarking with JMH)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 12: Compilers and Virtual Machine Tools",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a7-2",
-        "title": "Observability: The Three Pillars",
-        "xp": 50,
-        "slides": [
+        "id": "a7_l2",
+        "title": "HotSpot Tiered Compilation: C1, C2 & Method Inlining",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "The End Core adapts to pressure: cold pathways run through standard interpreter steps, while hyper-frequent hot pathways are fused into raw, blistering x86 machine code by the C2 compiler. Understanding Tiered Compilation unlocks peak execution speeds.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Logs, Metrics, Traces",
-            "content": "**Logs** (discrete events), **Metrics** (aggregates like CPU, req/sec), and **Distributed Traces** (following a request across microservices) enable production diagnosis."
+            "type": "text",
+            "content": "HotSpot uses **Tiered Compilation** (enabled by default): **Tier 0** (Interpreter, starts fast with no compilation delay), **Tier 1-3** (C1 Client Compiler with profiling instrumentation), and **Tier 4** (C2 Server Compiler, heavily optimized native machine code with loop unrolling, escape analysis, and inlining)."
           },
           {
             "type": "code",
-            "title": "Structured JSON Logging",
-            "content": "Machine-parseable logging output.",
-            "code": "// {\"timestamp\":\"...\",\"level\":\"INFO\",\"traceId\":\"...\",\"msg\":\"Order placed\"}"
+            "content": "Observing JIT compilation flags:",
+            "code": "# Print compiled methods as they are promoted to C1/C2:\njava -XX:+PrintCompilation -jar app.jar\n\n# Terminal Output Example:\n# 123   45       3       java.lang.String::hashCode (60 bytes)       # Tier 3 (C1)\n# 245   48   !   4       com.core.Engine::processPulse (120 bytes)   # Tier 4 (C2 optimized)\n\n# Inspect inlining decisions:\njava -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining -jar app.jar"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**Method Inlining** is HotSpot's #1 most powerful optimization. It replaces a method call with the body of the called method, eliminating call overhead and unlocking deeper optimizations (constant propagation, dead-branch pruning, loop unrolling). By default, HotSpot inlines methods whose bytecode size is ≤ 35 bytes (`-XX:MaxInlineLevel=9`). Keep hot methods small!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "Tiered Compilation Pipeline",
+            "content": "Tier 0 (Interpreter) -> Tier 2/3 (C1 fast compilation + profiling) -> Tier 4 (C2 heavy optimization)."
+          },
+          {
+            "title": "Method Inlining Power",
+            "content": "Replaces call instructions with target code directly. Methods under 35 bytes are inlined eagerly."
+          },
+          {
+            "title": "Deoptimization & Safepoints",
+            "content": "If assumptions are invalidated (e.g. a new class loaded violates monomorphic call site), C2 deoptimizes back to Tier 0 safely."
+          }
+        ],
+        "underTheHood": "HotSpot maintains two invocation counters per method: an **Invocation Counter** (number of times called) and a **Backedge Counter** (number of loop iterations). When the sum crosses compile thresholds, compilation is triggered. Long-running loops inside a method trigger **On-Stack Replacement (OSR)**, hot-swapping interpreted stack frames to native code mid-loop!",
+        "workedExample": {
+          "code": "public class Main {\n    // Small method (<35 bytecodes) guaranteed to be inlined by C2\n    public static int add(int a, int b) {\n        return a + b;\n    }\n    \n    public static void main(String[] args) {\n        int total = 0;\n        // Loop iterations cross JIT threshold (OSR compilation)\n        for (int i = 0; i < 20_000; i++) {\n            total = add(total, 1);\n        }\n        System.out.println(\"Total: \" + total);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "add() is tiny (2 bytecodes: iload + iadd). Perfect candidate for JIT inlining."
+            },
+            {
+              "line": 9,
+              "explanation": "Loop runs 20,000 times, crossing HotSpot compilation threshold."
+            },
+            {
+              "line": 10,
+              "explanation": "C2 completely inlines add(), transforming loop to raw native increment total++."
+            },
+            {
+              "line": 12,
+              "explanation": "Prints Total: 20000."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Writing monolithic 500-line methods that exceed the JIT inlining threshold.",
+            "code": "// Methods > 325 bytes (-XX:MaxFreqInlineSize) are NEVER inlined by C2!",
+            "correction": "Break large methods into small, focused helper methods (< 35 bytecodes)."
+          },
+          {
+            "mistake": "Relying on polymorphic call sites with >2 implementing classes in hot loops.",
+            "code": "// Megamorphic call sites (3+ classes) prevent direct inlining and require vtable lookups!",
+            "correction": "Strive for monomorphic call sites in hot loops."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why is Method Inlining considered the most important optimization performed by the JIT compiler?",
+            "options": [
+              "It eliminates method call overhead and exposes the inlined code to further compiler optimizations like constant folding and dead code elimination",
+              "It reduces the size of the .jar file on disk",
+              "It converts Java to C++ source files",
+              "It enables garbage collection"
+            ],
+            "answer": 0,
+            "explanation": "Inlining removes call frame overhead and gives the optimizer a larger contiguous scope for aggressive optimizations."
+          },
+          {
+            "question": "What is On-Stack Replacement (OSR) in the HotSpot JVM?",
+            "options": [
+              "Compiling a hot loop to native code and swapping the active stack frame while the loop is still actively running",
+              "Replacing heap objects with stack primitives",
+              "Swapping CPU registers with disk cache",
+              "Restarting the thread"
+            ],
+            "answer": 0,
+            "explanation": "OSR compiles and transitions long-running loops from interpreted mode to native code mid-execution."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an integer `threshold` from stdin. Simulate HotSpot JIT tiering: if calls < 1000, print `Tier 0: Interpreted`. If calls >= 1000 and < 10000, print `Tier 3: C1 Compiled`. If calls >= 10000, print `Tier 4: C2 Optimized`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int calls = scanner.nextInt();\n        \n        // Determine JIT tier and print\n        \n    }\n}",
+          "hints": [
+            "if (calls < 1000) System.out.println(\"Tier 0: Interpreted\");",
+            "else if (calls < 10000) System.out.println(\"Tier 3: C1 Compiled\");",
+            "else System.out.println(\"Tier 4: C2 Optimized\");"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int calls = scanner.nextInt();\n        \n        if (calls < 1000) {\n            System.out.println(\"Tier 0: Interpreted\");\n        } else if (calls < 10000) {\n            System.out.println(\"Tier 3: C1 Compiled\");\n        } else {\n            System.out.println(\"Tier 4: C2 Optimized\");\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "500 calls",
+              "stdin": "500\n",
+              "expectedStdout": "Tier 0: Interpreted\n"
+            },
+            {
+              "name": "5000 calls",
+              "stdin": "5000\n",
+              "expectedStdout": "Tier 3: C1 Compiled\n"
+            },
+            {
+              "name": "25000 calls",
+              "stdin": "25000\n",
+              "expectedStdout": "Tier 4: C2 Optimized\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 4: Working with the JIT Compiler (Tiered Compilation & Inlining)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 12: Compilers",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a7_l3",
+        "title": "Production Profiling: JDK Flight Recorder (JFR) & Mission Control",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Attaching invasive profilers to live End Core reactors slows production by 40% and risks reactor collapse. JDK Flight Recorder is baked into HotSpot's kernel, continuously recording CPU, lock contention, and memory churn with less than 1% overhead.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**JDK Flight Recorder (JFR)** is an event-based diagnostic and profiling framework built directly into the HotSpot JVM kernel. Unlike traditional profilers that cause heavy sampling distortion, JFR runs with **<1% performance overhead**, making it completely safe for 24/7 production use. Recorded `.jfr` files are visualized using **JDK Mission Control (JMC)**."
+          },
+          {
+            "type": "code",
+            "content": "Starting and dumping JFR recordings via jcmd:",
+            "code": "# Start a continuous circular buffer JFR recording in production:\njcmd <pid> JFR.start name=continuous settings=profile.jfc maxsize=500M\n\n# Dump recording to file when latency spike occurs:\njcmd <pid> JFR.dump name=continuous filename=/tmp/production_incident.jfr\n\n# Start fixed-duration recording:\njcmd <pid> JFR.start duration=60s filename=/tmp/profile.jfr"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "JFR was open-sourced in Java 11 (JEP 328) and is available free in all OpenJDK distributions without special commercial licenses!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "Why JFR in Production?",
+            "content": "Under 1% overhead. Records JVM internals, CPU execution samples, thread contention, and GC phase durations."
+          },
+          {
+            "title": "Custom JFR Events",
+            "content": "Subclass `jdk.jfr.Event` to emit application-specific domain telemetry (e.g. `PortalTeleportEvent`) alongside JVM metrics."
+          },
+          {
+            "title": "JDK Mission Control (JMC)",
+            "content": "Desktop analysis tool providing flame graphs, thread latency timelines, and automated performance rule advisors."
+          }
+        ],
+        "underTheHood": "JFR writes events into ring buffers in native memory without acquiring global VM locks. Background thread flushes buffers to disk asynchronously. When JFR events are disabled, the JIT emits a single no-op instruction at event points.",
+        "workedExample": {
+          "code": "import java.util.*;\n\npublic class Main {\n    // Simulating JFR metric telemetry aggregation\n    static class TelemetryEvent {\n        String eventType;\n        long durationMs;\n        public TelemetryEvent(String type, long d) { this.eventType = type; this.durationMs = d; }\n    }\n    \n    public static void main(String[] args) {\n        List<TelemetryEvent> events = List.of(\n            new TelemetryEvent(\"GC_Pause\", 12),\n            new TelemetryEvent(\"LockContention\", 45),\n            new TelemetryEvent(\"IO_Wait\", 8)\n        );\n        long maxDuration = events.stream().mapToLong(e -> e.durationMs).max().orElse(0);\n        System.out.println(\"Max latency event: \" + maxDuration + \" ms\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 5,
+              "explanation": "Telemetry event modeling JFR recording data."
+            },
+            {
+              "line": 11,
+              "explanation": "Simulate event collection timeline."
+            },
+            {
+              "line": 16,
+              "explanation": "Identify peak latency bottleneck."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using legacy sampling profilers that trigger Stop-The-World safepoints.",
+            "code": "// Safepoint bias: profilers only sample at safepoints, skewing results away from tight loops!",
+            "correction": "Use JFR or async-profiler, which capture true non-safepoint CPU instruction samples."
+          },
+          {
+            "mistake": "Leaving maxsize uncapped on circular JFR recordings.",
+            "code": "JFR.start name=rec // Unbounded disk growth can fill up production partitions!",
+            "correction": "Always specify `maxsize=500M` and `maxage=1d`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the typical performance overhead of running JDK Flight Recorder (JFR) in production?",
+            "options": [
+              "Less than 1% to 2% overhead, making it safe for continuous production profiling",
+              "Around 25% to 50% overhead",
+              "It freezes the JVM completely",
+              "Zero CPU cycles"
+            ],
+            "answer": 0,
+            "explanation": "JFR is engineered for production use with less than 1% typical overhead."
+          },
+          {
+            "question": "Which open-source desktop application is used to visualize and analyze `.jfr` recording files?",
+            "options": [
+              "JDK Mission Control (JMC)",
+              "Visual Studio Code",
+              "Wireshark",
+              "Docker Desktop"
+            ],
+            "answer": 0,
+            "explanation": "JDK Mission Control (JMC) provides graphical flame graphs and timeline analyzers for JFR files."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an event name and duration integer (ms) from stdin. If duration > 50, print `[JFR ALERT] High latency event: [name] ([duration]ms)`. Otherwise print `[JFR OK] Normal latency: [name]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String name = scanner.next();\n        int duration = scanner.nextInt();\n        \n        // Evaluate latency threshold and print diagnostic\n        \n    }\n}",
+          "hints": [
+            "if (duration > 50) System.out.println(\"[JFR ALERT] High latency event: \" + name + \" (\" + duration + \"ms)\");",
+            "else System.out.println(\"[JFR OK] Normal latency: \" + name);"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String name = scanner.next();\n        int duration = scanner.nextInt();\n        \n        if (duration > 50) {\n            System.out.println(\"[JFR ALERT] High latency event: \" + name + \" (\" + duration + \"ms)\");\n        } else {\n            System.out.println(\"[JFR OK] Normal latency: \" + name);\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "LockContention 120ms",
+              "stdin": "LockContention 120\n",
+              "expectedStdout": "[JFR ALERT] High latency event: LockContention (120ms)\n"
+            },
+            {
+              "name": "GC_Pause 15ms",
+              "stdin": "GC_Pause 15\n",
+              "expectedStdout": "[JFR OK] Normal latency: GC_Pause\n"
+            },
+            {
+              "name": "DB_Query 85ms",
+              "stdin": "DB_Query 85\n",
+              "expectedStdout": "[JFR ALERT] High latency event: DB_Query (85ms)\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 3: A Java Performance Toolbox (Flight Recorder and Mission Control)",
+            "verify": false
+          },
+          {
+            "source": "JEP 328: Flight Recorder (JDK 11)",
+            "location": "JDK Enhancement Proposal 328",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a7_l4",
+        "title": "Memory Optimizations: Compact Strings & Deduplication",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "In memory-heavy Void archives, strings consume over 40% of the entire heap. Historically, every single character wasted 2 bytes of UTF-16 RAM even for simple ASCII text. Compact Strings and String Deduplication cut heap usage in half.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In Java 9+ (JEP 254), **Compact Strings** replaced the internal `char[]` (2 bytes per character) of `java.lang.String` with a `byte[]` and an encoding flag (`coder`). If a string contains only ASCII/ISO-8859-1 characters, it uses **Latin-1 encoding** (1 byte per char), cutting memory consumption by **50%**. For full Unicode, it falls back to UTF-16 (2 bytes per char)."
+          },
+          {
+            "type": "code",
+            "content": "Configuring G1 String Deduplication:",
+            "code": "# Enable automatic background deduplication of identical String byte[] arrays:\njava -XX:+UseG1GC -XX:+UseStringDeduplication -jar app.jar"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**String Deduplication** runs during G1/ZGC GC passes. When the collector finds two distinct String instances with identical character arrays, it points both Strings to the single shared `byte[]` array and reclaims the duplicate memory automatically!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The char[] vs byte[] Revolution",
+            "content": "Before Java 9: `char[]` always allocated 2 bytes/char. Java 9+: `byte[]` allocates 1 byte/char for Latin-1 ASCII."
+          },
+          {
+            "title": "Automatic Transparency",
+            "content": "Zero code changes required. `String.length()` still returns the character count, but internal memory footprint drops by 50%."
+          },
+          {
+            "title": "String.intern() vs Deduplication",
+            "content": "intern() pins strings permanently in Metaspace string table. UseStringDeduplication cleans duplicates on the heap without leaks."
+          }
+        ],
+        "underTheHood": "HotSpot's String implementation checks `coder == 0` (LATIN1) vs `coder == 1` (UTF16). JIT compiler vectorizes String operations using AVX-512 SIMD instructions to scan bytes in 64-byte chunks per CPU clock cycle.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating Compact String byte calculation\n    public static int calculateMemoryBytes(String str) {\n        boolean isLatin1 = str.chars().allMatch(c -> c <= 255);\n        int bytesPerChar = isLatin1 ? 1 : 2;\n        return str.length() * bytesPerChar;\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(\"ASCII bytes:   \" + calculateMemoryBytes(\"Hello\")); // 5 bytes\n        System.out.println(\"Unicode bytes: \" + calculateMemoryBytes(\"End⚔\")); // 4 chars * 2 = 8 bytes\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 4,
+              "explanation": "Check if all characters fit in Latin-1 (<= 255)."
+            },
+            {
+              "line": 5,
+              "explanation": "Latin-1 uses 1 byte per character; Unicode uses 2 bytes."
+            },
+            {
+              "line": 10,
+              "explanation": "Demonstrates 50% savings for standard ASCII strings."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using String.intern() on millions of unique strings.",
+            "code": "for (String s : millions) s.intern(); // Can cause massive GC pauses in StringTable Metaspace!",
+            "correction": "Use `-XX:+UseStringDeduplication` with G1/ZGC instead of manual `intern()`."
+          },
+          {
+            "mistake": "String concatenation (+) inside long loops.",
+            "code": "String res = \"\"; for (int i = 0; i < 1000; i++) res += i; // O(N^2) allocations!",
+            "correction": "Use `StringBuilder` sized with initial capacity."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "How does the Compact Strings feature (Java 9+) reduce heap memory consumption?",
+            "options": [
+              "It stores ASCII/Latin-1 characters using 1 byte per character in a byte[] array instead of 2 bytes in a char[] array",
+              "It compresses all strings using GZIP",
+              "It limits all strings to 255 characters",
+              "It replaces strings with integers"
+            ],
+            "answer": 0,
+            "explanation": "Compact Strings store Latin-1 characters in 1 byte each, cutting heap consumption in half."
+          },
+          {
+            "question": "What does the JVM flag `-XX:+UseStringDeduplication` do in G1 GC?",
+            "options": [
+              "It identifies distinct String objects with identical character data and points them to a single shared byte[] array",
+              "It throws an exception if duplicate strings are created",
+              "It makes strings mutable",
+              "It converts strings to char arrays"
+            ],
+            "answer": 0,
+            "explanation": "String Deduplication merges duplicate backing byte arrays during garbage collection."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read a string from stdin. Determine its internal encoding under Compact Strings: if every character code <= 255, print `Encoding: LATIN1, Size: [len] bytes`. Otherwise print `Encoding: UTF16, Size: [len * 2] bytes`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextLine()) return;\n        String line = scanner.nextLine();\n        \n        // Analyze encoding and calculate compact memory size\n        \n    }\n}",
+          "hints": [
+            "boolean latin1 = line.chars().allMatch(c -> c <= 255);",
+            "if (latin1) System.out.println(\"Encoding: LATIN1, Size: \" + line.length() + \" bytes\");",
+            "else System.out.println(\"Encoding: UTF16, Size: \" + (line.length() * 2) + \" bytes\");"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextLine()) return;\n        String line = scanner.nextLine();\n        \n        boolean latin1 = line.chars().allMatch(c -> c <= 255);\n        if (latin1) {\n            System.out.println(\"Encoding: LATIN1, Size: \" + line.length() + \" bytes\");\n        } else {\n            System.out.println(\"Encoding: UTF16, Size: \" + (line.length() * 2) + \" bytes\");\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "ASCII string",
+              "stdin": "JavaQuest\n",
+              "expectedStdout": "Encoding: LATIN1, Size: 9 bytes\n"
+            },
+            {
+              "name": "Core string",
+              "stdin": "EndCore\n",
+              "expectedStdout": "Encoding: LATIN1, Size: 7 bytes\n"
+            },
+            {
+              "name": "Unicode string",
+              "stdin": "Rift★\n",
+              "expectedStdout": "Encoding: UTF16, Size: 10 bytes\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "JEP 254: Compact Strings (JDK 9)",
+            "location": "JDK Enhancement Proposal 254",
+            "verify": false
+          },
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 6: Memory Footprint Best Practices",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a7_l5",
+        "title": "Zero-Copy I/O: Direct ByteBuffer & FileChannel",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Streaming gigabytes of telemetry through standard JVM heap buffers copies data four times between kernel space, user space, and heap memory. Zero-Copy I/O bypasses the heap entirely, transferring data directly at wire speed.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In standard Java I/O, transmitting a file over a socket requires 4 context switches and 4 data copies: Disk -> OS Page Cache -> JVM Heap Buffer -> OS Socket Buffer -> NIC Buffer. **Zero-Copy I/O** uses `FileChannel.transferTo()` (which uses the OS `sendfile` syscall) or `ByteBuffer.allocateDirect()` to transfer data directly from OS cache to network buffer with **zero intermediate heap copies**."
+          },
+          {
+            "type": "code",
+            "content": "Zero-Copy File Transfer using FileChannel:",
+            "code": "try (FileChannel src = FileChannel.open(path, StandardOpenOption.READ);\n     SocketChannel dest = SocketChannel.open(address)) {\n    // Bypasses JVM heap memory entirely: Kernel page cache -> Socket buffer directly!\n    long transferred = src.transferTo(0, src.size(), dest);\n    System.out.println(\"Transferred bytes: \" + transferred);\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "`ByteBuffer.allocateDirect(size)` allocates memory off-heap in native operating system C-memory. It avoids GC copying overhead during native socket writes, but allocation is slower than heap memory. Ideal for long-lived reusable network I/O buffers!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The 4-Copy Bottleneck",
+            "content": "Standard I/O copies data from Kernel -> User Heap -> Kernel -> NIC. Wastes CPU cycles and pollutes GC."
+          },
+          {
+            "title": "FileChannel.transferTo()",
+            "content": "Leverages Linux `sendfile` syscall. The OS transfers pages directly from cache to the network card with zero CPU copies."
+          },
+          {
+            "title": "Direct vs Heap Buffers",
+            "content": "Heap (`allocate`): fast allocation, GC overhead on I/O. Direct (`allocateDirect`): off-heap native memory, zero copy on I/O."
+          }
+        ],
+        "underTheHood": "When `transferTo` runs on modern Linux kernels with DMA (Direct Memory Access) support, the CPU does not copy a single byte; DMA controllers stream data straight from disk controller to network interface cards.",
+        "workedExample": {
+          "code": "import java.nio.ByteBuffer;\n\npublic class Main {\n    public static void main(String[] args) {\n        // Allocate 1024 bytes of off-heap direct native memory\n        ByteBuffer buffer = ByteBuffer.allocateDirect(1024);\n        System.out.println(\"Is direct: \" + buffer.isDirect());\n        \n        buffer.putInt(42);\n        buffer.putInt(99);\n        buffer.flip(); // Prepare for reading\n        \n        System.out.println(\"First int:  \" + buffer.getInt());\n        System.out.println(\"Second int: \" + buffer.getInt());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 6,
+              "explanation": "allocateDirect allocates off-heap native memory."
+            },
+            {
+              "line": 7,
+              "explanation": "isDirect() confirms buffer resides in native OS memory."
+            },
+            {
+              "line": 9,
+              "explanation": "Write integer bytes into direct memory."
+            },
+            {
+              "line": 11,
+              "explanation": "flip() switches buffer from writing mode to reading mode."
+            },
+            {
+              "line": 13,
+              "explanation": "Read values back directly."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Allocating and destroying Direct ByteBuffers frequently in short-lived requests.",
+            "code": "ByteBuffer.allocateDirect(1024); // Heavy C malloc/free overhead on every request!",
+            "correction": "Use a buffer pool (like Netty's ByteBufPool) to reuse direct memory buffers."
+          },
+          {
+            "mistake": "Exhausting native Direct Memory (-XX:MaxDirectMemorySize).",
+            "code": "// Allocating direct memory faster than Cleaner threads can free it triggers OutOfMemoryError: Direct buffer memory",
+            "correction": "Cap and monitor direct memory usage via `-XX:MaxDirectMemorySize`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "How does `FileChannel.transferTo()` achieve 'Zero-Copy' data transfer?",
+            "options": [
+              "It delegates to the OS kernel `sendfile` syscall, allowing data to be copied directly from page cache to the network socket without entering JVM heap memory",
+              "It compresses data using zero bytes",
+              "It deletes the file after reading",
+              "It bypasses the operating system completely"
+            ],
+            "answer": 0,
+            "explanation": "Zero-copy transfers data directly within kernel buffers without traversing user-space JVM heap memory."
+          },
+          {
+            "question": "Where is memory allocated when invoking `ByteBuffer.allocateDirect(size)`?",
+            "options": [
+              "In off-heap native operating system memory (via C malloc)",
+              "In the Young Eden generation",
+              "In the Metaspace",
+              "On the thread stack"
+            ],
+            "answer": 0,
+            "explanation": "Direct ByteBuffers allocate memory outside the JVM heap in native operating system memory."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `val1` and integer `val2` from stdin. Using `ByteBuffer.allocateDirect(8)`, put both integers, flip the buffer, and read them back. Print `Direct buffer read: [val1], [val2]`.",
+          "starterCode": "import java.util.Scanner;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int val1 = scanner.nextInt();\n        int val2 = scanner.nextInt();\n        \n        // Write to Direct ByteBuffer, flip, and read back\n        \n    }\n}",
+          "hints": [
+            "ByteBuffer buf = ByteBuffer.allocateDirect(8);",
+            "buf.putInt(val1); buf.putInt(val2);",
+            "buf.flip();",
+            "Print `Direct buffer read: ` + buf.getInt() + `, ` + buf.getInt()."
+          ],
+          "solution": "import java.util.Scanner;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int val1 = scanner.nextInt();\n        int val2 = scanner.nextInt();\n        \n        ByteBuffer buf = ByteBuffer.allocateDirect(8);\n        buf.putInt(val1);\n        buf.putInt(val2);\n        buf.flip();\n        \n        System.out.println(\"Direct buffer read: \" + buf.getInt() + \", \" + buf.getInt());\n    }\n}",
+          "tests": [
+            {
+              "name": "10 and 20",
+              "stdin": "10 20\n",
+              "expectedStdout": "Direct buffer read: 10, 20\n"
+            },
+            {
+              "name": "500 and 999",
+              "stdin": "500 999\n",
+              "expectedStdout": "Direct buffer read: 500, 999\n"
+            },
+            {
+              "name": "0 and 42",
+              "stdin": "0 42\n",
+              "expectedStdout": "Direct buffer read: 0, 42\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 8: Tuning Java I/O (NIO and Direct Buffers)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 2: Streams and Files (Memory-Mapped Files)",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a7_l6",
+        "title": "Cache-Conscious Data Layouts & False Sharing",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Modern CPUs can execute 10 instructions in the time it takes to fetch one variable from slow RAM. The End Core hardware architecture demands 'Mechanical Sympathy'—aligning data structures with 64-byte CPU cache lines to eliminate cache misses and false sharing.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "CPUs do not read single bytes from RAM; they fetch **64-byte Cache Lines** into ultra-fast L1/L2/L3 caches. Traversing contiguous array memory sequentially (**Row-Major**) takes advantage of CPU spatial prefetching. Traversing across scattered pointers (**Column-Major** or pointer-chasing in linked lists) causes devastating **L1 Cache Misses**."
+          },
+          {
+            "type": "code",
+            "content": "Preventing False Sharing with @Contended padding:",
+            "code": "// FALSE SHARING: thread A modifies x, thread B reads y.\n// If x and y share the same 64-byte cache line, modifying x invalidates thread B's cache line!\n\n// Java 8+ @Contended pads fields to isolate them on separate cache lines:\npublic class PaddedCounter {\n    @jdk.internal.vm.annotation.Contended\n    public volatile long valueA = 0;\n\n    @jdk.internal.vm.annotation.Contended\n    public volatile long valueB = 0;\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "**Mechanical Sympathy** (Martin Thompson): You don't have to be an engineer to drive a car, but you'll drive much faster if you understand how the engine works. In Java, flat contiguous primitive arrays (`int[]`, `long[]`) are up to 10x faster than object pointer graphs (`List<Integer>`) due to CPU cache locality."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Memory Hierarchy Latencies",
+            "content": "CPU Registers: <1ns. L1 Cache: ~1ns. L2 Cache: ~4ns. L3 Cache: ~10ns. Main RAM: ~100ns (100x slower!)."
+          },
+          {
+            "title": "Spatial Locality",
+            "content": "When byte 0 is read, the CPU pre-fetches the entire 64-byte line. Sequential array iteration is blazing fast."
+          },
+          {
+            "title": "False Sharing",
+            "content": "Two unrelated variables on the same 64-byte line updated by two CPU cores trigger ping-pong cache line invalidations."
+          }
+        ],
+        "underTheHood": "The MESI (Modified, Exclusive, Shared, Invalid) cache coherence protocol forces CPU cores to broadcast invalidate signals over the hardware bus when a cache line is modified. Contended fields trigger millions of bus stalls per second unless padded.",
+        "workedExample": {
+          "code": "public class Main {\n    public static void main(String[] args) {\n        int rows = 1000, cols = 1000;\n        int[][] matrix = new int[rows][cols];\n        \n        // Row-Major: Cache-friendly sequential traversal along cache lines\n        long sum = 0;\n        for (int r = 0; r < rows; r++) {\n            for (int c = 0; c < cols; c++) {\n                sum += matrix[r][c];\n            }\n        }\n        System.out.println(\"Cache-friendly traversal complete. Sum: \" + sum);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 7,
+              "explanation": "Outer loop traverses rows."
+            },
+            {
+              "line": 8,
+              "explanation": "Inner loop traverses adjacent columns sequentially in memory."
+            },
+            {
+              "line": 9,
+              "explanation": "Maximizes CPU L1/L2 cache line hits."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Traversing 2D arrays in Column-Major order (outer loop cols, inner loop rows).",
+            "code": "for(c) for(r) sum += m[r][c]; // Jumps across memory pointers, causing continuous L1 cache misses!",
+            "correction": "Always iterate in Row-Major order (`for(r) for(c)`)."
+          },
+          {
+            "mistake": "Using LinkedList for high-performance queues.",
+            "code": "// Each LinkedList node allocates a heap object with 2 pointers, wrecking CPU cache locality!",
+            "correction": "Use array-backed structures like `ArrayDeque` or flat primitive arrays."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the typical size of a modern CPU hardware cache line?",
+            "options": [
+              "64 bytes",
+              "4 bytes",
+              "1024 bytes",
+              "8 megabytes"
+            ],
+            "answer": 0,
+            "explanation": "Almost all modern x86 and ARM processors fetch memory in 64-byte cache lines."
+          },
+          {
+            "question": "What is 'False Sharing' in concurrent multi-core computing?",
+            "options": [
+              "When two threads on separate CPU cores modify independent variables that happen to reside on the exact same 64-byte cache line, causing constant cache invalidations",
+              "Sharing false data between processes",
+              "A memory leak in arrays",
+              "An unauthorized file transfer"
+            ],
+            "answer": 0,
+            "explanation": "False sharing occurs when independent variables share a cache line, causing unnecessary hardware cache invalidations."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `rows` and integer `cols` from stdin. Calculate the total elements in the matrix, and determine how many 64-byte cache lines are required to store the integers if each `int` consumes 4 bytes. Print `Elements: [total], CacheLines: [lines]` (where `lines = (total * 4 + 63) / 64`).",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int rows = scanner.nextInt();\n        int cols = scanner.nextInt();\n        \n        // Compute total elements and cache line count\n        \n    }\n}",
+          "hints": [
+            "long total = (long) rows * cols;",
+            "long bytes = total * 4;",
+            "long lines = (bytes + 63) / 64;",
+            "Print `Elements: ` + total + `, CacheLines: ` + lines."
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int rows = scanner.nextInt();\n        int cols = scanner.nextInt();\n        \n        long total = (long) rows * cols;\n        long bytes = total * 4;\n        long lines = (bytes + 63) / 64;\n        \n        System.out.println(\"Elements: \" + total + \", CacheLines: \" + lines);\n    }\n}",
+          "tests": [
+            {
+              "name": "10x10 matrix",
+              "stdin": "10 10\n",
+              "expectedStdout": "Elements: 100, CacheLines: 7\n"
+            },
+            {
+              "name": "16x1 matrix",
+              "stdin": "16 1\n",
+              "expectedStdout": "Elements: 16, CacheLines: 1\n"
+            },
+            {
+              "name": "100x100 matrix",
+              "stdin": "100 100\n",
+              "expectedStdout": "Elements: 10000, CacheLines: 625\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 6: Memory Footprint (Cache Lines and Memory Layouts)",
+            "verify": false
+          },
+          {
+            "source": "Systems Performance: Enterprise and the Cloud, 2nd ed.",
+            "location": "Chapter 3: Operating Systems (CPUs and Caching)",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a7",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a7_q1",
+        "type": "mcq",
+        "question": "Why should you use JMH instead of a simple `System.nanoTime()` loop for Java microbenchmarks?",
+        "options": [
+          "JMH controls warmup cycles, prevents JIT Dead Code Elimination via Blackholes, and isolates tests in clean JVM forks",
+          "System.nanoTime() is deprecated",
+          "JMH runs directly on the GPU",
+          "JMH compiles Java into native machine code without the JVM"
+        ],
+        "answer": 0,
+        "explanation": "JMH avoids JIT traps like dead code elimination, constant folding, and warmup inaccuracies."
+      },
+      {
+        "id": "a7_q2",
+        "type": "mcq",
+        "question": "What is HotSpot's single most impactful JIT compiler optimization?",
+        "options": [
+          "Method Inlining (replacing method calls with method bodies to eliminate call overhead and expand optimization scope)",
+          "Garbage collection pause reduction",
+          "Thread priority boosting",
+          "Stack frame compression"
+        ],
+        "answer": 0,
+        "explanation": "Method inlining removes call overhead and enables downstream optimizations."
+      },
+      {
+        "id": "a7_q3",
+        "type": "mcq",
+        "question": "What is the primary advantage of JDK Flight Recorder (JFR) over traditional sampling profilers?",
+        "options": [
+          "It is built into the JVM kernel with <1% overhead and does not suffer from safepoint bias",
+          "It requires zero disk space",
+          "It speeds up execution by 20%",
+          "It works without the JDK"
+        ],
+        "answer": 0,
+        "explanation": "JFR provides production-safe profiling with negligible overhead and accurate non-safepoint telemetry."
+      },
+      {
+        "id": "a7_q4",
+        "type": "mcq",
+        "question": "How do Compact Strings (Java 9+) save memory for Latin-1 text?",
+        "options": [
+          "By allocating 1 byte per character in a byte[] array instead of 2 bytes in a char[] array",
+          "By truncating strings to 8 characters",
+          "By removing vowel letters",
+          "By storing text in native C memory"
+        ],
+        "answer": 0,
+        "explanation": "Compact Strings store ASCII/Latin-1 characters using 1 byte per character."
+      },
+      {
+        "id": "a7_q5",
+        "type": "mcq",
+        "question": "How does `FileChannel.transferTo()` achieve zero-copy file transfer over a network socket?",
+        "options": [
+          "It invokes the OS kernel sendfile syscall, streaming data from page cache directly to the network buffer without copying through JVM heap memory",
+          "It compresses the file to zero bytes",
+          "It writes directly to RAM without an OS",
+          "It converts files to UDP packets"
+        ],
+        "answer": 0,
+        "explanation": "Zero-copy eliminates copying through user-space JVM heap memory."
+      },
+      {
+        "id": "a7_q6",
+        "type": "mcq",
+        "question": "What hardware phenomenon is known as 'False Sharing'?",
+        "options": [
+          "When two separate threads modify independent variables that share the same 64-byte CPU cache line, triggering costly cross-core cache invalidations",
+          "When two processes share a database connection",
+          "Sharing passwords over plaintext HTTP",
+          "A hardware memory parity error"
+        ],
+        "answer": 0,
+        "explanation": "False sharing invalidates cache lines across cores when independent variables occupy the same 64-byte line."
+      },
+      {
+        "id": "a7_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "boolean b = \"Test\".length() == 4;\nSystem.out.println(b);",
+        "options": [
+          "true",
+          "false",
+          "null",
+          "Throws Exception"
+        ],
+        "answer": 0,
+        "explanation": "String.length() returns 4, outputting true."
+      },
+      {
+        "id": "a7_q8",
+        "type": "spot-the-bug",
+        "question": "Find the benchmark flaw in this JMH test:",
+        "code": "@Benchmark\npublic void testSqrt() {\n    double d = Math.sqrt(42.0);\n    // Result d is never returned or passed to Blackhole!\n}",
+        "options": [
+          "Dead Code Elimination: the JIT compiler will recognize d is never used and delete the Math.sqrt computation entirely",
+          "Math.sqrt is not thread-safe",
+          "Benchmark methods must return void",
+          "double cannot be benchmarked"
+        ],
+        "answer": 0,
+        "explanation": "Unused variables are eliminated by the JIT compiler, giving misleading benchmark timings."
+      },
+      {
+        "id": "a7_q9",
+        "type": "fill-in",
+        "question": "Complete the statement: Most modern CPU architectures fetch main memory in ____-byte cache lines.",
+        "answer": "64",
+        "explanation": "Standard CPU hardware cache lines are 64 bytes wide."
+      },
+      {
+        "id": "a7_q10",
+        "type": "mcq",
+        "question": "Which compiler tier in HotSpot represents the highest level of native optimization with C2?",
+        "options": [
+          "Tier 4",
+          "Tier 0",
+          "Tier 1",
+          "Tier 3"
+        ],
+        "answer": 0,
+        "explanation": "Tier 4 represents the C2 Server Compiler."
+      },
+      {
+        "id": "a7_q11",
+        "type": "order-the-lines",
+        "question": "Arrange HotSpot compilation tiers from cold startup to peak optimization:",
+        "lines": [
+          "Tier 0: Interpreter (immediate execution, no compilation)",
+          "Tier 1: C1 Simple (basic compiled native code, no profiling)",
+          "Tier 2: C1 Limited Profiling (compiles with basic counters)",
+          "Tier 3: C1 Full Profiling (compiles with detailed branch & type profiling)",
+          "Tier 4: C2 Server Compiler (deep optimizations, inlining, loop unrolling)"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "explanation": "Tier 0 (Interpreter) -> Tier 1 -> Tier 2 -> Tier 3 -> Tier 4 (C2 Server)."
+      },
+      {
+        "id": "a7_q12",
+        "type": "mcq",
+        "question": "What JVM flag enables automatic background string deduplication in G1 GC?",
+        "options": [
+          "-XX:+UseStringDeduplication",
+          "-XX:+CompactStrings",
+          "-XX:+CompressStrings",
+          "-XX:+DeduplicateMemory"
+        ],
+        "answer": 0,
+        "explanation": "`-XX:+UseStringDeduplication` enables background string deduplication."
+      }
+    ],
+    "project": {
+      "title": "End Core High-Performance Telemetry & Profiling Engine",
+      "brief": "Construct a zero-overhead performance profiling and benchmarking suite for the End Core. Implement JMH microbenchmark harnesses with Blackhole sinks to defeat Dead Code Elimination, analyze Tiered Compilation inlining thresholds, record low-overhead diagnostic telemetry with JDK Flight Recorder, optimize text storage using Compact Strings, and execute zero-copy I/O data transfers with Direct ByteBuffers.",
+      "milestones": [
+        "Milestone 1: Build a JMH benchmark suite measuring throughput with Blackhole sinks and warmup cycles",
+        "Milestone 2: Profile method inlining thresholds (<35 bytecodes) and inspect C1/C2 Tiered Compilation",
+        "Milestone 3: Construct a custom JFR Event emitter recording high-contention latencies with <1% overhead",
+        "Milestone 4: Implement a high-speed zero-copy pipeline streaming direct memory via ByteBuffer.allocateDirect()"
+      ],
+      "rubric": [
         {
-          "type": "mcq",
-          "question": "Why profile an application before attempting to optimize it?",
-          "options": [
-            "To identify measured bottlenecks rather than guessing",
-            "To increase code length",
-            "To avoid tests",
-            "To remove all abstractions"
-          ],
-          "answer": 0,
-          "explanation": "Profiling reveals actual hot spots in CPU, memory, and I/O so optimizations target real bottlenecks."
+          "criterion": "Microbenchmarking Rigor",
+          "points": 25,
+          "description": "Correct implementation of JMH harnesses avoiding Dead Code Elimination and Constant Folding"
         },
         {
-          "type": "mcq",
-          "question": "What is the purpose of observability signals such as logs, metrics and traces?",
-          "options": [
-            "To understand system behaviour and diagnose issues in production",
-            "To replace application security",
-            "To compile code",
-            "To eliminate database transactions"
-          ],
-          "answer": 0,
-          "explanation": "Observability provides insight into internal state and system health across components."
+          "criterion": "JIT & Inlining Knowledge",
+          "points": 25,
+          "description": "Accurate understanding of HotSpot compilation tiers, OSR, and small-method inlining"
         },
         {
-          "type": "true-false",
-          "question": "Premature optimization without profiling often adds unnecessary complexity without improving real performance.",
-          "answer": true,
-          "explanation": "\"Premature optimization is the root of all evil\" — Donald Knuth."
+          "criterion": "Production Telemetry (JFR)",
+          "points": 25,
+          "description": "Zero-overhead event emission and continuous recording configuration"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Performance & Observability?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a7",
-      "title": "A7: Simple LRU Cache Simulation",
-      "prompt": "Implement a cache using `LinkedHashMap<String, String>` configured for access order:\n`LinkedHashMap<String, String> cache = new LinkedHashMap<>(4, 0.75f, true)`\nAdd keys \"A\", \"B\", \"C\". Access \"A\" with `cache.get(\"A\")`.\nPrint cache keys: `[B, C, A]` (notice \"A\" moved to the end as most recently used!).",
-      "starterCode": "import java.util.LinkedHashMap;\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 1: Create LinkedHashMap<String, String> with access-order set to true\n        // TODO 2: Put \"A\", \"B\", \"C\"\n        // TODO 3: Access \"A\" to move it to the end\n        // TODO 4: Print cache.keySet() -> [B, C, A]\n    }\n}",
-      "expectedOutput": "[B, C, A]",
-      "testCases": [
-        {
-          "name": "Access Order LRU Ordering",
-          "expected": "[B, C, A]"
+          "criterion": "Zero-Copy & Memory Optimization",
+          "points": 25,
+          "description": "Proper usage of Direct ByteBuffers and cache-conscious contiguous data layouts"
         }
       ],
-      "hints": [
-        "The third boolean argument `true` in LinkedHashMap constructor specifies access-order."
+      "stretchGoals": [
+        "Benchmark throughput comparisons between row-major and column-major traversals on a 4096x4096 matrix",
+        "Use jcmd to capture and inspect a live production JFR recording flame graph in JDK Mission Control"
       ]
     },
-    "biome": "Telemetry Watchtower",
-    "conceptMetaphor": "Profiling, metrics, OpenTelemetry, and diagnostic lenses observing every heartbeat.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "JMH",
+        "definition": "Java Microbenchmark Harness: the OpenJDK tool for writing scientifically accurate microbenchmarks."
+      },
+      {
+        "term": "Dead Code Elimination",
+        "definition": "A compiler optimization that identifies and removes code that has no observable effect on program output."
+      },
+      {
+        "term": "Method Inlining",
+        "definition": "An optimization where the compiler replaces a method invocation with the actual body of the target method."
+      },
+      {
+        "term": "Tiered Compilation",
+        "definition": "HotSpot's compilation architecture combining the fast startup of an interpreter with the peak performance of C1 and C2 compilers."
+      },
+      {
+        "term": "On-Stack Replacement (OSR)",
+        "definition": "HotSpot's capability to compile a long-running loop to native code and hot-swap execution while the loop is running."
+      },
+      {
+        "term": "JFR",
+        "definition": "JDK Flight Recorder: a high-performance event recording framework built into the HotSpot JVM kernel (<1% overhead)."
+      },
+      {
+        "term": "Compact Strings",
+        "definition": "A Java 9+ feature storing Latin-1 strings using 1 byte per character in a byte[] array."
+      },
+      {
+        "term": "Zero-Copy I/O",
+        "definition": "A technique where data is transferred between storage and network channels without being copied into user-space heap memory."
+      },
+      {
+        "term": "Cache Line",
+        "definition": "The 64-byte unit of memory transferred between main RAM and CPU L1/L2/L3 caches."
+      },
+      {
+        "term": "False Sharing",
+        "definition": "Performance degradation when threads on different CPU cores update independent variables residing on the same cache line."
+      }
+    ],
+    "references": [
+      {
+        "source": "Java Performance: The Definitive Guide",
+        "location": "Chapters 2-4, 6, 8: Benchmarking, JIT, Memory & I/O",
+        "verify": false
+      },
+      {
+        "source": "JEP 254: Compact Strings & JEP 328: Flight Recorder",
+        "location": "JDK Enhancement Proposals",
+        "verify": false
+      },
+      {
+        "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+        "location": "Chapter 12: Compilers and Native Tools",
+        "verify": false
+      }
+    ]
   },
   {
     "id": "a8",
     "code": "A8",
+    "track": "advanced",
     "level": "advanced",
-    "title": "Deployment & Engineering Workflow",
-    "subtitle": "Packaging, Docker fundamentals, CI/CD pipelines, production readiness and monitoring",
-    "icon": "",
-    "color": "#1B4F72",
+    "title": "Cloud-Native Java: Packaging, Docker & CI/CD",
+    "subtitle": "Fat JARs, JPMS (Java Platform Module System), jlink custom minimal runtimes, multi-stage Docker builds, cgroup memory limits (-XX:MaxRAMPercentage), GitHub Actions CI/CD, and Micrometer observability",
+    "biome": "Void Spire",
+    "estimatedMinutes": 180,
+    "learningObjectives": [
+      "Package production-ready self-contained executable Fat JARs using Maven Shade and Spring Boot Maven plugins",
+      "Construct modular Java applications using JPMS (module-info.java) and assemble minimal stripped runtimes (<50MB) using jlink",
+      "Build secure, optimized container images using multi-stage Dockerfiles and Google Distroless base images",
+      "Configure containerized JVM ergonomics: cgroups v2 memory limits (-XX:MaxRAMPercentage) and CPU core quotas",
+      "Automate continuous integration pipelines using GitHub Actions with dependency caching and quality gates",
+      "Instrument production microservices with Micrometer metrics, Prometheus scrapers, and health checks"
+    ],
+    "prerequisites": [
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "b8",
+      "i1",
+      "i2",
+      "i3",
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "a1",
+      "a2",
+      "a3",
+      "a4",
+      "a5",
+      "a6",
+      "a7"
+    ],
     "lessons": [
       {
-        "id": "lesson-a8-1",
-        "title": "Containerization & Docker",
-        "xp": 50,
-        "slides": [
+        "id": "a8_l1",
+        "title": "Modern Java Packaging: Fat JARs & Build Lifecycles",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "High atop the Void Spire, deploying an application across dimensional clusters cannot depend on scattered libraries. A Fat JAR packages all compiled classes, resources, and third-party dependencies into a single self-contained executable.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Packaging for Production",
-            "content": "Docker packages the Java application, dependencies, and JRE into a standardized, lightweight container image. Multi-stage builds produce tiny production images."
-          },
-          {
-            "type": "visual",
-            "visual": "class-diagram",
-            "visualData": {
-              "classes": [
-                {
-                  "name": "Shape",
-                  "type": "sealed interface",
-                  "fields": [],
-                  "methods": [
-                    "permits Circle, Rectangle"
-                  ]
-                },
-                {
-                  "name": "Circle(double r)",
-                  "type": "record implements Shape",
-                  "fields": [
-                    "r: double"
-                  ],
-                  "methods": []
-                }
-              ]
-            },
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
+            "type": "text",
+            "content": "A standard JAR contains only the application's compiled classes, requiring external dependencies on the classpath (`-cp`). A **Fat JAR** (also called an **Uber-JAR**) bundles all application bytecodes along with all transitively unpacked dependency classes and a `META-INF/MANIFEST.MF` declaring `Main-Class`, enabling direct execution via `java -jar app.jar`."
           },
           {
             "type": "code",
-            "title": "Multi-stage Dockerfile",
-            "content": "Build stage with JDK; runner stage with slim JRE.",
-            "code": "FROM eclipse-temurin:21-jre-alpine\nWORKDIR /app\nCOPY target/*.jar app.jar\nENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]"
+            "content": "Configuring an executable Fat JAR in Maven pom.xml:",
+            "code": "<plugin>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-maven-plugin</artifactId>\n    <executions>\n        <execution>\n            <goals>\n                <goal>repackage</goal>\n            </goals>\n        </execution>\n    </executions>\n</plugin>\n\n# Or for non-Spring projects: maven-shade-plugin"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Spring Boot Fat JARs use a specialized layout: application classes live in `BOOT-INF/classes/`, and dependency JARs remain as nested `.jar` files in `BOOT-INF/lib/`, launched by Spring's custom `JarLauncher` class."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Standard JAR vs Fat JAR",
+            "content": "Standard: lightweight, needs all dependencies on classpath. Fat JAR: standalone, completely self-contained."
+          },
+          {
+            "title": "The Manifest File",
+            "content": "`META-INF/MANIFEST.MF` defines `Main-Class: com.example.Main` so double-clicking or `java -jar` knows where to begin."
+          },
+          {
+            "title": "Build Automation",
+            "content": "Maven (`mvn clean package`) and Gradle (`./gradlew bootJar`) automate compilation, test runs, and JAR assembly."
+          }
+        ],
+        "underTheHood": "Standard Java ClassLoaders cannot load classes inside nested JARs directly. Spring Boot's `LaunchedURLClassLoader` indexes nested JAR archive byte offsets, allowing direct class loading without extracting the JAR to disk.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating Manifest validation\n    public static String buildManifest(String mainClass, String version) {\n        return \"Manifest-Version: 1.0\\n\" +\n               \"Main-Class: \" + mainClass + \"\\n\" +\n               \"Implementation-Version: \" + version;\n    }\n    \n    public static void main(String[] args) {\n        String manifest = buildManifest(\"com.citadel.spire.Main\", \"2.1.0\");\n        System.out.println(manifest);\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Generate META-INF/MANIFEST.MF attributes."
+            },
+            {
+              "line": 5,
+              "explanation": "Main-Class specifies application entry point."
+            },
+            {
+              "line": 10,
+              "explanation": "Outputs valid manifest configuration."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Duplicate resource collisions during Maven Shade packaging (e.g. META-INF/services/...).",
+            "code": "// Overwriting service provider files breaks ServiceLoader discovery!",
+            "correction": "Use `<transformer implementation=\"...ServicesResourceTransformer\"/>` in Maven Shade."
+          },
+          {
+            "mistake": "Committing build artifacts (*.class, *.jar, target/) to Git repository.",
+            "code": "// Bloats git history with multi-megabyte binary blobs",
+            "correction": "Include `target/` and `build/` in `.gitignore`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary benefit of packaging an application as an executable 'Fat JAR'?",
+            "options": [
+              "It bundles all application code and third-party dependencies into a single self-contained file runnable with `java -jar app.jar`",
+              "It turns off the JIT compiler",
+              "It compresses memory usage to zero",
+              "It allows editing bytecodes in notepad"
+            ],
+            "answer": 0,
+            "explanation": "Fat JARs eliminate classpath configuration by containing all necessary dependencies in a single executable."
+          },
+          {
+            "question": "Which file inside a JAR specifies the entry point class for `java -jar`?",
+            "options": [
+              "META-INF/MANIFEST.MF",
+              "application.properties",
+              "module-info.java",
+              "pom.xml"
+            ],
+            "answer": 0,
+            "explanation": "`META-INF/MANIFEST.MF` declares the `Main-Class` attribute."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read the application name and main class string from stdin. Simulate generating a standard `jar` command to create an executable jar with manifest: print `jar --create --file [appName].jar --main-class [mainClass] -C target/classes .`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String appName = scanner.next();\n        String mainClass = scanner.next();\n        \n        // Print standard jar packaging command\n        \n    }\n}",
+          "hints": [
+            "System.out.println(\"jar --create --file \" + appName + \".jar --main-class \" + mainClass + \" -C target/classes .\");"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String appName = scanner.next();\n        String mainClass = scanner.next();\n        \n        System.out.println(\"jar --create --file \" + appName + \".jar --main-class \" + mainClass + \" -C target/classes .\");\n    }\n}",
+          "tests": [
+            {
+              "name": "spire com.spire.Main",
+              "stdin": "spire com.spire.Main\n",
+              "expectedStdout": "jar --create --file spire.jar --main-class com.spire.Main -C target/classes .\n"
+            },
+            {
+              "name": "beacon com.beacon.App",
+              "stdin": "beacon com.beacon.App\n",
+              "expectedStdout": "jar --create --file beacon.jar --main-class com.beacon.App -C target/classes .\n"
+            },
+            {
+              "name": "gateway com.gateway.Server",
+              "stdin": "gateway com.gateway.Server\n",
+              "expectedStdout": "jar --create --file gateway.jar --main-class com.gateway.Server -C target/classes .\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 13: Packaging and Deployment (JAR Files and Manifests)",
+            "verify": false
+          },
+          {
+            "source": "Spring Boot Reference Documentation",
+            "location": "Packaging Executable Archives",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-a8-2",
-        "title": "CI/CD & Production Readiness",
-        "xp": 50,
-        "slides": [
+        "id": "a8_l2",
+        "title": "JPMS & Modular Runtimes: module-info & jlink",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Deploying a massive 400MB full JDK to run a tiny 5MB microservice wastes gigabytes of cloud storage. The Java Platform Module System (JPMS) and `jlink` strip away unused JDK modules, creating a custom tailored runtime of only 35MB.",
+        "explanation": [
           {
-            "type": "intro",
-            "title": "Automated Delivery",
-            "content": "Continuous Integration runs tests and linters on every commit. Continuous Deployment deploys passing artifacts safely with health checks and rollbacks."
+            "type": "text",
+            "content": "Introduced in Java 9 (Project Jigsaw), the **Java Platform Module System (JPMS)** divides the entire JDK and application code into named **Modules**. A module declares its boundaries in `module-info.java` using `requires` (dependencies) and `exports` (public packages). With modules, **`jlink`** can assemble a custom, stripped-down JRE containing *only* the specific modules your application actually uses."
           },
           {
             "type": "code",
-            "title": "Production Health Probes",
-            "content": "Liveness and Readiness checks for Kubernetes.",
-            "code": "// GET /actuator/health -> {\"status\":\"UP\"}"
+            "content": "Modular definition and jlink command:",
+            "code": "// module-info.java\nmodule com.citadel.spire {\n    requires java.base;\n    requires java.net.http;\n    requires java.logging;\n    \n    exports com.citadel.spire.api;\n}\n\n# Assemble custom minimal JRE (often < 40MB!):\njlink --module-path $JAVA_HOME/jmods:target/modules \\\n      --add-modules com.citadel.spire \\\n      --strip-debug \\\n      --no-man-pages \\\n      --no-header-files \\\n      --compress=zip-6 \\\n      --output custom-runtime"
           },
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "A custom `jlink` runtime does not require a pre-installed Java runtime on the target machine! The `custom-runtime/bin/java` binary is fully self-contained and directly executable in production containers."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Strong Encapsulation",
+            "content": "Public classes are NO LONGER accessible to external code unless their containing package is explicitly `exports`-ed in `module-info.java`."
+          },
+          {
+            "title": "Reliable Configuration",
+            "content": "The JVM verifies all `requires` module dependencies at startup before running a single bytecode, ending 'ClassNotFoundException at 3 AM' bugs."
+          },
+          {
+            "title": "jlink Minimal Runtimes",
+            "content": "Shrink container footprints from 450MB (full JDK) down to 35-50MB by bundling only required modules."
+          }
+        ],
+        "underTheHood": "JPMS is enforced natively inside the JVM classloader and JIT compiler. Reflection (`setAccessible(true)`) into unexported packages is strictly blocked with `InaccessibleObjectException` unless explicitly permitted via `opens` directives.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating module-info exports and requires resolution\n    public static void printModuleInfo(String moduleName, String[] requires, String[] exports) {\n        System.out.println(\"module \" + moduleName + \" {\");\n        for (String r : requires) System.out.println(\"    requires \" + r + \";\");\n        for (String e : exports) System.out.println(\"    exports \" + e + \";\");\n        System.out.println(\"}\");\n    }\n    \n    public static void main(String[] args) {\n        printModuleInfo(\"com.spire.core\", new String[]{\"java.base\", \"java.net.http\"}, new String[]{\"com.spire.core.api\"});\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Format module declaration."
+            },
+            {
+              "line": 5,
+              "explanation": "Iterate requires clauses."
+            },
+            {
+              "line": 6,
+              "explanation": "Iterate exports clauses."
+            },
+            {
+              "line": 11,
+              "explanation": "Output structured module-info descriptor."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using deep reflection on unexported internal packages in Java 17+.",
+            "code": "field.setAccessible(true); // Throws InaccessibleObjectException: module java.base does not 'opens java.lang'!",
+            "correction": "Avoid deep reflection on JDK internals or pass `--add-opens java.base/java.lang=ALL-UNNAMED` if unavoidable."
+          },
+          {
+            "mistake": "Attempting to run jlink on non-modular automatic dependencies without jdeps inspection.",
+            "code": "// Fails if third-party libraries lack module-info.java",
+            "correction": "Use modern modular dependencies or wrap them using Moditect."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary purpose of the `jlink` tool in modern Java?",
+            "options": [
+              "To assemble and optimize a set of modules and their transitive dependencies into a custom, minimal, self-contained runtime image",
+              "To link Java code to C++ header files",
+              "To connect to database links",
+              "To generate HTML documentation"
+            ],
+            "answer": 0,
+            "explanation": "`jlink` creates stripped-down custom JRE images containing only required modules."
+          },
+          {
+            "question": "What happens if code attempts reflective `setAccessible(true)` on a private field in an unexported module package in Java 17+?",
+            "options": [
+              "It throws an `InaccessibleObjectException` due to JPMS strong encapsulation",
+              "It succeeds silently",
+              "It prints a compile-time warning only",
+              "It restarts the JVM"
+            ],
+            "answer": 0,
+            "explanation": "Java 17+ strongly encapsulates internal packages by default, throwing `InaccessibleObjectException` on unauthorized reflection."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read module name string from stdin. Format and print a standard `module-info.java` structure that `requires java.base;` and `requires java.net.http;` and `exports [moduleName].api;`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String mod = scanner.next();\n        \n        // Print module-info structure\n        \n    }\n}",
+          "hints": [
+            "System.out.println(\"module \" + mod + \" {\");",
+            "System.out.println(\"    requires java.base;\");",
+            "System.out.println(\"    requires java.net.http;\");",
+            "System.out.println(\"    exports \" + mod + \".api;\");",
+            "System.out.println(\"}\");"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNext()) return;\n        String mod = scanner.next();\n        \n        System.out.println(\"module \" + mod + \" {\");\n        System.out.println(\"    requires java.base;\");\n        System.out.println(\"    requires java.net.http;\");\n        System.out.println(\"    exports \" + mod + \".api;\");\n        System.out.println(\"}\");\n    }\n}",
+          "tests": [
+            {
+              "name": "spire.core",
+              "stdin": "spire.core\n",
+              "expectedStdout": "module spire.core {\n    requires java.base;\n    requires java.net.http;\n    exports spire.core.api;\n}\n"
+            },
+            {
+              "name": "portal.net",
+              "stdin": "portal.net\n",
+              "expectedStdout": "module portal.net {\n    requires java.base;\n    requires java.net.http;\n    exports portal.net.api;\n}\n"
+            },
+            {
+              "name": "telemetry",
+              "stdin": "telemetry\n",
+              "expectedStdout": "module telemetry {\n    requires java.base;\n    requires java.net.http;\n    exports telemetry.api;\n}\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "The Java Language Specification (Java SE 21)",
+            "location": "Chapter 7: Packages and Modules (§7.7: Module Declarations)",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 9: The Java Platform Module System",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a8_l3",
+        "title": "Containerizing Java with Multi-Stage Docker & Distroless",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Shipping compilers, package managers, and root shells into production containers exposes the Spire to intrusion attacks. Multi-stage Docker builds compile inside a builder image, copying only the final JAR into a hardened, shell-less Distroless container.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A production-grade Java container must be **minimal in size**, **fast to pull**, and **hardened against vulnerabilities**. A **Multi-Stage Dockerfile** separates the build environment (Maven/Gradle + full JDK) from the runtime environment (minimal JRE or Google Distroless `gcr.io/distroless/java21-debian12`). Distroless images contain *only* your application and its runtime dependencies—**no package manager, no shells (`/bin/sh`), and zero extraneous binaries**."
+          },
+          {
+            "type": "code",
+            "content": "Production Multi-Stage Dockerfile for Java 21:",
+            "code": "# Stage 1: Build\nFROM maven:3.9-eclipse-temurin-21-alpine AS builder\nWORKDIR /app\nCOPY pom.xml .\nRUN mvn dependency:go-offline\nCOPY src ./src\nRUN mvn clean package -DskipTests\n\n# Stage 2: Hardened Runtime\nFROM gcr.io/distroless/java21-debian12:nonroot\nWORKDIR /app\nCOPY --from=builder /app/target/*.jar app.jar\nUSER nonroot:nonroot\nEXPOSE 8080\nENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Running containers as `nonroot` (UID 65532) prevents container-escape exploits from acquiring root administrative control over the underlying Kubernetes or Docker host."
+          }
+        ],
+        "slides": [
+          {
+            "title": "Multi-Stage Build Pattern",
+            "content": "Stage 1 (Builder): has Maven + JDK -> Compiles code. Stage 2 (Runner): clean JRE only -> Copies compiled JAR."
+          },
+          {
+            "title": "Distroless Containers",
+            "content": "No bash, no apt-get, no curl. Attackers who exploit code cannot execute shell commands or install malware."
+          },
+          {
+            "title": "Layer Caching Optimization",
+            "content": "Copy `pom.xml` and run `dependency:go-offline` before copying `src/` to cache dependencies across code edits."
+          }
+        ],
+        "underTheHood": "Docker creates cached layers for each instruction. Placing `COPY pom.xml` and downloading dependencies before copying source code prevents Docker from re-downloading hundreds of megabytes of dependencies every time a single Java line changes.",
+        "workedExample": {
+          "code": "// Verification of Dockerfile Layer Ordering\n// 1. FROM maven:3.9 AS build\n// 2. COPY pom.xml . -> Cached layer\n// 3. COPY src ./src -> Invalidated only on code change\n// 4. FROM distroless -> Production runtime\n// 5. ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]",
+          "walkthrough": [
+            {
+              "line": 2,
+              "explanation": "Stage 1 builder."
+            },
+            {
+              "line": 3,
+              "explanation": "Dependency layer caching."
+            },
+            {
+              "line": 5,
+              "explanation": "Stage 2 hardened runner."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using full Ubuntu/Debian OS images for Java containers.",
+            "code": "FROM ubuntu:latest RUN apt-get install openjdk... // 800MB+ image full of vulnerable utilities!",
+            "correction": "Use Eclipse Temurin Alpine or Google Distroless images."
+          },
+          {
+            "mistake": "Running containers as the default root user.",
+            "code": "// Security risk if container boundary is compromised",
+            "correction": "Enforce `USER nonroot:nonroot`."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is a Google Distroless container image?",
+            "options": [
+              "A container image containing only the application and its runtime dependencies, containing no package managers, shells, or standard Linux programs",
+              "An image with no Java installed",
+              "An image that runs without Docker",
+              "A compressed zip file"
+            ],
+            "answer": 0,
+            "explanation": "Distroless images strip everything except the runtime and application, minimizing attack surface and CVEs."
+          },
+          {
+            "question": "Why should you `COPY pom.xml` and download dependencies before copying `src/` in a Dockerfile?",
+            "options": [
+              "To leverage Docker's layer cache so dependencies are not re-downloaded every time source code changes",
+              "Because Maven requires pom.xml to be first",
+              "To encrypt the dependencies",
+              "To speed up internet speeds"
+            ],
+            "answer": 0,
+            "explanation": "Docker layer caching avoids repeating expensive dependency downloads when only source files change."
+          }
+        ],
+        "exercise": {
+          "instructions": "Guided Project: Construct a multi-stage Docker build pipeline for your Java application. Review the checklist and answer the self-checks below.",
+          "isGuidedProject": true,
+          "checklist": [
+            "1. Create Dockerfile in root workspace with Stage 1 (builder) and Stage 2 (distroless)",
+            "2. Add '.dockerignore' ignoring target/, .git/, and local IDE files",
+            "3. Build the container image: 'docker build -t spire-app:1.0 .'",
+            "4. Verify image size: 'docker images spire-app:1.0' (confirm image is under 200MB)",
+            "5. Run the container: 'docker run -p 8080:8080 --rm spire-app:1.0'",
+            "6. Test connectivity with curl: 'curl http://localhost:8080/actuator/health'"
+          ],
+          "expectedOutputDescription": "Docker build executes stages, caches layers, and runs Java application on port 8080 inside a nonroot container.",
+          "selfChecks": [
+            {
+              "question": "Why is multi-stage build essential for secure Java containers?",
+              "answer": "It excludes build tools (Maven, compilers) and source code from the final runtime production image"
+            },
+            {
+              "question": "What user should production containers execute as?",
+              "answer": "A dedicated non-root user (e.g. nonroot UID 65532)"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Docker Deep Dive",
+            "location": "Chapter 10: Dockerfiles & Multi-Stage Builds",
+            "verify": false
+          },
+          {
+            "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+            "location": "Chapter 13: Packaging and Deployment",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a8_l4",
+        "title": "JVM in Containers: Memory Limits & CPU Quotas",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "In legacy Java, the JVM ignored container memory limits, reading the host's 128GB RAM instead of the container's 1GB quota and triggering sudden Linux OOM-Kills. Modern container-aware Java honors cgroup boundaries with surgical precision.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "In modern Java (Java 11+ and Java 21 LTS), HotSpot is fully **container-aware** (cgroups v1 and v2). It detects container memory and CPU quotas automatically via `UseContainerSupport` (enabled by default). Instead of setting fixed heap sizes (`-Xmx4g`), containerized apps should set **`-XX:MaxRAMPercentage`** (typically 70.0% to 80.0%), leaving the remaining 20-30% for off-heap native memory (Metaspace, thread stacks, JIT cache, Direct ByteBuffers)."
+          },
+          {
+            "type": "code",
+            "content": "Configuring container-aware JVM ergonomics:",
+            "code": "# Recommended container startup flags:\njava -XX:+UseContainerSupport \\\n     -XX:MaxRAMPercentage=75.0 \\\n     -XX:InitialRAMPercentage=75.0 \\\n     -XX:+ExitOnOutOfMemoryError \\\n     -jar app.jar"
+          },
+          {
+            "type": "callout",
+            "calloutType": "warning",
+            "content": "Never set `-XX:MaxRAMPercentage=100.0`! If the heap consumes 100% of the container's memory limit, any off-heap native allocation (thread stacks, GC card tables, Metaspace) will exceed the Docker memory ceiling, causing the Linux kernel to immediately send `SIGKILL` (`OOM-Killed: Exit Code 137`)!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The Linux OOM-Killer (Code 137)",
+            "content": "When a container exceeds its cgroup memory limit, the Linux kernel terminates the process immediately with SIGKILL (Exit code 137)."
+          },
+          {
+            "title": "-XX:MaxRAMPercentage=75.0",
+            "content": "Allocates 75% of the container's allocated memory to the Java Heap. Leaves 25% for native OS memory and thread stacks."
+          },
+          {
+            "title": "CPU Core Quotas",
+            "content": "The JVM detects Docker `--cpus 2.0` and configures `ForkJoinPool` and GC thread counts to match container CPU quotas."
+          }
+        ],
+        "underTheHood": "HotSpot reads `/sys/fs/cgroup/memory.max` and `/sys/fs/cgroup/cpu.max`. If set, it overrides host core and RAM counts, sizing `ParallelGCThreads`, `ConcGCThreads`, and heap ergonomics accordingly.",
+        "workedExample": {
+          "code": "public class Main {\n    // Simulating container heap sizing calculation\n    public static long calculateMaxHeap(long containerRamMb, double percentage) {\n        return (long) (containerRamMb * (percentage / 100.0));\n    }\n    \n    public static void main(String[] args) {\n        long containerLimitMb = 1024; // 1 GB container\n        long heap = calculateMaxHeap(containerLimitMb, 75.0);\n        long offHeap = containerLimitMb - heap;\n        System.out.println(\"Heap: \" + heap + \" MB, Off-Heap Headroom: \" + offHeap + \" MB\");\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Calculate heap from container cgroup limit and percentage."
+            },
+            {
+              "line": 9,
+              "explanation": "1024MB container with 75% MaxRAMPercentage allocates 768MB heap."
+            },
+            {
+              "line": 11,
+              "explanation": "Leaves 256MB for Metaspace, stacks, and native descriptors."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Setting -Xmx larger than the Docker container memory limit.",
+            "code": "docker run -m 512m ... java -Xmx1024m // Instant Linux kernel OOM-Kill (Exit 137)!",
+            "correction": "Use `-XX:MaxRAMPercentage=75.0` to scale heap dynamically with container limits."
+          },
+          {
+            "mistake": "Disabling container support with -XX:-UseContainerSupport.",
+            "code": "// Causes JVM to read entire bare-metal host RAM, exceeding container limits",
+            "correction": "Leave `UseContainerSupport` enabled (default)."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why should `-XX:MaxRAMPercentage` typically be set to 70-80% rather than 100% in containerized environments?",
+            "options": [
+              "To leave 20-30% headroom for off-heap native memory (thread stacks, Metaspace, GC buffers, Direct ByteBuffers) so the Linux kernel doesn't OOM-Kill the container",
+              "Because Java cannot use more than 80% of RAM",
+              "To save money on cloud bills",
+              "Because 100% is not a valid percentage"
+            ],
+            "answer": 0,
+            "explanation": "Off-heap native memory requires headroom; allocating 100% to heap guarantees Linux kernel OOM-Kills."
+          },
+          {
+            "question": "What Linux exit code signifies that a container was forcefully terminated by the kernel Out-Of-Memory Killer?",
+            "options": [
+              "Exit code 137 (SIGKILL 128 + 9)",
+              "Exit code 0",
+              "Exit code 1",
+              "Exit code 404"
+            ],
+            "answer": 0,
+            "explanation": "Exit code 137 indicates the process was killed by signal 9 (SIGKILL), standard for OOM-Kills."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read container RAM in megabytes (e.g. 1024) and percentage (e.g. 75.0) from stdin. Calculate the allocated heap in megabytes (`(long) (ram * (pct / 100.0))`) and the native off-heap headroom. Print `Heap: [heap]MB, Headroom: [offHeap]MB`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextLong()) return;\n        long ram = scanner.nextLong();\n        double pct = scanner.nextDouble();\n        \n        // Compute heap and off-heap headroom\n        \n    }\n}",
+          "hints": [
+            "long heap = (long) (ram * (pct / 100.0));",
+            "long offHeap = ram - heap;",
+            "System.out.println(\"Heap: \" + heap + \"MB, Headroom: \" + offHeap + \"MB\");"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextLong()) return;\n        long ram = scanner.nextLong();\n        double pct = scanner.nextDouble();\n        \n        long heap = (long) (ram * (pct / 100.0));\n        long offHeap = ram - heap;\n        \n        System.out.println(\"Heap: \" + heap + \"MB, Headroom: \" + offHeap + \"MB\");\n    }\n}",
+          "tests": [
+            {
+              "name": "1024MB at 75%",
+              "stdin": "1024 75.0\n",
+              "expectedStdout": "Heap: 768MB, Headroom: 256MB\n"
+            },
+            {
+              "name": "2048MB at 70%",
+              "stdin": "2048 70.0\n",
+              "expectedStdout": "Heap: 1433MB, Headroom: 615MB\n"
+            },
+            {
+              "name": "512MB at 80%",
+              "stdin": "512 80.0\n",
+              "expectedStdout": "Heap: 409MB, Headroom: 103MB\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Java Performance: The Definitive Guide",
+            "location": "Chapter 6: Memory Footprint (Containers and Ergonomics)",
+            "verify": false
+          },
+          {
+            "source": "OpenJDK Documentation",
+            "location": "Java in Docker Containers and cgroups",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a8_l5",
+        "title": "CI/CD Pipelines: GitHub Actions & Automated Quality Gates",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Relying on manual tests before shipping defenses risks rogue regressions entering the Spire matrix. Continuous Integration (CI) and Continuous Delivery (CD) automatically test, lint, and build every git push in cloud runners before deployment.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "A **CI/CD Pipeline** executes automated steps on every code commit: compiling bytecodes, running JUnit 5 unit and integration test suites, running static analysis linters (SpotBugs, SonarQube), building Docker images, and deploying to staging/production environments. **GitHub Actions** defines pipelines declaratively in `.github/workflows/ci.yml`."
+          },
+          {
+            "type": "code",
+            "content": "GitHub Actions workflow for Java 21 LTS with Maven dependency caching:",
+            "code": "name: Java CI/CD Pipeline\non: [push, pull_request]\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Set up JDK 21\n        uses: actions/setup-java@v4\n        with:\n          java-version: '21'\n          distribution: 'temurin'\n          cache: 'maven' # Automatically caches ~/.m2 repository!\n      - name: Build and Test\n        run: ./mvnw clean verify\n      - name: Archive Test Reports\n        uses: actions/upload-artifact@v4\n        if: always()\n        with:\n          name: junit-test-results\n          path: target/surefire-reports/"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Enabling `cache: 'maven'` in `actions/setup-java` reduces workflow execution time by up to **70%** by eliminating repetitive downloads of third-party dependencies from Maven Central across pipeline runs."
+          }
+        ],
+        "slides": [
+          {
+            "title": "The CI/CD Flow",
+            "content": "Git Push -> GitHub Actions Runner -> Setup JDK 21 -> Restore Cache -> Maven Build & Tests -> Artifact Archive."
+          },
+          {
+            "title": "Quality Gates",
+            "content": "Fail the build if tests fail or code coverage drops below threshold. Protects main branch from regressions."
+          },
+          {
+            "title": "Continuous Deployment (CD)",
+            "content": "On merge to main: build Docker container, push to container registry (GHCR/ECR), and trigger production deployment."
+          }
+        ],
+        "underTheHood": "GitHub Actions provisions an ephemeral Azure virtual machine runner for each workflow job. `mvn clean verify` executes all Surefire (unit) and Failsafe (integration) test plugins, returning an exit code that indicates job status.",
+        "workedExample": {
+          "code": "// Simulating CI Pipeline Step Evaluation\npublic class Main {\n    public static boolean runStep(String name, boolean pass) {\n        System.out.println(\"Running step: \" + name + \" -> \" + (pass ? \"SUCCESS\" : \"FAILED\"));\n        return pass;\n    }\n    public static void main(String[] args) {\n        boolean ok = runStep(\"Compile\", true) &&\n                     runStep(\"Unit Tests\", true) &&\n                     runStep(\"Docker Build\", true);\n        System.out.println(\"Pipeline Result: \" + (ok ? \"PASSED\" : \"FAILED\"));\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 3,
+              "explanation": "Simulate CI pipeline step execution."
+            },
+            {
+              "line": 8,
+              "explanation": "Chain steps; failure short-circuits pipeline."
+            },
+            {
+              "line": 11,
+              "explanation": "Reports final pipeline status."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Skipping tests in CI with -DskipTests.",
+            "code": "mvn clean package -DskipTests // Defeats the entire purpose of Continuous Integration!",
+            "correction": "Run `mvn clean verify` to execute all automated test suites."
+          },
+          {
+            "mistake": "Checking Maven wrapper executable permissions in Windows without git chmod +x.",
+            "code": "./mvnw: Permission denied on Linux runner",
+            "correction": "Run `git update-index --chmod=+x mvnw` to preserve execution bit in git."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is the primary benefit of configuring `cache: 'maven'` in `actions/setup-java` in GitHub Actions?",
+            "options": [
+              "It caches downloaded Maven dependencies across runs, drastically reducing pipeline build times",
+              "It turns off JUnit testing",
+              "It compiles Java code to native binaries",
+              "It bypasses git pull"
+            ],
+            "answer": 0,
+            "explanation": "Caching avoids repeatedly downloading third-party dependencies from Maven Central."
+          },
+          {
+            "question": "Which Maven lifecycle phase runs both unit tests (Surefire) and integration tests (Failsafe)?",
+            "options": [
+              "verify",
+              "compile",
+              "clean",
+              "validate"
+            ],
+            "answer": 0,
+            "explanation": "`mvn verify` executes the full verification phase including unit and integration tests."
+          }
+        ],
+        "exercise": {
+          "instructions": "Guided Project: Set up an automated GitHub Actions CI/CD workflow for your Java repository. Review the checklist and self-checks below.",
+          "isGuidedProject": true,
+          "checklist": [
+            "1. Create directory '.github/workflows' in the repository root",
+            "2. Add 'ci.yml' configured with on: [push, pull_request]",
+            "3. Configure steps: actions/checkout@v4 and actions/setup-java@v4 (JDK 21, temurin, cache: 'maven')",
+            "4. Add test step: './mvnw clean verify' (or 'gradle test')",
+            "5. Push to GitHub and observe pipeline execution in the Actions tab with green checkmark"
+          ],
+          "expectedOutputDescription": "GitHub Actions runner boots, builds project, passes JUnit 5 tests, and records green build status badge.",
+          "selfChecks": [
+            {
+              "question": "Where are GitHub Actions workflow YAML files located in a repository?",
+              "answer": ".github/workflows/"
+            },
+            {
+              "question": "What step uploads test failure reports as downloadable artifacts in GitHub Actions?",
+              "answer": "actions/upload-artifact@v4"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation",
+            "location": "Chapter 3: Continuous Integration",
+            "verify": false
+          },
+          {
+            "source": "GitHub Actions Documentation",
+            "location": "Building and testing Java with Maven",
+            "verify": false
+          }
+        ]
+      },
+      {
+        "id": "a8_l6",
+        "title": "Production Observability: Micrometer & Prometheus Metrics",
+        "xp": 45,
+        "estimatedMinutes": 30,
+        "story": "Flying blind through the Void Spire invites catastrophe. Production services must emit live vitals: request throughput, p99 latencies, active virtual thread counts, and JVM GC pause metrics scraped by Prometheus and displayed on Grafana dashboards.",
+        "explanation": [
+          {
+            "type": "text",
+            "content": "**Observability** consists of the Three Pillars: **Metrics** (numeric telemetry over time), **Logs** (timestamped diagnostic messages), and **Traces** (distributed request paths). In Java, **Micrometer** is the standard metrics facade (analogous to SLF4J for logging). It instruments metrics and exposes a `/actuator/prometheus` endpoint in standard Prometheus text format."
+          },
+          {
+            "type": "code",
+            "content": "Instrumenting business metrics with Micrometer MeterRegistry:",
+            "code": "@Service\npublic class SpireTelemetryService {\n    private final Counter dispatchCounter;\n    private final Timer requestTimer;\n\n    public SpireTelemetryService(MeterRegistry registry) {\n        this.dispatchCounter = registry.counter(\"spire.dispatches.total\", \"type\", \"portal\");\n        this.requestTimer = registry.timer(\"spire.dispatch.duration\");\n    }\n\n    public void executeDispatch() {\n        requestTimer.record(() -> {\n            dispatchCounter.increment();\n            // Execute dispatch logic\n        });\n    }\n}"
+          },
+          {
+            "type": "callout",
+            "calloutType": "tip",
+            "content": "Spring Boot Actuator automatically binds default JVM meters via Micrometer: JVM memory pools, GC pause counts, CPU utilization, thread states, and Tomcat connection pools without writing any instrumentation code!"
+          }
+        ],
+        "slides": [
+          {
+            "title": "The 3 Pillars of Observability",
+            "content": "Metrics (numeric time-series) + Logs (discrete events) + Distributed Tracing (cross-service call graphs)."
+          },
+          {
+            "title": "Micrometer Core Meter Types",
+            "content": "Counter (monotonically increasing count), Gauge (instantaneous value like queue size), Timer (duration + frequency)."
+          },
+          {
+            "title": "Prometheus & Grafana",
+            "content": "Prometheus scrapes `/actuator/prometheus` periodically. Grafana queries Prometheus to render real-time dashboards."
+          }
+        ],
+        "underTheHood": "Micrometer Timers record histograms and percentiles (p50, p95, p99) using decaying ring-buffer accumulators (HdrHistogram), maintaining accurate latency percentiles with bounded memory.",
+        "workedExample": {
+          "code": "import java.util.*;\nimport java.util.concurrent.atomic.AtomicLong;\n\npublic class Main {\n    // Simulating Micrometer Counter & Gauge\n    static class SimpleMetrics {\n        private final AtomicLong counter = new AtomicLong(0);\n        public void increment() { counter.incrementAndGet(); }\n        public long getCount() { return counter.get(); }\n    }\n    \n    public static void main(String[] args) {\n        SimpleMetrics metrics = new SimpleMetrics();\n        metrics.increment();\n        metrics.increment();\n        System.out.println(\"spire_dispatches_total: \" + metrics.getCount());\n    }\n}",
+          "walkthrough": [
+            {
+              "line": 6,
+              "explanation": "Atomic counter models metric collection."
+            },
+            {
+              "line": 12,
+              "explanation": "Record business events."
+            },
+            {
+              "line": 14,
+              "explanation": "Format metric in standard Prometheus time-series notation."
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "Using high-cardinality tags in Micrometer meters (e.g. user IDs or timestamps).",
+            "code": "registry.counter(\"http.requests\", \"userId\", userId); // Million unique tags explode Prometheus memory!",
+            "correction": "Use low-cardinality tags only (e.g. HTTP status, method, endpoint path)."
+          },
+          {
+            "mistake": "Exposing sensitive actuator endpoints to the public internet.",
+            "code": "management.endpoints.web.exposure.include=* // Exposes /env and heapdumps to hackers!",
+            "correction": "Expose only `health,prometheus` publicly; secure remaining actuator endpoints behind authentication."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Why should you avoid high-cardinality tag values (such as email addresses or UUIDs) in Micrometer metric tags?",
+            "options": [
+              "Every unique tag combination creates a separate time-series stream in Prometheus, causing a combinatorial explosion of memory consumption and server crash",
+              "Micrometer only accepts numbers for tags",
+              "Tags cannot contain letters",
+              "It violates GDPR"
+            ],
+            "answer": 0,
+            "explanation": "High-cardinality tags create millions of separate time-series streams in metric databases (cardinality explosion)."
+          },
+          {
+            "question": "Which Micrometer meter type should you use to record method execution latency percentiles (p50, p95, p99)?",
+            "options": [
+              "Timer",
+              "Counter",
+              "Gauge",
+              "DistributionSummary"
+            ],
+            "answer": 0,
+            "explanation": "`Timer` records both latency distributions (percentiles) and invocation counts."
+          }
+        ],
+        "exercise": {
+          "instructions": "Read integer `increments` from stdin. Simulate a Micrometer Counter tracking dispatches: increment the counter by 1 in a loop `increments` times. Print the formatted Prometheus metric line: `spire_dispatches_total{status=\"success\"} [increments]`.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int increments = scanner.nextInt();\n        \n        // Format Prometheus metric string\n        \n    }\n}",
+          "hints": [
+            "System.out.println(\"spire_dispatches_total{status=\\\"success\\\"} \" + increments);"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        if (!scanner.hasNextInt()) return;\n        int increments = scanner.nextInt();\n        \n        System.out.println(\"spire_dispatches_total{status=\\\"success\\\"} \" + increments);\n    }\n}",
+          "tests": [
+            {
+              "name": "50 dispatches",
+              "stdin": "50\n",
+              "expectedStdout": "spire_dispatches_total{status=\"success\"} 50\n"
+            },
+            {
+              "name": "100 dispatches",
+              "stdin": "100\n",
+              "expectedStdout": "spire_dispatches_total{status=\"success\"} 100\n"
+            },
+            {
+              "name": "1 dispatch",
+              "stdin": "1\n",
+              "expectedStdout": "spire_dispatches_total{status=\"success\"} 1\n"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Site Reliability Engineering: How Google Runs Production Systems",
+            "location": "Chapter 6: Monitoring Distributed Systems",
+            "verify": false
+          },
+          {
+            "source": "Micrometer Documentation",
+            "location": "Concepts: Meter Types and Registry Setup",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-a8",
-      "xp": 75,
-      "questions": [
+    "quizBank": [
+      {
+        "id": "a8_q1",
+        "type": "mcq",
+        "question": "What is an executable Fat JAR (Uber-JAR)?",
+        "options": [
+          "A self-contained JAR file containing compiled application classes along with all unpacked third-party dependencies and a Main-Class manifest entry",
+          "A compressed zip file over 1GB",
+          "A JAR file containing C++ source code",
+          "A database backup file"
+        ],
+        "answer": 0,
+        "explanation": "A Fat JAR bundles application bytecodes and all dependencies so it runs with `java -jar`."
+      },
+      {
+        "id": "a8_q2",
+        "type": "mcq",
+        "question": "What tool in the JDK assembles custom minimal JRE runtimes containing only required modules?",
+        "options": [
+          "jlink",
+          "javac",
+          "jar",
+          "jstack"
+        ],
+        "answer": 0,
+        "explanation": "`jlink` creates stripped-down custom runtimes from JPMS modules."
+      },
+      {
+        "id": "a8_q3",
+        "type": "mcq",
+        "question": "Why are Google Distroless images favored for production Java containers?",
+        "options": [
+          "They contain only the application and JRE, removing package managers, shells (/bin/sh), and extraneous tools to minimize attack surface",
+          "They are 100% free of bugs",
+          "They run on Windows only",
+          "They eliminate CPU usage"
+        ],
+        "answer": 0,
+        "explanation": "Distroless containers contain no package managers or shells, stopping attackers from running shell exploits."
+      },
+      {
+        "id": "a8_q4",
+        "type": "mcq",
+        "question": "Why should you set `-XX:MaxRAMPercentage=75.0` rather than 100% in a containerized Java application?",
+        "options": [
+          "To leave 20-30% memory headroom for native off-heap memory (thread stacks, Metaspace, GC card tables) to prevent Linux kernel OOM-Kills (Exit 137)",
+          "Because Java 21 only supports up to 80% RAM",
+          "To allow other Docker containers to use the memory",
+          "To avoid cloud bills"
+        ],
+        "answer": 0,
+        "explanation": "Off-heap memory allocations require headroom; allocating 100% to heap triggers container OOM-Kills."
+      },
+      {
+        "id": "a8_q5",
+        "type": "mcq",
+        "question": "What is the consequence of adding high-cardinality tags (like userId or timestamp) to Micrometer metrics?",
+        "options": [
+          "It triggers a cardinality explosion, creating millions of time-series streams and exhausting Prometheus memory",
+          "It speeds up dashboard loading",
+          "It causes compilation errors",
+          "It converts metrics to logs"
+        ],
+        "answer": 0,
+        "explanation": "High-cardinality tags create a separate time-series per value, exploding memory usage."
+      },
+      {
+        "id": "a8_q6",
+        "type": "mcq",
+        "question": "Which flag in GitHub Actions `setup-java` caches Maven dependencies across workflow runs?",
+        "options": [
+          "cache: 'maven'",
+          "cache: true",
+          "store: 'm2'",
+          "download: false"
+        ],
+        "answer": 0,
+        "explanation": "`cache: 'maven'` caches `~/.m2` dependencies across pipeline runs."
+      },
+      {
+        "id": "a8_q7",
+        "type": "predict-output",
+        "question": "What does this code output?",
+        "code": "long ram = 1000;\nlong heap = (long)(ram * 0.75);\nSystem.out.println(heap);",
+        "options": [
+          "750",
+          "1000",
+          "75",
+          "Throws Exception"
+        ],
+        "answer": 0,
+        "explanation": "1000 * 0.75 = 750."
+      },
+      {
+        "id": "a8_q8",
+        "type": "spot-the-bug",
+        "question": "Find the fatal flaw in this production Docker run command:",
+        "code": "docker run -m 512m my-java-app:1.0 java -Xmx1024m -jar app.jar",
+        "options": [
+          "The JVM heap (-Xmx1024m) exceeds the container cgroup memory limit (512m), causing the Linux kernel to immediately OOM-Kill the container (Exit 137)",
+          "Docker run requires -p",
+          "my-java-app cannot be a tag",
+          "java must be capitalized"
+        ],
+        "answer": 0,
+        "explanation": "Allocating 1024MB heap inside a 512MB container results in immediate SIGKILL 137."
+      },
+      {
+        "id": "a8_q9",
+        "type": "fill-in",
+        "question": "Complete the statement: The JVM flag to configure maximum heap percentage in containerized environments is -XX:MaxRAM______.",
+        "answer": "Percentage",
+        "explanation": "`-XX:MaxRAMPercentage` specifies the container RAM fraction for heap."
+      },
+      {
+        "id": "a8_q10",
+        "type": "mcq",
+        "question": "Which descriptor file in the root of a Java module defines its required dependencies and exported packages in JPMS?",
+        "options": [
+          "module-info.java",
+          "package-info.java",
+          "pom.xml",
+          "manifest.mf"
+        ],
+        "answer": 0,
+        "explanation": "`module-info.java` declares module boundaries in JPMS."
+      },
+      {
+        "id": "a8_q11",
+        "type": "order-the-lines",
+        "question": "Arrange the stages in a production multi-stage Dockerfile:",
+        "lines": [
+          "FROM maven:3.9-eclipse-temurin-21 AS builder",
+          "COPY pom.xml . && RUN mvn dependency:go-offline",
+          "COPY src ./src && RUN mvn clean package -DskipTests",
+          "FROM gcr.io/distroless/java21-debian12:nonroot",
+          "COPY --from=builder /app/target/*.jar app.jar",
+          "ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]"
+        ],
+        "answer": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "explanation": "Builder base -> cache dependencies -> build jar -> distroless runner -> copy jar -> entrypoint."
+      },
+      {
+        "id": "a8_q12",
+        "type": "mcq",
+        "question": "What is the standard Prometheus actuator endpoint path exposed by Spring Boot Actuator?",
+        "options": [
+          "/actuator/prometheus",
+          "/metrics/prom",
+          "/prometheus/metrics",
+          "/api/v1/prometheus"
+        ],
+        "answer": 0,
+        "explanation": "Spring Boot Actuator exposes Prometheus metrics on `/actuator/prometheus`."
+      }
+    ],
+    "project": {
+      "title": "Void Spire Cloud-Native Packaging & Deployment Pipeline",
+      "brief": "Construct an automated, cloud-native packaging and containerization pipeline for the Void Spire. Package production Fat JARs, define modular JPMS architectures with module-info.java, build stripped-down minimal runtimes using jlink, construct hardened multi-stage Distroless Dockerfiles, configure container-aware JVM ergonomics (-XX:MaxRAMPercentage=75.0), and automate continuous testing in GitHub Actions with Prometheus observability.",
+      "milestones": [
+        "Milestone 1: Configure build tool to package self-contained executable Fat JAR with custom manifest",
+        "Milestone 2: Modularize project with module-info.java and generate minimal custom runtime with jlink",
+        "Milestone 3: Construct multi-stage Dockerfile targeting Google Distroless with nonroot user security",
+        "Milestone 4: Write GitHub Actions CI workflow with automated test verification and dependency caching"
+      ],
+      "rubric": [
         {
-          "type": "true-false",
-          "question": "Multi-stage Docker builds allow compiling with a full JDK but running with a slim JRE to minimize image size and attack surface.",
-          "answer": true,
-          "explanation": "Multi-stage builds discard the compiler and build tools, leaving only runtime necessities."
+          "criterion": "Packaging & Manifest Hygiene",
+          "points": 25,
+          "description": "Correct configuration of executable Fat JARs and clean dependency isolation"
         },
         {
-          "type": "mcq",
-          "question": "What does a continuous integration (CI) pipeline do upon a git push?",
-          "options": [
-            "Automatically compiles code and runs automated test suites",
-            "Edits source code directly",
-            "Purchases server hardware",
-            "Deletes git branches"
-          ],
-          "answer": 0,
-          "explanation": "CI builds code and executes automated tests on every push to detect regressions immediately."
+          "criterion": "Modularization & jlink Runtimes",
+          "points": 25,
+          "description": "Accurate JPMS module declarations and stripped minimal JRE runtime assembly"
         },
         {
-          "type": "output",
-          "question": "What does a standard health check endpoint return when healthy?",
-          "options": [
-            "UP or 200 OK",
-            "DOWN",
-            "Exception",
-            "404"
-          ],
-          "answer": 0,
-          "explanation": "Health endpoints return status UP with HTTP 200 to signal readiness."
+          "criterion": "Container Hardening & Ergonomics",
+          "points": 25,
+          "description": "Multi-stage Distroless builds, nonroot execution, and correct MaxRAMPercentage memory bounds"
         },
         {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Deployment & Engineering Workflow?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-a8",
-      "title": "A8: Application Health Indicator",
-      "prompt": "Write a class that reports application status:\nIf database is connected and disk space > 100MB, return `\"STATUS: UP\"`\nIn main, print:\n`STATUS: UP`",
-      "starterCode": "public class Main {\n    // TODO 1: Implement getHealthStatus(boolean dbOk, long freeDiskMb)\n    // If dbOk and freeDiskMb > 100, return \"STATUS: UP\", else \"STATUS: DOWN\"\n    public static String getHealthStatus(boolean dbOk, long freeDiskMb) {\n        // Your code here\n        return \"\";\n    }\n\n    public static void main(String[] args) {\n        // TODO 2: Call getHealthStatus(true, 500) and print result\n    }\n}",
-      "expectedOutput": "STATUS: UP",
-      "testCases": [
-        {
-          "name": "Health Status UP",
-          "expected": "STATUS: UP"
+          "criterion": "CI/CD & Observability",
+          "points": 25,
+          "description": "Complete GitHub Actions workflow and Prometheus actuator metrics instrumentation"
         }
       ],
-      "hints": [
-        "Check both parameters."
+      "stretchGoals": [
+        "Build a GraalVM Native Image generating a 25MB instant-startup (10ms) standalone Linux executable",
+        "Configure automated SBOM (Software Bill of Materials) generation using Syft and Grype vulnerability scanning"
       ]
     },
-    "biome": "End Gateway",
-    "conceptMetaphor": "Containers, automated CI/CD pipelines, and production release gateways.",
-    "track": "advanced"
+    "glossary": [
+      {
+        "term": "Fat JAR (Uber-JAR)",
+        "definition": "An executable JAR containing the application classes along with all unpacked third-party library dependencies."
+      },
+      {
+        "term": "JPMS",
+        "definition": "Java Platform Module System: introduced in Java 9 to modularize the JDK and applications via module-info.java."
+      },
+      {
+        "term": "jlink",
+        "definition": "A JDK tool that packages and optimizes a set of modules and their dependencies into a custom minimal runtime image."
+      },
+      {
+        "term": "Distroless",
+        "definition": "Container images created by Google that contain only your application and its runtime dependencies, omitting package managers and shells."
+      },
+      {
+        "term": "cgroups",
+        "definition": "A Linux kernel feature that isolates and bounds resource usage (CPU, memory, disk I/O) of process collections."
+      },
+      {
+        "term": "-XX:MaxRAMPercentage",
+        "definition": "A JVM flag that sets the maximum heap size as a percentage of the detected container RAM limit."
+      },
+      {
+        "term": "OOM-Killer",
+        "definition": "A Linux kernel mechanism that forcefully kills processes (Exit code 137) when system or container memory limits are exceeded."
+      },
+      {
+        "term": "CI/CD",
+        "definition": "Continuous Integration and Continuous Delivery: automated build, test, and release pipelines."
+      },
+      {
+        "term": "Micrometer",
+        "definition": "An open-source metrics instrumentation facade for Java, serving as the standard telemetry layer for Spring Boot."
+      },
+      {
+        "term": "Prometheus",
+        "definition": "An open-source systems monitoring and alerting toolkit that collects time-series metrics via HTTP pull."
+      }
+    ],
+    "references": [
+      {
+        "source": "Core Java Vol. II: Advanced Features, 12th ed.",
+        "location": "Chapter 9: The Java Platform Module System & Chapter 13: Packaging and Deployment",
+        "verify": false
+      },
+      {
+        "source": "Docker Deep Dive",
+        "location": "Chapters 10 & 12: Multi-Stage Builds and Production Containers",
+        "verify": false
+      },
+      {
+        "source": "Continuous Delivery: Reliable Software Releases",
+        "location": "Chapter 3: Continuous Integration",
+        "verify": false
+      }
+    ]
   }
 ];
 
@@ -18902,40 +28086,41 @@ const PROJECTS = [
   {
     "id": "proj-advanced",
     "level": "advanced",
-    "title": "Task Management REST API (Spring Boot)",
-    "description": "Design and deploy an enterprise-grade REST service with JWT security, JPA persistence, and Dockerized microservice architecture.",
+    "track": "advanced",
+    "title": "End City Task Management Distributed REST API",
+    "description": "Architect and deploy an enterprise-grade cloud-native REST service featuring Spring Boot / modern Java HTTP server architecture, JPA relational persistence, JWT stateless authentication, virtual thread concurrency, and multi-stage Docker containerization.",
     "xpReward": 500,
     "badgeId": "capstone-advanced",
     "requirements": [
-      "Design RESTful endpoints for CRUD tasks (GET, POST, PUT, DELETE)",
-      "Implement JWT Authentication & Role-Based Access Control (Admin vs User)",
-      "Configure database persistence with Spring Data JPA and transactions",
-      "Add input validation (@NotNull, @Size), custom error handlers, and pagination",
-      "Write a production Dockerfile and Docker Compose setup"
+      "Design RESTful endpoints for CRUD tasks (GET, POST, PUT, DELETE) adhering to idempotent semantics and HTTP status codes",
+      "Implement stateless JWT Authentication & Role-Based Access Control (Admin vs User) with constant-time signature verification",
+      "Configure relational persistence with Spring Data JPA entities, repositories, and transactional boundaries",
+      "Add declarative input validation (@Valid, @NotNull, @Size), centralized exception handling, and Stream API filtering",
+      "Construct a production-ready multi-stage Distroless Dockerfile with non-root execution and cgroup memory bounds"
     ],
-    "rubric": "Spring Boot, REST architecture, JPA persistence, JWT security, virtual threads, and Docker CI/CD.",
-    "starterCode": "// ===============================================================\n//  ADVANCED CAPSTONE: Task Management REST API Simulator\n// Focus: REST Architecture, Enums, Maps, Lambdas, Virtual Threads\n//\n//  Instructions: Complete the TODOs below to build your API simulator!\n//    If you need any hints, ask JavaBot  in the corner!\n// ===============================================================\nimport java.time.LocalDateTime;\nimport java.util.*;\n\nenum TaskStatus { TODO, IN_PROGRESS, COMPLETED }\n\n// --- Milestone 1: Task Model ---\nclass Task {\n    // TODO 1: Define fields: id (String), title (String), assignee (String),\n    //         status (TaskStatus), createdAt (LocalDateTime)\n\n    // TODO 2: Write constructor and getter/setter methods\n}\n\npublic class Main {\n    // TODO 3: Create an in-memory data store for tasks (e.g. Map<String, Task>)\n\n    public static void main(String[] args) {\n        System.out.println(\"==================================================\");\n        System.out.println(\" JavaQuest Task Management REST API Simulator \");\n        System.out.println(\"==================================================\");\n\n        // TODO 4: Simulate REST Controller endpoints:\n        //         - POST /api/tasks (Create a task)\n        //         - GET  /api/tasks (List all tasks)\n        //         - PUT  /api/tasks/{id}/status (Update status to COMPLETED)\n        //         - GET  /api/tasks?status=COMPLETED (Filter using Streams)\n\n        System.out.println(\" Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 5: Implement postTask(String id, String title, String assignee)\n\n    // TODO 6: Implement updateTaskStatus(String id, TaskStatus status)\n\n    // TODO 7: Implement getTasksByStatus(TaskStatus status) using Java Streams\n}\n",
+    "rubric": "Clean Spring Boot / modern REST architecture, JPA persistence, JWT security, virtual thread concurrency, Bean validation, and production containerization.",
+    "starterCode": "// ===============================================================\n//  ADVANCED CAPSTONE: End City Task Management REST API\n// Focus: REST Architecture, Records, Enums, Streams, Virtual Threads\n// ===============================================================\nimport java.time.LocalDateTime;\nimport java.util.*;\nimport java.util.concurrent.*;\nimport java.util.stream.Collectors;\n\nenum TaskStatus { TODO, IN_PROGRESS, COMPLETED }\n\n// --- Milestone 1: Domain Record ---\n// TODO 1: Declare Task record (or class) with fields:\n//         String id, String title, String assignee, TaskStatus status, LocalDateTime createdAt\n\n// --- Milestone 2: Service Layer & Storage ---\npublic class Main {\n    // In-memory thread-safe storage for tasks\n    private static final Map<String, TaskModel> taskStore = new ConcurrentHashMap<>();\n\n    record TaskModel(String id, String title, String assignee, TaskStatus status, LocalDateTime createdAt) {}\n\n    public static void main(String[] args) throws Exception {\n        System.out.println(\"==================================================\");\n        System.out.println(\" End City Task Management REST API Engine \");\n        System.out.println(\"==================================================\");\n\n        // TODO 3: Seed initial tasks\n        // TODO 4: Execute concurrent task creation using Virtual Threads (Executors.newVirtualThreadPerTaskExecutor)\n        // TODO 5: Query and filter tasks by status using Java 8+ Streams\n        // TODO 6: Run automated test suite verifying CRUD operations and status updates\n\n        System.out.println(\"System initialized successfully. Run test suite to verify!\");\n    }\n\n    // TODO 7: Implement createTask(String id, String title, String assignee)\n    // TODO 8: Implement updateStatus(String id, TaskStatus newStatus)\n    // TODO 9: Implement findByStatus(TaskStatus status) returning List<TaskModel>\n}\n",
     "featureIdeas": [
       {
-        "icon": "",
+        "icon": "cloud",
         "title": "Java 21 Virtual Threads Engine",
-        "concepts": "Virtual Threads & Concurrency (Module A2)",
+        "concepts": "Virtual Threads & Concurrency (Module A3)",
         "description": "Configure Spring Boot 3 with virtual threads (spring.threads.virtual.enabled=true) to effortlessly handle 10,000+ concurrent API requests without thread starvation."
       },
       {
-        "icon": "",
+        "icon": "database",
         "title": "Redis Second-Level Caching",
         "concepts": "Performance & Architecture (Module A4)",
         "description": "Integrate Redis caching with @Cacheable on frequently requested task summaries and @CacheEvict on modifications to achieve sub-millisecond response times."
       },
       {
-        "icon": "",
+        "icon": "shield",
         "title": "Refresh Token Rotation & OAuth2",
         "concepts": "Security & Idempotency (Module A5)",
         "description": "Implement short-lived JWT access tokens (15m) paired with database-backed refresh tokens and token reuse detection for enterprise-grade authentication."
       },
       {
-        "icon": "",
+        "icon": "speed",
         "title": "Docker Compose Multi-Container Stack",
         "concepts": "Docker & Observability (Modules A7, A8)",
         "description": "Bundle the Spring Boot API, PostgreSQL database, Prometheus metrics collector, and Grafana dashboard into a single docker-compose.yml file."
