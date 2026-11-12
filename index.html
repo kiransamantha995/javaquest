@@ -7,7 +7,7 @@
   <title>JavaQuest — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=8.2"/>
+  <link rel="stylesheet" href="style.css?v=8.3"/>
 </head>
 <body>
 
@@ -535,6 +535,7 @@
               <span class="mac-traffic-dot green"></span>
             </div>
             <span class="editor-lang-badge">Exercise.java</span>
+            <button class="btn-xs btn-outline-gold" id="live-watch-toggle-btn" onclick="window.toggleLiveWatching()" title="Toggle JavaBot live watching">👁 Watching</button>
             <button class="btn-secondary btn-sm" id="lesson-reset-code-btn" onclick="resetLessonCode()" title="Reset starter code">↺ Reset</button>
             <div style="flex:1"></div>
             <button class="btn-run-secondary" id="lesson-run-btn" onclick="runLessonCode()" title="Run code in interactive terminal (Ctrl+Enter)">▶ Run Code</button>
@@ -909,6 +910,18 @@
       </div>
     </div>
 
+    
+    <div class="settings-card glass-card">
+      <h3>Learner Memory (Local &amp; Private)</h3>
+      <p>Concepts you found tricky during exercises, saved locally to your device:</p>
+      <div id="learner-memory-list" style="margin-top:0.5rem;min-height:30px;">
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin:0;">No weak spots tracked yet.</p>
+      </div>
+      <div style="margin-top:0.85rem;">
+        <button class="btn-secondary" onclick="window.clearLearnerMemory()">Clear My Learner Memory</button>
+      </div>
+    </div>
+
     <div class="settings-card glass-card danger-card">
       <h3>Danger Zone</h3>
       <p>Irreversible actions for your JavaQuest learning profile and account data:</p>
@@ -1191,12 +1204,12 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=8.2"></script>
-<script src="animations.js?v=8.2"></script>
-<script src="supabase.js?v=8.2"></script>
-<script src="ai-tutor.js?v=8.2"></script>
-<script src="lib/editor.bundle.js?v=8.2"></script>
-<script src="lib/game-fx.js?v=8.2"></script>
-<script src="app.js?v=8.2"></script>
+<script src="curriculum.js?v=8.3"></script>
+<script src="animations.js?v=8.3"></script>
+<script src="supabase.js?v=8.3"></script>
+<script src="ai-tutor.js?v=8.3"></script>
+<script src="lib/editor.bundle.js?v=8.3"></script>
+<script src="lib/game-fx.js?v=8.3"></script>
+<script src="app.js?v=8.3"></script>
 </body>
 </html>

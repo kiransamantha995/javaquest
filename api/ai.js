@@ -468,6 +468,118 @@ module.exports = async function handler(req, res) {
       return;
     }
 
+    
+    // ─────────────────────────────────────────────────────────────────
+    // 7. SOCRATIC HINT & GUIDANCE ESCALATOR
+    // ─────────────────────────────────────────────────────────────────
+    if (action === 'socratic-hint') {
+      const code = userStr(redactSecrets(body.code || ''), MAX_INPUT_BYTES);
+      const lessonTitle = userStr(body.lessonTitle || '', 120);
+      const errorMsg = userStr(body.error || '', 400);
+      const tier = Math.min(Math.max(parseInt(body.tier || 1, 10), 1), 3);
+
+      const systemPrompt =
+        'You are JavaBot, a Socratic Java tutor. Help the student solve their coding task.\n' +
+        'Rules: Do NOT give away the complete solution immediately.\n' +
+        'Tier 1: Ask 1 thought-provoking guiding question.\n' +
+        'Tier 2: Give a specific hint about the exact method or syntax construct.\n' +
+        'Tier 3: Provide a minimal code snippet illustrating the fix.\n' +
+        'Return ONLY raw JSON: { "tier": number, "message": string, "concept": string }';
+
+      const userSection =
+        'Lesson: [' + escHtml(lessonTitle) + ']\n' +
+        'Requested Tier: ' + tier + '\n' +
+        (errorMsg ? ('Error: [' + escHtml(errorMsg) + ']\n') : '') +
+        'Code:\n```java\n' + escHtml(code) + '\n```';
+
+      const result = await callGeminiWithFallback({
+        contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userSection }] }],
+        generationConfig: { response_mime_type: 'application/json', temperature: 0.4, maxOutputTokens: 600 }
+      });
+
+      let rawText = extractCandidateText(result).trim().replace(/^\`\`\`(?:json)?\s*/i, '').replace(/\s*\`\`\`$/i, '');
+      let parsed;
+      try { parsed = JSON.parse(rawText); } catch { return res.status(200).json(safeFallback(action)); }
+
+      res.status(200).json({
+        success: true,
+        tier: parsed.tier || tier,
+        message: escHtml(parsed.message || 'Review your variable types and logic.'),
+        concept: escHtml(parsed.concept || 'Java Fundamentals')
+      });
+      return;
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 8. ERROR TRANSLATOR (Javac & Runtime to Plain English)
+    // ─────────────────────────────────────────────────────────────────
+    if (action === 'translate-error') {
+      const errorText = userStr(body.errorText || '', 800);
+      const code = userStr(redactSecrets(body.code || ''), MAX_INPUT_BYTES);
+
+      const systemPrompt =
+        'You are an expert compiler diagnostic translator for Java beginners.\n' +
+        'Translate the javac/runtime error into friendly, clear plain English.\n' +
+        'Identify: 1) What went wrong, 2) Why it happened, 3) Exact line number, 4) Suggested one-line fix.\n' +
+        'Return ONLY raw JSON: { "plainEnglish": string, "lineNo": number, "suggestedFix": string }';
+
+      const userSection =
+        'Error:\n' + escHtml(errorText) + '\n\n' +
+        'Code:\n```java\n' + escHtml(code) + '\n```';
+
+      const result = await callGeminiWithFallback({
+        contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userSection }] }],
+        generationConfig: { response_mime_type: 'application/json', temperature: 0.2, maxOutputTokens: 500 }
+      });
+
+      let rawText = extractCandidateText(result).trim().replace(/^\`\`\`(?:json)?\s*/i, '').replace(/\s*\`\`\`$/i, '');
+      let parsed;
+      try { parsed = JSON.parse(rawText); } catch { return res.status(200).json(safeFallback(action)); }
+
+      res.status(200).json({
+        success: true,
+        plainEnglish: escHtml(parsed.plainEnglish || 'The compiler encountered an unexpected token or type mismatch.'),
+        lineNo: typeof parsed.lineNo === 'number' ? parsed.lineNo : 1,
+        suggestedFix: escHtml(parsed.suggestedFix || '')
+      });
+      return;
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 9. AUTOMATED CODE REVIEW (Effective Java Best Practices)
+    // ─────────────────────────────────────────────────────────────────
+    if (action === 'code-review') {
+      const code = userStr(redactSecrets(body.code || ''), MAX_INPUT_BYTES);
+      const taskTitle = userStr(body.taskTitle || 'Java Challenge', 120);
+
+      const systemPrompt =
+        'You are a senior Java engineer reviewing a student\'s passing code.\n' +
+        'Provide constructive, encouraging feedback citing Effective Java by Joshua Bloch or clean code rules.\n' +
+        'Highlight 1 strength, 1 clean-code improvement, and 1 best-practice tip.\n' +
+        'Return ONLY raw JSON: { "strength": string, "improvement": string, "effectiveJavaTip": string }';
+
+      const userSection =
+        'Task: [' + escHtml(taskTitle) + ']\n' +
+        'Code:\n```java\n' + escHtml(code) + '\n```';
+
+      const result = await callGeminiWithFallback({
+        contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userSection }] }],
+        generationConfig: { response_mime_type: 'application/json', temperature: 0.3, maxOutputTokens: 600 }
+      });
+
+      let rawText = extractCandidateText(result).trim().replace(/^\`\`\`(?:json)?\s*/i, '').replace(/\s*\`\`\`$/i, '');
+      let parsed;
+      try { parsed = JSON.parse(rawText); } catch { return res.status(200).json(safeFallback(action)); }
+
+      res.status(200).json({
+        success: true,
+        strength: escHtml(parsed.strength || 'Clean structure and correct logic.'),
+        improvement: escHtml(parsed.improvement || 'Consider descriptive variable names.'),
+        effectiveJavaTip: escHtml(parsed.effectiveJavaTip || 'Favor immutability where possible.')
+      });
+      return;
+    }
+
     res.status(400).json({ error: `Unknown action: "${escHtml(action)}"` });
 
   } catch (err) {

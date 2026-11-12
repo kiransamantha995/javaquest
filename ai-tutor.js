@@ -495,3 +495,133 @@ function formatDeepDiveMarkdown(md) {
     .replace(/^- (.*$)/gim, '<li>$1</li>')
     .replace(/\n\n/g, '<p></p>');
 }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   PHASE 6: AI TUTOR V2 (LIVE WATCHING, SOCRATIC HINTS, LEARNER MEMORY)
+   ═════════════════════════════════════════════════════════════════ */
+
+var _isLiveWatchingPaused = false;
+var _lastLiveSuggestionTime = 0;
+var _liveWatchDebounceTimer = null;
+
+// ── 1. Learner Memory (Local & Deletable) ──────────────────────────────────
+function getLearnerMemory() {
+  try {
+    var raw = localStorage.getItem('jq_learner_memory');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function recordLearnerMistake(concept) {
+  if (!concept) return;
+  try {
+    var mem = getLearnerMemory();
+    var existing = mem.find(function(m) { return m.concept.toLowerCase() === concept.toLowerCase(); });
+    if (existing) {
+      existing.count = (existing.count || 1) + 1;
+      existing.lastOccurred = new Date().toISOString();
+    } else {
+      mem.push({ concept: concept, count: 1, lastOccurred: new Date().toISOString() });
+    }
+    // Cap to top 20 concepts
+    if (mem.length > 20) mem = mem.slice(-20);
+    localStorage.setItem('jq_learner_memory', JSON.stringify(mem));
+    renderLearnerMemoryUI();
+  } catch (e) {}
+}
+
+function clearLearnerMemory() {
+  try {
+    localStorage.removeItem('jq_learner_memory');
+    renderLearnerMemoryUI();
+    if (typeof toast === 'function') toast('Learner memory cleared! Fresh start.');
+  } catch (e) {}
+}
+window.clearLearnerMemory = clearLearnerMemory;
+
+function renderLearnerMemoryUI() {
+  var container = document.getElementById('learner-memory-list');
+  if (!container) return;
+  var mem = getLearnerMemory();
+  if (mem.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary);font-size:0.85rem;margin:0;">No weak spots tracked yet. Keep solving challenges!</p>';
+    return;
+  }
+  var html = '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.4rem;">';
+  mem.forEach(function(m) {
+    html += '<span style="background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.3);padding:0.25rem 0.65rem;border-radius:999px;font-size:0.75rem;font-weight:700;">'
+      + esc(m.concept) + ' (' + m.count + 'x)</span>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+window.renderLearnerMemoryUI = renderLearnerMemoryUI;
+
+// ── 2. Live Watching & Client-Side Static Analysis ─────────────────────────
+function toggleLiveWatching() {
+  _isLiveWatchingPaused = !_isLiveWatchingPaused;
+  var badge = document.getElementById('live-watch-toggle-btn');
+  if (badge) {
+    badge.textContent = _isLiveWatchingPaused ? '👁 Watching: Paused' : '👁 Watching: Active';
+    badge.style.opacity = _isLiveWatchingPaused ? '0.6' : '1';
+  }
+  if (typeof toast === 'function') {
+    toast(_isLiveWatchingPaused ? 'JavaBot live watching paused.' : 'JavaBot is actively watching your code.');
+  }
+}
+window.toggleLiveWatching = toggleLiveWatching;
+
+function analyzeCodeStatic(code) {
+  if (!code || _isLiveWatchingPaused) return null;
+
+  // 1. String compared with ==
+  if (/String\s+\w+\s*=/.test(code) && /==\s*"[^"]*"/.test(code)) {
+    return {
+      message: 'Notice: comparing Strings with == compares object memory addresses. Use .equals() for value equality!',
+      concept: 'String equality with .equals()'
+    };
+  }
+
+  // 2. Accidental assignment in if condition
+  if (/if\s*\(\s*\w+\s*=\s*[^=]/.test(code)) {
+    return {
+      message: 'Potential bug: single = inside if (...) is assignment, not comparison (==).',
+      concept: 'Equality operator vs Assignment'
+    };
+  }
+
+  // 3. Unbalanced braces
+  var openCount = (code.match(/\{/g) || []).length;
+  var closeCount = (code.match(/\}/g) || []).length;
+  if (openCount !== closeCount && code.length > 50) {
+    return {
+      message: 'Brace mismatch: you have ' + openCount + ' "{" and ' + closeCount + ' "}".',
+      concept: 'Syntax: Matching braces'
+    };
+  }
+
+  return null;
+}
+
+function triggerLiveCodeWatcher(code) {
+  if (_isLiveWatchingPaused) return;
+  clearTimeout(_liveWatchDebounceTimer);
+  _liveWatchDebounceTimer = setTimeout(function() {
+    var now = Date.now();
+    if (now - _lastLiveSuggestionTime < 180000) return; // at most once per 3 minutes
+
+    var finding = analyzeCodeStatic(code);
+    if (finding) {
+      _lastLiveSuggestionTime = now;
+      recordLearnerMistake(finding.concept);
+      if (window.GameFX && typeof window.GameFX.mascotSay === 'function') {
+        window.GameFX.mascotSay(finding.message, 6000);
+        window.GameFX.mascotReact('nod');
+      }
+    }
+  }, 1500);
+}
+window.triggerLiveCodeWatcher = triggerLiveCodeWatcher;
