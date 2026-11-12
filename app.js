@@ -3290,13 +3290,16 @@ function submitTerminalInput(overrideVal) {
 }
 
 /* ═══════════════ XP / LEVELS ════════════════════════════════════ */
-function addXP(amount) {
+function addXP(amount, lessonId) {
   if(!amount) return;
   STATE.player.xp+=amount; showXpFloat(amount);
   var before=STATE.player.level, nx;
   while((nx=getNextLv())&&STATE.player.xp>=nx.xpRequired) STATE.player.level=nx.level;
   if(STATE.player.level>before) triggerLevelUp();
   updateNav(); localSave();
+  if (typeof sbAwardXP === 'function') {
+    sbAwardXP(lessonId || (_curLesson ? _curLesson.id : 'activity'), amount);
+  }
 }
 function triggerLevelUp(){var lv=getLv();setText('levelup-new-level','Level '+STATE.player.level);setText('levelup-rank',lv.name);setText('levelup-rank-icon',lv.icon);checkBadge('level_5');checkBadge('level_10');burstParticles('levelup-particles');setTimeout(function(){showModal('modal-levelup');},300);}
 function getLv(){if(!window.LEVELS)return{level:1,name:'Novice',xpRequired:0,icon:''};var r=LEVELS[0];for(var i=0;i<LEVELS.length;i++)if(STATE.player.xp>=LEVELS[i].xpRequired)r=LEVELS[i];return r;}

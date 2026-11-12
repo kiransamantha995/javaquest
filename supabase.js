@@ -222,6 +222,19 @@ function sbUpsertProfile(data) {
   });
 }
 
+function sbAwardXP(lessonId, xpAmount) {
+  var uid = sbCurrentUser() && sbCurrentUser().id;
+  if (!uid) return Promise.resolve(null);
+  return sbFetch('/rest/v1/rpc/award_xp', {
+    method: 'POST',
+    body: JSON.stringify({ lesson_id: lessonId, xp_amount: xpAmount })
+  }).catch(function(e) {
+    console.warn('sbAwardXP RPC notice:', e.message);
+    return null;
+  });
+}
+window.sbAwardXP = sbAwardXP;
+
 // ═══════════════════════════════════════════════════════
 //  PROGRESS
 // ═══════════════════════════════════════════════════════
