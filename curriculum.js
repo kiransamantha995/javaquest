@@ -7,1078 +7,1059 @@ const CURRICULUM = [
     "id": "b1",
     "code": "B1",
     "level": "beginner",
-    "title": "Java Orientation & Setup",
-    "subtitle": "Source code, bytecode, JVM, JRE and JDK roles",
-    "icon": "",
-    "color": "#6C63FF",
+    "title": "How Java Runs & Orientation",
+    "subtitle": "Source code, bytecode, JVM, JIT, JDK, and your first Java program",
+    "biome": "Sunrise Plains",
+    "estimatedMinutes": 90,
+    "learningObjectives": [
+      "Explain source (.java) vs bytecode (.class)",
+      "Describe JVM, ClassLoader, and HotSpot JIT compiler roles",
+      "Construct a valid class and main method in Java 21",
+      "Diagnose and fix basic syntax and compilation errors"
+    ],
+    "prerequisites": [],
     "lessons": [
       {
-        "id": "lesson-b1-1",
-        "title": "What is Java & The JVM",
-        "xp": 30,
+        "id": "b1_l1",
+        "title": "Source Code to Bytecode",
+        "xp": 25,
+        "estimatedMinutes": 12,
+        "story": "Welcome to the Sunrise Plains! Java takes your human-readable .java source code and forges it into portable .class bytecode blocks that run anywhere.",
         "slides": [
           {
+            "title": "Write Once, Run Anywhere",
             "type": "intro",
-            "title": "Welcome to Java 21+",
-            "content": "Java was created by James Gosling in 1995. Its core superpower is **\"Write Once, Run Anywhere\" (WORA)**. Millions of backend systems, Android apps, and high-performance services run on modern Java 21 LTS."
+            "content": "Java compiles into **bytecode** for the Java Virtual Machine (JVM). Bytecode runs identically on Windows, Mac, Linux, and Cloud.",
+            "code": "// 1. Greeting.java\n// 2. javac Greeting.java -> Greeting.class\n// 3. java Greeting"
           },
           {
-            "type": "visual",
-            "visual": "jvm",
-            "title": "How Code Runs",
-            "content": "Your `.java` source code is compiled by **javac** into portable **bytecode** (`.class` files). The **Java Virtual Machine (JVM)** executes this bytecode on any OS.",
-            "visualData": null
-          },
-          {
+            "title": "The Main Method",
             "type": "code",
-            "title": "Anatomy of Main",
-            "content": "Every standalone Java program starts execution at the `public static void main(String[] args)` method inside a class.",
-            "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, JavaQuest!\");\n    }\n}"
+            "content": "Execution begins at the standard entry point: `public static void main(String[] args)`.",
+            "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, Overworld!\");\n    }\n}"
+          }
+        ],
+        "underTheHood": "javac transforms AST nodes into bytecode instructions. The JVM executes these with verification and HotSpot JIT compilation.",
+        "commonMistakes": [
+          {
+            "mistake": "Class name does not match file name",
+            "error": "class Main is public, should be declared in Main.java",
+            "fix": "Class name must match file name exactly."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What tool compiles Java code into bytecode?",
+            "options": [
+              "java",
+              "javac",
+              "javap",
+              "jvm"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Print `Hello, Overworld!` followed by a newline.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print message\n    }\n}",
+          "hints": [
+            "Use System.out.println()",
+            "Wrap text in double quotes",
+            "End statement with a semicolon ;"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, Overworld!\");\n    }\n}",
+          "tests": [
+            {
+              "name": "Print Hello Overworld",
+              "stdin": "",
+              "expected": "Hello, Overworld!"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Head First Java, 3rd ed.",
+            "location": "Chapter 1",
+            "verify": false
           },
           {
-            "type": "tip",
-            "title": "JDK vs JRE vs JVM",
-            "content": "**JDK** (Java Development Kit) includes tools like `javac` compiler and debugger.\n**JRE** (Java Runtime Environment) provides libraries to run code.\n**JVM** (Virtual Machine) executes bytecode into machine code."
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Chapter 2",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-b1-2",
-        "title": "Class Structure & Comments",
-        "xp": 30,
+        "id": "b1_l2",
+        "title": "Printing & Output Formatting",
+        "xp": 25,
+        "estimatedMinutes": 15,
+        "story": "Signs and chat messages share discoveries in the Overworld. Use print and println to communicate output cleanly.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Classes as Containers",
-            "content": "In Java, everything lives inside a `class`. The file name must match the public class name (e.g. `Main.java` contains `public class Main`)."
-          },
-          {
+            "title": "print vs println",
             "type": "code",
-            "title": "Comments in Java",
-            "content": "Use `//` for single-line comments and `/* ... */` for multi-line comments. Java ignores them during compilation.",
-            "code": "// Single-line note\n/* Multi-line\n   documentation */\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Clean code has comments!\");\n    }\n}"
-          },
+            "content": "`System.out.print` stays on the same line, while `System.out.println` advances to the next line.",
+            "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.print(\"Level \");\n        System.out.println(1);\n    }\n}"
+          }
+        ],
+        "underTheHood": "System.out is a static PrintStream. In production environments, standard output is buffered for throughput.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Checkpoint: Run Hello World",
-            "content": "Test compiling via terminal: `javac Main.java` followed by `java Main`."
+            "mistake": "Single quotes around multi-character text",
+            "error": "unclosed character literal",
+            "fix": "Use double quotes for Strings."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which method starts a new line after printing?",
+            "options": [
+              "System.out.print()",
+              "System.out.println()",
+              "System.out.write()"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Output `Quest: Active` on the first line, and `Player: Steve` on the second line.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print two lines\n    }\n}",
+          "hints": [
+            "Call System.out.println twice",
+            "First line: Quest: Active",
+            "Second line: Player: Steve"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Quest: Active\");\n        System.out.println(\"Player: Steve\");\n    }\n}",
+          "tests": [
+            {
+              "name": "Prints two lines",
+              "stdin": "",
+              "expected": "Quest: Active\nPlayer: Steve"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Chapter 3",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b1",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "Which component executes Java bytecode at runtime?",
-          "options": [
-            "JVM",
-            "javac compiler",
-            "Javadoc",
-            "JShell"
-          ],
-          "answer": 0,
-          "explanation": "The JVM (Java Virtual Machine) loads and executes compiled bytecode."
-        },
-        {
-          "type": "true-false",
-          "question": "The javac compiler converts Java source code directly into machine machine code.",
-          "answer": false,
-          "explanation": "javac compiles source code into intermediate bytecode (.class), which the JVM runs."
-        },
-        {
-          "type": "output",
-          "question": "What does this code output?",
-          "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.print(\"A\");\n        System.out.println(\"B\");\n    }\n}",
-          "options": [
-            "AB on one line",
-            "A and B on separate lines",
-            "Compile error",
-            "BA"
-          ],
-          "answer": 0,
-          "explanation": "print(\"A\") does not emit a newline, so \"B\" prints right after it on the same line."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Java Orientation & Setup?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b1",
-      "title": "B1: Hello JavaQuest Console",
-      "prompt": "Write a Java program in the `Main` class that prints:\nLine 1: `Hello, JavaQuest!`\nLine 2: `Java 21 Ready`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print \"Hello, JavaQuest!\" on line 1\n        // TODO: Print \"Java 21 Ready\" on line 2\n    }\n}",
-      "expectedOutput": "Hello, JavaQuest!\nJava 21 Ready",
-      "testCases": [
-        {
-          "name": "Contains Hello, JavaQuest!",
-          "expected": "Hello, JavaQuest!"
-        },
-        {
-          "name": "Contains Java 21 Ready",
-          "expected": "Java 21 Ready"
-        }
-      ],
-      "hints": [
-        "Use System.out.println() twice.",
-        "Make sure spelling, comma, and exclamation mark match exactly."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "mcq",
+        "question": "What file contains Java bytecode?",
+        "options": [
+          ".java",
+          ".class",
+          ".jar",
+          ".jvm"
+        ],
+        "answer": 1,
+        "explanation": ".class files contain compiled bytecode."
+      },
+      {
+        "type": "output",
+        "question": "What is output by System.out.print(\"X\"); System.out.println(\"Y\");?",
+        "options": [
+          "X\\nY",
+          "XY",
+          "Y\\nX",
+          "X Y"
+        ],
+        "answer": 1,
+        "explanation": "print does not add a newline."
+      }
+    ]
+  },
   {
     "id": "b2",
     "code": "B2",
     "level": "beginner",
     "title": "Variables, Data Types & Input",
-    "subtitle": "Primitives, reference types, casting and Scanner input",
-    "icon": "",
-    "color": "#43D8C9",
+    "subtitle": "Primitives, reference types, Scanner, and type casting",
+    "biome": "Village Market",
+    "estimatedMinutes": 100,
+    "learningObjectives": [
+      "Choose and use all 8 primitive types properly",
+      "Declare and initialize variables with static typing",
+      "Read terminal inputs using java.util.Scanner",
+      "Perform safe numeric conversions and type casting"
+    ],
+    "prerequisites": [
+      "b1"
+    ],
     "lessons": [
       {
-        "id": "lesson-b2-1",
-        "title": "Primitive Types & Memory",
-        "xp": 30,
+        "id": "b2_l1",
+        "title": "Primitive Types & Memory Sizes",
+        "xp": 25,
+        "estimatedMinutes": 14,
+        "story": "At the Village Market, commodities are sorted by size. Java provides 8 fixed primitive types so memory layout is always predictable.",
         "slides": [
           {
+            "title": "The 8 Primitives",
             "type": "intro",
-            "title": "Strongly Typed Language",
-            "content": "Java requires every variable to declare its type. Java has 8 **primitive types**: `byte`, `short`, `int`, `long` (integers), `float`, `double` (decimals), `char` (character), and `boolean` (true/false)."
-          },
+            "content": "`byte` (8b), `short` (16b), `int` (32b), `long` (64b), `float` (32b), `double` (64b), `char` (16b), `boolean` (1b).",
+            "code": "int emeralds = 16;\ndouble balance = 99.50;\nboolean isOpen = true;\nchar grade = 'A';"
+          }
+        ],
+        "underTheHood": "Primitive sizes in Java are defined identically across every OS by the JLS §4.2, guaranteeing portability.",
+        "commonMistakes": [
           {
-            "type": "visual",
-            "visual": "memory",
-            "visualData": null,
-            "title": "Stack Memory",
-            "content": "Primitives live directly on the stack with their actual value."
-          },
+            "mistake": "Missing L on long literal",
+            "error": "integer number too large",
+            "fix": "Add L to literals over 2.14B: long x = 3000000000L;"
+          }
+        ],
+        "checkpoint": [
           {
-            "type": "code",
-            "title": "Declaring Variables",
-            "content": "Syntax: `type variableName = value;`",
-            "code": "public class Main {\n    public static void main(String[] args) {\n        int heroLevel = 5;\n        double health = 98.5;\n        boolean hasPotion = true;\n        char rank = 'A';\n        System.out.println(\"Hero Level: \" + heroLevel);\n    }\n}"
-          },
+            "question": "What is the default integer type in Java?",
+            "options": [
+              "byte",
+              "short",
+              "int",
+              "long"
+            ],
+            "answer": 2
+          }
+        ],
+        "exercise": {
+          "instructions": "Declare an `int` named `gold` with value `50`, and print: `Gold: 50`",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Declare gold and print\n    }\n}",
+          "hints": [
+            "int gold = 50;",
+            "System.out.println(\"Gold: \" + gold);"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        int gold = 50;\n        System.out.println(\"Gold: \" + gold);\n    }\n}",
+          "tests": [
+            {
+              "name": "Prints gold",
+              "stdin": "",
+              "expected": "Gold: 50"
+            }
+          ]
+        },
+        "references": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "source": "The Java Language Specification (Java SE 21)",
+            "location": "Section 4.2",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-b2-2",
-        "title": "Type Casting & User Input",
+        "id": "b2_l2",
+        "title": "Reading Input with Scanner",
         "xp": 30,
+        "estimatedMinutes": 16,
+        "story": "Villagers listen and respond! Connect to standard input via java.util.Scanner to make your code interactive.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Widening vs Narrowing Casting",
-            "content": "**Widening** (automatic): smaller to larger type (e.g. `int` to `double`).\n**Narrowing** (manual): larger to smaller type, requiring cast syntax: `(int) 3.99`."
-          },
-          {
+            "title": "Reading Standard Input",
             "type": "code",
-            "title": "Scanner for Input",
-            "content": "Use `java.util.Scanner` to read keyboard input.",
-            "code": "import java.util.Scanner;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.out.nextLine());\n        // sc.nextInt(), sc.nextDouble(), sc.nextLine()\n    }\n}"
-          },
+            "content": "Use `Scanner sc = new Scanner(System.in);` and `sc.nextLine()` to read user input.",
+            "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String item = sc.nextLine();\n        System.out.println(\"Item: \" + item);\n        sc.close();\n    }\n}"
+          }
+        ],
+        "underTheHood": "Scanner parses tokens using regular expressions over the underlying System.in stream.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Missing import java.util.Scanner",
+            "error": "cannot find symbol: class Scanner",
+            "fix": "Add import java.util.Scanner; at line 1."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which method reads an entire text line?",
+            "options": [
+              "next()",
+              "nextLine()",
+              "read()",
+              "nextString()"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Read an integer from input and print `Double: ` followed by double its value.",
+          "starterCode": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO: Read int and print double\n    }\n}",
+          "hints": [
+            "int n = sc.nextInt();",
+            "System.out.println(\"Double: \" + (n * 2));"
+          ],
+          "solution": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        System.out.println(\"Double: \" + (n * 2));\n        sc.close();\n    }\n}",
+          "tests": [
+            {
+              "name": "Double 10",
+              "stdin": "10\n",
+              "expected": "Double: 20"
+            },
+            {
+              "name": "Double 7",
+              "stdin": "7\n",
+              "expected": "Double: 14"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Chapter 3.7",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b2",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "Which is a primitive Java type?",
-          "options": [
-            "String",
-            "Integer",
-            "boolean",
-            "ArrayList"
-          ],
-          "answer": 2,
-          "explanation": "boolean is primitive; String, Integer, and ArrayList are reference objects."
-        },
-        {
-          "type": "output",
-          "question": "What is the output of this casting operation?",
-          "code": "double d = 9.85;\nint x = (int) d;\nSystem.out.println(x);",
-          "options": [
-            "9",
-            "10",
-            "9.85",
-            "Compile error"
-          ],
-          "answer": 0,
-          "explanation": "Narrowing cast (int) truncates the decimal portion, yielding 9 without rounding."
-        },
-        {
-          "type": "true-false",
-          "question": "In Java, a variable can change its declared type at runtime.",
-          "answer": false,
-          "explanation": "Java is statically typed: a variable type cannot change once declared."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Variables, Data Types & Input?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b2",
-      "title": "B2: User Profile Formatter",
-      "prompt": "Declare variables:\n- `String name = \"Alex\";`\n- `int age = 20;`\n- `double gpa = 3.75;`\nPrint the profile in this exact format:\n`Name: Alex | Age: 21 next year | GPA: 3.75`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO 1: Declare String name = \"Alex\";\n        // TODO 2: Declare int age = 20;\n        // TODO 3: Declare double gpa = 3.75;\n        \n        // TODO 4: Print: Name: Alex | Age: 21 next year | GPA: 3.75\n    }\n}",
-      "expectedOutput": "Name: Alex | Age: 21 next year | GPA: 3.75",
-      "testCases": [
-        {
-          "name": "Profile Format Match",
-          "expected": "Name: Alex | Age: 21 next year | GPA: 3.75"
-        }
-      ],
-      "hints": [
-        "Calculate age + 1 for next year.",
-        "Use string concatenation with +."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "mcq",
+        "question": "Which type represents a single Unicode character?",
+        "options": [
+          "String",
+          "char",
+          "byte",
+          "Character"
+        ],
+        "answer": 1,
+        "explanation": "char is the 16-bit Unicode primitive."
+      }
+    ]
+  },
   {
     "id": "b3",
     "code": "B3",
     "level": "beginner",
     "title": "Operators & Expressions",
-    "subtitle": "Arithmetic, relational, logical operators and precedence",
-    "icon": "",
-    "color": "#FFD166",
+    "subtitle": "Arithmetic, modulo, compound assignments, comparisons, and boolean logic",
+    "biome": "Farmland",
+    "estimatedMinutes": 90,
+    "learningObjectives": [
+      "Apply arithmetic operators (+, -, *, /, %) with integer truncation rules",
+      "Use relational operators and boolean logical operators (&&, ||, !)",
+      "Explain short-circuit evaluation in boolean expressions",
+      "Evaluate operator precedence and write unambiguous expressions"
+    ],
+    "prerequisites": [
+      "b2"
+    ],
     "lessons": [
       {
-        "id": "lesson-b3-1",
-        "title": "Arithmetic & Modulus",
-        "xp": 30,
+        "id": "b3_l1",
+        "title": "Arithmetic & Modulo Operations",
+        "xp": 25,
+        "estimatedMinutes": 14,
+        "story": "Crops grow in rows. Divide seeds and harvest yields using arithmetic and modulo remainder operations.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Math in Java",
-            "content": "Java provides `+`, `-`, `*`, `/`, and `%` (modulus / remainder). Beware of **integer division**: dividing two ints truncates decimals!"
-          },
-          {
-            "type": "visual",
-            "visual": "flowchart",
-            "visualData": {
-              "condition": "x != null && x > 0",
-              "trueBranch": "Valid Data",
-              "falseBranch": "Reject / Fallback"
-            },
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
-          },
-          {
+            "title": "Arithmetic & Integer Division",
             "type": "code",
-            "title": "Integer Division Traps",
-            "content": "`7 / 2` is `3`, not `3.5`. To get a double result, at least one operand must be a double: `7.0 / 2` is `3.5`.",
-            "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(7 / 2);      // prints 3\n        System.out.println(7.0 / 2);    // prints 3.5\n        System.out.println(7 % 2);      // remainder: 1\n    }\n}"
-          },
+            "content": "Integer division `/` truncates decimals. Modulo `%` returns the remainder.",
+            "code": "int total = 17;\nint perChest = 5;\nint chests = total / perChest; // 3\nint leftover = total % perChest; // 2"
+          }
+        ],
+        "underTheHood": "Integer division in Java rounds toward zero. For floating point, division by zero produces Infinity rather than throwing ArithmeticException.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Expecting decimal result from integer division",
+            "error": "e.g. 5 / 2 yields 2, not 2.5",
+            "fix": "Cast one operand to double: (double) 5 / 2"
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What is 14 % 4 in Java?",
+            "options": [
+              "3",
+              "2",
+              "3.5",
+              "0"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Given `int total = 29;` and `int group = 6;`, print `Quotient: X, Remainder: Y`",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int total = 29, group = 6;\n        // TODO: Print quotient and remainder\n    }\n}",
+          "hints": [
+            "int q = total / group;",
+            "int r = total % group;",
+            "System.out.println(\"Quotient: \" + q + \", Remainder: \" + r);"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        int total = 29, group = 6;\n        System.out.println(\"Quotient: \" + (total / group) + \", Remainder: \" + (total % group));\n    }\n}",
+          "tests": [
+            {
+              "name": "Computes div and mod",
+              "stdin": "",
+              "expected": "Quotient: 4, Remainder: 5"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Section 3.5: Operators",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-b3-2",
-        "title": "Logical & Ternary Operators",
-        "xp": 30,
+        "id": "b3_l2",
+        "title": "Boolean Logic & Short-Circuiting",
+        "xp": 25,
+        "estimatedMinutes": 14,
+        "story": "Redstone logic gates require precise signals. Combine conditions with AND (&&), OR (||), and NOT (!).",
         "slides": [
           {
-            "type": "intro",
-            "title": "Making Logical Decisions",
-            "content": "Use `&&` (AND), `||` (OR), and `!` (NOT). Java uses **short-circuit evaluation**: if the first operand of `&&` is false, it skips evaluating the second."
-          },
-          {
+            "title": "Short-Circuit Evaluation",
             "type": "code",
-            "title": "Ternary Operator",
-            "content": "`condition ? valueIfTrue : valueIfFalse`",
-            "code": "public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        String result = (score >= 60) ? \"PASS\" : \"FAIL\";\n        System.out.println(result);\n    }\n}"
-          },
+            "content": "In `A && B`, if A is false, B is never evaluated. In `A || B`, if A is true, B is skipped.",
+            "code": "boolean hasPickaxe = true;\nboolean hasTorch = false;\nboolean canMine = hasPickaxe && (hasTorch || true);"
+          }
+        ],
+        "underTheHood": "Short-circuiting prevents NullPointerException: `str != null && str.length() > 0` safely guards against null access.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Using single & instead of &&",
+            "error": "Bitwise evaluation instead of short-circuit",
+            "fix": "Always use && and || for boolean logic."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "If x = false, does (x && doSomething()) execute doSomething()?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Given `int health = 80;` and `boolean hasPotion = true;`, print `Safe: true` if health > 50 and hasPotion is true.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int health = 80;\n        boolean hasPotion = true;\n        // TODO: Evaluate and print\n    }\n}",
+          "hints": [
+            "boolean isSafe = health > 50 && hasPotion;",
+            "System.out.println(\"Safe: \" + isSafe);"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        int health = 80;\n        boolean hasPotion = true;\n        System.out.println(\"Safe: \" + (health > 50 && hasPotion));\n    }\n}",
+          "tests": [
+            {
+              "name": "Evaluates logic",
+              "stdin": "",
+              "expected": "Safe: true"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Introduction to Java Programming, 12th ed.",
+            "location": "Chapter 3",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b3",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "What is the result of 7 / 2 when both operands are int?",
-          "options": [
-            "3",
-            "3.5",
-            "4",
-            "Compile-time error"
-          ],
-          "answer": 0,
-          "explanation": "Integer division in Java truncates the fractional part, yielding 3."
-        },
-        {
-          "type": "output",
-          "question": "What does this code output?",
-          "code": "int x = 5;\nx *= 3;\nx -= 4;\nSystem.out.println(x);",
-          "options": [
-            "11",
-            "15",
-            "19",
-            "10"
-          ],
-          "answer": 0,
-          "explanation": "5 * 3 = 15; 15 - 4 = 11."
-        },
-        {
-          "type": "true-false",
-          "question": "The expression (5 > 3 || 10 / 0 == 0) throws an ArithmeticException at runtime.",
-          "answer": false,
-          "explanation": "Because 5 > 3 is true, short-circuit OR (||) does not evaluate the second operand."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Operators & Expressions?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b3",
-      "title": "B3: Discount Calculator",
-      "prompt": "Write a program with `double originalPrice = 120.0;` and `double discountPercent = 15.0;`\n1. Calculate discounted price: `originalPrice * (1 - discountPercent / 100)`\n2. If discounted price is over 100, apply an extra $5 coupon: `price - 5.0`\n3. Print: `Final Price: $97.0` (format with 1 decimal).",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        double originalPrice = 120.0;\n        double discountPercent = 15.0;\n        \n        // TODO 1: Calculate discounted price: originalPrice * (1 - discountPercent / 100.0)\n        // TODO 2: If discounted price > 100.0, subtract $5 coupon\n        // TODO 3: Print: Final Price: $ + discounted (e.g. Final Price: $97.0)\n    }\n}",
-      "expectedOutput": "Final Price: $97.0",
-      "testCases": [
-        {
-          "name": "Calculates Final Price with Coupon",
-          "expected": "Final Price: $97.0"
-        }
-      ],
-      "hints": [
-        "Multiply originalPrice by (1 - discountPercent / 100.0).",
-        "Check if discounted > 100.0 and subtract 5.0."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "output",
+        "question": "What is printed by: int a = 5; System.out.println(++a * 2);?",
+        "options": [
+          "10",
+          "12",
+          "11",
+          "Compilation error"
+        ],
+        "answer": 1,
+        "explanation": "++a increments to 6 before multiplication, so 6 * 2 = 12."
+      }
+    ]
+  },
   {
     "id": "b4",
     "code": "B4",
     "level": "beginner",
-    "title": "Decision Making & Loops",
-    "subtitle": "if/else, switch expressions, while, for and do-while loops",
-    "icon": "",
-    "color": "#06D6A0",
+    "title": "Decisions & Loops",
+    "subtitle": "if/else branching, switch expressions, while, for, and loop control",
+    "biome": "Redstone Lab",
+    "estimatedMinutes": 110,
+    "learningObjectives": [
+      "Write multi-branch decisions using if, else if, else and switch expressions",
+      "Execute repetitive tasks using while, do-while, and for loops",
+      "Control loop flow using break and continue",
+      "Avoid off-by-one errors and infinite loop conditions"
+    ],
+    "prerequisites": [
+      "b3"
+    ],
     "lessons": [
       {
-        "id": "lesson-b4-1",
-        "title": "If, Else & Modern Switch",
-        "xp": 30,
+        "id": "b4_l1",
+        "title": "Branching with if/else & Switch",
+        "xp": 25,
+        "estimatedMinutes": 15,
+        "story": "In the Redstone Lab, pressure plates direct minecarts along different tracks. Use if/else and modern switch expressions to steer execution.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Branching Logic",
-            "content": "Branching lets programs choose execution paths using `if`, `else if`, and `else`."
-          },
-          {
-            "type": "visual",
-            "visual": "loop",
-            "visualData": {
-              "start": 0,
-              "end": 5,
-              "varName": "i"
-            },
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
-          },
-          {
-            "type": "code",
             "title": "Modern Switch Expressions (Java 14+)",
-            "content": "Modern Java supports arrow syntax `->` in switch expressions without break statements!",
-            "code": "int day = 3;\nString name = switch (day) {\n    case 1 -> \"Monday\";\n    case 2 -> \"Tuesday\";\n    case 3 -> \"Wednesday\";\n    default -> \"Other\";\n};\nSystem.out.println(name);"
-          },
+            "type": "code",
+            "content": "Modern switch uses the arrow `->` syntax and does not suffer from accidental fallthrough.",
+            "code": "int day = 2;\nString name = switch (day) {\n    case 1 -> \"Monday\";\n    case 2 -> \"Tuesday\";\n    default -> \"Weekend\";\n};\nSystem.out.println(name);"
+          }
+        ],
+        "underTheHood": "Modern switch expressions are translated by javac into tableswitch or lookupswitch bytecode instructions with exhaustiveness checking.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Missing break in traditional switch",
+            "error": "Fallthrough to subsequent cases",
+            "fix": "Use modern switch -> syntax or include break;"
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What keyword provides the fallback case in a switch statement?",
+            "options": [
+              "else",
+              "default",
+              "finally",
+              "catch"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Given `int score = 85;`, print `Pass` if score >= 60, otherwise print `Fail`.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        // TODO: Check score\n    }\n}",
+          "hints": [
+            "if (score >= 60) { System.out.println(\"Pass\"); } else { System.out.println(\"Fail\"); }"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        if (score >= 60) {\n            System.out.println(\"Pass\");\n        } else {\n            System.out.println(\"Fail\");\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Prints Pass",
+              "stdin": "",
+              "expected": "Pass"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Section 3.8: Control Flow",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-b4-2",
-        "title": "Loops: for, while & do-while",
+        "id": "b4_l2",
+        "title": "Repetition with for & while Loops",
         "xp": 30,
+        "estimatedMinutes": 16,
+        "story": "Redstone repeater clocks tick continuously. Automate repetitive tasks using while and for loops.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Repetition in Code",
-            "content": "Loops repeat code. `for` when count is known, `while` when condition-driven, and `do-while` when body must run at least once."
-          },
-          {
-            "type": "visual",
-            "visual": "loop",
-            "visualData": {
-              "start": 1,
-              "end": 5,
-              "varName": "i"
-            },
-            "title": "Loop Tracer",
-            "content": "Step-by-step tracing of loop variable i."
-          },
-          {
+            "title": "The for Loop",
             "type": "code",
-            "title": "Break and Continue",
-            "content": "`break` exits loop immediately; `continue` skips to the next iteration.",
-            "code": "for (int i = 1; i <= 5; i++) {\n    if (i == 3) continue; // skip 3\n    System.out.print(i + \" \");\n}"
-          },
+            "content": "A for loop bundles initialization, condition check, and increment into one header line.",
+            "code": "for (int i = 1; i <= 5; i++) {\n    System.out.print(i + \" \");\n}"
+          }
+        ],
+        "underTheHood": "A for loop compiles into an initialization, conditional branch (if_icmpge), loop body bytecode, increment (iinc), and unconditional jump (goto).",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Off-by-one loop boundary (<= vs <)",
+            "error": "Executes one time too many or few",
+            "fix": "Check boundary conditions carefully."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "How many times does for (int i = 0; i < 3; i++) run?",
+            "options": [
+              "2",
+              "3",
+              "4",
+              "Infinite"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Use a loop to print numbers from 1 to 4 on separate lines.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print 1 to 4\n    }\n}",
+          "hints": [
+            "for (int i = 1; i <= 4; i++)",
+            "System.out.println(i);"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 4; i++) {\n            System.out.println(i);\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Prints 1 to 4",
+              "stdin": "",
+              "expected": "1\n2\n3\n4"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Head First Java, 3rd ed.",
+            "location": "Chapter 2",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b4",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "Which loop checks its condition after executing the body?",
-          "options": [
-            "for",
-            "while",
-            "do-while",
-            "enhanced for"
-          ],
-          "answer": 2,
-          "explanation": "A do-while loop always executes the body once before evaluating its condition."
-        },
-        {
-          "type": "output",
-          "question": "What does this loop print?",
-          "code": "int count = 0;\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 2; j++) count++;\n}\nSystem.out.println(count);",
-          "options": [
-            "5",
-            "6",
-            "3",
-            "9"
-          ],
-          "answer": 1,
-          "explanation": "The outer loop runs 3 times; the inner loop runs 2 times per outer loop: 3 * 2 = 6."
-        },
-        {
-          "type": "true-false",
-          "question": "The continue statement terminates the entire loop and jumps out of it.",
-          "answer": false,
-          "explanation": "continue skips only the current iteration; break terminates the entire loop."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Decision Making & Loops?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b4",
-      "title": "B4: FizzBuzz Counter",
-      "prompt": "Write a loop from 1 to 15. For each number:\n- If divisible by both 3 and 5, print `FizzBuzz`\n- Else if divisible by 3, print `Fizz`\n- Else if divisible by 5, print `Buzz`\n- Otherwise, print the number\n(Each on a new line)",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Write a loop from 1 to 15.\n        // - If divisible by both 3 and 5, print \"FizzBuzz\"\n        // - Else if divisible by 3, print \"Fizz\"\n        // - Else if divisible by 5, print \"Buzz\"\n        // - Otherwise, print the number\n    }\n}",
-      "expectedOutput": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz",
-      "testCases": [
-        {
-          "name": "FizzBuzz 1 to 15 Sequence",
-          "expected": "FizzBuzz"
-        }
-      ],
-      "hints": [
-        "Check for % 15 == 0 first before % 3 or % 5.",
-        "Use if-else ladder."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "output",
+        "question": "What is printed by: int count = 0; while (count < 3) count++; System.out.println(count);?",
+        "options": [
+          "2",
+          "3",
+          "4",
+          "0"
+        ],
+        "answer": 1,
+        "explanation": "Loop runs for count = 0, 1, 2, exits when count becomes 3."
+      }
+    ]
+  },
   {
     "id": "b5",
     "code": "B5",
     "level": "beginner",
     "title": "Methods & Scope",
-    "subtitle": "Parameters, return values, overloading and call stack",
-    "icon": "️",
-    "color": "#F72585",
+    "subtitle": "Parameters, return values, pass-by-value, method overloading, and call stack",
+    "biome": "Crafting Workshop",
+    "estimatedMinutes": 100,
+    "learningObjectives": [
+      "Deconstruct methods into return type, name, and parameter list",
+      "Explain pass-by-value semantics for primitives and object references",
+      "Implement method overloading based on distinct parameter signatures",
+      "Trace call stack execution and understand local variable scope"
+    ],
+    "prerequisites": [
+      "b4"
+    ],
     "lessons": [
       {
-        "id": "lesson-b5-1",
-        "title": "Declaring & Calling Methods",
-        "xp": 30,
+        "id": "b5_l1",
+        "title": "Defining & Calling Methods",
+        "xp": 25,
+        "estimatedMinutes": 15,
+        "story": "In the Crafting Workshop, recipes transform inputs into tools. Methods encapsulate algorithms so you can reuse them anywhere.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Reusable Building Blocks",
-            "content": "A method is a block of code designed to perform a specific task. Methods improve reusability and maintainability."
-          },
-          {
-            "type": "visual",
-            "visual": "memory",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
-          },
-          {
-            "type": "code",
             "title": "Method Anatomy",
-            "content": "`returnType methodName(parameters) { ... }`",
-            "code": "public class Main {\n    static int add(int a, int b) {\n        return a + b;\n    }\n    public static void main(String[] args) {\n        int sum = add(10, 20);\n        System.out.println(\"Sum: \" + sum);\n    }\n}"
-          },
-          {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
-          }
-        ]
-      },
-      {
-        "id": "lesson-b5-2",
-        "title": "Method Overloading & Scope",
-        "xp": 30,
-        "slides": [
-          {
-            "type": "intro",
-            "title": "Method Overloading",
-            "content": "Multiple methods can have the same name if they have different parameter lists (different types, counts, or order)."
-          },
-          {
             "type": "code",
-            "title": "Overloading Example",
-            "content": "Notice `multiply(int, int)` vs `multiply(double, double)`.",
-            "code": "static int multiply(int a, int b) { return a * b; }\nstatic double multiply(double a, double b) { return a * b; }"
-          },
+            "content": "A method specifies its return type, name, and typed parameters.",
+            "code": "public static int add(int a, int b) {\n    return a + b;\n}\n\npublic static void main(String[] args) {\n    int sum = add(10, 25);\n    System.out.println(\"Sum: \" + sum);\n}"
+          }
+        ],
+        "underTheHood": "Calling a method pushes a new Stack Frame containing local variables and operand stack onto the Java Thread Stack.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Missing return statement in non-void method",
+            "error": "missing return statement",
+            "fix": "Every code path in a non-void method must return a value."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What return type indicates a method does not return any value?",
+            "options": [
+              "null",
+              "void",
+              "empty",
+              "none"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Implement a static method `square(int x)` that returns `x * x`. In `main`, print `square(7)`.",
+          "starterCode": "public class Main {\n    // TODO: Define square method\n    public static void main(String[] args) {\n        // TODO: Call and print square(7)\n    }\n}",
+          "hints": [
+            "public static int square(int x) { return x * x; }",
+            "System.out.println(square(7));"
+          ],
+          "solution": "public class Main {\n    public static int square(int x) {\n        return x * x;\n    }\n    public static void main(String[] args) {\n        System.out.println(square(7));\n    }\n}",
+          "tests": [
+            {
+              "name": "Squares 7",
+              "stdin": "",
+              "expected": "49"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Chapter 4",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b5",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "What does a method's return type describe?",
-          "options": [
-            "Its access level",
-            "The kind of value it returns",
-            "Its parameter count",
-            "Its class name"
-          ],
-          "answer": 1,
-          "explanation": "The return type specifies the data type of the value returned, or void if none."
-        },
-        {
-          "type": "output",
-          "question": "What is the output?",
-          "code": "public class Main {\n    static int f(int x) { return x * 2; }\n    public static void main(String[] args) {\n        System.out.println(f(f(3)));\n    }\n}",
-          "options": [
-            "6",
-            "12",
-            "9",
-            "Compile error"
-          ],
-          "answer": 1,
-          "explanation": "f(3) is 6; then f(6) is 12."
-        },
-        {
-          "type": "true-false",
-          "question": "Two methods in the same class can have the same name and identical parameter lists if their return types differ.",
-          "answer": false,
-          "explanation": "In Java, return type alone cannot be used to overload a method."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Methods & Scope?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b5",
-      "title": "B5: Temperature Converter Method",
-      "prompt": "Implement a static method `celsiusToFahrenheit(double c)` that computes:\n`F = (c * 9.0 / 5.0) + 32.0`\nIn main, call it with 25.0 and print: `25.0 C = 77.0 F`",
-      "starterCode": "public class Main {\n    // TODO 1: Implement static method celsiusToFahrenheit(double c)\n    // Formula: (c * 9.0 / 5.0) + 32.0\n    public static double celsiusToFahrenheit(double c) {\n        // Your code here\n        return 0.0;\n    }\n\n    public static void main(String[] args) {\n        double c = 25.0;\n        // TODO 2: Call celsiusToFahrenheit and print: 25.0 C = 77.0 F\n    }\n}",
-      "expectedOutput": "25.0 C = 77.0 F",
-      "testCases": [
-        {
-          "name": "Convert 25C to 77F",
-          "expected": "25.0 C = 77.0 F"
-        }
-      ],
-      "hints": [
-        "Use floating-point division 9.0 / 5.0, not 9 / 5."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "mcq",
+        "question": "Is Java pass-by-value or pass-by-reference?",
+        "options": [
+          "Pass-by-value exclusively",
+          "Pass-by-reference exclusively",
+          "Pass-by-value for primitives, pass-by-reference for objects",
+          "Depends on JVM flags"
+        ],
+        "answer": 0,
+        "explanation": "Java is strictly pass-by-value. For objects, the value of the reference (pointer) is copied."
+      }
+    ]
+  },
   {
     "id": "b6",
     "code": "B6",
     "level": "beginner",
     "title": "Arrays & Strings",
-    "subtitle": "1D/2D arrays, String immutability, StringBuilder",
-    "icon": "",
-    "color": "#4CC9F0",
+    "subtitle": "1D/2D arrays, enhanced for-each, String immutability, and StringBuilder",
+    "biome": "Chest Vault",
+    "estimatedMinutes": 105,
+    "learningObjectives": [
+      "Allocate and manipulate fixed-size arrays with 0-based indexing",
+      "Iterate over sequences cleanly using the enhanced for-each loop",
+      "Explain String immutability and the String Constant Pool",
+      "Use StringBuilder for efficient multi-step string assembly"
+    ],
+    "prerequisites": [
+      "b5"
+    ],
     "lessons": [
       {
-        "id": "lesson-b6-1",
-        "title": "Arrays in Java",
-        "xp": 30,
+        "id": "b6_l1",
+        "title": "1D Arrays & The for-each Loop",
+        "xp": 25,
+        "estimatedMinutes": 15,
+        "story": "The Chest Vault organizes items in rows of fixed inventory slots. Arrays store ordered elements of the same type.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Fixed-Size Sequences",
-            "content": "An array holds elements of the same type in contiguous memory. Indexing starts at `0` and length is fixed at creation."
-          },
-          {
-            "type": "visual",
-            "visual": "memory",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
-          },
-          {
+            "title": "Declaring and Accessing Arrays",
             "type": "code",
-            "title": "Creating & Iterating Arrays",
-            "content": "Use enhanced for-each loop to traverse.",
-            "code": "int[] numbers = {10, 20, 30, 40};\nfor (int n : numbers) {\n    System.out.println(n);\n}"
-          },
-          {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "content": "Arrays have a fixed `.length` property and are 0-indexed.",
+            "code": "int[] gems = {10, 25, 40};\nfor (int g : gems) {\n    System.out.println(g);\n}"
           }
-        ]
-      },
-      {
-        "id": "lesson-b6-2",
-        "title": "String Immutability & StringBuilder",
-        "xp": 30,
-        "slides": [
+        ],
+        "underTheHood": "Arrays are objects stored on the Heap. The JVM performs bounds checking (aaload/aastore) and throws ArrayIndexOutOfBoundsException on violation.",
+        "commonMistakes": [
           {
-            "type": "intro",
-            "title": "Strings Are Immutable",
-            "content": "In Java, String objects cannot be modified after creation. Operations like `.toUpperCase()` return a brand new String!"
-          },
+            "mistake": "Accessing array[length] instead of array[length - 1]",
+            "error": "ArrayIndexOutOfBoundsException",
+            "fix": "Array indexes range from 0 to length - 1."
+          }
+        ],
+        "checkpoint": [
           {
-            "type": "code",
-            "title": "Using StringBuilder",
-            "content": "For heavy string concatenation inside loops, use `StringBuilder` for high performance.",
-            "code": "StringBuilder sb = new StringBuilder();\nsb.append(\"Hello\").append(\" \").append(\"World\");\nSystem.out.println(sb.toString());"
-          },
+            "question": "What property returns the number of elements in an array?",
+            "options": [
+              "length()",
+              "size()",
+              "length",
+              "count"
+            ],
+            "answer": 2
+          }
+        ],
+        "exercise": {
+          "instructions": "Given `int[] nums = {4, 8, 12};`, calculate and print the sum of its elements.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int[] nums = {4, 8, 12};\n        // TODO: Compute and print sum\n    }\n}",
+          "hints": [
+            "int sum = 0;",
+            "for (int n : nums) sum += n;",
+            "System.out.println(sum);"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        int[] nums = {4, 8, 12};\n        int sum = 0;\n        for (int n : nums) sum += n;\n        System.out.println(sum);\n    }\n}",
+          "tests": [
+            {
+              "name": "Calculates sum",
+              "stdin": "",
+              "expected": "24"
+            }
+          ]
+        },
+        "references": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Section 3.10: Arrays",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b6",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "Which statement about String is true in Java?",
-          "options": [
-            "String objects are mutable",
-            "String is a primitive",
-            "String is immutable",
-            "String cannot be compared"
-          ],
-          "answer": 2,
-          "explanation": "String objects in Java are immutable; any operation returns a new String."
-        },
-        {
-          "type": "output",
-          "question": "What does this code output?",
-          "code": "String s = \"java\";\ns.toUpperCase();\nSystem.out.println(s);",
-          "options": [
-            "JAVA",
-            "java",
-            "null",
-            "Compile error"
-          ],
-          "answer": 1,
-          "explanation": "Because strings are immutable and the return value was not reassigned, s remains \"java\"."
-        },
-        {
-          "type": "true-false",
-          "question": "In Java, array indices are 0-based and array.length is a method call length().",
-          "answer": false,
-          "explanation": "Arrays have a public final field .length, not a method length()."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Arrays & Strings?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b6",
-      "title": "B6: Marks Analyser",
-      "prompt": "Given an array `int[] marks = {85, 92, 78, 90, 65};`\nWrite a program to compute:\n- Highest mark\n- Lowest mark\n- Average mark (as double)\nPrint:\n`Highest: 92\nLowest: 65\nAverage: 82.0`",
-      "starterCode": "public class Main {\n    public static void main(String[] args) {\n        int[] marks = {85, 92, 78, 90, 65};\n        \n        // TODO 1: Find the highest mark\n        // TODO 2: Find the lowest mark\n        // TODO 3: Calculate the average mark (as double)\n        \n        // TODO 4: Print:\n        // Highest: 92\n        // Lowest: 65\n        // Average: 82.0\n    }\n}",
-      "expectedOutput": "Highest: 92\nLowest: 65\nAverage: 82.0",
-      "testCases": [
-        {
-          "name": "Compute Array Stats",
-          "expected": "Highest: 92\nLowest: 65\nAverage: 82.0"
-        }
-      ],
-      "hints": [
-        "Initialize min and max with marks[0].",
-        "Cast sum to double when dividing by length."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "mcq",
+        "question": "Why are Strings immutable in Java?",
+        "options": [
+          "Security, caching in String Pool, and thread-safety",
+          "Faster garbage collection only",
+          "To prevent inheritance",
+          "Hardware constraint"
+        ],
+        "answer": 0,
+        "explanation": "Immutability enables String Constant Pool caching, thread-safety, and secure hashing."
+      }
+    ]
+  },
   {
     "id": "b7",
     "code": "B7",
     "level": "beginner",
-    "title": "OOP Foundations",
-    "subtitle": "Classes, objects, constructors, this, encapsulation and static",
-    "icon": "️",
-    "color": "#C084FC",
+    "title": "Classes & Objects (OOP Foundations)",
+    "subtitle": "State, behavior, constructors, encapsulation, this keyword, and static members",
+    "biome": "Blueprint Forge",
+    "estimatedMinutes": 120,
+    "learningObjectives": [
+      "Model real-world entities using classes (state + behavior)",
+      "Construct objects with parameterized constructors and the this reference",
+      "Enforce encapsulation using private fields and public getters/setters",
+      "Differentiate between instance members and class-level static members"
+    ],
+    "prerequisites": [
+      "b6"
+    ],
     "lessons": [
       {
-        "id": "lesson-b7-1",
-        "title": "Classes & Objects",
+        "id": "b7_l1",
+        "title": "Classes, Fields & Constructors",
         "xp": 30,
+        "estimatedMinutes": 18,
+        "story": "At the Blueprint Forge, master builders create spawn blueprints. A class is a blueprint; an object is an active entity instantiated into the world.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Blueprint & Instances",
-            "content": "A class is a blueprint. An object is an instance created using `new`. Constructors initialize the object state."
-          },
-          {
-            "type": "visual",
-            "visual": "class-diagram",
-            "visualData": {
-              "classes": [
-                {
-                  "name": "BankAccount",
-                  "type": "class",
-                  "fields": [
-                    "- String owner",
-                    "- double balance"
-                  ],
-                  "methods": [
-                    "+ deposit(amount)",
-                    "+ withdraw(amount)",
-                    "+ getBalance()"
-                  ]
-                }
-              ]
-            },
-            "title": "Class Diagram",
-            "content": "Structure of fields and methods."
-          },
-          {
+            "title": "Class Definition & Constructor",
             "type": "code",
-            "title": "Class with Constructor",
-            "content": "Using this keyword to distinguish fields from parameters.",
-            "code": "class Hero {\n    String name;\n    Hero(String name) { this.name = name; }\n    void shout() { System.out.println(name + \" is here!\"); }\n}"
-          },
-          {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "content": "Constructors initialize state when creating a `new` instance.",
+            "code": "class Player {\n    private String name;\n    private int level;\n    public Player(String name, int level) {\n        this.name = name;\n        this.level = level;\n    }\n    public String getName() { return name; }\n}"
           }
-        ]
-      },
-      {
-        "id": "lesson-b7-2",
-        "title": "Encapsulation & Access Modifiers",
-        "xp": 30,
-        "slides": [
+        ],
+        "underTheHood": "The `new` operator allocates memory on the Heap, zeroes fields to defaults, invokes the constructor `<init>`, and returns the memory reference.",
+        "commonMistakes": [
           {
-            "type": "intro",
-            "title": "Encapsulation",
-            "content": "Keep fields `private` and provide controlled access via `getters` and `setters`. This protects object integrity."
+            "mistake": "Omitting this when parameter matches field name",
+            "error": "Field remains uninitialized or default value",
+            "fix": "Use this.field = param to disambiguate."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What keyword allocates an object instance on the Heap?",
+            "options": [
+              "create",
+              "new",
+              "malloc",
+              "spawn"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Create an `Item` class with `String name` and `int power`. In `main`, create `new Item(\"Sword\", 50)` and print `Sword power: 50`.",
+          "starterCode": "class Item {\n    // TODO: Define fields, constructor, and getters\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO: Instantiate and print\n    }\n}",
+          "hints": [
+            "class Item { String name; int power; Item(String n, int p) { name = n; power = p; } }",
+            "System.out.println(item.name + \" power: \" + item.power);"
+          ],
+          "solution": "class Item {\n    String name;\n    int power;\n    public Item(String name, int power) {\n        this.name = name;\n        this.power = power;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Item item = new Item(\"Sword\", 50);\n        System.out.println(item.name + \" power: \" + item.power);\n    }\n}",
+          "tests": [
+            {
+              "name": "Instantiates Item",
+              "stdin": "",
+              "expected": "Sword power: 50"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Item 16: In public classes, use accessor methods",
+            "verify": false
           },
           {
-            "type": "code",
-            "title": "Getters and Setters",
-            "content": "Encapsulation example with validation.",
-            "code": "class Account {\n    private double balance;\n    public double getBalance() { return balance; }\n    public void deposit(double amt) {\n        if (amt > 0) balance += amt;\n    }\n}"
-          },
-          {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "source": "Head First Java, 3rd ed.",
+            "location": "Chapter 4",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b7",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "Which OOP concept hides internal state behind controlled methods?",
-          "options": [
-            "Encapsulation",
-            "Compilation",
-            "Iteration",
-            "Casting"
-          ],
-          "answer": 0,
-          "explanation": "Encapsulation protects internal fields by restricting direct access and exposing getters/setters."
-        },
-        {
-          "type": "mcq",
-          "question": "What does the new keyword generally do when creating an object?",
-          "options": [
-            "Deletes an object",
-            "Creates an object in memory and calls constructor",
-            "Imports a package",
-            "Starts a thread"
-          ],
-          "answer": 1,
-          "explanation": "new allocates memory on the heap and invokes the constructor."
-        },
-        {
-          "type": "true-false",
-          "question": "Static methods can directly access non-static instance variables without an object reference.",
-          "answer": false,
-          "explanation": "Static methods belong to the class and have no this reference; they cannot directly access instance fields."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for OOP Foundations?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b7",
-      "title": "B7: BankAccount Class",
-      "prompt": "Complete the `BankAccount` class with:\n- `private double balance;`\n- Constructor `BankAccount(double initial)`\n- `public void deposit(double amount)`\n- `public void withdraw(double amount)` (only if balance >= amount)\n- `public double getBalance()`\nIn `main`: start with 100, deposit 50, withdraw 30, and print `Balance: $120.0`",
-      "starterCode": "class BankAccount {\n    private double balance;\n\n    // TODO 1: Initialize balance in constructor\n    public BankAccount(double initial) {\n        // Your code here\n    }\n\n    // TODO 2: Increase balance by amount if amount > 0\n    public void deposit(double amount) {\n        // Your code here\n    }\n\n    // TODO 3: Decrease balance if amount > 0 and balance >= amount\n    public void withdraw(double amount) {\n        // Your code here\n    }\n\n    // TODO 4: Return current balance\n    public double getBalance() {\n        return 0.0;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO 5: Create BankAccount with 100, deposit 50, withdraw 30, and print: Balance: $120.0\n    }\n}",
-      "expectedOutput": "Balance: $120.0",
-      "testCases": [
-        {
-          "name": "Balance is $120.0",
-          "expected": "Balance: $120.0"
-        }
-      ],
-      "hints": [
-        "Keep balance private.",
-        "Deposit adds to balance; withdraw subtracts."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "mcq",
+        "question": "What is encapsulation in OOP?",
+        "options": [
+          "Hiding internal state behind public methods",
+          "Inheriting from multiple parents",
+          "Compiling code into bytecode",
+          "Allocating memory on the stack"
+        ],
+        "answer": 0,
+        "explanation": "Encapsulation bundles data and methods while restricting direct access to fields."
+      }
+    ]
+  },
   {
     "id": "b8",
     "code": "B8",
     "level": "beginner",
     "title": "Exceptions & Collections Intro",
-    "subtitle": "try/catch/finally, ArrayList, HashMap and HashSet",
-    "icon": "️",
-    "color": "#E63946",
+    "subtitle": "try-catch-finally, checked vs unchecked, ArrayList<E>, and HashMap<K,V>",
+    "biome": "Creeper Cave",
+    "estimatedMinutes": 120,
+    "learningObjectives": [
+      "Handle runtime errors safely using try-catch-finally blocks",
+      "Distinguish between checked exceptions and unchecked RuntimeExceptions",
+      "Use java.util.ArrayList<E> for dynamic, resizable collections",
+      "Store and retrieve key-value pairs using java.util.HashMap<K, V>"
+    ],
+    "prerequisites": [
+      "b7"
+    ],
     "lessons": [
       {
-        "id": "lesson-b8-1",
-        "title": "Exception Handling",
+        "id": "b8_l1",
+        "title": "Handling Exceptions with try-catch",
         "xp": 30,
+        "estimatedMinutes": 16,
+        "story": "In the Creeper Cave, unexpected surprises happen. Wrap hazardous operations in try-catch blocks to prevent your application from crashing.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Handling Errors Gracefully",
-            "content": "Exceptions disrupt normal flow. Use `try-catch-finally` to prevent crashes and handle errors gracefully."
-          },
-          {
-            "type": "visual",
-            "visual": "memory",
-            "visualData": null,
-            "title": "Interactive System Architecture",
-            "content": "Step through and interact with the animated technical visualizer below to see how the runtime, memory, and compiler coordinate."
-          },
-          {
+            "title": "The try-catch Mechanism",
             "type": "code",
-            "title": "Try-Catch-Finally",
-            "content": "The finally block runs whether an exception occurred or not.",
-            "code": "try {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Cannot divide by zero!\");\n} finally {\n    System.out.println(\"Cleanup completed.\");\n}"
-          },
+            "content": "Catch specific exceptions to handle errors gracefully.",
+            "code": "try {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Handled division by zero!\");\n}"
+          }
+        ],
+        "underTheHood": "When an exception is thrown, the JVM creates an Exception Table entry and unwinds stack frames until a matching catch block is located.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Empty catch block (swallowing exceptions)",
+            "error": "Silent failure in production",
+            "fix": "Log or handle the exception appropriately (Effective Java Item 77)."
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "Which block always runs regardless of whether an exception was thrown?",
+            "options": [
+              "try",
+              "catch",
+              "finally",
+              "else"
+            ],
+            "answer": 2
+          }
+        ],
+        "exercise": {
+          "instructions": "Use a try-catch block to catch an `ArithmeticException` when dividing `10 / 0` and print `Caught error!`.",
+          "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: try-catch block\n    }\n}",
+          "hints": [
+            "try { int x = 10 / 0; } catch (ArithmeticException e) { System.out.println(\"Caught error!\"); }"
+          ],
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        try {\n            int x = 10 / 0;\n        } catch (ArithmeticException e) {\n            System.out.println(\"Caught error!\");\n        }\n    }\n}",
+          "tests": [
+            {
+              "name": "Catches exception",
+              "stdin": "",
+              "expected": "Caught error!"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Effective Java, 3rd ed.",
+            "location": "Chapter 10: Exceptions",
+            "verify": false
           }
         ]
       },
       {
-        "id": "lesson-b8-2",
-        "title": "ArrayList & HashMap Basics",
+        "id": "b8_l2",
+        "title": "Dynamic Lists with ArrayList<E>",
         "xp": 30,
+        "estimatedMinutes": 18,
+        "story": "Standard chests have fixed slots, but a magical Ender pouch expands on demand! ArrayList<E> grows dynamically as you add items.",
         "slides": [
           {
-            "type": "intro",
-            "title": "Dynamic Data Structures",
-            "content": "**ArrayList** grows dynamically. **HashMap** stores key-value pairs with fast lookups."
-          },
-          {
+            "title": "Using java.util.ArrayList",
             "type": "code",
-            "title": "ArrayList & HashMap in Action",
-            "content": "Essential collection operations.",
-            "code": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>();\n        list.add(\"Java\");\n        Map<String, Integer> map = new HashMap<>();\n        map.put(\"Java\", 21);\n        System.out.println(map.get(\"Java\"));\n    }\n}"
-          },
+            "content": "ArrayList provides dynamic resizing, `.add()`, `.get(index)`, and `.size()`.",
+            "code": "import java.util.ArrayList;\n\nArrayList<String> pouch = new ArrayList<>();\npouch.add(\"Torch\");\npouch.add(\"Pickaxe\");\nSystem.out.println(\"Items: \" + pouch.size());"
+          }
+        ],
+        "underTheHood": "ArrayList wraps an internal Object[] array. When capacity is exceeded, it allocates a new array of 1.5x size and copies elements using System.arraycopy.",
+        "commonMistakes": [
           {
-            "type": "tip",
-            "title": "Authoritative Best Practice (Effective Java)",
-            "content": "According to Joshua Bloch's *Effective Java* and Cay Horstmann's *Core Java*, always favor immutability, validate method preconditions, minimize member accessibility, and design APIs for clear static typing."
+            "mistake": "Using primitive types in generics (e.g. ArrayList<int>)",
+            "error": "unexpected type: found primitive",
+            "fix": "Use wrapper classes: ArrayList<Integer>"
+          }
+        ],
+        "checkpoint": [
+          {
+            "question": "What method returns the number of elements in an ArrayList?",
+            "options": [
+              "length",
+              "size()",
+              "count()",
+              "length()"
+            ],
+            "answer": 1
+          }
+        ],
+        "exercise": {
+          "instructions": "Create an `ArrayList<String>` named `loot`, add `\"Diamond\"` and `\"Gold\"`, and print `Loot size: 2`.",
+          "starterCode": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        // TODO: ArrayList operations\n    }\n}",
+          "hints": [
+            "ArrayList<String> loot = new ArrayList<>();",
+            "loot.add(\"Diamond\"); loot.add(\"Gold\");",
+            "System.out.println(\"Loot size: \" + loot.size());"
+          ],
+          "solution": "import java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> loot = new ArrayList<>();\n        loot.add(\"Diamond\");\n        loot.add(\"Gold\");\n        System.out.println(\"Loot size: \" + loot.size());\n    }\n}",
+          "tests": [
+            {
+              "name": "Prints loot size",
+              "stdin": "",
+              "expected": "Loot size: 2"
+            }
+          ]
+        },
+        "references": [
+          {
+            "source": "Core Java Vol I, 12th ed.",
+            "location": "Chapter 9: Collections",
+            "verify": false
           }
         ]
       }
     ],
-    "challenge": {
-      "id": "chall-b8",
-      "xp": 50,
-      "questions": [
-        {
-          "type": "mcq",
-          "question": "Which collection stores key-value pairs in Java?",
-          "options": [
-            "ArrayList",
-            "HashSet",
-            "HashMap",
-            "LinkedList"
-          ],
-          "answer": 2,
-          "explanation": "HashMap stores key-value associations and allows fast retrieval by key."
-        },
-        {
-          "type": "mcq",
-          "question": "Which block is commonly used to catch and handle an exception?",
-          "options": [
-            "catch",
-            "package",
-            "import",
-            "extends"
-          ],
-          "answer": 0,
-          "explanation": "The catch block handles an exception matching its parameter type."
-        },
-        {
-          "type": "true-false",
-          "question": "The code inside a finally block is only executed if an exception is thrown in the try block.",
-          "answer": false,
-          "explanation": "A finally block executes regardless of whether an exception occurred or was handled."
-        },
-        {
-          "type": "mcq",
-          "question": "What runtime architectural advantage does Java offer for Exceptions & Collections Intro?",
-          "options": [
-            "Automatic memory safety and JIT compiler optimizations",
-            "Direct hardware register access like raw assembly",
-            "Zero compile-time type checking",
-            "Forced manual memory pointer deallocation"
-          ],
-          "answer": 0,
-          "explanation": "The JVM provides automatic memory management (garbage collection), runtime type-safety verification, and dynamic JIT optimizations."
-        }
-      ]
-    },
-    "codingTask": {
-      "id": "code-b8",
-      "title": "B8: Unique Names Counter",
-      "prompt": "Given an array with duplicate names:\n`String[] names = {\"Alice\", \"Bob\", \"Alice\", \"Charlie\", \"Bob\"};`\nUse a `HashSet<String>` to collect unique names.\nPrint:\n`Total Unique: 3`",
-      "starterCode": "abstract class Shape {\n    abstract double area();\n}\n\n// TODO 1: Implement Circle with radius field and area() = Math.PI * radius * radius\nclass Circle extends Shape {\n    private double radius;\n    public Circle(double r) {\n        this.radius = r;\n    }\n    @Override\n    double area() {\n        return 0.0;\n    }\n}\n\n// TODO 2: Implement Rectangle with width and height fields and area() = width * height\nclass Rectangle extends Shape {\n    private double width, height;\n    public Rectangle(double w, double h) {\n        this.width = w;\n        this.height = h;\n    }\n    @Override\n    double area() {\n        return 0.0;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Shape c = new Circle(5.0);\n        Shape r = new Rectangle(4.0, 6.0);\n        \n        // TODO 3: Print circle area (1 decimal) and rectangle area:\n        // Circle Area: 78.5\n        // Rectangle Area: 24.0\n    }\n}",
-      "expectedOutput": "Total Unique: 3",
-      "testCases": [
-        {
-          "name": "Count Unique Names",
-          "expected": "Total Unique: 3"
-        }
-      ],
-      "hints": [
-        "HashSet automatically discards duplicate entries.",
-        "Use unique.size() to get count."
-      ]
-    }
-},
+    "quizBank": [
+      {
+        "type": "mcq",
+        "question": "Which class implements a resizable array backed by an internal array?",
+        "options": [
+          "LinkedList",
+          "ArrayList",
+          "Vector",
+          "ArrayDeque"
+        ],
+        "answer": 1,
+        "explanation": "ArrayList is the standard resizable array implementation."
+      }
+    ]
+  },
   {
     "id": "i1",
     "code": "I1",
