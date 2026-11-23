@@ -168,6 +168,9 @@ function applyTheme(theme) {
     }
   } catch(e) {}
   updateThemeUI(isDark);
+  if (typeof syncEditorThemes === 'function') {
+    syncEditorThemes(isDark);
+  }
 }
 
 function updateThemeUI(isDark) {
@@ -4203,6 +4206,8 @@ function initCodeMirrorEditors() {
         runLessonCode();
       }
     });
+  } else if (_cmLesson) {
+    _cmLesson.setTheme(isDark);
   }
 }
 window.initCodeMirrorEditors = initCodeMirrorEditors;
