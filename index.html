@@ -51,14 +51,14 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </span>
       </button>
-      <div class="login-badge-pill">100% FREE GAMIFIED JAVA LEARNING</div>
+      <div class="login-badge-pill">INTERACTIVE JAVA QUEST</div>
       <div class="login-logo-wrap">
         <span class="login-logo-icon">
           <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
         </span>
       </div>
       <h1 class="login-title" id="auth-title">Create an account to save your progress</h1>
-      <p class="login-subtitle" id="auth-subtitle">Join thousands of developers mastering Java from core syntax to cloud architecture.</p>
+      <p class="login-subtitle" id="auth-subtitle">Master Java from core syntax to cloud architecture through interactive quests.</p>
 
       <!-- Tab switcher -->
       <div class="auth-tabs">
@@ -256,8 +256,6 @@
             <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span id="hero-time-estimate">~24h of learning</span></span>
             <span class="meta-item-divider">•</span>
             <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <span id="hero-modules-count">24 Modules</span></span>
-            <span class="meta-item-divider">•</span>
-            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> +15,000 Adventurers</span>
           </div>
         </div>
       </div>
@@ -343,10 +341,10 @@
         <!-- Course Badges Shelf Card -->
         <div class="hud-card hud-badges-card">
           <div class="hud-card-header">
-            <span class="hud-card-title">Minecraft Medals</span>
+            <span class="hud-card-title">Voxel Medals</span>
             <span class="hud-badge-count" id="hud-badge-count">0 / 24</span>
           </div>
-          <p class="hud-card-sub">Complete milestones to collect authentic Minecraft pixel trophies!</p>
+          <p class="hud-card-sub">Complete milestones to collect original pixel trophies!</p>
           <div class="hud-badges-mini-grid" id="hud-badges-mini-grid">
             <!-- Populated dynamically -->
           </div>
@@ -409,6 +407,7 @@
         <!-- Rendered dynamically -->
       </nav>
       <div class="lesson-top-actions">
+        <span class="lesson-hearts-display" id="lesson-nav-hearts"></span>
         <span class="lesson-xp-pill" id="lesson-xp-badge">+30 XP</span>
       </div>
     </header>
@@ -546,7 +545,7 @@
             <div class="output-area lesson-output-area" id="lesson-terminal-out" aria-live="polite">
               <div class="terminal-idle-state" onclick="runLessonCode()">
                 <span class="terminal-idle-icon" aria-hidden="true">❯</span>
-                <span class="terminal-idle-text">Ready. Click <button class="terminal-run-pill" onclick="runLessonCode()" aria-label="Run Code">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>
+                <span class="terminal-idle-text">Press <strong>Ctrl+Enter</strong> or click <strong>▶ Run Code</strong> to execute.</span>
               </div>
             </div>
             <div class="terminal-interactive-bar" id="lesson-terminal-bar" style="display:none">
@@ -793,7 +792,7 @@
         <div class="output-area" id="output-area">
           <div class="terminal-idle-state" id="terminal-idle-prompt" onclick="runCode()">
             <span class="terminal-idle-icon">❯</span>
-            <span class="terminal-idle-text">Java Terminal Ready. Click <button class="terminal-run-pill" onclick="runCode()">▶ Run Code</button> (or press <strong>Ctrl+Enter</strong>) to execute!</span>
+            <span class="terminal-idle-text">Press <strong>Ctrl+Enter</strong> or click <strong>▶ Run Code</strong> to execute.</span>
           </div>
         </div>
         <div class="terminal-interactive-bar" id="terminal-interactive-bar" style="display:none">
@@ -887,7 +886,7 @@
 
     <div class="settings-card glass-card">
       <h3>Hearts Auto-Refill</h3>
-      <p>Hearts refill every 30 minutes.</p>
+      <p>Hearts refill automatically over time, or complete practices to earn one back.</p>
       <button class="btn-secondary" id="refill-hearts-btn">Refill Hearts Now</button>
     </div>
 

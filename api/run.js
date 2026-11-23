@@ -13,8 +13,10 @@ const WANDBOX_TIMEOUT = 25000;        // ms
 // For production scale, move to Upstash Redis or similar.
 const _ipBucket  = new Map(); // ip  → { count, resetAt }
 const _userBucket = new Map(); // uid → { count, resetAt }
+const _guestIpBucket = new Map();
 const IP_LIMIT   = 10;  // per minute
 const USER_LIMIT = 20;  // per minute
+const GUEST_IP_LIMIT = 5; // per minute for guests
 
 function checkRateLimit(bucket, key, limit) {
   const now = Date.now();
@@ -168,24 +170,27 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  // ── Auth ──────────────────────────────────────────────────────────────────
-  const user = await verifySupabaseJwt(req.headers['authorization']);
-  if (!user) {
-    res.status(401).json({ error: 'Authentication required. Please sign in to use the compiler.' });
-    return;
-  }
+  // ── Auth & Rate Limit ─────────────────────────────────────────────────────
+  const user = await verifySupabaseJwt(req.headers ? req.headers['authorization'] : null);
+  const ip = req.headers?.['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
 
-  // ── Rate limit by IP and user ─────────────────────────────────────────────
-  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
-  if (!checkRateLimit(_ipBucket, ip, IP_LIMIT)) {
-    safeLog('warn', 'IP rate limited', { ip });
-    res.status(429).json({ error: 'Too many requests from your network. Please wait a minute and try again.' });
-    return;
-  }
-  if (!checkRateLimit(_userBucket, user.id, USER_LIMIT)) {
-    safeLog('warn', 'User rate limited', { uid: user.id });
-    res.status(429).json({ error: 'You\'re running code too fast! Take a breath and try again in a minute.' });
-    return;
+  if (!user) {
+    if (!checkRateLimit(_guestIpBucket, ip, GUEST_IP_LIMIT)) {
+      safeLog('warn', 'Guest IP rate limited', { ip });
+      res.status(429).json({ error: 'Guest rate limit reached (5 runs/min). Please wait a minute or create a free account for higher quotas!' });
+      return;
+    }
+  } else {
+    if (!checkRateLimit(_ipBucket, ip, IP_LIMIT)) {
+      safeLog('warn', 'IP rate limited', { ip });
+      res.status(429).json({ error: 'Too many requests from your network. Please wait a minute and try again.' });
+      return;
+    }
+    if (!checkRateLimit(_userBucket, user.id, USER_LIMIT)) {
+      safeLog('warn', 'User rate limited', { uid: user.id });
+      res.status(429).json({ error: 'You\'re running code too fast! Take a breath and try again in a minute.' });
+      return;
+    }
   }
 
   // ── Parse body ────────────────────────────────────────────────────────────

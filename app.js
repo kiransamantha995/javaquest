@@ -218,7 +218,7 @@ function showScreen(name) {
     if (el) el.classList.toggle('active', ALL_SCREENS[i]===name);
   }
   var nav = ge('navbar');
-  if (nav) nav.style.display = (name==='auth') ? 'none' : 'flex';
+  if (nav) nav.style.display = (name==='auth' || name==='lesson') ? 'none' : 'flex';
   var aiChat = ge('ai-chat-wrapper');
   if (aiChat) aiChat.style.display = (name==='auth') ? 'none' : 'flex';
   if (name==='auth') {
@@ -301,7 +301,7 @@ function initAuthUI() {
       if (formSU) formSU.classList.remove('hidden');
       if (formSI) formSI.classList.add('hidden');
       if (authTitle) authTitle.innerHTML = 'Create an account to save your progress :)';
-      if (authSub) authSub.textContent = 'Join thousands of questers learning Java from zero to hero!';
+      if (authSub) authSub.textContent = 'Master Java from core syntax to cloud architecture through interactive quests.';
     } else {
       if (tabSI) tabSI.classList.add('active');
       if (tabSU) tabSU.classList.remove('active');
@@ -2640,7 +2640,17 @@ function executeJava(code, stdin) {
     return executeWandboxDirect(code, stdin)
       .catch(function(wErr){
         console.warn('Wandbox direct also failed:', wErr.message);
-        return runClientJavaInterpreter(code, stdin);
+        return {
+          compile: {
+            code: 1,
+            stderr: 'Execution Error: Unable to reach compiler service (' + (err.message || wErr.message) + '). Please check your internet connection and try again.'
+          },
+          run: {
+            stdout: '',
+            stderr: 'Execution Error: Unable to reach compiler service.',
+            code: 1
+          }
+        };
       });
   });
 }
@@ -2696,86 +2706,6 @@ function executeWandboxDirect(code, stdin) {
       }
     };
   });
-}
-
-function runClientJavaInterpreter(code, stdin) {
-  // Strip comments first so comments can never be mistaken for code or output
-  var stripped = code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '').trim();
-
-  // Validate class and main method
-  if (!/class\s+\w+/.test(stripped)) {
-    return Promise.resolve({
-      compile: {
-        code: 1,
-        stderr: 'Main.java: error: class, interface, enum, or record expected'
-      }
-    });
-  }
-  if (!/public\s+static\s+void\s+main/.test(stripped)) {
-    return Promise.resolve({
-      compile: {
-        code: 1,
-        stderr: 'Main.java: error: Main method not found in class Main'
-      }
-    });
-  }
-
-  // Check balanced braces
-  var openB = (stripped.match(/\{/g) || []).length;
-  var closeB = (stripped.match(/\}/g) || []).length;
-  if (openB !== closeB || openB < 2) {
-    return Promise.resolve({
-      compile: {
-        code: 1,
-        stderr: 'Main.java: error: Syntax error on tokens, misplaced or unbalanced braces { }'
-      }
-    });
-  }
-
-  // Extract body of main
-  var mainMatch = stripped.match(/public\s+static\s+void\s+main\s*\([^)]*\)\s*\{([\s\S]*)\}\s*\}\s*$/);
-  var body = mainMatch ? mainMatch[1] : stripped;
-
-  var stdout = [];
-  var currentLine = '';
-
-  function __println(val) {
-    var s = (val !== undefined && val !== null) ? String(val) : '';
-    stdout.push(currentLine + s);
-    currentLine = '';
-  }
-  function __print(val) {
-    var s = (val !== undefined && val !== null) ? String(val) : '';
-    currentLine += s;
-  }
-
-  // Transpile basic Java body to safe JS execution
-  var jsBody = body
-    .replace(/System\.out\.println\s*\(/g, '__println(')
-    .replace(/System\.out\.print\s*\(/g, '__print(')
-    .replace(/\b(?:int|double|float|long|short|byte|boolean|char|String|var)\s+(\w+)/g, 'let $1')
-    .replace(/\btrue\b/g, 'true')
-    .replace(/\bfalse\b/g, 'false');
-
-  try {
-    var runner = new Function('__println', '__print', jsBody);
-    runner(__println, __print);
-    if (currentLine) stdout.push(currentLine);
-    return Promise.resolve({
-      run: {
-        stdout: stdout.join('\n'),
-        stderr: '',
-        code: 0
-      }
-    });
-  } catch(e) {
-    return Promise.resolve({
-      compile: {
-        code: 1,
-        stderr: 'Compilation / Runtime Error: ' + e.message
-      }
-    });
-  }
 }
 
 function runCodingTests() {
@@ -3173,7 +3103,7 @@ function checkAnswer() {
   else if(q.type==='bug'){if(_selBug<0){toast('Select an option first!');return;}correct=(_selBug===q.answer);if(q.options){qsa('.mcq-option').forEach(function(el,i){if(i===q.answer)el.classList.add('correct');else if(i===_selBug&&!correct)el.classList.add('wrong');});}}
   else if(q.type==='match'){if(Object.keys(_mPairs).length<q.pairs.length){toast('Match all pairs first!');return;}correct=true;for(var k=0;k<q.pairs.length;k++)if(_mPairs[k]!==k){correct=false;break;}}
   if(correct){_hits++;addXP(12);}
-  else{var p=STATE.player;if(p.hearts>0){p.hearts--;p.heartRefillTime=Date.now()+30*60*1000;renderHearts();localSave();}if(p.hearts===0)toast('No hearts! They refill in 30 min');}
+  else{var p=STATE.player;if(p.hearts>0){p.hearts--;p.heartRefillTime=Date.now()+(window.HEART_COOLDOWN_MS||4*3600*1000);renderHearts();localSave();}if(p.hearts===0)toast('No hearts! They refill automatically over time or complete a practice to earn one back.');}
   var fb=ge('answer-feedback'),ca=ge('challenge-actions');
   if(fb){
     fb.classList.remove('hidden','correct-fb','wrong-fb');
@@ -3258,6 +3188,14 @@ function renderHearts(){
       svgHearts += renderPixelHeartSvg(a < h);
     }
     container.innerHTML = svgHearts;
+  }
+  var lessonHearts = ge('lesson-nav-hearts');
+  if (lessonHearts) {
+    var svgHearts2 = '';
+    for (var b = 0; b < 3; b++) {
+      svgHearts2 += renderPixelHeartSvg(b < h);
+    }
+    lessonHearts.innerHTML = svgHearts2;
   }
 }
 
@@ -4046,6 +3984,69 @@ function initResizableWorkspaces() {
       startDragCompH(e.touches[0].clientX);
     });
   }
+
+  // ── 4. Split Lesson: Horizontal Split (Instructions vs CodeMirror Editor) ──
+  var lessonGutterH = ge('lesson-resizer-h');
+  var lessonWorkspace = ge('split-lesson-workspace');
+  var lessonGuideCol = ge('lesson-guide-col');
+
+  if (lessonGutterH && lessonWorkspace && lessonGuideCol) {
+    var savedLessonW = localStorage.getItem('jq_lesson_split_w');
+    if (savedLessonW && window.innerWidth > 768) {
+      var lPct = parseFloat(savedLessonW);
+      if (lPct >= 25 && lPct <= 75) {
+        lessonGuideCol.style.width = lPct + '%';
+      }
+    }
+
+    function startLessonDragH(clientX) {
+      document.body.classList.add('is-resizing', 'is-resizing-h');
+      lessonGutterH.classList.add('dragging');
+
+      function onMove(cx) {
+        var rect = lessonWorkspace.getBoundingClientRect();
+        if (rect.width <= 0) return;
+        var offset = cx - rect.left;
+        var percent = (offset / rect.width) * 100;
+        if (percent < 25) percent = 25;
+        if (percent > 75) percent = 75;
+        lessonGuideCol.style.width = percent + '%';
+        try { localStorage.setItem('jq_lesson_split_w', percent.toFixed(1)); } catch(e){}
+      }
+
+      function onMouseMove(ev) { onMove(ev.clientX); }
+      function onMouseUp() {
+        document.body.classList.remove('is-resizing', 'is-resizing-h');
+        lessonGutterH.classList.remove('dragging');
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+      function onTouchMove(ev) {
+        if (ev.touches && ev.touches[0]) onMove(ev.touches[0].clientX);
+      }
+      function onTouchEnd() {
+        document.body.classList.remove('is-resizing', 'is-resizing-h');
+        lessonGutterH.classList.remove('dragging');
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      document.addEventListener('touchmove', onTouchMove, { passive: true });
+      document.addEventListener('touchend', onTouchEnd);
+    }
+
+    lessonGutterH.addEventListener('mousedown', function(e){
+      if (window.innerWidth <= 768) return;
+      e.preventDefault();
+      startLessonDragH(e.clientX);
+    });
+    lessonGutterH.addEventListener('touchstart', function(e){
+      if (window.innerWidth <= 768 || !e.touches || !e.touches[0]) return;
+      startLessonDragH(e.touches[0].clientX);
+    });
+  }
 }
 
 /* ═══════════════ WIRE ALL EVENTS ════════════════════════════════ */
@@ -4299,12 +4300,13 @@ function renderSplitLesson() {
       + '<span class="slide-type-badge">' + typeLabel + '</span>'
       + '<button class="btn-deep-dive" onclick="openDeepDive()" aria-label="Open AI Deep Dive modal">AI Deep Dive</button>'
       + '</div>'
-      + '<h2 class="slide-title">' + esc(slide.title) + '</h2>'
-      + '<div class="slide-content">' + fmt(slide.content) + '</div>';
-    if (slide.code) html += buildCodeBlock(slide.code);
+      + '<h2 class="slide-title">' + esc(slide.title) + '</h2>';
     if (slide.type === 'tip') {
-      html += '<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">' + fmt(slide.content) + '</div></div>';
+      html += '<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">' + fmt(slide.content) + '</div></div>';
+    } else {
+      html += '<div class="slide-content">' + fmt(slide.content) + '</div>';
     }
+    if (slide.code) html += buildCodeBlock(slide.code);
     html += '</div>';
     if (slide.visual) html += '<div class="visual-area" id="vis-now"></div>';
     html += '</div>';
@@ -4578,6 +4580,9 @@ function runLessonCode() {
   _lessonAttempts++;
 
   switchConsoleTab('terminal');
+  if (window.innerWidth <= 768 && typeof switchMobileTab === 'function') {
+    switchMobileTab('console');
+  }
   var outEl = ge('lesson-terminal-out');
   var bar = ge('lesson-terminal-bar');
   if (bar) bar.style.display = 'none';
@@ -4671,6 +4676,9 @@ function submitLessonTests() {
   _lessonAttempts++;
 
   switchConsoleTab('tests');
+  if (window.innerWidth <= 768 && typeof switchMobileTab === 'function') {
+    switchMobileTab('console');
+  }
   var diffList = ge('lesson-test-diff-list');
   if (!diffList) return;
   diffList.innerHTML = '<div class="test-placeholder"><span class="run-spinner"></span>Running deterministic test cases against OpenJDK 22…</div>';
