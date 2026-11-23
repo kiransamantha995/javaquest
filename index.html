@@ -36,6 +36,10 @@
       <svg class="flame-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2c-.6 1.4-1.2 2.7-1.2 4.1 0 2.3 1.8 3.9 1.8 5.9 0 3.3-2.7 6-6 6-1.1 0-2.1-.3-3-1 1.2 4 4.8 7 9.2 7 5.4 0 9.8-4.4 9.8-9.8 0-4.6-3.8-8.5-7.6-11.2-.8-.6-1.8-.7-3-1z"/></svg>
       <span id="nav-streak">0</span>
     </div>
+    <div class="stat-chip freeze-chip" id="nav-freeze-chip" title="Streak Freezes: Protects your streak if you miss a day">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+      <span id="nav-freeze-val">0</span>
+    </div>
     <div class="stat-chip hearts-chip" id="nav-hearts-chip" title="Player Health"><span id="nav-hearts" class="hearts-row"></span></div>
   </div>
 </nav>
@@ -888,6 +892,17 @@
       <h3>Hearts Auto-Refill</h3>
       <p>Hearts refill automatically over time, or complete practices to earn one back.</p>
       <button class="btn-secondary" id="refill-hearts-btn">Refill Hearts Now</button>
+    </div>
+
+    <div class="settings-card glass-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+        <h3 style="margin:0;">Streak Protection (Freeze Charm)</h3>
+        <span class="hud-stat-val" id="settings-freeze-count" style="font-size:0.82rem;color:#38BDF8;background:rgba(56,189,248,0.12);padding:0.25rem 0.6rem;border-radius:999px;border:1px solid rgba(56,189,248,0.3);font-weight:800;">0 / 2 Equipped</span>
+      </div>
+      <p style="margin-top:0.5rem;">A Streak Freeze automatically protects your daily learning streak if you ever miss a day of practice. Earn one on 7-day streaks, complete track capstones, or craft one with XP.</p>
+      <div style="margin-top:.75rem">
+        <button class="btn-secondary" id="btn-craft-freeze" onclick="craftStreakFreeze()">Craft Streak Freeze (100 XP)</button>
+      </div>
     </div>
 
     

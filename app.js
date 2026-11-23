@@ -64,6 +64,7 @@ function sanitizeState(state) {
   if (typeof p.xp !== 'number' || isNaN(p.xp)) p.xp = 0;
   if (typeof p.level !== 'number' || isNaN(p.level)) p.level = 1;
   if (typeof p.streak !== 'number' || isNaN(p.streak)) p.streak = 1;
+  if (typeof p.streakFreeze !== 'number' || isNaN(p.streakFreeze)) p.streakFreeze = 0;
   if (typeof p.hearts !== 'number' || isNaN(p.hearts)) p.hearts = 3;
   return state;
 }
@@ -76,7 +77,7 @@ function freshState(name, diff, skin) {
       avatar:        { skin: skin || 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 },
       minecraftSkin: 'blockhead', avatarHat: 'none', avatarCape: 'none',
       theme:         (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light',
-      xp: 0, level: 1, streak: 1, lastVisit: new Date().toDateString(),
+      xp: 0, level: 1, streak: 1, streakFreeze: 0, lastVisit: new Date().toDateString(),
       hearts: 3, heartRefillTime: null,
       badges: [], completedLessons: [], completedModules: [], completedChallenges: [],
       completedCoding: [], codingAttempts: {}, capstoneProjects: {}
@@ -2350,8 +2351,14 @@ function openProjectModal(projId) {
       pState.completedAt = new Date().toISOString();
       addXP(proj.xpReward || 250);
       if (proj.badgeId) awardBadgeDirect(proj.badgeId);
+      if (typeof STATE.player.streakFreeze !== 'number') STATE.player.streakFreeze = 0;
+      if (STATE.player.streakFreeze < 2) {
+        STATE.player.streakFreeze++;
+        setTimeout(function(){ toast('Capstone Bonus: +1 Streak Freeze equipped! ❄️'); }, 600);
+      }
       burstParticles('home-particles');
       localSave();
+      updateNav();
       updateStatusUI();
       renderMap();
       toast('Capstone Verified & Completed! +' + (proj.xpReward || 250) + ' XP & Badge Awarded!');
@@ -3510,21 +3517,68 @@ function updateNav() {
   setText('nav-level','Lv.'+p.level);
   setText('nav-xp',p.xp+' XP');setWidth('xp-fill-mini',pct+'%');
   setText('nav-streak',p.streak);renderHearts();
+  if (typeof p.streakFreeze !== 'number') p.streakFreeze = 0;
+  setText('nav-freeze-val', p.streakFreeze);
   // Difficulty chip
   var dc=ge('nav-diff-chip');
   if(dc) dc.textContent=(p.difficulty || 'beginner').toUpperCase();
 }
 
-/* ═══════════════ STREAK ══════════════════════════════════════════ */
+/* ═══════════════ STREAK & FREEZE ══════════════════════════════════ */
 function checkStreak(){
-  var today=new Date().toDateString(),p=STATE.player;
-  if(!p.lastVisit){p.streak=1;}
-  else{var last=new Date(p.lastVisit).toDateString(),yest=new Date();yest.setDate(yest.getDate()-1);
-    if(last===today){}
-    else if(last===yest.toDateString()){p.streak++;checkBadge('streak_3');checkBadge('streak_7');setTimeout(function(){toast('Day '+p.streak+' streak!');},800);}
-    else p.streak=1;}
-  p.lastVisit=today; localSave(); updateNav();
+  var today=new Date().toDateString(), p=STATE.player;
+  if (typeof p.streakFreeze !== 'number') p.streakFreeze = 0;
+  if (!p.lastVisit) {
+    p.streak = 1;
+  } else {
+    var last = new Date(p.lastVisit).toDateString();
+    var yest = new Date();
+    yest.setDate(yest.getDate() - 1);
+    if (last === today) {
+      // Same day, nothing to update
+    } else if (last === yest.toDateString()) {
+      p.streak++;
+      checkBadge('streak_3');
+      checkBadge('streak_7');
+      if (p.streak === 7 && p.streakFreeze < 2) {
+        p.streakFreeze++;
+        toast('7-Day Streak Bonus: +1 Streak Freeze equipped! ❄️');
+      }
+      setTimeout(function(){ toast('Day ' + p.streak + ' streak! 🔥'); }, 800);
+    } else {
+      // Missed 1 or more days
+      if (p.streakFreeze > 0) {
+        p.streakFreeze--;
+        toast('Streak Freeze Activated! ❄️ Your ' + p.streak + '-day streak was preserved!');
+      } else {
+        p.streak = 1;
+      }
+    }
+  }
+  p.lastVisit = today;
+  localSave();
+  updateNav();
 }
+
+function craftStreakFreeze() {
+  var p = STATE.player;
+  if (typeof p.streakFreeze !== 'number') p.streakFreeze = 0;
+  if (p.streakFreeze >= 2) {
+    toast('Maximum 2 Streak Freezes equipped!');
+    return;
+  }
+  if (p.xp < 100) {
+    toast('You need at least 100 XP to craft a Streak Freeze!');
+    return;
+  }
+  p.xp -= 100;
+  p.streakFreeze++;
+  localSave();
+  updateNav();
+  renderSettings();
+  toast('Streak Freeze Crafted! ❄️ (-100 XP)');
+}
+window.craftStreakFreeze = craftStreakFreeze;
 
 /* ═══════════════ BADGES (Minecraft Themed) ══════════════════════ */
 function checkBadge(condition){
@@ -3642,11 +3696,27 @@ function renderBadges(){
 function renderSettings(){
   if(!STATE) return;
   var u=sbCurrentUser();
+  var p=STATE.player;
   setText('settings-email', u?u.email:'—');
-  setText('settings-player-name',STATE.player.name);
-  setText('settings-difficulty',DIFFICULTY_LABELS[STATE.player.difficulty]||'Beginner');
+  setText('settings-player-name',p.name);
+  setText('settings-difficulty',DIFFICULTY_LABELS[p.difficulty]||'Beginner');
   updateThemeUI(document.body.classList.contains('dark-theme'));
   updateRefillBtn();
+  if (typeof p.streakFreeze !== 'number') p.streakFreeze = 0;
+  setText('settings-freeze-count', p.streakFreeze + ' / 2 Equipped');
+  var craftBtn = ge('btn-craft-freeze');
+  if (craftBtn) {
+    if (p.streakFreeze >= 2) {
+      craftBtn.disabled = true;
+      craftBtn.textContent = 'Maximum Freezes Equipped (2/2)';
+    } else if (p.xp < 100) {
+      craftBtn.disabled = true;
+      craftBtn.textContent = 'Craft Freeze (Needs 100 XP)';
+    } else {
+      craftBtn.disabled = false;
+      craftBtn.textContent = 'Craft Streak Freeze (100 XP)';
+    }
+  }
   var sndToggle = ge("settings-sound-toggle"); if (sndToggle && window.GameFX) sndToggle.checked = window.GameFX.isSoundEnabled();
 }
 
@@ -4273,6 +4343,48 @@ function updateStepPills() {
   }
 }
 
+var JAVA_ANALOGIES = {
+  b1: { title: "The JVM as the World Engine", analogy: "Think of Java like a Minecraft world save. Your source code (.java) is human design blueprints. When you run javac, it encodes the plans into universal .class bytecode chunks. The JVM (HotSpot) is the game engine itself: it loads those chunks, optimizes hot areas, and translates them into native stone (machine instructions) for your specific computer." },
+  b2: { title: "Variables as Labeled Chests", analogy: "A variable is like a labeled wooden chest in your storage room. The type (int, double, boolean) determines the chest's compartment size and what items can be stored inside. You cannot place a String potion into an integer gold chest without a compile error!" },
+  b3: { title: "Operators as Redstone Circuits", analogy: "Operators are redstone components. Arithmetic (+, -, *, /) calculates item quantities; comparison (==, !=, <, >) acts like a Redstone Comparator checking signal strength; and logical operators (&&, ||, !) are Redstone Repeaters and Inverters routing power." },
+  b4: { title: "Conditionals & Loops as Levers and Clocks", analogy: "An if/else statement is a pressure plate or tripwire: step on it and the door opens; step off and it takes the alternate path. A while or for loop is a Redstone Clock that pulses repeatedly until a repeater ticks down to 0 or a lever switches off." },
+  b5: { title: "Methods as Crafting Recipes", analogy: "A method is an automated Crafting Table. You feed in specific input ingredients (parameters), the recipe executes inside the crafting grid (isolated method scope), and it outputs a brand new tool or diamond (the return value)." },
+  b6: { title: "Arrays as the Hotbar & Shulkers", analogy: "An array is your 9-slot Hotbar. It has a permanent, fixed size determined when crafted. Each item rests at a zero-based index from [0] to [8]. Trying to access slot [9] throws an ArrayIndexOutOfBoundsException!" },
+  b7: { title: "Classes as Blueprints, Objects as Mobs", analogy: "A class is a mob spawn egg blueprint defining max health, speed, and attack power. An object is a live creature spawned into the world using 'new'. You can spawn 50 Iron Golems from one blueprint, and each has its own current health." },
+  b8: { title: "Exceptions as Hissers & Shields", analogy: "A runtime exception is like a surprise hissing creature behind you. If you enclose the danger in a try/catch block, you pull up a shield: you absorb the blast, log the event, and keep walking. If unhandled, the game crashes back to desktop." },
+  i1: { title: "Inheritance as Creature Families", analogy: "Inheritance is like the Zombie family tree: Zombie is the superclass; Husk and Drowned are subclasses that inherit walking and attacking, but override special abilities like hunger infliction or water breathing." },
+  i2: { title: "Collections as Automated Storage Hoppers", analogy: "ArrayList is an expandable backpack that grows as you loot; HashSet is an enchanted chest that automatically vaporizes duplicate items; HashMap is a room of labeled item frames where each item key points directly to its chest." },
+  i3: { title: "I/O as Lecterns & Bookshelves", analogy: "Java Streams and Readers are like pulling written books from lecterns on disk into player memory. try-with-resources acts like an automatic book clasp: the moment you stop reading, the lectern closes cleanly to prevent file locks." },
+  i4: { title: "Streams as Hopper Sorting Pipelines", analogy: "Java 8+ Streams are hopper sorting systems. Items flow along a conveyor belt: .filter() drops out unwanted cobble, .map() smelts iron ore into ingots, and .collect() packs them into neat storage crates." },
+  i5: { title: "Records as Sealed Vault Keys", analogy: "Java Records are immutable stone tokens stamped with fixed coordinates. Once forged, their fields can never be tampered with, giving guaranteed thread safety and built-in equality." },
+  i6: { title: "Testing as Redstone Proof-of-Concepts", analogy: "JUnit tests are target blocks and redstone test benches. Before deploying your contraption into the wild, you run simulated inputs through it to guarantee pistons fire in the exact sequence expected." },
+  i7: { title: "JDBC as the Kingdom Treasury Bank", analogy: "HikariCP is a bank vault manager with 10 golden keys (connections). Your application borrows a key, opens an account ledger (PreparedStatement), commits changes, and returns the key to the vault immediately for the next teller." },
+  i8: { title: "Concurrency as Multiple Villagers", analogy: "Threads are multiple villagers working on the same crop farm simultaneously. Without synchronized locks or atomic variables, two villagers might grab the exact same carrot at tick 0, corrupting the farm inventory!" },
+  a1: { title: "JVM Memory as World Chunks & Garbage Collection", analogy: "The Java Heap is active chunk memory where entities roam. When mobs defeat each other, they become unreferenced dropped items. The Garbage Collector is the world cleaner that sweeps through chunks, collecting reclaimed memory without lagging the tick rate." },
+  a2: { title: "Memory Model as Nether Portal Synchronization", analogy: "The Java Memory Model is the synchronization barrier between the Overworld and the Nether. Volatile and synchronized ensure that an item stored in a chest in one dimension is immediately visible to players in the other." },
+  a3: { title: "Virtual Threads as Billions of Pixel Particles", analogy: "Traditional platform threads are heavy Iron Golems (limited to a few thousand). Virtual threads (Project Loom) are lightweight firefly particles: you can spawn one million of them simultaneously to handle web requests with almost zero memory overhead." },
+  a4: { title: "Design Patterns as Redstone Architecture", analogy: "Design patterns are battle-tested redstone circuit templates — Singleton is a single central beacon, Factory is an automated potion dispenser, and Observer is a calibrated sculk sensor alerting surrounding pistons." },
+  a5: { title: "Networking as Carrier Pigeons & Portals", analogy: "HTTP and TCP sockets are two-way portals exchanging JSON packet scrolls across different server dimensions with TLS encryption shields." },
+  a6: { title: "Spring Boot as Automated Village Infrastructure", analogy: "Spring Boot's IoC container is a master village architect. You annotate classes with @Component, and Spring automatically wires all plumbing, water supply, and electric connections on boot." },
+  a7: { title: "Performance Profiling as F3 Debug Screen", analogy: "JVM profilers (JFR, Async-Profiler) are like pressing F3 in the world: displaying frame times, memory allocation rates, and identifying lagging chunk bottlenecks in your code." },
+  a8: { title: "Docker & CI/CD as Blueprint World Exports", analogy: "Docker packages your entire Java application and its minimal runtime environment into a sealed shulker box container that boots identically on any cloud machine in the world." }
+};
+
+function toggleLessonAnalogy() {
+  var box = ge('lesson-analogy-box');
+  var btn = ge('btn-lesson-analogy');
+  if (!box) return;
+  var isHidden = box.classList.contains('hidden');
+  if (isHidden) {
+    box.classList.remove('hidden');
+    if (btn) btn.classList.add('active');
+  } else {
+    box.classList.add('hidden');
+    if (btn) btn.classList.remove('active');
+  }
+}
+window.toggleLessonAnalogy = toggleLessonAnalogy;
+
 function renderSplitLesson() {
   if (!_curMod || !_curLesson) return;
   var slide = _curLesson.slides[_slideIdx];
@@ -4293,14 +4405,23 @@ function renderSplitLesson() {
   // 3. Explanation Slide Area
   var slideArea = ge('slide-area');
   if (slideArea) {
+    var modPrefix = (_curMod.id || '').replace('module-', '').split('_')[0] || 'b1';
+    var analogyData = JAVA_ANALOGIES[modPrefix] || JAVA_ANALOGIES.b1;
     var typeLabel = { intro: 'Concept Overview', code: 'Code Walkthrough', tip: 'Expert Tip', visual: 'Architecture' }[slide.type] || 'Concept';
     var html = '<div class="slide slide-type-' + (slide.type || 'intro') + '">'
       + '<div class="slide-inner">'
       + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
       + '<span class="slide-type-badge">' + typeLabel + '</span>'
+      + '<div style="display:flex;gap:0.5rem;align-items:center;">'
+      + '<button class="btn-analogy" id="btn-lesson-analogy" onclick="toggleLessonAnalogy()" aria-label="Explain concept differently">💡 Analogy</button>'
       + '<button class="btn-deep-dive" onclick="openDeepDive()" aria-label="Open AI Deep Dive modal">AI Deep Dive</button>'
       + '</div>'
-      + '<h2 class="slide-title">' + esc(slide.title) + '</h2>';
+      + '</div>'
+      + '<h2 class="slide-title">' + esc(slide.title) + '</h2>'
+      + '<div class="analogy-box hidden" id="lesson-analogy-box">'
+      + '<div class="analogy-header"><span class="analogy-badge">Game Analogy</span><strong>' + esc(analogyData.title) + '</strong></div>'
+      + '<p class="analogy-text">' + esc(analogyData.analogy) + '</p>'
+      + '</div>';
     if (slide.type === 'tip') {
       html += '<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">' + fmt(slide.content) + '</div></div>';
     } else {

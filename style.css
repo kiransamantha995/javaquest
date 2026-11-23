@@ -9749,5 +9749,82 @@ body.dark-theme .learner-memory-modal {
   border-radius: 10px;
 }
 
+/* ── Streak Freeze & Analogy Styles ───────────────────────────────── */
+.nav-freeze-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38BDF8;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  cursor: help;
+  user-select: none;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.nav-freeze-badge:hover {
+  background: rgba(56, 189, 248, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-analogy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 230, 0, 0.08);
+  border: 1px solid rgba(255, 230, 0, 0.25);
+  color: #FFE600;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-analogy:hover, .btn-analogy.active {
+  background: rgba(255, 230, 0, 0.18);
+  border-color: #FFE600;
+  transform: translateY(-1px);
+}
+
+.analogy-box {
+  background: linear-gradient(135deg, rgba(255, 230, 0, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border: 1px solid rgba(255, 230, 0, 0.25);
+  border-radius: 10px;
+  padding: 1rem 1.15rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1rem;
+  animation: slideDown 0.2s ease-out;
+}
+.analogy-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.analogy-badge {
+  background: rgba(255, 230, 0, 0.15);
+  color: #FFE600;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 230, 0, 0.3);
+}
+.analogy-text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+
 
 
