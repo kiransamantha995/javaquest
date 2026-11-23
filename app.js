@@ -191,7 +191,11 @@ function updateThemeUI(isDark) {
   }
 }
 
+var _lastThemeToggle = 0;
 function toggleTheme() {
+  var now = Date.now();
+  if (now - _lastThemeToggle < 300) return;
+  _lastThemeToggle = now;
   var current = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
   var next = (current === 'dark') ? 'light' : 'dark';
   applyTheme(next);
@@ -4929,7 +4933,7 @@ function submitLessonTests() {
     }
 
     if (firstCompileErr) {
-      diffList.innerHTML = '<div class="diff-card fail">'
+      diffList.innerHTML = '<div class="diff-card test-diff-card fail">'
         + '<div class="diff-card-header"><span class="diff-test-name">Compilation Check</span><span class="diff-test-status">FAILED</span></div>'
         + '<pre class="output-error" style="margin:0;font-size:0.8rem;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;">' + esc(firstCompileErr) + '</pre>'
         + '</div>';
@@ -4964,7 +4968,7 @@ function submitLessonTests() {
       if (isPass) passCount++;
       else allPassed = false;
 
-      cardsHtml += '<div class="diff-card ' + (isPass ? 'pass' : 'fail') + '">'
+      cardsHtml += '<div class="diff-card test-diff-card ' + (isPass ? 'pass' : 'fail') + '">'
         + '<div class="diff-card-header">'
         + '<span class="diff-test-name">Test ' + (idx + 1) + ': ' + esc(t.name || 'Output Verification') + '</span>'
         + '<span class="diff-test-status">' + (isPass ? 'PASSED' : 'FAILED') + '</span>'
@@ -5003,7 +5007,7 @@ function submitLessonTests() {
       }
     }
   }).catch(function(err) {
-    diffList.innerHTML = '<div class="diff-card fail"><div class="diff-card-header"><span class="diff-test-name">System Error</span><span class="diff-test-status">ERROR</span></div><pre class="output-error">' + esc(err.message) + '</pre></div>';
+    diffList.innerHTML = '<div class="diff-card test-diff-card fail"><div class="diff-card-header"><span class="diff-test-name">System Error</span><span class="diff-test-status">ERROR</span></div><pre class="output-error">' + esc(err.message) + '</pre></div>';
   });
 }
 window.submitLessonTests = submitLessonTests;
@@ -5152,8 +5156,10 @@ document.addEventListener('DOMContentLoaded', function(){
   initTheme();
 
   // ── THEME TOGGLES ──
-  var ttb=ge('theme-toggle-btn');          if(ttb)ttb.addEventListener('click',toggleTheme);
-  var stb=ge('settings-theme-toggle-btn'); if(stb)stb.addEventListener('click',toggleTheme);
+  // auth-theme-toggle-btn and settings-theme-toggle-btn have inline onclick="toggleTheme()"
+  // Only bind event listener if inline handler is absent to prevent double-toggle cancellation.
+  var atb=ge('auth-theme-toggle-btn');     if(atb && !atb.getAttribute('onclick')) atb.addEventListener('click',toggleTheme);
+  var stb=ge('settings-theme-toggle-btn'); if(stb && !stb.getAttribute('onclick')) stb.addEventListener('click',toggleTheme);
 
   // ── NAV ───────────────────────────────────────────────────────
   var nll=ge('nav-logo-btn');   if(nll) nll.addEventListener('click', function(){showScreen('home');});
