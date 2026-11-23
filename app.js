@@ -4398,14 +4398,20 @@ function renderSplitLesson() {
   // 5. Exercise Prompt & Starter Code
   var exerciseBox = ge('lesson-exercise-box');
   var exerciseInstructions = ge('exercise-instructions');
-  var starterCode = slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // Write your solution here\n    }\n}';
+  var isExerciseStep = (_slideIdx === total - 1);
+  var curEx = _curLesson.exercise;
 
-  if (exerciseBox && exerciseInstructions) {
-    var taskDesc = slide.instructions || ('Practice writing the Java code for **' + esc(slide.title) + '**. Run your code or submit to verify tests!');
-    exerciseInstructions.innerHTML = fmt(taskDesc);
+  if (isExerciseStep && curEx && curEx.isGuidedProject) {
+    renderGuidedProject(exerciseBox, exerciseInstructions, curEx);
+  } else {
+    var taskDesc = (isExerciseStep && curEx && curEx.instructions) || slide.instructions || ('Practice writing the Java code for **' + esc(slide.title) + '**. Run your code or submit to verify tests!');
+    if (exerciseBox && exerciseInstructions) {
+      exerciseInstructions.innerHTML = fmt(taskDesc);
+    }
   }
 
   // Populate editor with starter code if empty or step changed
+  var starterCode = (isExerciseStep && curEx && curEx.starterCode) || slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // Write your solution here\n    }\n}';
   setEditorCode('lesson', starterCode);
 
   // 6. 3-Tier Progressive Hints Setup
@@ -4465,13 +4471,94 @@ function renderSplitLesson() {
   }
 }
 
+function renderGuidedProject(exerciseBox, exerciseInstructions, ex) {
+  if (!exerciseInstructions) return;
+  var html = '<div class="guided-project-container">';
+  html += '<div class="guided-project-badge"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Architecture Milestone</div>';
+  html += '<p class="guided-project-desc">' + fmt(ex.instructions || 'Follow the engineering milestones below to verify this system architecture.') + '</p>';
+
+  if (ex.checklist && ex.checklist.length > 0) {
+    html += '<div class="guided-section-title">Milestone Checklist</div>';
+    html += '<div class="guided-checklist">';
+    ex.checklist.forEach(function(item, idx) {
+      html += '<label class="guided-check-row">';
+      html += '<input type="checkbox" class="guided-cb" data-idx="' + idx + '" onchange="onGuidedCheckChange()" />';
+      html += '<span>' + esc(item) + '</span>';
+      html += '</label>';
+    });
+    html += '</div>';
+  }
+
+  if (ex.expectedOutputDescription) {
+    html += '<div class="guided-section-title">Expected Architecture Logs</div>';
+    html += '<pre class="guided-output-pre">' + esc(ex.expectedOutputDescription) + '</pre>';
+  }
+
+  var selfChecks = ex.selfChecks || ex.selfCheck || [];
+  if (selfChecks.length > 0) {
+    html += '<div class="guided-section-title">Architecture Self-Checks</div>';
+    html += '<div class="guided-selfchecks">';
+    selfChecks.forEach(function(sc, idx) {
+      html += '<details class="guided-selfcheck-card">';
+      html += '<summary class="guided-selfcheck-q"><strong>Q:</strong> ' + esc(sc.question) + '</summary>';
+      html += '<div class="guided-selfcheck-a"><strong>A:</strong> ' + esc(sc.answer) + '</div>';
+      html += '</details>';
+    });
+    html += '</div>';
+  }
+
+  html += '<div class="guided-actions">';
+  html += '<button class="btn-primary guided-complete-btn" id="btn-complete-guided" onclick="completeGuidedProject()">Verify & Complete Milestone</button>';
+  html += '</div>';
+  html += '</div>';
+
+  exerciseInstructions.innerHTML = html;
+}
+
+function completeGuidedProject() {
+  var cbs = qsa('.guided-cb');
+  var allChecked = true;
+  cbs.forEach(function(cb) {
+    if (!cb.checked) allChecked = false;
+  });
+  if (cbs.length > 0 && !allChecked) {
+    toast('Check off each completed milestone in the checklist to verify!');
+    return;
+  }
+  _stepTestsPassed[_slideIdx] = true;
+  _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx + 1);
+  updateStepPills();
+  addXP(_curLesson.xp || 30);
+  if (window.GameFX) {
+    if (window.GameFX.playBlockBreak) window.GameFX.playBlockBreak();
+    if (window.GameFX.flyXpOrbs) window.GameFX.flyXpOrbs();
+    if (window.GameFX.mascotReact) window.GameFX.mascotReact("bounce");
+  }
+  toast('Guided Project Milestone Completed! +' + (_curLesson.xp || 30) + ' XP');
+  showRecapOverlay();
+}
+window.completeGuidedProject = completeGuidedProject;
+
+function onGuidedCheckChange() {
+  var cbs = qsa('.guided-cb');
+  var checkedCount = 0;
+  cbs.forEach(function(cb) { if (cb.checked) checkedCount++; });
+  var btn = ge('btn-complete-guided');
+  if (btn && cbs.length > 0) {
+    btn.textContent = (checkedCount === cbs.length) ? 'Verify & Complete Milestone ✓' : ('Verify & Complete (' + checkedCount + '/' + cbs.length + ')');
+  }
+}
+window.onGuidedCheckChange = onGuidedCheckChange;
+
 function setupLessonHints(slide) {
   _unlockedHints = [false, false, false];
-  var rawHints = slide.hints || [
-    'Think about the types involved. Does your method signature match?',
-    'Double check standard syntax: semicolon at the end of statements and matching braces { }.',
-    'Review the code example above — notice how variables and methods are declared.'
-  ];
+  var rawHints = (slide && slide.hints && slide.hints.length) ? slide.hints : (
+    (_curLesson && _curLesson.exercise && _curLesson.exercise.hints && _curLesson.exercise.hints.length) ? _curLesson.exercise.hints : [
+      'Think about the types involved. Does your method signature match?',
+      'Double check standard syntax: semicolon at the end of statements and matching braces { }.',
+      'Review the code example above — notice how variables and methods are declared.'
+    ]
+  );
 
   for (var i = 1; i <= 3; i++) {
     var contentEl = ge('hint-tier-' + i + '-content');
@@ -4555,7 +4642,7 @@ function unlockLessonSolution() {
   var solBox = ge('solution-revealed-box');
   var solPre = ge('solution-code-pre');
   var slide = _curLesson.slides[_slideIdx];
-  var solution = slide.solution || slide.code || '// Solution matches the code example provided in the lesson';
+  var solution = (slide && slide.solution) || (_curLesson && _curLesson.exercise && _curLesson.exercise.solution) || slide.code || '// Solution matches the code example provided in the lesson';
   if (solBox && solPre) {
     solPre.textContent = solution;
     solBox.classList.remove('hidden');
@@ -4566,7 +4653,8 @@ window.unlockLessonSolution = unlockLessonSolution;
 function resetLessonCode() {
   if (!_curLesson) return;
   var slide = _curLesson.slides[_slideIdx];
-  var starterCode = slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n    }\n}';
+  var isExerciseStep = (_slideIdx === _curLesson.slides.length - 1);
+  var starterCode = (isExerciseStep && _curLesson.exercise && _curLesson.exercise.starterCode) || slide.code || _curLesson.starterCode || 'public class Main {\n    public static void main(String[] args) {\n    }\n}';
   setEditorCode('lesson', starterCode);
   toast('Code reset to starter template.');
 }
@@ -4671,6 +4759,11 @@ window.clearLessonConsole = clearLessonConsole;
 // ── Deterministic Test Runner & Diff Viewer ───────────────────────────────
 
 function submitLessonTests() {
+  if (_curLesson && _curLesson.exercise && _curLesson.exercise.isGuidedProject) {
+    completeGuidedProject();
+    return;
+  }
+
   var code = getEditorCode('lesson').trim();
   if (!code) { toast('Write your solution before submitting!'); return; }
   _lessonAttempts++;
@@ -4681,12 +4774,15 @@ function submitLessonTests() {
   }
   var diffList = ge('lesson-test-diff-list');
   if (!diffList) return;
-  diffList.innerHTML = '<div class="test-placeholder"><span class="run-spinner"></span>Running deterministic test cases against OpenJDK 22…</div>';
+  diffList.innerHTML = '<div class="test-placeholder"><span class="run-spinner"></span>Running deterministic test cases against OpenJDK…</div>';
 
   var slide = _curLesson.slides[_slideIdx];
-  var tests = (slide && slide.tests && slide.tests.length) ? slide.tests : [
-    { name: 'Output Verification', stdin: '', expected: (slide && slide.expected) || '' }
-  ];
+  var rawTests = (slide && slide.tests && slide.tests.length) ? slide.tests : (
+    (_curLesson && _curLesson.exercise && _curLesson.exercise.tests && _curLesson.exercise.tests.length) ? _curLesson.exercise.tests : [
+      { name: 'Output Verification', stdin: '', expected: (slide && slide.expected) || '' }
+    ]
+  );
+  var tests = rawTests;
 
   if (_cmLesson) _cmLesson.clearErrors();
 
@@ -4695,7 +4791,8 @@ function submitLessonTests() {
 
   tests.forEach(function(t) {
     promiseChain = promiseChain.then(function() {
-      return executeJava(code, (t.stdin != null ? String(t.stdin) : '')).then(function(res) {
+      var stdinVal = t.stdin != null ? String(t.stdin) : '';
+      return executeJava(code, stdinVal).then(function(res) {
         results.push({ test: t, res: res });
       });
     });
@@ -4732,8 +4829,17 @@ function submitLessonTests() {
     results.forEach(function(r, idx) {
       var t = r.test;
       var stdout = (r.res.run ? r.res.run.stdout : '').trim();
-      var expected = String(t.expected || '').trim();
-      var isPass = (!expected) || (stdout === expected) || (stdout.includes(expected));
+      var expectedRaw = t.expectedStdout != null ? t.expectedStdout : (t.expected != null ? t.expected : '');
+      var expected = String(expectedRaw).trim();
+      var isPass = false;
+      if (!expected) {
+        isPass = stdout.length > 0;
+      } else {
+        var normStdout = stdout.replace(/\r\n/g, '\n').trim();
+        var normExpected = expected.replace(/\r\n/g, '\n').trim();
+        isPass = (normStdout === normExpected) || (normStdout.indexOf(normExpected) !== -1);
+      }
+
       if (isPass) passCount++;
       else allPassed = false;
 

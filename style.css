@@ -9630,4 +9630,124 @@ body.dark-theme .learner-memory-modal {
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* ── Guided Project Milestone Styling ───────────────────────────── */
+.guided-project-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.guided-project-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(14, 165, 233, 0.12);
+  color: #38BDF8;
+  border: 1px solid rgba(14, 165, 233, 0.28);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+.guided-project-desc {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+.guided-section-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+.guided-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.guided-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.guided-check-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.guided-check-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-yellow);
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.guided-output-pre {
+  background: #0D1117;
+  color: #58A6FF;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  line-height: 1.5;
+  margin: 0;
+}
+.guided-selfchecks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.guided-selfcheck-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+}
+.guided-selfcheck-card[open] {
+  border-color: rgba(255, 230, 0, 0.25);
+  background: rgba(255, 230, 0, 0.02);
+}
+.guided-selfcheck-q {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+}
+.guided-selfcheck-a {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--mint);
+  line-height: 1.5;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--mint);
+}
+.guided-actions {
+  margin-top: 0.5rem;
+}
+.guided-complete-btn {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+
 
