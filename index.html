@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://wandbox.org https://generativelanguage.googleapis.com; img-src 'self' data: blob:; worker-src 'none'; object-src 'none'; base-uri 'self';">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co https://wandbox.org https://generativelanguage.googleapis.com; img-src 'self' data: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self';">
+  <meta name="theme-color" content="#FFE600"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="JavaQuest"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <title>JavaQuest — Learn Java Like a Game</title>
@@ -1085,6 +1092,9 @@
       <input type="text" id="chat-input" class="chat-input" placeholder="Ask JavaBot about your code…"/>
       <button class="chat-send-btn" id="chat-send-btn" type="button" onclick="window.sendChatMessage && window.sendChatMessage()" title="Send Message"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
     </div>
+    <div class="ai-disclaimer" style="font-size:0.68rem;text-align:center;padding:0.35rem 0.5rem;color:var(--text-secondary,#71717A);opacity:0.85;">
+      JavaBot AI may produce inaccuracies. Verify code with compiler.
+    </div>
   </div>
   <button class="ai-chat-fab" id="ai-chat-fab" title="Ask JavaBot" type="button" onclick="event.stopPropagation(); window.toggleChat && window.toggleChat();" aria-label="Ask JavaBot AI Tutor">
     <span class="fab-icon">
@@ -1285,5 +1295,14 @@
 <script src="lib/editor.bundle.js?v=9.1"></script>
 <script src="lib/game-fx.js?v=9.1"></script>
 <script src="app.js?v=9.1"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js').catch(function(err) {
+        console.warn('[SW] Registration failed:', err);
+      });
+    });
+  }
+</script>
 </body>
 </html>

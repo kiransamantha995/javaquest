@@ -1,0 +1,41 @@
+{
+  "name": "JavaQuest — Master Modern Java 21",
+  "short_name": "JavaQuest",
+  "description": "Gamified Java learning platform with 24 interactive modules, OpenJDK 22 compiler, and Gemini AI tutor.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B0B0E",
+  "theme_color": "#FFE600",
+  "categories": [
+    "education",
+    "developer"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

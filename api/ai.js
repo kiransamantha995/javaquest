@@ -144,16 +144,27 @@ function isTopicAllowed(query) {
 }
 
 // ─── Gemini API caller (key in header, never in URL) ─────────────────────────
+const PLAYSTORE_SAFETY_SETTINGS = [
+  { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+  { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' }
+];
+
 async function callGeminiSingle(model, payload) {
   const apiKey = process.env.GEMINI_API_KEY;
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+  const enrichedPayload = {
+    ...payload,
+    safetySettings: payload.safetySettings || PLAYSTORE_SAFETY_SETTINGS
+  };
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type':   'application/json',
       'x-goog-api-key': apiKey
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(enrichedPayload),
     signal: AbortSignal.timeout(28000)
   });
 

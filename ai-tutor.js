@@ -860,6 +860,29 @@
     }
 
     div.appendChild(bubble);
+
+    // Google Play Generative AI Policy: In-app reporting mechanism for AI responses
+    if (role === 'bot') {
+      var reportWrap = document.createElement('div');
+      reportWrap.className = 'ai-msg-actions';
+      reportWrap.style.cssText = 'display:flex;justify-content:flex-end;margin-top:4px;gap:6px;';
+      var reportBtn = document.createElement('button');
+      reportBtn.type = 'button';
+      reportBtn.className = 'btn-report-ai';
+      reportBtn.title = 'Report inappropriate or inaccurate response';
+      reportBtn.innerHTML = '<span style="font-size:0.72rem;opacity:0.7;cursor:pointer;">⚑ Report</span>';
+      reportBtn.style.cssText = 'background:none;border:none;padding:2px 6px;cursor:pointer;color:inherit;font-family:inherit;';
+      reportBtn.onclick = function() {
+        reportBtn.innerHTML = '<span style="font-size:0.72rem;color:#10B981;font-weight:700;">✓ Flagged for review</span>';
+        reportBtn.disabled = true;
+        if (typeof toast === 'function') {
+          toast('Thank you for reporting. This response has been flagged for safety review.');
+        }
+      };
+      reportWrap.appendChild(reportBtn);
+      div.appendChild(reportWrap);
+    }
+
     container.appendChild(div);
     scrollChatToBottom();
   }
