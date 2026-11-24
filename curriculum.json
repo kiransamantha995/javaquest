@@ -1,0 +1,990 @@
+{
+  "tracks": 3,
+  "totalModules": 24,
+  "modules": [
+    {
+      "id": "b1",
+      "code": "B1",
+      "level": "beginner",
+      "title": "How Java Runs & Orientation",
+      "subtitle": "Source code, bytecode, the JVM, HotSpot JIT, JDK, and program anatomy",
+      "biome": "Sunrise Plains",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b1_l1",
+          "title": "From Source Code to Bytecode",
+          "xp": 30
+        },
+        {
+          "id": "b1_l2",
+          "title": "Anatomy of a Java Class",
+          "xp": 30
+        },
+        {
+          "id": "b1_l3",
+          "title": "The main Method: Anatomy of an Entry Point",
+          "xp": 30
+        },
+        {
+          "id": "b1_l4",
+          "title": "Console Output: print, println, and printf",
+          "xp": 30
+        },
+        {
+          "id": "b1_l5",
+          "title": "Comments, Code Style & Documentation",
+          "xp": 30
+        },
+        {
+          "id": "b1_l6",
+          "title": "Diagnosing Compilation vs Runtime Errors",
+          "xp": 35
+        }
+      ]
+    },
+    {
+      "id": "b2",
+      "code": "B2",
+      "level": "beginner",
+      "title": "Variables, Data Types & Terminal Input",
+      "subtitle": "Primitives, IEEE 754 precision, Scanner console input, and type conversions",
+      "biome": "Village Market",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b2_l1",
+          "title": "Variables, Memory & Static Typing",
+          "xp": 30
+        },
+        {
+          "id": "b2_l2",
+          "title": "Integer Primitives: byte, short, int, long",
+          "xp": 30
+        },
+        {
+          "id": "b2_l3",
+          "title": "Floating-Point Numbers: float vs double",
+          "xp": 30
+        },
+        {
+          "id": "b2_l4",
+          "title": "Characters & Booleans: Symbols and Binary State",
+          "xp": 30
+        },
+        {
+          "id": "b2_l5",
+          "title": "Reading Console Input with java.util.Scanner",
+          "xp": 35
+        },
+        {
+          "id": "b2_l6",
+          "title": "Type Casting & Numeric Promotion",
+          "xp": 35
+        }
+      ]
+    },
+    {
+      "id": "b3",
+      "code": "B3",
+      "level": "beginner",
+      "title": "Operators, Expressions & Precedence",
+      "subtitle": "Arithmetic, relational, short-circuit boolean logic, and operator precedence",
+      "biome": "Redstone Workshop",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b3_l1",
+          "title": "Arithmetic Operators & The Modulo Operator",
+          "xp": 30
+        },
+        {
+          "id": "b3_l2",
+          "title": "Compound Assignment & Prefix vs Postfix Unary Operators",
+          "xp": 30
+        },
+        {
+          "id": "b3_l3",
+          "title": "Relational & Equality Operators",
+          "xp": 30
+        },
+        {
+          "id": "b3_l4",
+          "title": "Logical Operators & Short-Circuit Evaluation",
+          "xp": 35
+        },
+        {
+          "id": "b3_l5",
+          "title": "The Ternary Conditional Operator (? :)",
+          "xp": 30
+        },
+        {
+          "id": "b3_l6",
+          "title": "Operator Precedence & Bitwise Operations",
+          "xp": 35
+        }
+      ]
+    },
+    {
+      "id": "b4",
+      "code": "B4",
+      "level": "beginner",
+      "title": "Control Flow: Decisions & Loops",
+      "subtitle": "Branching with if/switch, iterative loops (while, do-while, for), and loop control",
+      "biome": "Labyrinth Caves",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b4_l1",
+          "title": "Branching with if, else if, and else",
+          "xp": 30
+        },
+        {
+          "id": "b4_l2",
+          "title": "Modern switch Statements & Expressions (Java 14+)",
+          "xp": 30
+        },
+        {
+          "id": "b4_l3",
+          "title": "The while Loop: Condition-Controlled Repetition",
+          "xp": 30
+        },
+        {
+          "id": "b4_l4",
+          "title": "The do-while Loop: Guaranteed First Execution",
+          "xp": 30
+        },
+        {
+          "id": "b4_l5",
+          "title": "The Standard for Loop: Count-Controlled Repetition",
+          "xp": 35
+        },
+        {
+          "id": "b4_l6",
+          "title": "Loop Control: break, continue & Nested Loops",
+          "xp": 35
+        }
+      ]
+    },
+    {
+      "id": "b5",
+      "code": "B5",
+      "level": "beginner",
+      "title": "Methods, Parameters & Scope",
+      "subtitle": "Modular functions, Java's pass-by-value mechanics, method overloading, and recursion",
+      "biome": "Crafting Citadel",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b5_l1",
+          "title": "Defining & Invoking Methods",
+          "xp": 30
+        },
+        {
+          "id": "b5_l2",
+          "title": "Parameters, Arguments & Pass-by-Value",
+          "xp": 35
+        },
+        {
+          "id": "b5_l3",
+          "title": "Return Values & Early Exit Guard Clauses",
+          "xp": 30
+        },
+        {
+          "id": "b5_l4",
+          "title": "Variable Scope & Shadowing",
+          "xp": 30
+        },
+        {
+          "id": "b5_l5",
+          "title": "Method Overloading: Polymorphic Flexibility",
+          "xp": 35
+        },
+        {
+          "id": "b5_l6",
+          "title": "Introduction to Recursion",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "code": "B6",
+      "level": "beginner",
+      "title": "Arrays & String Manipulation",
+      "subtitle": "Contiguous heap memory, 1D & 2D arrays, String immutability, constant pool, and StringBuilder",
+      "biome": "Quarry Warehouse",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b6_l1",
+          "title": "1D Arrays: Allocation, Indexing & Memory Layout",
+          "xp": 30
+        },
+        {
+          "id": "b6_l2",
+          "title": "Array Traversal: Classic For vs Enhanced For-Each",
+          "xp": 30
+        },
+        {
+          "id": "b6_l3",
+          "title": "Multi-Dimensional Arrays: Matrices & Jagged Arrays",
+          "xp": 30
+        },
+        {
+          "id": "b6_l4",
+          "title": "Strings & Immutability: The String Constant Pool",
+          "xp": 30
+        },
+        {
+          "id": "b6_l5",
+          "title": "Essential String Methods & Tokenization",
+          "xp": 30
+        },
+        {
+          "id": "b6_l6",
+          "title": "StringBuilder & Modern Text Blocks (Java 15+)",
+          "xp": 30
+        }
+      ]
+    },
+    {
+      "id": "b7",
+      "code": "B7",
+      "level": "beginner",
+      "title": "Classes & Object-Oriented Foundations",
+      "subtitle": "State and behavior, encapsulation, constructors, the `this` reference, and static class members",
+      "biome": "Architect Academy",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b7_l1",
+          "title": "Classes as Blueprints & Heap Instances",
+          "xp": 30
+        },
+        {
+          "id": "b7_l2",
+          "title": "Instance Methods & State Mutation",
+          "xp": 30
+        },
+        {
+          "id": "b7_l3",
+          "title": "Constructors & Parameterized Initialization",
+          "xp": 30
+        },
+        {
+          "id": "b7_l4",
+          "title": "The this Keyword & Constructor Chaining",
+          "xp": 30
+        },
+        {
+          "id": "b7_l5",
+          "title": "Encapsulation, Access Modifiers & Invariant Validation",
+          "xp": 30
+        },
+        {
+          "id": "b7_l6",
+          "title": "Class Members: static Methods & Constants",
+          "xp": 30
+        }
+      ]
+    },
+    {
+      "id": "b8",
+      "code": "B8",
+      "level": "beginner",
+      "title": "Exceptions, Collections & Track 1 Capstone",
+      "subtitle": "Robust error handling, try-catch-finally, checked vs unchecked exceptions, ArrayList, HashMap, and the Console Expense Tracker",
+      "biome": "Hisser Cavern",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "b8_l1",
+          "title": "Exception Hierarchy & The try-catch Block",
+          "xp": 35
+        },
+        {
+          "id": "b8_l2",
+          "title": "Multi-Catch, try-with-resources & the finally Block",
+          "xp": 35
+        },
+        {
+          "id": "b8_l3",
+          "title": "Checked vs Unchecked Exceptions & Throwing",
+          "xp": 35
+        },
+        {
+          "id": "b8_l4",
+          "title": "Dynamic Resizable Lists: ArrayList<E> & Generics",
+          "xp": 35
+        },
+        {
+          "id": "b8_l5",
+          "title": "Key-Value Lookups: HashMap<K, V>",
+          "xp": 35
+        },
+        {
+          "id": "b8_l6",
+          "title": "Track 1 Capstone: Console Expense Tracker",
+          "xp": 50
+        }
+      ]
+    },
+    {
+      "id": "i1",
+      "code": "I1",
+      "level": "intermediate",
+      "title": "Inheritance, Interfaces & Polymorphism",
+      "subtitle": "Subclassing with extends, dynamic dispatch, abstract classes, interface contracts, and polymorphism",
+      "biome": "Crimson Forest",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i1_l1",
+          "title": "Inheritance & The super Keyword",
+          "xp": 40
+        },
+        {
+          "id": "i1_l2",
+          "title": "Method Overriding & The @Override Annotation",
+          "xp": 40
+        },
+        {
+          "id": "i1_l3",
+          "title": "Polymorphism & Dynamic Method Dispatch",
+          "xp": 40
+        },
+        {
+          "id": "i1_l4",
+          "title": "Abstract Classes & Template Methods",
+          "xp": 40
+        },
+        {
+          "id": "i1_l5",
+          "title": "Interfaces & Multiple Contract Implementation",
+          "xp": 40
+        },
+        {
+          "id": "i1_l6",
+          "title": "Modern Interfaces: default, static, and private Methods",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i2",
+      "code": "I2",
+      "level": "intermediate",
+      "title": "Collections & Generics in Depth",
+      "subtitle": "Type erasure, bounded wildcards (PECS), custom generic classes, Sets, Deques, and sorting contracts",
+      "biome": "Soul Sand Valley",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i2_l1",
+          "title": "Generic Classes & Type Parameterization",
+          "xp": 40
+        },
+        {
+          "id": "i2_l2",
+          "title": "Generic Methods & Bounded Type Parameters",
+          "xp": 40
+        },
+        {
+          "id": "i2_l3",
+          "title": "Wildcards & The PECS Principle",
+          "xp": 40
+        },
+        {
+          "id": "i2_l4",
+          "title": "Sets: Uniqueness with HashSet & TreeSet",
+          "xp": 40
+        },
+        {
+          "id": "i2_l5",
+          "title": "Queues & Deques: ArrayDeque & PriorityQueue",
+          "xp": 40
+        },
+        {
+          "id": "i2_l6",
+          "title": "Sorting Contracts: Comparable vs Comparator",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i3",
+      "code": "I3",
+      "level": "intermediate",
+      "title": "Files, Modern I/O & Resource Safety",
+      "subtitle": "Byte vs character streams, buffered I/O, modern NIO.2 (Path, Files), and strict try-with-resources",
+      "biome": "Basalt Deltas",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i3_l1",
+          "title": "Streams Architecture: Byte Streams vs Character Streams",
+          "xp": 40
+        },
+        {
+          "id": "i3_l2",
+          "title": "Buffered I/O & Line-by-Line Processing",
+          "xp": 40
+        },
+        {
+          "id": "i3_l3",
+          "title": "Resource Safety: try-with-resources & AutoCloseable",
+          "xp": 40
+        },
+        {
+          "id": "i3_l4",
+          "title": "Modern NIO.2: Path & Files",
+          "xp": 40
+        },
+        {
+          "id": "i3_l5",
+          "title": "Modern Text & Stream I/O: Files.readString & Files.lines",
+          "xp": 40
+        },
+        {
+          "id": "i3_l6",
+          "title": "Binary Serialization vs Structured JSON/Text Data",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i4",
+      "code": "I4",
+      "level": "intermediate",
+      "title": "Functional Java: Lambdas, Streams & Optional",
+      "subtitle": "Functional interfaces, lambda expressions, method references, stream pipelines, collectors, and Optional",
+      "biome": "Warped Forest",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i4_l1",
+          "title": "Functional Interfaces & Lambda Syntax",
+          "xp": 40
+        },
+        {
+          "id": "i4_l2",
+          "title": "Method References (Class::method)",
+          "xp": 40
+        },
+        {
+          "id": "i4_l3",
+          "title": "The Stream Pipeline: filter, map & sorted",
+          "xp": 40
+        },
+        {
+          "id": "i4_l4",
+          "title": "FlatMap & Reductions (reduce, sum, min, max)",
+          "xp": 40
+        },
+        {
+          "id": "i4_l5",
+          "title": "Advanced Collectors: groupingBy & joining",
+          "xp": 40
+        },
+        {
+          "id": "i4_l6",
+          "title": "Null-Safety with Optional<T>",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i5",
+      "code": "I5",
+      "level": "intermediate",
+      "title": "Modern Java: Records, Enums, Sealed Types & Pattern Matching",
+      "subtitle": "Immutable data carriers (records), type-safe enums with behavior, sealed hierarchies, pattern matching instanceof, and switch pattern matching",
+      "biome": "Nether Fortress",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i5_l1",
+          "title": "Rich Enums: Fields, Constructors & Constant-Specific Behavior",
+          "xp": 40
+        },
+        {
+          "id": "i5_l2",
+          "title": "Records: Transparent Immutable Data Carriers (Java 16+)",
+          "xp": 40
+        },
+        {
+          "id": "i5_l3",
+          "title": "Sealed Classes & Interfaces: Bounded Hierarchies (Java 17+)",
+          "xp": 40
+        },
+        {
+          "id": "i5_l4",
+          "title": "Pattern Matching for instanceof (Java 16+)",
+          "xp": 40
+        },
+        {
+          "id": "i5_l5",
+          "title": "Pattern Matching for switch (Java 21)",
+          "xp": 40
+        },
+        {
+          "id": "i5_l6",
+          "title": "Algebraic Data Types (ADTs) & Domain Modeling",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i6",
+      "code": "I6",
+      "level": "intermediate",
+      "title": "Testing with JUnit 5 & Diagnostic Debugging",
+      "subtitle": "Automated unit testing, test lifecycle (@Test, @BeforeEach), assertions, exception testing, parameterized tests, and stack trace debugging",
+      "biome": "Piglin Bastion",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i6_l1",
+          "title": "The Philosophy of Unit Testing & The Testing Triangle",
+          "xp": 40
+        },
+        {
+          "id": "i6_l2",
+          "title": "JUnit 5 Architecture & Core Assertions",
+          "xp": 40
+        },
+        {
+          "id": "i6_l3",
+          "title": "The Test Lifecycle: @BeforeEach, @AfterEach, @BeforeAll",
+          "xp": 40
+        },
+        {
+          "id": "i6_l4",
+          "title": "Testing Exceptions with assertThrows",
+          "xp": 40
+        },
+        {
+          "id": "i6_l5",
+          "title": "Data-Driven Testing: @ParameterizedTest",
+          "xp": 40
+        },
+        {
+          "id": "i6_l6",
+          "title": "Debugging, Diagnostic Logging & Stack Trace Forensics",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i7",
+      "code": "I7",
+      "level": "intermediate",
+      "title": "Relational Persistence: JDBC & SQL Architecture",
+      "subtitle": "Relational database tables, connection lifecycles, SQL queries, PreparedStatement security, ResultSet cursor iteration, and ACID transactions",
+      "biome": "Magma Core",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i7_l1",
+          "title": "Relational Schemas & SQL Foundations",
+          "xp": 40
+        },
+        {
+          "id": "i7_l2",
+          "title": "JDBC Architecture & Connection Lifecycles",
+          "xp": 40
+        },
+        {
+          "id": "i7_l3",
+          "title": "Parameterized Queries & PreparedStatement Security",
+          "xp": 40
+        },
+        {
+          "id": "i7_l4",
+          "title": "ResultSet Cursor Navigation & Entity Mapping",
+          "xp": 40
+        },
+        {
+          "id": "i7_l5",
+          "title": "ACID Transactions & Rollback Strategies",
+          "xp": 40
+        },
+        {
+          "id": "i7_l6",
+          "title": "The Data Access Object (DAO) Pattern",
+          "xp": 40
+        }
+      ]
+    },
+    {
+      "id": "i8",
+      "code": "I8",
+      "level": "intermediate",
+      "title": "Concurrency Basics & Thread Safety",
+      "subtitle": "Threads, Runnable, intrinsic locks, synchronized, volatile visibility, ExecutorService, Atomic variables, and coordination primitives",
+      "biome": "Blaze Citadel",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "i8_l1",
+          "title": "Threads & The Runnable Interface",
+          "xp": 40
+        },
+        {
+          "id": "i8_l2",
+          "title": "Race Conditions & The synchronized Keyword",
+          "xp": 45
+        },
+        {
+          "id": "i8_l3",
+          "title": "Memory Visibility & The volatile Keyword",
+          "xp": 40
+        },
+        {
+          "id": "i8_l4",
+          "title": "Modern Thread Pools: ExecutorService & Callables",
+          "xp": 45
+        },
+        {
+          "id": "i8_l5",
+          "title": "Atomic Variables & Lock-Free CAS",
+          "xp": 45
+        },
+        {
+          "id": "i8_l6",
+          "title": "Thread Coordination: CountDownLatch & BlockingQueue",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a1",
+      "code": "A1",
+      "level": "advanced",
+      "title": "JVM Memory, Class Loading & Garbage Collection",
+      "subtitle": "HotSpot runtime data areas, Metaspace, ClassLoader hierarchies, generational GC algorithms (G1, ZGC), reference types, and memory diagnostic flags",
+      "biome": "End Gateway",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a1_l1",
+          "title": "JVM Runtime Data Areas: Heap, Stack & Metaspace",
+          "xp": 45
+        },
+        {
+          "id": "a1_l2",
+          "title": "Class Loading Subsystem & Delegation Hierarchy",
+          "xp": 45
+        },
+        {
+          "id": "a1_l3",
+          "title": "Generational Garbage Collection & The Life of an Object",
+          "xp": 45
+        },
+        {
+          "id": "a1_l4",
+          "title": "Modern Garbage Collectors: G1 GC, ZGC & Shenandoah",
+          "xp": 45
+        },
+        {
+          "id": "a1_l5",
+          "title": "Memory Leaks, Heap Dumps & Diagnostic Profiling",
+          "xp": 45
+        },
+        {
+          "id": "a1_l6",
+          "title": "Reference Types: Strong, Soft, Weak & Phantom",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a2",
+      "code": "A2",
+      "level": "advanced",
+      "title": "Java Memory Model & Advanced Concurrency",
+      "subtitle": "The JMM specification, happens-before rules, ReentrantLock, Condition variables, ReentrantReadWriteLock, StampedLock, lock-free concurrent structures, and thread dump diagnostics",
+      "biome": "Void Abyss",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a2_l1",
+          "title": "The Java Memory Model & Happens-Before Guarantee",
+          "xp": 45
+        },
+        {
+          "id": "a2_l2",
+          "title": "Explicit Locks: ReentrantLock & Timed Acquires",
+          "xp": 45
+        },
+        {
+          "id": "a2_l3",
+          "title": "Condition Variables & Thread Signaling",
+          "xp": 45
+        },
+        {
+          "id": "a2_l4",
+          "title": "Read-Write Locks: ReentrantReadWriteLock & StampedLock",
+          "xp": 45
+        },
+        {
+          "id": "a2_l5",
+          "title": "Concurrent Collections: ConcurrentHashMap & CopyOnWrite",
+          "xp": 45
+        },
+        {
+          "id": "a2_l6",
+          "title": "Deadlocks, Livelocks & Thread Dump Diagnostics",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a3",
+      "code": "A3",
+      "level": "advanced",
+      "title": "Modern Java: Virtual Threads & Structured Concurrency",
+      "subtitle": "Project Loom, Thread.ofVirtual(), Executors.newVirtualThreadPerTaskExecutor(), carrier thread scheduling, thread pinning hazards, and Structured Concurrency patterns",
+      "biome": "Chorus Highlands",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a3_l1",
+          "title": "The Loom Revolution: Platform vs Virtual Threads",
+          "xp": 45
+        },
+        {
+          "id": "a3_l2",
+          "title": "VirtualThreadPerTaskExecutor: Modern Asynchronous Execution",
+          "xp": 45
+        },
+        {
+          "id": "a3_l3",
+          "title": "Carrier Thread Pinning: synchronized vs ReentrantLock",
+          "xp": 45
+        },
+        {
+          "id": "a3_l4",
+          "title": "Structured Concurrency & Failure Propagation",
+          "xp": 45
+        },
+        {
+          "id": "a3_l5",
+          "title": "Scoped Values: Replacing ThreadLocal in High Concurrency",
+          "xp": 45
+        },
+        {
+          "id": "a3_l6",
+          "title": "High-Throughput Benchmarking: 10,000 Tasks in Milliseconds",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a4",
+      "code": "A4",
+      "level": "advanced",
+      "title": "Design Patterns & Clean Architecture",
+      "subtitle": "Modern Java idioms for GoF patterns: Builder with Records, Singleton patterns, Adapter, Decorator, Strategy with Lambdas, Observer with Reactive events, and Clean/Hexagonal Architecture",
+      "biome": "End City Outer Islands",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a4_l1",
+          "title": "Creational Patterns: Fluent Builder & Immutability",
+          "xp": 45
+        },
+        {
+          "id": "a4_l2",
+          "title": "Creational Patterns: Thread-Safe Singleton Idioms",
+          "xp": 45
+        },
+        {
+          "id": "a4_l3",
+          "title": "Structural Patterns: Adapter & Decorator Pipelines",
+          "xp": 45
+        },
+        {
+          "id": "a4_l4",
+          "title": "Behavioral Patterns: Strategy & Command with Lambdas",
+          "xp": 45
+        },
+        {
+          "id": "a4_l5",
+          "title": "Behavioral Patterns: Observer & Event Broadcasting",
+          "xp": 45
+        },
+        {
+          "id": "a4_l6",
+          "title": "Clean Architecture: Ports, Adapters & SOLID Principles",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a5",
+      "code": "A5",
+      "level": "advanced",
+      "title": "Networking, Modern HTTP & Security Architecture",
+      "subtitle": "Socket programming, Java 11+ java.net.http.HttpClient, RESTful API contracts, cryptographic hashing (SHA-256), TLS/SSL handshakes, and JSON Web Token (JWT) authentication",
+      "biome": "Void Nebula",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a5_l1",
+          "title": "Low-Level Networking: TCP Sockets & ServerSockets",
+          "xp": 45
+        },
+        {
+          "id": "a5_l2",
+          "title": "Modern HTTP Client: java.net.http (Async & HTTP/2)",
+          "xp": 45
+        },
+        {
+          "id": "a5_l3",
+          "title": "RESTful API Architecture & JSON Contracts",
+          "xp": 45
+        },
+        {
+          "id": "a5_l4",
+          "title": "Cryptographic Foundations: Hashing & MessageDigest",
+          "xp": 45
+        },
+        {
+          "id": "a5_l5",
+          "title": "Asymmetric Cryptography, KeyPairs & TLS Handshakes",
+          "xp": 45
+        },
+        {
+          "id": "a5_l6",
+          "title": "Stateless Security: JSON Web Tokens (JWT) & Filter Chains",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a6",
+      "code": "A6",
+      "level": "advanced",
+      "title": "Enterprise Architecture: Spring Boot, REST & JPA",
+      "subtitle": "Spring IoC Container, Dependency Injection, @SpringBootApplication, REST controllers, Spring Data JPA, Hibernate ORM, Bean validation, and multi-tier architectural layering",
+      "biome": "Dragon's Perch",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a6_l1",
+          "title": "Spring IoC Container & Dependency Injection",
+          "xp": 45
+        },
+        {
+          "id": "a6_l2",
+          "title": "Spring Boot Microservices & Auto-Configuration",
+          "xp": 45
+        },
+        {
+          "id": "a6_l3",
+          "title": "Building RESTful Controllers with Spring MVC",
+          "xp": 45
+        },
+        {
+          "id": "a6_l4",
+          "title": "Persistence with Spring Data JPA & Hibernate",
+          "xp": 45
+        },
+        {
+          "id": "a6_l5",
+          "title": "DTO Validation & Global Exception Handling",
+          "xp": 45
+        },
+        {
+          "id": "a6_l6",
+          "title": "Guided Project: Deploying a Multi-Tier Spring REST Service",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a7",
+      "code": "A7",
+      "level": "advanced",
+      "title": "High-Performance Java: Profiling, JIT & Memory Architecture",
+      "subtitle": "JMH microbenchmarks, HotSpot Tiered Compilation (C1/C2), On-Stack Replacement (OSR), JDK Flight Recorder (JFR), Compact Strings, and Zero-Copy Direct Memory",
+      "biome": "End Core",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a7_l1",
+          "title": "Microbenchmarking with JMH: Avoiding JIT Traps",
+          "xp": 45
+        },
+        {
+          "id": "a7_l2",
+          "title": "HotSpot Tiered Compilation: C1, C2 & Method Inlining",
+          "xp": 45
+        },
+        {
+          "id": "a7_l3",
+          "title": "Production Profiling: JDK Flight Recorder (JFR) & Mission Control",
+          "xp": 45
+        },
+        {
+          "id": "a7_l4",
+          "title": "Memory Optimizations: Compact Strings & Deduplication",
+          "xp": 45
+        },
+        {
+          "id": "a7_l5",
+          "title": "Zero-Copy I/O: Direct ByteBuffer & FileChannel",
+          "xp": 45
+        },
+        {
+          "id": "a7_l6",
+          "title": "Cache-Conscious Data Layouts & False Sharing",
+          "xp": 45
+        }
+      ]
+    },
+    {
+      "id": "a8",
+      "code": "A8",
+      "level": "advanced",
+      "title": "Cloud-Native Java: Packaging, Docker & CI/CD",
+      "subtitle": "Fat JARs, JPMS (Java Platform Module System), jlink custom minimal runtimes, multi-stage Docker builds, cgroup memory limits (-XX:MaxRAMPercentage), GitHub Actions CI/CD, and Micrometer observability",
+      "biome": "Void Spire",
+      "lessonsCount": 6,
+      "lessons": [
+        {
+          "id": "a8_l1",
+          "title": "Modern Java Packaging: Fat JARs & Build Lifecycles",
+          "xp": 45
+        },
+        {
+          "id": "a8_l2",
+          "title": "JPMS & Modular Runtimes: module-info & jlink",
+          "xp": 45
+        },
+        {
+          "id": "a8_l3",
+          "title": "Containerizing Java with Multi-Stage Docker & Distroless",
+          "xp": 45
+        },
+        {
+          "id": "a8_l4",
+          "title": "JVM in Containers: Memory Limits & CPU Quotas",
+          "xp": 45
+        },
+        {
+          "id": "a8_l5",
+          "title": "CI/CD Pipelines: GitHub Actions & Automated Quality Gates",
+          "xp": 45
+        },
+        {
+          "id": "a8_l6",
+          "title": "Production Observability: Micrometer & Prometheus Metrics",
+          "xp": 45
+        }
+      ]
+    }
+  ]
+}
