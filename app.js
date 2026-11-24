@@ -232,6 +232,12 @@ function showScreen(name) {
   if (name==='auth') {
     var cp = ge('chat-panel');
     if (cp) cp.classList.add('hidden');
+    if (window.Meowger && window.Meowger.el) window.Meowger.el.style.display = 'none';
+  } else {
+    if (window.Meowger && window.Meowger.el) window.Meowger.el.style.display = 'block';
+  }
+  if (window.Meowger && typeof window.Meowger.onScreenChanged === 'function') {
+    window.Meowger.onScreenChanged(name);
   }
   qsa('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
   var nb = ge('nav-'+name); if (nb) nb.classList.add('active');
@@ -1648,6 +1654,15 @@ function renderMap() {
     filteredMods = allMods.filter(function(m){ return m.level === _activeTrackFilter; });
   }
 
+  // ── Render W3Schools-Style Adventure Trail ──
+  var trailContainer = ge('adventure-trail-wrap');
+  if (trailContainer && typeof window.renderAdventureTrail === 'function') {
+    window.renderAdventureTrail(trailContainer, filteredMods, _activeTrackFilter);
+  }
+  if (typeof window.setMapViewMode === 'function') {
+    window.setMapViewMode();
+  }
+
   container.innerHTML = '';
 
   var trackMeta = {
@@ -1735,7 +1750,7 @@ function renderMap() {
       + '<span class="chapter-code-badge">' + (mod.code || mod.id).toUpperCase() + '</span>'
       + '<h3 class="chapter-title">' + esc(mod.title) + '</h3>' + (mod.biome ? '<span class="biome-badge">◆ ' + esc(mod.biome) + '</span>' : '')
       + '</div>'
-      + '<p class="chapter-desc">' + esc(mod.subtitle || '') + (mod.conceptMetaphor ? ' <span style="display:block;margin-top:4px;color:var(--pixel-mint);font-weight:600;">💡 ' + esc(mod.conceptMetaphor) + '</span>' : '') + '</p>'
+      + '<p class="chapter-desc">' + esc(mod.subtitle || '') + (mod.conceptMetaphor ? ' <span style="display:block;margin-top:4px;color:var(--pixel-mint);font-weight:600;"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:3px;vertical-align:-1px"><circle cx="8" cy="6" r="4"/><path d="M6 10h4M7 13h2"/></svg>' + esc(mod.conceptMetaphor) + '</span>' : '') + '</p>'
       + '</div>'
       + '</div>'
       + '<div class="chapter-header-right">'
@@ -2361,7 +2376,7 @@ function openProjectModal(projId) {
       if (typeof STATE.player.streakFreeze !== 'number') STATE.player.streakFreeze = 0;
       if (STATE.player.streakFreeze < 2) {
         STATE.player.streakFreeze++;
-        setTimeout(function(){ toast('Capstone Bonus: +1 Streak Freeze equipped! ❄️'); }, 600);
+        setTimeout(function(){ toast('Capstone Bonus: +1 Streak Freeze equipped!'); }, 600);
       }
       burstParticles('home-particles');
       localSave();
@@ -3549,14 +3564,14 @@ function checkStreak(){
       checkBadge('streak_7');
       if (p.streak === 7 && p.streakFreeze < 2) {
         p.streakFreeze++;
-        toast('7-Day Streak Bonus: +1 Streak Freeze equipped! ❄️');
+        toast('7-Day Streak Bonus: +1 Streak Freeze equipped!');
       }
-      setTimeout(function(){ toast('Day ' + p.streak + ' streak! 🔥'); }, 800);
+      setTimeout(function(){ toast('Day ' + p.streak + ' streak!'); }, 800);
     } else {
       // Missed 1 or more days
       if (p.streakFreeze > 0) {
         p.streakFreeze--;
-        toast('Streak Freeze Activated! ❄️ Your ' + p.streak + '-day streak was preserved!');
+        toast('Streak Freeze Activated! Your ' + p.streak + '-day streak was preserved!');
       } else {
         p.streak = 1;
       }
@@ -3583,7 +3598,7 @@ function craftStreakFreeze() {
   localSave();
   updateNav();
   renderSettings();
-  toast('Streak Freeze Crafted! ❄️ (-100 XP)');
+  toast('Streak Freeze Crafted! (-100 XP)');
 }
 window.craftStreakFreeze = craftStreakFreeze;
 
@@ -4422,7 +4437,7 @@ function renderSplitLesson() {
       + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
       + '<span class="slide-type-badge">' + typeLabel + '</span>'
       + '<div style="display:flex;gap:0.5rem;align-items:center;">'
-      + '<button class="btn-analogy" id="btn-lesson-analogy" onclick="toggleLessonAnalogy()" aria-label="Explain concept differently">💡 Analogy</button>'
+      + '<button class="btn-analogy" id="btn-lesson-analogy" onclick="toggleLessonAnalogy()" aria-label="Explain concept differently"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:-1px"><circle cx="8" cy="6" r="4"/><path d="M6 10h4M7 13h2"/></svg>Analogy</button>'
       + '<button class="btn-deep-dive" onclick="openDeepDive()" aria-label="Open AI Deep Dive modal">AI Deep Dive</button>'
       + '</div>'
       + '</div>'
@@ -4494,7 +4509,7 @@ function renderSplitLesson() {
             _stepCheckpointsPassed[_slideIdx] = true;
             _maxUnlockedStep = Math.max(_maxUnlockedStep, _slideIdx + 1);
             if (checkpointFeedback) {
-              checkpointFeedback.textContent = '✓ Correct! Great job understanding this concept.';
+              checkpointFeedback.textContent = 'Correct! Great job understanding this concept.';
               checkpointFeedback.className = 'checkpoint-feedback correct';
               checkpointFeedback.classList.remove('hidden');
             }
@@ -4505,7 +4520,7 @@ function renderSplitLesson() {
             var correctBtn = qsa('.checkpoint-option-btn')[currentCheckpoint.answer];
             if (correctBtn) correctBtn.classList.add('correct');
             if (checkpointFeedback) {
-              checkpointFeedback.textContent = '✗ Not quite. The correct answer is ' + 'ABCD'[currentCheckpoint.answer] + '. Review the concept above!';
+              checkpointFeedback.textContent = 'Not quite. The correct answer is ' + 'ABCD'[currentCheckpoint.answer] + '. Review the concept above!';
               checkpointFeedback.className = 'checkpoint-feedback wrong';
               checkpointFeedback.classList.remove('hidden');
             }
@@ -4517,7 +4532,7 @@ function renderSplitLesson() {
     });
 
     if (answered && checkpointFeedback) {
-      checkpointFeedback.textContent = '✓ Checkpoint passed!';
+      checkpointFeedback.textContent = 'Checkpoint passed!';
       checkpointFeedback.className = 'checkpoint-feedback correct';
       checkpointFeedback.classList.remove('hidden');
     }
@@ -4825,6 +4840,9 @@ function runLessonCode() {
         if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onExecutionResult === 'function') {
           window.JavaBotWatcher.onExecutionResult({ code: code, compileError: data.compile.stderr });
         }
+        if (typeof window.meowgerReactToRun === 'function') {
+          window.meowgerReactToRun(false, data.compile.stderr);
+        }
         return;
       }
 
@@ -4849,9 +4867,15 @@ function runLessonCode() {
       if (window.JavaBotWatcher && typeof window.JavaBotWatcher.onExecutionResult === 'function') {
         window.JavaBotWatcher.onExecutionResult({ code: code, runtimeError: (hasErr ? data.run.stderr : ''), output: data.run.stdout });
       }
+      if (typeof window.meowgerReactToRun === 'function') {
+        window.meowgerReactToRun(!hasErr, hasErr ? data.run.stderr : '');
+      }
     })
     .catch(function(err) {
       if (outEl) outEl.innerHTML = '<pre class="output-error">[Execution Failed]\n' + esc(err.message) + '</pre>';
+      if (typeof window.meowgerReactToRun === 'function') {
+        window.meowgerReactToRun(false, err.message);
+      }
     });
 }
 window.runLessonCode = runLessonCode;

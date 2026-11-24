@@ -299,9 +299,27 @@
     <!-- 2-Column Course Layout (Codédex Style) -->
     <div class="course-hub-grid">
       
-      <!-- Left Column: Chapter Accordions -->
+      <!-- Left Column: Adventure Trail & Chapter Accordions -->
       <div class="course-chapters-col">
-        <div class="chapters-accordion" id="chapters-accordion">
+        <!-- View Switcher (Zero Emoji - Pure SVGs) -->
+        <div class="map-view-switcher" id="map-view-switcher">
+          <button class="map-view-toggle-btn active" id="btn-map-view-trail" type="button" onclick="window.setMapViewMode && window.setMapViewMode('trail')" title="View RPG Adventure Trail">
+            <svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15 C3 11 9 11 9 7 C9 3 15 3 15 3"/><circle cx="3" cy="15" r="1.5" fill="currentColor"/><circle cx="15" cy="3" r="1.5" fill="currentColor"/></svg>
+            <span>Adventure Trail</span>
+          </button>
+          <button class="map-view-toggle-btn" id="btn-map-view-list" type="button" onclick="window.setMapViewMode && window.setMapViewMode('list')" title="View Curriculum Accordion List">
+            <svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="15" y2="5"/><line x1="3" y1="9" x2="15" y2="9"/><line x1="3" y1="13" x2="15" y2="13"/></svg>
+            <span>Curriculum List</span>
+          </button>
+        </div>
+
+        <!-- W3Schools-Style Winding Adventure Trail Container -->
+        <div class="adventure-trail-wrap" id="adventure-trail-wrap">
+          <!-- Populated dynamically by renderMap() -->
+        </div>
+
+        <!-- Traditional Chapter Accordions Container (Toggled via Switcher) -->
+        <div class="chapters-accordion hidden" id="chapters-accordion">
           <!-- Populated dynamically by renderMap() -->
         </div>
       </div>
@@ -556,7 +574,7 @@
             <div class="output-area lesson-output-area" id="lesson-terminal-out" aria-live="polite">
               <div class="terminal-idle-state" onclick="runLessonCode()">
                 <span class="terminal-idle-icon" aria-hidden="true">❯</span>
-                <span class="terminal-idle-text">Press <strong>Ctrl+Enter</strong> or click <strong>▶ Run Code</strong> to execute.</span>
+                <span class="terminal-idle-text">Press <strong>Ctrl+Enter</strong> or click <strong><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align:-1px;margin-right:2px"><polygon points="6 4 20 12 6 20 6 4"/></svg>Run Code</strong> to execute.</span>
               </div>
             </div>
             <div class="terminal-interactive-bar" id="lesson-terminal-bar" style="display:none">
@@ -803,7 +821,7 @@
         <div class="output-area" id="output-area">
           <div class="terminal-idle-state" id="terminal-idle-prompt" onclick="runCode()">
             <span class="terminal-idle-icon">❯</span>
-            <span class="terminal-idle-text">Press <strong>Ctrl+Enter</strong> or click <strong>▶ Run Code</strong> to execute.</span>
+            <span class="terminal-idle-text">Press <strong>Ctrl+Enter</strong> or click <strong><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="vertical-align:-1px;margin-right:2px"><polygon points="6 4 20 12 6 20 6 4"/></svg>Run Code</strong> to execute.</span>
           </div>
         </div>
         <div class="terminal-interactive-bar" id="terminal-interactive-bar" style="display:none">
@@ -1054,22 +1072,34 @@
   </div>
 </div>
 
-<!-- ====== AI CHAT ====== -->
+<!-- ====== AI CHAT (POWERED BY MEOWGER) ====== -->
 <div class="ai-chat-wrapper" id="ai-chat-wrapper">
   <div class="chat-panel hidden" id="chat-panel">
     <div class="chat-panel-header">
       <div class="chat-bot-info">
-        <div class="chat-bot-avatar">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
+        <div class="chat-bot-avatar" style="background:#FFE600;border:2px solid #0B0B0E;box-shadow:1.5px 1.5px 0px #0B0B0E;display:flex;align-items:center;justify-content:center;">
+          <!-- Meowger Pure SVG Avatar -->
+          <svg viewBox="0 0 24 24" width="22" height="22" shape-rendering="crispEdges">
+            <polygon points="6,9 8,3 11,9" fill="#A0522D"/>
+            <polygon points="13,9 16,3 18,9" fill="#A0522D"/>
+            <rect x="5" y="7" width="14" height="10" rx="2" fill="#B87333"/>
+            <rect x="9" y="11" width="6" height="4" fill="#FFF8DC"/>
+            <rect x="7" y="9" width="3" height="3" fill="#18191E"/>
+            <rect x="14" y="9" width="3" height="3" fill="#18191E"/>
+          </svg>
         </div>
         <div>
-          <div class="chat-bot-name">JavaBot</div>
-          <div class="chat-bot-status" id="chat-bot-status">Your AI Java Tutor</div>
+          <div class="chat-bot-name">Meowger AI</div>
+          <div class="chat-bot-status" id="chat-bot-status">Your Feline Java Mentor</div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:.4rem;">
-        <button class="btn-clear-chat" id="chat-memory-btn" onclick="window.openLearnerMemoryModal()" title="View learner weak spots">🧠 Memory</button>
-        <button class="btn-clear-chat" id="chat-clear-btn" onclick="window.clearChat && window.clearChat()" title="Clear chat history">↺ Reset</button>
+        <button class="btn-clear-chat" id="chat-memory-btn" onclick="window.openLearnerMemoryModal()" title="View learner weak spots">
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:3px;vertical-align:-1px"><path d="M5 2a3 3 0 0 0-3 3c0 1.2.7 2.2 1.7 2.7A3 3 0 0 0 5 13h1V2H5zM11 2a3 3 0 0 1 3 3c0 1.2-.7 2.2-1.7 2.7A3 3 0 0 1 11 13h-1V2h1z"/></svg>Memory
+        </button>
+        <button class="btn-clear-chat" id="chat-clear-btn" onclick="window.clearChat && window.clearChat()" title="Clear chat history">
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:3px;vertical-align:-1px"><path d="M2 8a6 6 0 1 1 2 4.5M2 8V4m0 4h4"/></svg>Reset
+        </button>
         <button class="chat-close-btn" id="chat-close-btn" aria-label="Close" onclick="event.stopPropagation(); window.toggleChat && window.toggleChat(false);"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     </div>
@@ -1080,7 +1110,7 @@
       <span class="context-text" id="chat-context-label">Watching Code Editor</span>
     </div>
     <div class="chat-messages" id="chat-messages">
-      <div class="chat-message bot"><div class="message-bubble">Hi! I'm JavaBot. Ask me anything about Java or your code!</div></div>
+      <div class="chat-message bot"><div class="message-bubble">Meow! I'm Meowger, your Java coding companion &amp; AI mentor. Ask me anything about Java syntax, debugging, or your quest!</div></div>
     </div>
     <div class="chat-typing-indicator hidden" id="chat-typing"><span></span><span></span><span></span></div>
     <div class="chat-quick-chips" id="chat-quick-chips">
@@ -1089,19 +1119,13 @@
       <button class="chat-chip" id="chip-next-step" type="button" onclick="window.requestSocraticHint && window.requestSocraticHint()">Hint for Next Step</button>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chat-input" class="chat-input" placeholder="Ask JavaBot about your code…"/>
+      <input type="text" id="chat-input" class="chat-input" placeholder="Ask Meowger about your code…"/>
       <button class="chat-send-btn" id="chat-send-btn" type="button" onclick="window.sendChatMessage && window.sendChatMessage()" title="Send Message"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
     </div>
     <div class="ai-disclaimer" style="font-size:0.68rem;text-align:center;padding:0.35rem 0.5rem;color:var(--text-secondary,#71717A);opacity:0.85;">
-      JavaBot AI may produce inaccuracies. Verify code with compiler.
+      Meowger AI may produce inaccuracies. Verify code with compiler.
     </div>
   </div>
-  <button class="ai-chat-fab" id="ai-chat-fab" title="Ask JavaBot" type="button" onclick="event.stopPropagation(); window.toggleChat && window.toggleChat();" aria-label="Ask JavaBot AI Tutor">
-    <span class="fab-icon">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
-    </span>
-    <span class="fab-label">Ask AI</span><span class="fab-pulse"></span>
-  </button>
 </div>
 
 <!-- ====== MODALS ====== -->
@@ -1240,15 +1264,24 @@
   </div>
 </div>
 
-<!-- ====== JAVABOT PROACTIVE TOAST ====== -->
+<!-- ====== MEOWGER PROACTIVE TOAST (PURE SVG - ZERO EMOJI) ====== -->
 <div class="javabot-suggestion-toast hidden" id="javabot-suggestion-toast" role="alert">
-  <div class="javabot-toast-icon">☕</div>
+  <div class="javabot-toast-icon" style="background:#FFE600;border:1.5px solid #0B0B0E;border-radius:6px;display:flex;align-items:center;justify-content:center;padding:3px;">
+    <svg viewBox="0 0 24 24" width="20" height="20" shape-rendering="crispEdges">
+      <polygon points="6,9 8,3 11,9" fill="#A0522D"/>
+      <polygon points="13,9 16,3 18,9" fill="#A0522D"/>
+      <rect x="5" y="7" width="14" height="10" rx="2" fill="#B87333"/>
+      <rect x="9" y="11" width="6" height="4" fill="#FFF8DC"/>
+      <rect x="7" y="9" width="3" height="3" fill="#18191E"/>
+      <rect x="14" y="9" width="3" height="3" fill="#18191E"/>
+    </svg>
+  </div>
   <div class="javabot-toast-body">
-    <div class="javabot-toast-title" id="javabot-toast-title">JavaBot Tip</div>
+    <div class="javabot-toast-title" id="javabot-toast-title">Meowger Tip</div>
     <div class="javabot-toast-msg" id="javabot-toast-msg"></div>
   </div>
   <div class="javabot-toast-actions">
-    <button class="btn-xs btn-primary" id="javabot-toast-action-btn">Ask Hint</button>
+    <button class="btn-xs btn-primary" id="javabot-toast-action-btn">Ask Meowger</button>
     <button class="btn-xs btn-secondary" onclick="window.dismissJavaBotToast()">Dismiss</button>
   </div>
 </div>
@@ -1294,7 +1327,9 @@
 <script src="ai-tutor.js?v=9.1"></script>
 <script src="lib/editor.bundle.js?v=9.1"></script>
 <script src="lib/game-fx.js?v=9.1"></script>
-<script src="app.js?v=9.1"></script>
+<script src="adventure-trail.js?v=9.2"></script>
+<script src="meowger.js?v=9.2"></script>
+<script src="app.js?v=9.2"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {

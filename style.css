@@ -10126,3 +10126,772 @@ body.dark-theme .learner-memory-modal {
 
 
 
+
+
+/* ============================================================
+   MEOWGER DIGITAL PET COMPANION & ADVENTURE TRAIL MAP SYSTEM
+   100% Pure Inline SVG Pixel-Art Architecture (Zero Emojis)
+   High-Contrast Day Mode & Night Mode Compatibility
+   ============================================================ */
+
+/* ── 1. Meowger Pet Companion ── */
+.meowger-pet-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1200;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.14s ease-out;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.22));
+}
+
+.meowger-pet-wrap:hover {
+  transform: scale(1.08);
+}
+
+.meowger-sprite-box {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meowger-svg {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Animations */
+@keyframes meowgerBreathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.5px); }
+}
+
+@keyframes meowgerTailSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(10deg); }
+}
+
+@keyframes meowgerPawWalkLeft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes meowgerPawWalkRight {
+  0%, 100% { transform: translateY(-3px); }
+  50% { transform: translateY(0); }
+}
+
+.meowger-idle .meowger-head {
+  animation: meowgerBreathe 2.4s ease-in-out infinite;
+}
+
+.meowger-idle .meowger-tail {
+  transform-origin: 36px 32px;
+  animation: meowgerTailSway 2.8s ease-in-out infinite;
+}
+
+.meowger-walk .paw-left {
+  animation: meowgerPawWalkLeft 0.22s infinite alternate;
+}
+
+.meowger-walk .paw-right {
+  animation: meowgerPawWalkRight 0.22s infinite alternate;
+}
+
+.meowger-hop {
+  animation: meowgerHopAnim 0.75s ease-out forwards;
+}
+
+@keyframes meowgerHopAnim {
+  0% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-24px) scale(1.15); }
+  70% { transform: translateY(0) scale(0.92); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.meowger-teleport-out {
+  animation: meowgerPuffOut 0.2s ease-in forwards;
+}
+
+.meowger-teleport-in {
+  animation: meowgerPuffIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes meowgerPuffOut {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.1); opacity: 0; }
+}
+
+@keyframes meowgerPuffIn {
+  0% { transform: scale(0.1); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Meowger Speech Bubble */
+.meowger-speech-bubble {
+  position: absolute;
+  bottom: 74px;
+  right: 0;
+  min-width: 180px;
+  max-width: 280px;
+  background: #FFFFFF;
+  color: #0B0B0E;
+  border: 2px solid #0B0B0E;
+  border-radius: 14px;
+  padding: 0.65rem 0.95rem;
+  box-shadow: 3.5px 3.5px 0px #0B0B0E;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.35;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1250;
+}
+
+.meowger-speech-bubble.hidden {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+.meowger-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 28px;
+  width: 12px;
+  height: 12px;
+  background: #FFFFFF;
+  border-right: 2px solid #0B0B0E;
+  border-bottom: 2px solid #0B0B0E;
+  transform: rotate(45deg);
+}
+
+.meowger-speech-bubble .bubble-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.meowger-speech-bubble .bubble-icon {
+  flex-shrink: 0;
+  color: #FFE600;
+  background: #0B0B0E;
+  padding: 3px;
+  border-radius: 4px;
+  display: flex;
+}
+
+body.dark-theme .meowger-speech-bubble {
+  background: #18191E !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 3.5px 3.5px 0px #000000 !important;
+}
+
+body.dark-theme .meowger-speech-bubble::after {
+  background: #18191E !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ── 2. Map View Switcher ── */
+.map-view-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.map-view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--ink, #0B0B0E);
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: var(--ink, #0B0B0E);
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 800;
+  box-shadow: 2px 2px 0px var(--ink, #0B0B0E);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-view-toggle-btn:hover {
+  background: #FFFEEB;
+  transform: translateY(-1px);
+}
+
+.map-view-toggle-btn.active {
+  background: #FFE600;
+  box-shadow: 2.5px 2.5px 0px var(--ink, #0B0B0E);
+}
+
+body.dark-theme .map-view-toggle-btn {
+  background: #18191E !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+body.dark-theme .map-view-toggle-btn.active {
+  background: #FFE600 !important;
+  color: #0B0B0E !important;
+  border-color: #000000 !important;
+}
+
+/* ── 3. Adventure Trail Board ── */
+.adventure-trail-wrap {
+  width: 100%;
+}
+
+.adventure-trail-board {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #FAF8F5;
+  border: 2px solid var(--ink, #0B0B0E);
+  border-radius: 24px;
+  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
+  overflow: hidden;
+}
+
+body.dark-theme .adventure-trail-board {
+  background: #121316 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+
+/* Biome Specific Ambiances */
+.adventure-trail-board[data-biome="nether"] {
+  background: #1A0D11;
+  border-color: #8B0000;
+}
+
+.adventure-trail-board[data-biome="end"] {
+  background: #0E0817;
+  border-color: #5B21B6;
+}
+
+/* Chapter Header on Trail */
+.trail-chapter-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  margin: 1.75rem 0 1rem;
+  background: #FFFFFF;
+  border: 2px solid var(--ink, #0B0B0E);
+  border-radius: 14px;
+  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
+  z-index: 10;
+}
+
+body.dark-theme .trail-chapter-header {
+  background: #1A1D24 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+}
+
+.trail-chap-pill-badge {
+  background: #FFE600;
+  color: #0B0B0E;
+  font-family: var(--font-mono, monospace);
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  border: 1.5px solid #0B0B0E;
+  box-shadow: 1.5px 1.5px 0px #0B0B0E;
+  flex-shrink: 0;
+}
+
+.trail-chap-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.trail-chap-title {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--ink, #0B0B0E);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.dark-theme .trail-chap-title {
+  color: #F4F4F5 !important;
+}
+
+.trail-chap-sub {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #52525B;
+}
+
+body.dark-theme .trail-chap-sub {
+  color: #94A3B8 !important;
+}
+
+.trail-chap-status-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--ink, #0B0B0E);
+  flex-shrink: 0;
+}
+
+.trail-chap-status-tag.done {
+  background: #DCFCE7;
+  color: #166534;
+  border-color: #10B981;
+}
+
+.trail-chap-status-tag.active {
+  background: #FEF9C3;
+  color: #854D0E;
+  border-color: #EAB308;
+}
+
+.trail-chap-status-tag.locked {
+  background: #F4F4F5;
+  color: #71717A;
+  border-color: #A1A1AA;
+}
+
+body.dark-theme .trail-chap-status-tag.done {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+  border-color: #10B981 !important;
+}
+
+body.dark-theme .trail-chap-status-tag.active {
+  background: #713F12 !important;
+  color: #FEF08A !important;
+  border-color: #EAB308 !important;
+}
+
+body.dark-theme .trail-chap-status-tag.locked {
+  background: #27272A !important;
+  color: #A1A1AA !important;
+  border-color: #52525B !important;
+}
+
+/* Trail Segment & Nodes */
+.trail-chapter-segment {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+  padding: 1.5rem 0 2rem;
+}
+
+/* Decorative winding background line */
+.trail-chapter-segment::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 22px;
+  transform: translateX(-50%);
+  background: #D7BA89;
+  border-left: 2px dashed #926A3D;
+  border-right: 2px dashed #926A3D;
+  z-index: 1;
+  opacity: 0.7;
+  border-radius: 9999px;
+}
+
+body.dark-theme .trail-chapter-segment::before {
+  background: #2D333B !important;
+  border-left: 2px dashed #444C56 !important;
+  border-right: 2px dashed #444C56 !important;
+}
+
+.trail-node-row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* Stepping Stone Node Button */
+.trail-step-node {
+  position: relative;
+  transform: translateX(var(--x-offset, 0px));
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  border: 2.5px solid var(--ink, #0B0B0E);
+  background: #FFFFFF;
+  color: var(--ink, #0B0B0E);
+  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.95rem;
+  font-weight: 900;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.trail-step-node:hover {
+  transform: translateX(var(--x-offset, 0px)) translateY(-2px);
+  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
+}
+
+/* Completed Node */
+.trail-step-node.node-done {
+  background: #10B981;
+  border-color: #064E3B;
+  color: #FFFFFF;
+  box-shadow: 3px 3px 0px #064E3B;
+}
+
+/* Active Node */
+.trail-step-node.node-active {
+  background: #FFE600;
+  border-color: #0B0B0E;
+  color: #0B0B0E;
+  box-shadow: 4px 4px 0px #0B0B0E;
+  animation: activeNodePulse 1.8s infinite;
+}
+
+@keyframes activeNodePulse {
+  0%, 100% { box-shadow: 4px 4px 0px #0B0B0E, 0 0 0 0 rgba(255, 230, 0, 0.7); }
+  50% { box-shadow: 4px 4px 0px #0B0B0E, 0 0 0 10px rgba(255, 230, 0, 0); }
+}
+
+/* Locked Node */
+.trail-step-node.node-locked {
+  background: #E4E4E7;
+  color: #71717A;
+  border-color: #71717A;
+  box-shadow: 2px 2px 0px #71717A;
+  opacity: 0.85;
+}
+
+body.dark-theme .trail-step-node.node-locked {
+  background: #1F2228 !important;
+  color: #52525B !important;
+  border-color: #3F3F46 !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+/* Scenery Slots */
+.trail-scenery-slot {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.trail-scenery-slot.left {
+  left: 8%;
+}
+
+.trail-scenery-slot.right {
+  right: 8%;
+}
+
+/* Meowger Marker on Active Node */
+.trail-meowger-marker {
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 20;
+  animation: meowgerMarkerBounce 1.6s ease-in-out infinite;
+}
+
+@keyframes meowgerMarkerBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+.marker-speech {
+  background: #FFE600;
+  color: #0B0B0E;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  border: 1.5px solid #0B0B0E;
+  box-shadow: 1.5px 1.5px 0px #0B0B0E;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+
+.marker-avatar {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+}
+
+/* Treasure Chest Node */
+.trail-chest-row {
+  margin-top: 1rem;
+}
+
+.trail-chest-node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.trail-chest-node:hover {
+  transform: scale(1.08) translateY(-2px);
+}
+
+.chest-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--ink, #0B0B0E);
+  background: #FFFFFF;
+  border: 1.5px solid var(--ink, #0B0B0E);
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  box-shadow: 1.5px 1.5px 0px var(--ink, #0B0B0E);
+}
+
+body.dark-theme .chest-label {
+  background: #1E1F24 !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 1.5px 1.5px 0px #000000 !important;
+}
+
+/* Trail Node Modal Backdrop & Card */
+.trail-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 11, 14, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.trail-modal-card {
+  background: #FFFFFF;
+  border: 3px solid var(--ink, #0B0B0E);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
+  width: 100%;
+  max-width: 440px;
+  padding: 1.75rem;
+  animation: modalCardPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.dark-theme .trail-modal-card {
+  background: #18191E !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+}
+
+@keyframes modalCardPop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.trail-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.trail-modal-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trail-modal-pill {
+  background: #FFE600;
+  color: #0B0B0E;
+  font-family: var(--font-mono, monospace);
+  font-weight: 900;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: 1.5px solid #0B0B0E;
+}
+
+.trail-modal-status {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.trail-modal-status.status-done {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.trail-modal-status.status-active {
+  background: #FEF9C3;
+  color: #854D0E;
+}
+
+.trail-modal-status.status-locked {
+  background: #F4F4F5;
+  color: #71717A;
+}
+
+body.dark-theme .trail-modal-status.status-done {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+}
+
+body.dark-theme .trail-modal-status.status-active {
+  background: #713F12 !important;
+  color: #FEF08A !important;
+}
+
+body.dark-theme .trail-modal-status.status-locked {
+  background: #27272A !important;
+  color: #A1A1AA !important;
+}
+
+.trail-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink, #0B0B0E);
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.dark-theme .trail-modal-close {
+  color: #F4F4F5 !important;
+}
+
+.trail-modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink, #0B0B0E);
+  margin: 0.35rem 0 0.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+body.dark-theme .trail-modal-title {
+  color: #F4F4F5 !important;
+}
+
+.trail-modal-desc {
+  font-size: 0.88rem;
+  color: #52525B;
+  line-height: 1.45;
+  margin: 0 0 1.15rem;
+}
+
+body.dark-theme .trail-modal-desc {
+  color: #94A3B8 !important;
+}
+
+.trail-modal-meta {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.4rem;
+}
+
+.trail-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #F4F4F5;
+  color: var(--ink, #0B0B0E);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink, #0B0B0E);
+}
+
+body.dark-theme .trail-meta-chip {
+  background: #24262C !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.trail-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.trail-btn-action {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .meowger-pet-wrap {
+    bottom: 14px;
+    right: 14px;
+    transform: scale(0.92);
+  }
+  .meowger-speech-bubble {
+    right: -10px;
+    bottom: 68px;
+    max-width: 220px;
+  }
+  .adventure-trail-board {
+    border-radius: 16px;
+    padding: 1rem 0.65rem 3rem;
+  }
+  .trail-scenery-slot.left {
+    left: 2%;
+    opacity: 0.6;
+  }
+  .trail-scenery-slot.right {
+    right: 2%;
+    opacity: 0.6;
+  }
+}
