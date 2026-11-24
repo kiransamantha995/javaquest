@@ -11707,17 +11707,49 @@ body.dark-theme .tutorial-slide-title {
   border: 2.5px solid var(--ink);
   border-radius: 16px;
   box-shadow: 4px 4px 0px var(--ink);
-  padding: 1.25rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.25rem;
   min-height: 145px;
+  position: relative;
+  overflow: hidden;
 }
 body.dark-theme .tutorial-hero-visual {
   background: #18191E;
   border-color: #000000;
   box-shadow: 4px 4px 0px #000000;
+}
+.tutorial-hero-img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0px var(--ink);
+  display: block;
+}
+body.dark-theme .tutorial-hero-img {
+  border-color: #000000;
+  box-shadow: 3px 3px 0px #000000;
+}
+.tutorial-pet-tag {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: #FFE600;
+  color: #0B0B0E;
+  border: 1.5px solid #0B0B0E;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 2px 2px 0px #0B0B0E;
 }
 .tutorial-hero-svg {
   width: 100%;

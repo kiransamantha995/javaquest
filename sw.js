@@ -1,5 +1,5 @@
 // JavaQst Service Worker — Offline Shell & Mobile PWA / TWA Support
-const CACHE_NAME = 'javaqst-cache-v1.5';
+const CACHE_NAME = 'javaqst-cache-v1.6';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -13,6 +13,11 @@ const SHELL_ASSETS = [
   '/ai-tutor.js',
   '/adventure-trail.js',
   '/meowger.js',
+  '/images/tutorial/step1-map.jpg',
+  '/images/tutorial/step2-code.jpg',
+  '/images/tutorial/step3-hints.jpg',
+  '/images/tutorial/step4-meowger.jpg',
+  '/images/tutorial/step5-avatar.png',
   '/favicon.svg',
   '/manifest.json',
   '/icons/icon-192.png',

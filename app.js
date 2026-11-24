@@ -359,9 +359,19 @@ function hasAcceptedTerms() {
   }
 }
 
+function hasSeenTutorial() {
+  try {
+    return (localStorage.getItem('javaqst_tutorial_seen') === 'true') ||
+           (localStorage.getItem('javaquest_tutorial_seen') === 'true');
+  } catch(e) {
+    return false;
+  }
+}
+
 function doGuestLogin() {
   if (!hasAcceptedTerms()) {
     showModal('modal-terms-gate');
+    return;
   }
   var enteredName = (ge('su-name') || {}).value;
   var name = (enteredName && enteredName.trim()) ? enteredName.trim() : 'JavaLearner';
@@ -382,6 +392,13 @@ function doGuestLogin() {
   updateNav();
   showScreen('home');
   setTimeout(function(){ toast('Playing in Guest Mode (Progress saved locally)'); }, 400);
+
+  // Show tutorial when pressed local mode if not seen yet
+  if (!hasSeenTutorial()) {
+    setTimeout(function(){
+      if (typeof window.openTutorial === 'function') window.openTutorial(0);
+    }, 650);
+  }
 }
 
 function showAuthLoading(show) {
@@ -558,6 +575,12 @@ function loadUserAndEnter() {
       updateNav();
       showScreen('home');
       setTimeout(function(){ toast('Welcome, '+STATE.player.name+'!'); }, 500);
+      // Show tutorial after login if not seen yet
+      if (!hasSeenTutorial()) {
+        setTimeout(function(){
+          if (typeof window.openTutorial === 'function') window.openTutorial(0);
+        }, 750);
+      }
     })
     .catch(function(e){
       // Fallback: try local backup
@@ -571,6 +594,11 @@ function loadUserAndEnter() {
         var u = sbCurrentUser();
         STATE = freshState(u ? u.email.split('@')[0] : 'JavaLearner', 'beginner', 0);
         showScreen('home');
+      }
+      if (!hasSeenTutorial()) {
+        setTimeout(function(){
+          if (typeof window.openTutorial === 'function') window.openTutorial(0);
+        }, 750);
       }
     });
 }
@@ -5500,18 +5528,6 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch(e) {}
     hideModal('modal-terms-gate');
     toast('Terms accepted! Welcome to JavaQst.');
-
-    // If first-time user hasn't seen the tutorial, launch it
-    var tutSeen = false;
-    try {
-      tutSeen = (localStorage.getItem('javaqst_tutorial_seen') === 'true') ||
-                (localStorage.getItem('javaquest_tutorial_seen') === 'true');
-    } catch(e) {}
-    if (!tutSeen) {
-      setTimeout(function(){
-        window.openTutorial(0);
-      }, 450);
-    }
   };
 
   var _curTutorialStep = 0;
