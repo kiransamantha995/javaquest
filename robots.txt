@@ -32,4 +32,4 @@ Allow: /
 User-agent: Cohere-ai
 Allow: /
 
-Sitemap: https://javaquest-ashen.vercel.app/sitemap.xml
+Sitemap: https://www.javaqst.in/sitemap.xml

@@ -1,4 +1,4 @@
-// JavaQuest — api/ai.js
+// JavaQst — api/ai.js
 // Authenticated Gemini proxy for JavaBot AI Tutor v2. Zero client-side key exposure.
 // Security: JWT auth, CORS restricted, rate-limited, schema-validated, prompt-injection hardened.
 // Key sent in x-goog-api-key header — never in URL query string.
@@ -9,7 +9,12 @@ if (!process.env.GEMINI_API_KEY) {
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
-const ALLOWED_ORIGIN    = 'https://javaquest-ashen.vercel.app';
+const ALLOWED_ORIGINS   = [
+  'https://www.javaqst.in',
+  'https://javaqst.in',
+  'https://javaquest-ashen.vercel.app'
+];
+const PRIMARY_ORIGIN    = 'https://www.javaqst.in';
 const CANDIDATE_MODELS  = [
   'gemini-3.5-flash-lite',
   'gemini-3-flash-preview',
@@ -216,8 +221,8 @@ async function handler(req, res) {
 
   // CORS
   const origin = req.headers['origin'] || '';
-  const isAllowed = !origin || origin === ALLOWED_ORIGIN || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1') || process.env.NODE_ENV === 'development';
-  res.setHeader('Access-Control-Allow-Origin', isAllowed ? (origin || ALLOWED_ORIGIN) : ALLOWED_ORIGIN);
+  const isAllowed = !origin || ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1') || process.env.NODE_ENV === 'development';
+  res.setHeader('Access-Control-Allow-Origin', isAllowed ? (origin || PRIMARY_ORIGIN) : PRIMARY_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Vary', 'Origin');
@@ -290,7 +295,7 @@ async function handler(req, res) {
       const SYSTEM = {
         role: 'user',
         parts: [{ text:
-          `You are JavaBot, the AI coding tutor in JavaQuest. You help learners understand modern Java 21 LTS.\n` +
+          `You are JavaBot, the AI coding tutor in JavaQst. You help learners understand modern Java 21 LTS.\n` +
           `CORE RULES:\n` +
           `1. Answer Java and software development questions exclusively. Decline unrelated queries politely.\n` +
           `2. Be concise, encouraging, and clear (max 120 words).\n` +

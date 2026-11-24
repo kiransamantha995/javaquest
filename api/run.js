@@ -1,10 +1,15 @@
-// JavaQuest — api/run.js
+// JavaQst — api/run.js
 // Authenticated Java compilation proxy via Wandbox (OpenJDK).
 // No simulated / AI fallback — real execution only.
 // Security: Supabase JWT required, rate-limited, max code/stdin size enforced.
 
 // ─── Config ───────────────────────────────────────────────────────────────────
-const ALLOWED_ORIGIN = 'https://javaquest-ashen.vercel.app';
+const ALLOWED_ORIGINS = [
+  'https://www.javaqst.in',
+  'https://javaqst.in',
+  'https://javaquest-ashen.vercel.app'
+];
+const PRIMARY_ORIGIN  = 'https://www.javaqst.in';
 const MAX_CODE_BYTES  = 20 * 1024;   // 20 KB
 const MAX_STDIN_BYTES = 2  * 1024;   //  2 KB
 const WANDBOX_TIMEOUT = 25000;        // ms
@@ -158,8 +163,8 @@ async function runWandbox(code, stdin) {
 // ─── Main handler ─────────────────────────────────────────────────────────────
 module.exports = async function handler(req, res) {
   const origin = req.headers['origin'] || '';
-  const isAllowed = origin === ALLOWED_ORIGIN || process.env.NODE_ENV === 'development';
-  res.setHeader('Access-Control-Allow-Origin', isAllowed ? origin : ALLOWED_ORIGIN);
+  const isAllowed = ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1') || process.env.NODE_ENV === 'development';
+  res.setHeader('Access-Control-Allow-Origin', isAllowed ? (origin || PRIMARY_ORIGIN) : PRIMARY_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Vary', 'Origin');

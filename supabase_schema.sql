@@ -1,4 +1,4 @@
--- JavaQuest Supabase Database Schema
+-- JavaQst Supabase Database Schema
 -- Run this in your Supabase SQL editor if setting up a fresh project.
 
 -- 1. Profiles Table

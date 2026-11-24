@@ -1,4 +1,4 @@
-// JavaQuest — meowger.js
+// JavaQst — meowger.js
 // Interactive Digital Pet Host & AI Companion "Meowger"
 // Zero emojis — 100% pure inline SVG pixel-art architecture.
 // Features: 60fps smooth roaming, mouse following, screen jumping, compiler reactions, and AI Tutor trigger.

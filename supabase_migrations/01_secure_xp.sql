@@ -11,7 +11,7 @@ begin
   -- (Only permitted if invoked with auth.role() = 'service_role' or via security definer RPC)
   if (new.xp <> old.xp or new.level <> old.level) and current_user <> 'postgres' and current_setting('role', true) <> 'service_role' then
     -- Allow change only if called inside award_xp_rpc
-    if current_setting('javaquest.internal_award', true) <> 'true' then
+    if current_setting('javaqst.internal_award', true) <> 'true' and current_setting('javaquest.internal_award', true) <> 'true' then
       new.xp := old.xp;
       new.level := old.level;
     end if;
@@ -43,6 +43,7 @@ begin
   end if;
 
   -- Set transaction-local flag so the trigger allows the XP update
+  set local javaqst.internal_award = 'true';
   set local javaquest.internal_award = 'true';
 
   select coalesce(xp, 0) into old_xp from public.profiles where id = curr_uid;

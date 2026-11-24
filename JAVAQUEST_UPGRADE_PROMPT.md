@@ -1,4 +1,4 @@
-# JavaQuest Upgrade Prompt
+# JavaQst Upgrade Prompt
 
 Paste everything below the line into your coding agent (Claude Code, Cursor, etc.) with the project folder open.
 
@@ -6,7 +6,7 @@ Paste everything below the line into your coding agent (Claude Code, Cursor, etc
 
 ## ROLE
 
-You are a senior full-stack engineer, game-UI designer, and Java educator. You are upgrading **JavaQuest**, a browser-based Java learning platform, into something in the spirit of **Codédex** (codedex.io): a playful, project-based, "learn by doing" platform where every lesson has a short explanation on one side and a live editor with tests on the other, and the whole product feels like a game rather than a textbook.
+You are a senior full-stack engineer, game-UI designer, and Java educator. You are upgrading **JavaQst**, a browser-based Java learning platform, into something in the spirit of **Codédex** (codedex.io): a playful, project-based, "learn by doing" platform where every lesson has a short explanation on one side and a live editor with tests on the other, and the whole product feels like a game rather than a textbook.
 
 Work in **phases**. After each phase: run the app, run any checks you can, summarize what changed, and wait for my "continue" before starting the next phase. Do not rewrite everything at once. Do not add a dependency or build step without asking first and explaining why.
 
@@ -38,7 +38,7 @@ Plain static site, no framework: `index.html`, `app.js` (~190 KB), `style.css` (
 
 Goal: it should feel like stepping into a blocky world, not a SaaS dashboard. Pick **one** aesthetic and commit: chunky pixel/voxel look, warm and bright, tactile buttons, lots of small delightful details.
 
-**Legal guardrail (important):** "Minecraft" is Mojang/Microsoft's trademark, and its characters and textures are their assets. Make **Minecraft-inspired original art**: our own pixel/voxel characters, blocks, and mobs, drawn by us as SVG or canvas pixel grids. Do not copy Mojang textures, skins, or logos. Do not claim the product is "authentic Minecraft". Add a footer line: "JavaQuest is not affiliated with or endorsed by Mojang or Microsoft." Review Mojang's brand and asset usage guidelines before launching publicly, and tell me what you changed so I can decide how far to take the theme.
+**Legal guardrail (important):** "Minecraft" is Mojang/Microsoft's trademark, and its characters and textures are their assets. Make **Minecraft-inspired original art**: our own pixel/voxel characters, blocks, and mobs, drawn by us as SVG or canvas pixel grids. Do not copy Mojang textures, skins, or logos. Do not claim the product is "authentic Minecraft". Add a footer line: "JavaQst is not affiliated with or endorsed by Mojang or Microsoft." Review Mojang's brand and asset usage guidelines before launching publicly, and tell me what you changed so I can decide how far to take the theme.
 
 Ideas to implement:
 - **World map:** the learning map is an isometric or top-down voxel world. Each module is a biome or structure (village, mine, farm, redstone lab, Nether fortress, End city). Paths between them unlock as you progress. Chapters are "chunks" that visibly load in.

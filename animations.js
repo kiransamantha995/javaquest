@@ -1,4 +1,4 @@
-// JavaQuest — animations.js
+// JavaQst — animations.js
 // Interactive Neobrutalist Visualizers, Java Syntax Highlighter & Canvas Animations
 
 /* ── Helpers ─────────────────────────────────────── */
@@ -242,7 +242,7 @@ function renderMemoryDiagram(container, data) {
 
           <div class="vis-heap-object pool-obj">
             <div class="vis-obj-addr">Address: 0x33A0 <span class="vis-live-badge">String Constant Pool</span></div>
-            <div class="vis-obj-name">"JavaQuest" (Interned Literal)</div>
+            <div class="vis-obj-name">"JavaQst" (Interned Literal)</div>
             <div class="vis-obj-field">• All matching literals share this 1 instance</div>
           </div>
         </div>

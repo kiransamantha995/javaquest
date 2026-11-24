@@ -1,4 +1,4 @@
-// JavaQuest — adventure-trail.js
+// JavaQst — adventure-trail.js
 // Isometric Mountain Trail & Floating Island Map (Tamed Neobrutalist Theme)
 // 100% Pure Inline SVG Pixel-Art Architecture — Zero Unicode Emojis
 // Full Day Mode & Night Mode High-Contrast Compatibility
@@ -295,7 +295,7 @@
   // ── 2. View Mode State ──────────────────────────────────────────────────────
   var _mapViewMode = 'trail'; // 'trail' | 'list'
   try {
-    var savedMode = localStorage.getItem('javaquest_map_view_mode');
+    var savedMode = localStorage.getItem('javaqst_map_view_mode') || localStorage.getItem('javaquest_map_view_mode');
     if (savedMode === 'trail' || savedMode === 'list') {
       _mapViewMode = savedMode;
     }
@@ -303,7 +303,10 @@
 
   function setMapViewMode(mode) {
     if (mode) _mapViewMode = (mode === 'list') ? 'list' : 'trail';
-    try { localStorage.setItem('javaquest_map_view_mode', _mapViewMode); } catch(e) {}
+    try {
+      localStorage.setItem('javaqst_map_view_mode', _mapViewMode);
+      localStorage.setItem('javaquest_map_view_mode', _mapViewMode);
+    } catch(e) {}
 
     var btnTrail = document.getElementById('btn-map-view-trail');
     var btnList  = document.getElementById('btn-map-view-list');

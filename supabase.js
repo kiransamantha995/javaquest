@@ -1,4 +1,4 @@
-// JavaQuest — supabase.js
+// JavaQst — supabase.js
 // Supabase client + all DB operations
 // Credentials loaded dynamically from window.CONFIG (config.js) or localStorage
 
@@ -52,7 +52,7 @@ window._sbSession = null;
 function sbSignUp(email, password, metadata) {
   var body = { email: email, password: password };
   if (metadata) body.data = metadata;
-  var origin = (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'https://javaquest-ashen.vercel.app';
+  var origin = (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'https://www.javaqst.in';
   return sbFetch('/auth/v1/signup?redirect_to=' + encodeURIComponent(origin), {
     method: 'POST',
     body: JSON.stringify(body)
@@ -85,6 +85,7 @@ function sbSignIn(email, password) {
 function sbSignOut() {
   var token = window._sbSession ? window._sbSession.access_token : null;
   window._sbSession = null;
+  localStorage.removeItem('javaqst_session');
   localStorage.removeItem('javaquest_session');
   if (!token) return Promise.resolve();
   return fetch(SUPABASE_URL + '/auth/v1/logout', {
@@ -113,7 +114,10 @@ function decodeJwt(token) {
 window._sbHashError = null;
 
 function sbPersistSession(session) {
-  try { localStorage.setItem('javaquest_session', JSON.stringify(session)); } catch(e) {}
+  try {
+    localStorage.setItem('javaqst_session', JSON.stringify(session));
+    localStorage.setItem('javaquest_session', JSON.stringify(session));
+  } catch(e) {}
 }
 
 function sbRestoreSession() {
@@ -162,11 +166,12 @@ function sbRestoreSession() {
     }
 
     // 2. Check localStorage
-    var raw = localStorage.getItem('javaquest_session');
+    var raw = localStorage.getItem('javaqst_session') || localStorage.getItem('javaquest_session');
     if (!raw) return null;
     var session = JSON.parse(raw);
     // Check expiry (exp is in seconds)
     if (session.expires_at && Date.now() / 1000 > session.expires_at) {
+      localStorage.removeItem('javaqst_session');
       localStorage.removeItem('javaquest_session');
       return null;
     }

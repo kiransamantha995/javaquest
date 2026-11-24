@@ -1,4 +1,4 @@
-// JavaQuest Curriculum — curriculum.js
+// JavaQst Curriculum — curriculum.js
 // 24 Modules (B1-B8, I1-I8, A1-A8) grounded in "Core Java" (Cay Horstmann), "Effective Java" (Joshua Bloch), "Head First Java", and "Modern Java in Action"
 // Track 1 (B1-B8): Completely rewritten from scratch with deep lessons, step-by-step worked examples, and local compiler test harnesses
 // Track 2 (I1-I8): Completely rewritten from scratch with intermediate OOP, Streams, I/O, Generics, Testing, JDBC, Concurrency, and Capstone
@@ -111,29 +111,29 @@ const CURRICULUM = [
           }
         ],
         "exercise": {
-          "instructions": "Print three distinct lines:\nLine 1: `[System] JavaQuest 21 LTS Online`\nLine 2: `[JVM] HotSpot Engine Ready`\nLine 3: `[Status] Exploring Sunrise Plains`",
+          "instructions": "Print three distinct lines:\nLine 1: `[System] JavaQst 21 LTS Online`\nLine 2: `[JVM] HotSpot Engine Ready`\nLine 3: `[Status] Exploring Sunrise Plains`",
           "starterCode": "public class Main {\n    public static void main(String[] args) {\n        // TODO: Print the three required system status lines\n    }\n}",
           "hints": [
             "Use System.out.println() for each of the three lines.",
             "Ensure spelling, punctuation, and brackets match exactly.",
             "Remember that each statement must end with a semicolon (;)."
           ],
-          "solution": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"[System] JavaQuest 21 LTS Online\");\n        System.out.println(\"[JVM] HotSpot Engine Ready\");\n        System.out.println(\"[Status] Exploring Sunrise Plains\");\n    }\n}",
+          "solution": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"[System] JavaQst 21 LTS Online\");\n        System.out.println(\"[JVM] HotSpot Engine Ready\");\n        System.out.println(\"[Status] Exploring Sunrise Plains\");\n    }\n}",
           "tests": [
             {
               "name": "Full 3-line output check",
               "stdin": "",
-              "expectedStdout": "[System] JavaQuest 21 LTS Online\n[JVM] HotSpot Engine Ready\n[Status] Exploring Sunrise Plains"
+              "expectedStdout": "[System] JavaQst 21 LTS Online\n[JVM] HotSpot Engine Ready\n[Status] Exploring Sunrise Plains"
             },
             {
               "name": "Line 1 prefix check",
               "stdin": "",
-              "expectedStdout": "[System] JavaQuest 21 LTS Online\n[JVM] HotSpot Engine Ready\n[Status] Exploring Sunrise Plains"
+              "expectedStdout": "[System] JavaQst 21 LTS Online\n[JVM] HotSpot Engine Ready\n[Status] Exploring Sunrise Plains"
             },
             {
               "name": "Line 3 Plains check",
               "stdin": "",
-              "expectedStdout": "[System] JavaQuest 21 LTS Online\n[JVM] HotSpot Engine Ready\n[Status] Exploring Sunrise Plains"
+              "expectedStdout": "[System] JavaQst 21 LTS Online\n[JVM] HotSpot Engine Ready\n[Status] Exploring Sunrise Plains"
             }
           ]
         },
@@ -6735,15 +6735,15 @@ const CURRICULUM = [
       {
         "id": "b6_q10",
         "type": "predict-output",
-        "question": "What does this code print?\n```java\nStringBuilder sb = new StringBuilder(\"Java\");\nsb.append(\"Quest\");\nsb.reverse();\nSystem.out.println(sb);\n```",
+        "question": "What does this code print?\n```java\nStringBuilder sb = new StringBuilder(\"Java\");\nsb.append(\"Qst\");\nsb.reverse();\nSystem.out.println(sb);\n```",
         "options": [
-          "tseuQavaJ",
-          "JavaQuest",
-          "QuestJava",
-          "tseuQ avaJ"
+          "tsQavaJ",
+          "JavaQst",
+          "QstJava",
+          "tsQ avaJ"
         ],
         "answer": 0,
-        "explanation": "Appending creates 'JavaQuest'. Reversing it produces 'tseuQavaJ'."
+        "explanation": "Appending creates 'JavaQst'. Reversing it produces 'tsQavaJ'."
       },
       {
         "id": "b6_q11",
@@ -6990,15 +6990,15 @@ const CURRICULUM = [
         {
           "id": "b6_q10",
           "type": "predict-output",
-          "question": "What does this code print?\n```java\nStringBuilder sb = new StringBuilder(\"Java\");\nsb.append(\"Quest\");\nsb.reverse();\nSystem.out.println(sb);\n```",
+          "question": "What does this code print?\n```java\nStringBuilder sb = new StringBuilder(\"Java\");\nsb.append(\"Qst\");\nsb.reverse();\nSystem.out.println(sb);\n```",
           "options": [
-            "tseuQavaJ",
-            "JavaQuest",
-            "QuestJava",
-            "tseuQ avaJ"
+            "tsQavaJ",
+            "JavaQst",
+            "QstJava",
+            "tsQ avaJ"
           ],
           "answer": 0,
-          "explanation": "Appending creates 'JavaQuest'. Reversing it produces 'tseuQavaJ'."
+          "explanation": "Appending creates 'JavaQst'. Reversing it produces 'tsQavaJ'."
         },
         {
           "id": "b6_q11",
@@ -23868,7 +23868,7 @@ const CURRICULUM = [
         ],
         "underTheHood": "The HTTP/2 engine uses a single persistent TCP connection and multiplexes hundreds of independent logical bidirectional streams using binary framing (HEADERS and DATA frames), avoiding head-of-line blocking.",
         "workedExample": {
-          "code": "import java.net.URI;\nimport java.net.http.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        HttpRequest req = HttpRequest.newBuilder()\n            .uri(URI.create(\"https://nebula.internal/v1/ping\"))\n            .header(\"User-Agent\", \"JavaQuest-Nebula/1.0\")\n            .GET()\n            .build();\n            \n        System.out.println(\"URI: \" + req.uri());\n        System.out.println(\"Method: \" + req.method());\n        System.out.println(\"User-Agent: \" + req.headers().firstValue(\"User-Agent\").orElse(\"\"));\n    }\n}",
+          "code": "import java.net.URI;\nimport java.net.http.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        HttpRequest req = HttpRequest.newBuilder()\n            .uri(URI.create(\"https://nebula.internal/v1/ping\"))\n            .header(\"User-Agent\", \"JavaQst-Nebula/1.0\")\n            .GET()\n            .build();\n            \n        System.out.println(\"URI: \" + req.uri());\n        System.out.println(\"Method: \" + req.method());\n        System.out.println(\"User-Agent: \" + req.headers().firstValue(\"User-Agent\").orElse(\"\"));\n    }\n}",
           "walkthrough": [
             {
               "line": 5,
@@ -24136,7 +24136,7 @@ const CURRICULUM = [
         ],
         "underTheHood": "SHA-256 operates on 512-bit message blocks using 64 rounds of bitwise logical operations (AND, XOR, ROTR, SHR) and modular addition, generating a 256-bit state across 8 internal 32-bit registers.",
         "workedExample": {
-          "code": "import java.security.MessageDigest;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static String sha256Hex(String input) throws Exception {\n        MessageDigest md = MessageDigest.getInstance(\"SHA-256\");\n        byte[] bytes = md.digest(input.getBytes(StandardCharsets.UTF_8));\n        StringBuilder sb = new StringBuilder();\n        for (byte b : bytes) {\n            sb.append(String.format(\"%02x\", b));\n        }\n        return sb.toString();\n    }\n    \n    public static void main(String[] args) throws Exception {\n        String hash = sha256Hex(\"JavaQuest\");\n        System.out.println(\"Hash prefix: \" + hash.substring(0, 8));\n    }\n}",
+          "code": "import java.security.MessageDigest;\nimport java.nio.charset.StandardCharsets;\n\npublic class Main {\n    public static String sha256Hex(String input) throws Exception {\n        MessageDigest md = MessageDigest.getInstance(\"SHA-256\");\n        byte[] bytes = md.digest(input.getBytes(StandardCharsets.UTF_8));\n        StringBuilder sb = new StringBuilder();\n        for (byte b : bytes) {\n            sb.append(String.format(\"%02x\", b));\n        }\n        return sb.toString();\n    }\n    \n    public static void main(String[] args) throws Exception {\n        String hash = sha256Hex(\"JavaQst\");\n        System.out.println(\"Hash prefix: \" + hash.substring(0, 8));\n    }\n}",
           "walkthrough": [
             {
               "line": 5,
@@ -26354,8 +26354,8 @@ const CURRICULUM = [
           "tests": [
             {
               "name": "ASCII string",
-              "stdin": "JavaQuest\n",
-              "expectedStdout": "Encoding: LATIN1, Size: 9 bytes\n"
+              "stdin": "JavaQst\n",
+              "expectedStdout": "Encoding: LATIN1, Size: 7 bytes\n"
             },
             {
               "name": "Core string",
@@ -28004,7 +28004,7 @@ const PROJECTS = [
       "Format transaction output cleanly with currency formatting ($%.2f) and timestamps"
     ],
     "rubric": "Clean OOP class encapsulation, ArrayList usage, loops & conditionals, try-catch exception handling, and clean console output formatting.",
-    "starterCode": "// ===============================================================\n//  BEGINNER CAPSTONE: Personal Expense Tracker (Console)\n// Focus: OOP Class, Methods, ArrayList, Loops, Input Validation\n//\n//  Instructions: Build your project by completing the TODOs below!\n//    If you have any doubts, open JavaBot  — it can see your code!\n// ===============================================================\nimport java.util.ArrayList;\nimport java.util.Scanner;\n\n// --- Milestone 1: Define the Expense Class ---\nclass Expense {\n    // TODO 1: Declare private fields: description (String), amount (double), category (String)\n\n    // TODO 2: Create a constructor that accepts (description, amount, category)\n\n    // TODO 3: Implement getter methods: getDescription(), getAmount(), getCategory()\n\n    // TODO 4: Override toString() to display formatted expense details\n    //         Hint: return String.format(\"[%-10s] %-20s : $%.2f\", category, description, amount);\n}\n\npublic class Main {\n    // TODO 5: Declare an ArrayList<Expense> to store user expenses\n    //         Hint: private static ArrayList<Expense> expenses = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\" JavaQuest Personal Expense Tracker \");\n        System.out.println(\"=========================================\");\n\n        // TODO 6: Call addExpense() with test data, or build a Scanner menu loop!\n\n        System.out.println(\" Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 7: Implement addExpense(String desc, double amount, String category)\n    //         Validate that amount is positive! If negative, print an error message.\n\n    // TODO 8: Implement displayAll()\n    //         Loop through the expenses list and print each expense.\n\n    // TODO 9: Implement displaySummary()\n    //         Calculate the sum of all expenses and print total spending.\n}\n",
+    "starterCode": "// ===============================================================\n//  BEGINNER CAPSTONE: Personal Expense Tracker (Console)\n// Focus: OOP Class, Methods, ArrayList, Loops, Input Validation\n//\n//  Instructions: Build your project by completing the TODOs below!\n//    If you have any doubts, open JavaBot  — it can see your code!\n// ===============================================================\nimport java.util.ArrayList;\nimport java.util.Scanner;\n\n// --- Milestone 1: Define the Expense Class ---\nclass Expense {\n    // TODO 1: Declare private fields: description (String), amount (double), category (String)\n\n    // TODO 2: Create a constructor that accepts (description, amount, category)\n\n    // TODO 3: Implement getter methods: getDescription(), getAmount(), getCategory()\n\n    // TODO 4: Override toString() to display formatted expense details\n    //         Hint: return String.format(\"[%-10s] %-20s : $%.2f\", category, description, amount);\n}\n\npublic class Main {\n    // TODO 5: Declare an ArrayList<Expense> to store user expenses\n    //         Hint: private static ArrayList<Expense> expenses = new ArrayList<>();\n\n    public static void main(String[] args) {\n        System.out.println(\"=========================================\");\n        System.out.println(\" JavaQst Personal Expense Tracker \");\n        System.out.println(\"=========================================\");\n\n        // TODO 6: Call addExpense() with test data, or build a Scanner menu loop!\n\n        System.out.println(\" Starter skeleton loaded. Complete the TODOs to build your project!\");\n    }\n\n    // TODO 7: Implement addExpense(String desc, double amount, String category)\n    //         Validate that amount is positive! If negative, print an error message.\n\n    // TODO 8: Implement displayAll()\n    //         Loop through the expenses list and print each expense.\n\n    // TODO 9: Implement displaySummary()\n    //         Calculate the sum of all expenses and print total spending.\n}\n",
     "featureIdeas": [
       {
         "icon": "",
@@ -28281,7 +28281,7 @@ const BADGES = [
     "id": "clockwork-coder",
     "name": "Clockwork Coder",
     "icon": "",
-    "description": "Completed 10 lessons across the JavaQuest curriculum",
+    "description": "Completed 10 lessons across the JavaQst curriculum",
     "condition": "lessons_10"
   },
   {

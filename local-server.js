@@ -1,4 +1,4 @@
-// JavaQuest Local Dev & Code Execution Server
+// JavaQst Local Dev & Code Execution Server
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -268,6 +268,6 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`JavaQuest server running at http://localhost:${PORT}`);
+  console.log(`JavaQst server running at http://localhost:${PORT}`);
   console.log(`Real Java compiler endpoint active at http://localhost:${PORT}/api/run`);
 });

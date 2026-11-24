@@ -1,6 +1,6 @@
 {
-  "name": "JavaQuest — Master Modern Java 21",
-  "short_name": "JavaQuest",
+  "name": "JavaQst — Master Modern Java 21",
+  "short_name": "JavaQst",
   "description": "Gamified Java learning platform with 24 interactive modules, OpenJDK 22 compiler, and Gemini AI tutor.",
   "start_url": "/",
   "scope": "/",

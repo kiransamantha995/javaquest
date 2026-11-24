@@ -1,22 +1,22 @@
-# ☕ JavaQuest — Learn Modern Java Like a Game
+# ☕ JavaQst — Learn Modern Java Like a Game
 
 [![Java 21 LTS](https://img.shields.io/badge/Java-21_LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://javaquest-ashen.vercel.app)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://www.javaqst.in)
 [![Supabase Auth & DB](https://img.shields.io/badge/Supabase-Database_%26_Auth-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 [![CodeMirror 6](https://img.shields.io/badge/CodeMirror-6-blue?style=for-the-badge)](https://codemirror.net)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-> **Live Production URL**: [https://javaquest-ashen.vercel.app](https://javaquest-ashen.vercel.app)
+> **Live Production URL**: [https://www.javaqst.in](https://www.javaqst.in)
 
-**JavaQuest** is an interactive, gamified learning platform for **Modern Java (Java 21 LTS baseline)** styled with a retro neobrutalist aesthetic inspired by platforms like Codédex and Minecraft.
+**JavaQst** is an interactive, gamified learning platform for **Modern Java (Java 21 LTS baseline)** styled with a retro neobrutalist aesthetic inspired by platforms like Codédex and Minecraft.
 
-From crafting your first `Hello, World!` in the Overworld to mastering Virtual Threads, Records, Pattern Matching, and Spring Boot REST APIs in The End, JavaQuest takes you on a comprehensive adventure with zero heavyweight IDE setup required.
+From crafting your first `Hello, World!` in the Overworld to mastering Virtual Threads, Records, Pattern Matching, and Spring Boot REST APIs in The End, JavaQst takes you on a comprehensive adventure with zero heavyweight IDE setup required.
 
 ---
 
-## 🌟 What Sets JavaQuest Apart?
+## 🌟 What Sets JavaQst Apart?
 
-- **Real OpenJDK 22 Compiler & Runner**: Unlike simulators that use regular expressions or pretend execution, JavaQuest compiles and runs your code against real OpenJDK 22 in a secure execution sandbox with deterministic stdout/stderr capture and test suite assertions.
+- **Real OpenJDK 22 Compiler & Runner**: Unlike simulators that use regular expressions or pretend execution, JavaQst compiles and runs your code against real OpenJDK 22 in a secure execution sandbox with deterministic stdout/stderr capture and test suite assertions.
 - **Codédex-Inspired Split-Screen Lesson Shell**: A distraction-free 2-column workspace featuring concept guides, CodeMirror 6 code editor with live syntax diagnostics, interactive stdin terminal, and visual test case diff runners.
 - **3-Tier Progressive Hint System**: Stuck on a bug? Request a conceptual nudge, actionable guidance, or a near-solution snippet before unlocking the full reference solution.
 - **JavaBot AI Tutor v2**: Built with Gemini Flash-Lite and gated behind authenticated Supabase JWT tokens. JavaBot acts as a genuine Socratic tutor — explaining compiler stack traces in plain English, performing line-by-line code reviews, and remembering tricky concepts in your local Learner Memory.
@@ -99,7 +99,7 @@ cd javaquest
 ```
 
 ### 2. Run locally
-JavaQuest works in **Guest Mode** with zero dependencies:
+JavaQst works in **Guest Mode** with zero dependencies:
 ```bash
 # Using Node.js built-in server
 node local-server.js
@@ -131,7 +131,7 @@ To run the full authenticated suite locally:
 
 ## 🔒 Security & Sandboxing Architecture
 
-JavaQuest is built on a strict defense-in-depth model:
+JavaQst is built on a strict defense-in-depth model:
 - **Zero Unauthenticated Proxy Access**: Both `/api/run.js` and `/api/ai.js` require cryptographically valid Supabase JWT tokens. Requests lacking authorization receive immediate `401 Unauthorized`.
 - **Zero Client-Side API Keys**: `GEMINI_API_KEY` is kept exclusively on the server and passed via the `x-goog-api-key` header (never exposed in URLs or client bundles).
 - **No Simulation Runner**: All code runs against real OpenJDK 22; no AI hallucinations or fake regular-expression evaluators.
@@ -144,7 +144,7 @@ For full security specifications, review [`SECURITY.md`](SECURITY.md).
 
 ## 📄 License & Legal Notice
 
-JavaQuest is open-source software licensed under the [MIT License](LICENSE).
+JavaQst is open-source software licensed under the [MIT License](LICENSE).
 
 ### Mojang / Microsoft Trademark Disclaimer
-*JavaQuest is an independent educational project and is **not** affiliated with, associated with, authorized by, endorsed by, or in any way officially connected with Mojang Studios, Microsoft Corporation, or any of their subsidiaries or affiliates. "Minecraft" is a registered trademark of Mojang Synergies AB.*
+*JavaQst is an independent educational project and is **not** affiliated with, associated with, authorized by, endorsed by, or in any way officially connected with Mojang Studios, Microsoft Corporation, or any of their subsidiaries or affiliates. "Minecraft" is a registered trademark of Mojang Synergies AB.*

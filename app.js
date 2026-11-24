@@ -14,7 +14,7 @@ function getPlayerState() {
   };
 }
 
-// JavaQuest — app.js (Supabase Edition)
+// JavaQst — app.js (Supabase Edition)
 // Pure addEventListener, no inline onclick, full Supabase sync
 
 /* ═══════════════ XSS SAFETY UTILITY ════════════════════════════
@@ -53,7 +53,7 @@ function sanitizeState(state) {
   if (!p.difficulty || ['beginner','intermediate','advanced'].indexOf(p.difficulty) === -1) p.difficulty = 'beginner';
   if (!p.avatar || typeof p.avatar !== 'object') p.avatar = { skin: 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 };
   if (!p.minecraftSkin || p.minecraftSkin === 'steve') p.minecraftSkin = 'blockhead'; if (!p.avatarHat) p.avatarHat = 'none'; if (!p.avatarCape) p.avatarCape = 'none';
-  if (!p.theme) p.theme = (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light';
+  if (!p.theme) p.theme = (typeof localStorage !== 'undefined' && (localStorage.getItem('javaqst_theme') || localStorage.getItem('javaquest_theme'))) || 'light';
   if (!Array.isArray(p.completedLessons)) p.completedLessons = [];
   if (!Array.isArray(p.completedModules)) p.completedModules = [];
   if (!Array.isArray(p.completedChallenges)) p.completedChallenges = [];
@@ -76,7 +76,7 @@ function freshState(name, diff, skin) {
       difficulty:    diff || 'beginner',
       avatar:        { skin: skin || 0, hair: 0, hairColor: 0, outfit: 0, accessory: 0 },
       minecraftSkin: 'blockhead', avatarHat: 'none', avatarCape: 'none',
-      theme:         (typeof localStorage !== 'undefined' && localStorage.getItem('javaquest_theme')) || 'light',
+      theme:         (typeof localStorage !== 'undefined' && (localStorage.getItem('javaqst_theme') || localStorage.getItem('javaquest_theme'))) || 'light',
       xp: 0, level: 1, streak: 1, streakFreeze: 0, lastVisit: new Date().toDateString(),
       hearts: 3, heartRefillTime: null,
       badges: [], completedLessons: [], completedModules: [], completedChallenges: [],
@@ -145,7 +145,7 @@ function getSavedTheme() {
   try {
     if (STATE && STATE.player && STATE.player.theme) return STATE.player.theme;
     if (typeof localStorage !== 'undefined') {
-      var saved = localStorage.getItem('javaquest_theme');
+      var saved = localStorage.getItem('javaqst_theme') || localStorage.getItem('javaquest_theme');
       if (saved) return saved;
     }
   } catch(e) {}
@@ -164,6 +164,7 @@ function applyTheme(theme) {
   }
   try {
     if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('javaqst_theme', theme);
       localStorage.setItem('javaquest_theme', theme);
     }
   } catch(e) {}
@@ -321,7 +322,7 @@ function initAuthUI() {
       if (tabSU) tabSU.classList.remove('active');
       if (formSI) formSI.classList.remove('hidden');
       if (formSU) formSU.classList.add('hidden');
-      if (authTitle) authTitle.innerHTML = 'Welcome back to <span class="logo-accent">JavaQuest</span>';
+      if (authTitle) authTitle.innerHTML = 'Welcome back to <span class="logo-accent">JavaQst</span>';
       if (authSub) authSub.textContent = 'Sign in to continue your coding adventure :)';
     }
     hideAuthError();
@@ -565,7 +566,7 @@ function loadUserAndEnter() {
 function doSignOut() {
   sbSignOut().finally(function(){
     STATE = null;
-    try { localStorage.removeItem('jq_local'); localStorage.removeItem('javaquest_session'); } catch(e){}
+    try { localStorage.removeItem('jq_local'); localStorage.removeItem('javaqst_session'); localStorage.removeItem('javaquest_session'); } catch(e){}
     showScreen('auth');
     toast('Signed out. See you next time!');
   });
@@ -1614,7 +1615,7 @@ function renderMap() {
   if (resumeBtn) {
     resumeBtn.onclick = function() {
       try {
-        var last = localStorage.getItem('javaquest_last_lesson');
+        var last = localStorage.getItem('javaqst_last_lesson') || localStorage.getItem('javaquest_last_lesson');
         if (last) {
           var parsed = JSON.parse(last);
           if (parsed && parsed.modId && parsed.lessonId) {
@@ -2349,7 +2350,7 @@ function openProjectModal(projId) {
     askAiBtn.onclick = function(){
       hideModal('modal-project');
       if (typeof sendPromptToChat === 'function') {
-        sendPromptToChat("I'm building the " + proj.title + " Capstone project in JavaQuest! Based on what I've learned in the " + proj.level + " Java track, what are 3 creative next features I should add with implementation advice?");
+        sendPromptToChat("I'm building the " + proj.title + " Capstone project in JavaQst! Based on what I've learned in the " + proj.level + " Java track, what are 3 creative next features I should add with implementation advice?");
       } else {
         toggleChat();
       }
@@ -3235,14 +3236,14 @@ function renderHearts(){
 
 /* ═══════════════ COMPILER ═══════════════════════════════════════ */
 var TEMPLATES = {
-  hello:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("I am learning Java with JavaQuest!");\n    }\n}',
+  hello:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("I am learning Java with JavaQst!");\n    }\n}',
   variables:'public class Main {\n    public static void main(String[] args) {\n        int age = 20;\n        double price = 9.99;\n        boolean isLearning = true;\n        String name = "JavaLearner";\n        char grade = \'A\';\n        System.out.println("Name: " + name);\n        System.out.println("Age: " + age);\n        System.out.println("Learning: " + isLearning);\n    }\n}',
   ifelse:'public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        if (score >= 90) System.out.println("Grade: A");\n        else if (score >= 80) System.out.println("Grade: B");\n        else System.out.println("Grade: C or below");\n        String status = score >= 60 ? "Passed" : "Failed";\n        System.out.println("Status: " + status);\n    }\n}',
   loops:'public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) System.out.println("Step " + i);\n        int count = 0;\n        while (count < 3) { System.out.println("Count: " + count); count++; }\n        int[] nums = {10, 20, 30};\n        for (int num : nums) System.out.println(num);\n    }\n}',
   arrays:'public class Main {\n    public static void main(String[] args) {\n        int[] scores = {95, 87, 76, 92, 88};\n        int sum = 0;\n        for (int s : scores) sum += s;\n        System.out.println("Average: " + (double)sum / scores.length);\n    }\n}',
   methods:'public class Main {\n    static int add(int a, int b) { return a + b; }\n    static boolean isEven(int n) { return n % 2 == 0; }\n    static int factorial(int n) { return n <= 1 ? 1 : n * factorial(n-1); }\n    public static void main(String[] args) {\n        System.out.println("5+3 = " + add(5,3));\n        System.out.println("4 even? " + isEven(4));\n        System.out.println("5! = " + factorial(5));\n    }\n}',
   oop:'public class Main {\n    static class Animal {\n        String name, sound;\n        Animal(String n, String s) { name=n; sound=s; }\n        void speak() { System.out.println(name+" says "+sound+"!"); }\n    }\n    public static void main(String[] args) {\n        Animal dog = new Animal("Dog","Woof");\n        Animal cat = new Animal("Cat","Meow");\n        dog.speak(); cat.speak();\n    }\n}',
-  scanner:'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println("=== JavaQuest Interactive Scanner Demo ===");\n        System.out.print("Enter your adventurer name: ");\n        String name = sc.nextLine();\n\n        System.out.print("Enter your level: ");\n        int level = Integer.parseInt(sc.nextLine());\n\n        System.out.println("\\nWelcome to JavaQuest, " + name + "! (Level " + level + ")");\n        System.out.println(level >= 10 ? "Status: Master Coder!" : "Status: Rising Apprentice!");\n        sc.close();\n    }\n}'
+  scanner:'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println("=== JavaQst Interactive Scanner Demo ===");\n        System.out.print("Enter your adventurer name: ");\n        String name = sc.nextLine();\n\n        System.out.print("Enter your level: ");\n        int level = Integer.parseInt(sc.nextLine());\n\n        System.out.println("\\nWelcome to JavaQst, " + name + "! (Level " + level + ")");\n        System.out.println(level >= 10 ? "Status: Master Coder!" : "Status: Rising Apprentice!");\n        sc.close();\n    }\n}'
 };
 
 var _compilerReady=false;
@@ -3801,9 +3802,13 @@ function deleteAccount() {
   deleteCloudPromise
     .then(function() {
       try {
+        localStorage.removeItem('javaqst_state');
         localStorage.removeItem('javaquest_state');
+        localStorage.removeItem('javaqst_session');
         localStorage.removeItem('javaquest_session');
+        localStorage.removeItem('javaqst_guest');
         localStorage.removeItem('javaquest_guest');
+        localStorage.removeItem('javaqst_active_capstone');
         localStorage.removeItem('javaquest_active_capstone');
         localStorage.removeItem('jq_last_skin');
       } catch(e) {}
@@ -4174,7 +4179,7 @@ function initCodeMirrorEditors() {
   if (cmPlayMount && !_cmPlayground) {
     var initialCode = origPlayArea ? origPlayArea.value : '';
     if (!initialCode.trim()) {
-      initialCode = 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, JavaQuest!");\n    }\n}';
+      initialCode = 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, JavaQst!");\n    }\n}';
     }
     _cmPlayground = window.JavaEditor.create(cmPlayMount, {
       initialCode: initialCode,
@@ -4295,12 +4300,14 @@ function startLesson(modId, lessonId, initialStep) {
 
   // Persist session to resume later
   try {
-    localStorage.setItem('javaquest_last_lesson', JSON.stringify({
+    var lastLessonData = JSON.stringify({
       modId: modId,
       lessonId: lessonId,
       stepIdx: _slideIdx,
       timestamp: Date.now()
-    }));
+    });
+    localStorage.setItem('javaqst_last_lesson', lastLessonData);
+    localStorage.setItem('javaquest_last_lesson', lastLessonData);
   } catch(e) {}
 
   // Deep link hash update

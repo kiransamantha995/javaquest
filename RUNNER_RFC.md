@@ -1,7 +1,7 @@
-# RFC 001: Dedicated Sandboxed Code Execution Runner for JavaQuest
+# RFC 001: Dedicated Sandboxed Code Execution Runner for JavaQst
 
 - **Status**: Proposed / Architectural Blueprint
-- **Author**: JavaQuest Core Engineering Team
+- **Author**: JavaQst Core Engineering Team
 - **Target Runtime**: OpenJDK 21 LTS / OpenJDK 22 (Headless)
 - **Deployment Targets**: Fly.io MicroVMs or Hetzner Cloud with gVisor (`runsc`)
 
@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-JavaQuest currently runs learner Java code through hardened serverless proxy routes (`/api/run.js`) delegating to Wandbox's OpenJDK 22 compiler/runner. While Wandbox provides deterministic compilation and eliminates client-side simulation, third-party shared sandboxes introduce critical operational constraints:
+JavaQst currently runs learner Java code through hardened serverless proxy routes (`/api/run.js`) delegating to Wandbox's OpenJDK 22 compiler/runner. While Wandbox provides deterministic compilation and eliminates client-side simulation, third-party shared sandboxes introduce critical operational constraints:
 
 1. **Shared Rate Limits & Throttling**: Wandbox public endpoints are shared with thousands of developers globally and can throttle or queue requests during peak hours.
 2. **Interactive Stdin Latency**: Interactive lessons (e.g. `Scanner(System.in)`) require fast, reliable stdin streaming.
@@ -99,17 +99,17 @@ Every request between Vercel Serverless (`/api/run.js`) and the Runner must incl
 
 ```http
 POST /v1/execute
-Host: runner.javaquest.dev
+Host: runner.javaqst.in
 Content-Type: application/json
-X-JavaQuest-Signature: sha256=4f53cda18c2...
-X-JavaQuest-Timestamp: 1794462000
+X-JavaQst-Signature: sha256=4f53cda18c2...
+X-JavaQst-Timestamp: 1794462000
 ```
 
 ### 3.2 Request Schema
 
 ```json
 {
-  "source": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello JavaQuest\");\n    }\n}",
+  "source": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello JavaQst\");\n    }\n}",
   "stdin": "optional input line 1\nline 2\n",
   "timeoutMs": 5000,
   "javaVersion": 21
@@ -122,7 +122,7 @@ X-JavaQuest-Timestamp: 1794462000
 {
   "status": "COMPLETED",
   "exitCode": 0,
-  "stdout": "Hello JavaQuest\n",
+  "stdout": "Hello JavaQst\n",
   "stderr": "",
   "compilationTimeMs": 284,
   "executionTimeMs": 86,
@@ -142,7 +142,7 @@ X-JavaQuest-Timestamp: 1794462000
 
 ## 4. High-Availability & Failover Strategy
 
-JavaQuest maintains 99.9% execution uptime via an automated dual-tier circuit breaker:
+JavaQst maintains 99.9% execution uptime via an automated dual-tier circuit breaker:
 
 ```mermaid
 flowchart TD

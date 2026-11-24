@@ -1,4 +1,4 @@
-# JavaQuest — SECURITY.md
+# JavaQst — SECURITY.md
 
 This document lists every security threat addressed in Phase 1 of the upgrade, residual risks, and planned future work.
 
@@ -8,7 +8,7 @@ This document lists every security threat addressed in Phase 1 of the upgrade, r
 
 ### 1. Unauthenticated API Access (`api/ai.js`, `api/run.js`)
 - **Was:** `Access-Control-Allow-Origin: *`, no auth, any internet client could call.
-- **Fixed:** Supabase JWT required on every request. CORS restricted to `javaquest-ashen.vercel.app`. Guest access is not permitted.
+- **Fixed:** Supabase JWT required on every request. CORS restricted to `www.javaqst.in` and `javaquest-ashen.vercel.app`. Guest access is not permitted.
 
 ### 2. API Key Leakage via URL (`api/ai.js`)
 - **Was:** `?key=${apiKey}` in Gemini request URL — appeared in server logs.
@@ -94,9 +94,9 @@ This document lists every security threat addressed in Phase 1 of the upgrade, r
 
 ## 📋 Mojang / Minecraft Legal Notice
 
-JavaQuest uses **original pixel/voxel art** inspired by — but not copied from — Minecraft. All SVG badge icons and character sprites are original works. No Mojang textures, skins, or logos are used.
+JavaQst uses **original pixel/voxel art** inspired by — but not copied from — Minecraft. All SVG badge icons and character sprites are original works. No Mojang textures, skins, or logos are used.
 
-> *JavaQuest is not affiliated with or endorsed by Mojang Studios or Microsoft Corporation.*
+> *JavaQst is not affiliated with or endorsed by Mojang Studios or Microsoft Corporation.*
 
 Review [Mojang's Brand and Assets Guidelines](https://www.minecraft.net/en-us/brand-guidelines) before any public launch of Minecraft-themed content.
 

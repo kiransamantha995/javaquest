@@ -1,4 +1,4 @@
-// JavaQuest — ai-tutor.js
+// JavaQst — ai-tutor.js
 // JavaBot AI Coding Mentor v2 (Live Watching, Socratic Escalation, Error Translator, Code Review, Learner Memory)
 // Zero client-side API keys. Authenticated calls proxy securely through /api/ai.
 
@@ -8,12 +8,13 @@
   // ─────────────────────────────────────────────────────────────────────────────
   // 1. Core State & Storage Keys
   // ─────────────────────────────────────────────────────────────────────────────
-  var STORAGE_KEY_WATCHER_PAUSED = 'javaquest_watcher_paused';
-  var STORAGE_KEY_LEARNER_MEMORY = 'javaquest_learner_memory';
+  var STORAGE_KEY_WATCHER_PAUSED = 'javaqst_watcher_paused';
+  var STORAGE_KEY_LEARNER_MEMORY = 'javaqst_learner_memory';
 
   // Remove any obsolete legacy local key
   try {
     if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('javaqst_gemini_key');
       localStorage.removeItem('javaquest_gemini_key');
     }
   } catch (e) {}
@@ -80,7 +81,7 @@
   // ─────────────────────────────────────────────────────────────────────────────
   function getLearnerMemory() {
     try {
-      var raw = localStorage.getItem(STORAGE_KEY_LEARNER_MEMORY);
+      var raw = localStorage.getItem(STORAGE_KEY_LEARNER_MEMORY) || localStorage.getItem('javaquest_learner_memory');
       return raw ? JSON.parse(raw) : [];
     } catch (e) {
       return [];
@@ -122,6 +123,7 @@
   function clearLearnerMemory() {
     try {
       localStorage.removeItem(STORAGE_KEY_LEARNER_MEMORY);
+      localStorage.removeItem('javaquest_learner_memory');
       renderLearnerMemoryUI();
       if (typeof toast === 'function') toast('Learner memory reset! Starting fresh.');
     } catch (e) {}

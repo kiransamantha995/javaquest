@@ -1,6 +1,6 @@
-# Contributing to JavaQuest
+# Contributing to JavaQst
 
-Thank you for your interest in contributing to **JavaQuest**! JavaQuest is an open-source, gamified learning platform for modern Java (Java 21 LTS baseline) built with a retro neobrutalist aesthetic inspired by platforms like Codédex.
+Thank you for your interest in contributing to **JavaQst**! JavaQst is an open-source, gamified learning platform for modern Java (Java 21 LTS baseline) built with a retro neobrutalist aesthetic inspired by platforms like Codédex.
 
 ---
 
