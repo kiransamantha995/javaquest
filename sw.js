@@ -1,5 +1,5 @@
 // JavaQuest Service Worker — Offline Shell & Mobile PWA / TWA Support
-const CACHE_NAME = 'javaquest-cache-v1.1';
+const CACHE_NAME = 'javaquest-cache-v1.2';
 const SHELL_ASSETS = [
   '/',
   '/index.html',

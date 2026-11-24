@@ -10350,278 +10350,380 @@ body.dark-theme .map-view-toggle-btn.active {
   border-color: #000000 !important;
 }
 
-/* ── 3. Adventure Trail Board ── */
+/* ── 3. Adventure Trail: Isometric Mountain Island Diorama (Tamed Neobrutalist) ── */
 .adventure-trail-wrap {
   width: 100%;
 }
 
-.adventure-trail-board {
+.adventure-trail-board.island-mountain-board {
   position: relative;
   width: 100%;
-  max-width: 720px;
+  max-width: 780px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 1.5rem 1.25rem 3.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   background: #FAF8F5;
-  border: 2px solid var(--ink, #0B0B0E);
-  border-radius: 24px;
-  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
+  border: 3px solid var(--ink, #0B0B0E);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
   overflow: hidden;
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
-body.dark-theme .adventure-trail-board {
+body.dark-theme .adventure-trail-board.island-mountain-board {
   background: #121316 !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 4px 4px 0px #000000 !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 6px 6px 0px #000000 !important;
 }
 
 /* Biome Specific Ambiances */
 .adventure-trail-board[data-biome="nether"] {
-  background: #1A0D11;
-  border-color: #8B0000;
+  background: #180C10 !important;
+  border-color: #8B0000 !important;
+}
+body.dark-theme .adventure-trail-board[data-biome="nether"] {
+  background: #14080B !important;
 }
 
 .adventure-trail-board[data-biome="end"] {
-  background: #0E0817;
-  border-color: #5B21B6;
+  background: #0E0817 !important;
+  border-color: #5B21B6 !important;
+}
+body.dark-theme .adventure-trail-board[data-biome="end"] {
+  background: #0A0512 !important;
 }
 
-/* Chapter Header on Trail */
-.trail-chapter-header {
+/* Floating Clouds & Sky Atmosphere */
+.island-sky-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.pixel-cloud {
+  position: absolute;
+  background: #FFFFFF;
+  border: 2px solid var(--ink, #0B0B0E);
+  box-shadow: 2px 2px 0px var(--ink, #0B0B0E);
+  border-radius: 8px;
+  opacity: 0.75;
+}
+.pixel-cloud.c1 {
+  top: 40px;
+  left: 20px;
+  width: 64px;
+  height: 18px;
+  animation: floatCloud 24s ease-in-out infinite alternate;
+}
+.pixel-cloud.c2 {
+  top: 180px;
+  right: 24px;
+  width: 82px;
+  height: 22px;
+  animation: floatCloud 30s ease-in-out infinite alternate-reverse;
+}
+.pixel-cloud.c3 {
+  bottom: 120px;
+  left: 30px;
+  width: 70px;
+  height: 20px;
+  animation: floatCloud 28s ease-in-out infinite alternate;
+}
+
+body.dark-theme .pixel-cloud {
+  background: #1F232B !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+  opacity: 0.55;
+}
+
+@keyframes floatCloud {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(18px); }
+}
+
+/* ── Top Island Biome Header Bar (Matches User Reference Image) ── */
+.island-header-bar {
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.85rem 1.25rem;
-  margin: 1.75rem 0 1rem;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1.5rem;
   background: #FFFFFF;
-  border: 2px solid var(--ink, #0B0B0E);
-  border-radius: 14px;
-  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
+  border: 2.5px solid var(--ink, #0B0B0E);
+  border-radius: 18px;
+  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
   z-index: 10;
 }
 
-body.dark-theme .trail-chapter-header {
-  background: #1A1D24 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 3px 3px 0px #000000 !important;
+body.dark-theme .island-header-bar {
+  background: #18191E !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 4px 4px 0px #000000 !important;
 }
 
-.trail-chap-pill-badge {
+.island-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.island-biome-cube {
+  flex-shrink: 0;
+  filter: drop-shadow(2px 2px 0px var(--ink, #0B0B0E));
+}
+
+.island-title-group {
+  min-width: 0;
+}
+
+.island-badge-pill {
+  display: inline-block;
   background: #FFE600;
   color: #0B0B0E;
   font-family: var(--font-mono, monospace);
   font-weight: 900;
-  font-size: 0.85rem;
-  padding: 0.3rem 0.65rem;
-  border-radius: 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  padding: 0.18rem 0.55rem;
+  border-radius: 6px;
   border: 1.5px solid #0B0B0E;
-  box-shadow: 1.5px 1.5px 0px #0B0B0E;
-  flex-shrink: 0;
+  box-shadow: 1px 1px 0px #0B0B0E;
+  margin-bottom: 0.25rem;
 }
 
-.trail-chap-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.trail-chap-title {
-  font-size: 0.96rem;
+.island-heading {
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--ink, #0B0B0E);
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 0;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
 }
 
-body.dark-theme .trail-chap-title {
+body.dark-theme .island-heading {
   color: #F4F4F5 !important;
 }
 
-.trail-chap-sub {
+.island-sub {
   font-size: 0.78rem;
   font-weight: 600;
   color: #52525B;
+  margin: 0.2rem 0 0;
+  line-height: 1.35;
 }
 
-body.dark-theme .trail-chap-sub {
+body.dark-theme .island-sub {
   color: #94A3B8 !important;
 }
 
-.trail-chap-status-tag {
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  border: 1.5px solid var(--ink, #0B0B0E);
+.island-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55rem;
   flex-shrink: 0;
 }
 
-.trail-chap-status-tag.done {
-  background: #DCFCE7;
-  color: #166534;
-  border-color: #10B981;
+.island-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FAF8F5;
+  border: 1.5px solid var(--ink, #0B0B0E);
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0px var(--ink, #0B0B0E);
 }
 
-.trail-chap-status-tag.active {
-  background: #FEF9C3;
-  color: #854D0E;
-  border-color: #EAB308;
+body.dark-theme .island-stat-chip {
+  background: #24262C !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 2px 2px 0px #000000 !important;
 }
 
-.trail-chap-status-tag.locked {
-  background: #F4F4F5;
+.chip-label {
+  font-size: 0.7rem;
+  font-weight: 700;
   color: #71717A;
-  border-color: #A1A1AA;
+  text-transform: uppercase;
 }
 
-body.dark-theme .trail-chap-status-tag.done {
-  background: #064E3B !important;
-  color: #A7F3D0 !important;
-  border-color: #10B981 !important;
+.chip-val {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--ink, #0B0B0E);
 }
 
-body.dark-theme .trail-chap-status-tag.active {
-  background: #713F12 !important;
-  color: #FEF08A !important;
-  border-color: #EAB308 !important;
+body.dark-theme .chip-val {
+  color: #F4F4F5 !important;
 }
 
-body.dark-theme .trail-chap-status-tag.locked {
-  background: #27272A !important;
-  color: #A1A1AA !important;
-  border-color: #52525B !important;
+.island-mini-bar {
+  width: 50px;
+  height: 6px;
+  background: #E4E4E7;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--ink, #0B0B0E);
 }
 
-/* Trail Segment & Nodes */
-.trail-chapter-segment {
+.mini-bar-fill {
+  height: 100%;
+  background: #10B981;
+  transition: width 0.3s ease;
+}
+
+.island-track-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.track-pill-btn {
+  background: #FFFFFF;
+  border: 1.5px solid var(--ink, #0B0B0E);
+  box-shadow: 1.5px 1.5px 0px var(--ink, #0B0B0E);
+  border-radius: 8px;
+  padding: 0.25rem 0.6rem;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ink, #0B0B0E);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.track-pill-btn:hover {
+  background: #FFFEEB;
+  transform: translate(-1px, -1px);
+}
+
+.track-pill-btn.active {
+  background: #FFE600;
+  border-color: #0B0B0E;
+  color: #0B0B0E;
+  box-shadow: 2px 2px 0px #0B0B0E;
+}
+
+body.dark-theme .track-pill-btn {
+  background: #202228 !important;
+  color: #E4E4E7 !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 1.5px 1.5px 0px #000000 !important;
+}
+
+body.dark-theme .track-pill-btn.active {
+  background: #FFE600 !important;
+  color: #0B0B0E !important;
+  border-color: #FFE600 !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+/* ── The Mountain Island Canvas & Diorama ── */
+.island-canvas {
   position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.25rem;
+  gap: 2rem;
   padding: 1.5rem 0 2rem;
+  z-index: 5;
 }
 
-/* Decorative winding background line */
-.trail-chapter-segment::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 22px;
-  transform: translateX(-50%);
-  background: #D7BA89;
-  border-left: 2px dashed #926A3D;
-  border-right: 2px dashed #926A3D;
-  z-index: 1;
-  opacity: 0.7;
-  border-radius: 9999px;
-}
-
-body.dark-theme .trail-chapter-segment::before {
-  background: #2D333B !important;
-  border-left: 2px dashed #444C56 !important;
-  border-right: 2px dashed #444C56 !important;
-}
-
-.trail-node-row {
+/* Winding Mountain Stepping Stone Stations */
+.island-node-station {
   position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  gap: 1.5rem;
+  z-index: 6;
+  transform: translateX(var(--node-x, 0px));
+  transition: transform 0.2s ease;
 }
 
-/* Stepping Stone Node Button */
-.trail-step-node {
-  position: relative;
-  transform: translateX(var(--x-offset, 0px));
-  width: 58px;
-  height: 58px;
-  border-radius: 14px;
-  border: 2.5px solid var(--ink, #0B0B0E);
-  background: #FFFFFF;
-  color: var(--ink, #0B0B0E);
-  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono, monospace);
-  font-size: 0.95rem;
-  font-weight: 900;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+.island-node-station.layout-pill-right {
+  flex-direction: row;
 }
 
-.trail-step-node:hover {
-  transform: translateX(var(--x-offset, 0px)) translateY(-2px);
-  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
+.island-node-station.layout-pill-left {
+  flex-direction: row-reverse;
 }
 
-/* Completed Node */
-.trail-step-node.node-done {
-  background: #10B981;
-  border-color: #064E3B;
-  color: #FFFFFF;
-  box-shadow: 3px 3px 0px #064E3B;
-}
-
-/* Active Node */
-.trail-step-node.node-active {
-  background: #FFE600;
-  border-color: #0B0B0E;
-  color: #0B0B0E;
-  box-shadow: 4px 4px 0px #0B0B0E;
-  animation: activeNodePulse 1.8s infinite;
-}
-
-@keyframes activeNodePulse {
-  0%, 100% { box-shadow: 4px 4px 0px #0B0B0E, 0 0 0 0 rgba(255, 230, 0, 0.7); }
-  50% { box-shadow: 4px 4px 0px #0B0B0E, 0 0 0 10px rgba(255, 230, 0, 0); }
-}
-
-/* Locked Node */
-.trail-step-node.node-locked {
-  background: #E4E4E7;
-  color: #71717A;
-  border-color: #71717A;
-  box-shadow: 2px 2px 0px #71717A;
-  opacity: 0.85;
-}
-
-body.dark-theme .trail-step-node.node-locked {
-  background: #1F2228 !important;
-  color: #52525B !important;
-  border-color: #3F3F46 !important;
-  box-shadow: 2px 2px 0px #000000 !important;
-}
-
-/* Scenery Slots */
-.trail-scenery-slot {
+/* Scenery prop positioned beside node */
+.station-scenery {
   position: absolute;
+  top: -16px;
   pointer-events: none;
   z-index: 2;
 }
 
-.trail-scenery-slot.left {
-  left: 8%;
+.layout-pill-right .station-scenery {
+  left: 2%;
 }
 
-.trail-scenery-slot.right {
-  right: 8%;
+.layout-pill-left .station-scenery {
+  right: 2%;
 }
 
-/* Meowger Marker on Active Node */
-.trail-meowger-marker {
+/* ── 3D Stepping Stone Pedestal ── */
+.island-pedestal {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+}
+
+.island-pedestal:hover {
+  transform: translateY(-4px);
+}
+
+.island-pedestal.pedestal-active {
+  animation: activePedestalFloat 2s ease-in-out infinite;
+}
+
+@keyframes activePedestalFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.pedestal-active-glow {
+  position: absolute;
+  bottom: 6px;
+  width: 60px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.8) 0%, rgba(168, 85, 247, 0) 70%);
+  filter: blur(4px);
+  pointer-events: none;
+  animation: activePortalPulse 1.8s infinite;
+}
+
+@keyframes activePortalPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+/* Character Sprite standing on active pedestal */
+.station-character-sprite {
   position: absolute;
   top: -52px;
   left: 50%;
@@ -10630,21 +10732,22 @@ body.dark-theme .trail-step-node.node-locked {
   flex-direction: column;
   align-items: center;
   pointer-events: none;
-  z-index: 20;
-  animation: meowgerMarkerBounce 1.6s ease-in-out infinite;
+  z-index: 15;
+  animation: idleCharacterBob 1.8s ease-in-out infinite;
 }
 
-@keyframes meowgerMarkerBounce {
+@keyframes idleCharacterBob {
   0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-6px); }
+  50% { transform: translateX(-50%) translateY(-5px); }
 }
 
-.marker-speech {
+.station-speech-bubble {
   background: #FFE600;
   color: #0B0B0E;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 0.15rem 0.45rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.18rem 0.5rem;
   border-radius: 6px;
   border: 1.5px solid #0B0B0E;
   box-shadow: 1.5px 1.5px 0px #0B0B0E;
@@ -10652,57 +10755,345 @@ body.dark-theme .trail-step-node.node-locked {
   margin-bottom: 2px;
 }
 
-.marker-avatar {
-  width: 28px;
-  height: 28px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+.station-avatar-inner {
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
 }
 
-/* Treasure Chest Node */
-.trail-chest-row {
-  margin-top: 1rem;
-}
-
-.trail-chest-node {
-  display: inline-flex;
-  flex-direction: column;
+/* ── Quest Label Pill (Matches User Reference Image) ── */
+.island-quest-pill {
+  display: flex;
   align-items: center;
-  gap: 0.4rem;
-  background: none;
-  border: none;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  background: #FFFFFF;
+  border: 2px solid var(--ink, #0B0B0E);
+  border-radius: 14px;
+  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
   cursor: pointer;
-  transition: transform 0.18s ease;
+  transition: all 0.15s ease;
+  min-width: 220px;
+  max-width: 320px;
 }
 
-.trail-chest-node:hover {
-  transform: scale(1.08) translateY(-2px);
+.island-quest-pill:hover {
+  background: #FFFEEB;
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
 }
 
-.chest-label {
+body.dark-theme .island-quest-pill {
+  background: #1A1D24 !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 3px 3px 0px #000000 !important;
+}
+
+body.dark-theme .island-quest-pill:hover {
+  background: #242832 !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+
+.island-quest-pill.pill-active {
+  border-color: #0B0B0E;
+  box-shadow: 3.5px 3.5px 0px #0B0B0E;
+  background: #FFFDEB;
+}
+
+body.dark-theme .island-quest-pill.pill-active {
+  background: #201E2B !important;
+  border-color: #FFE600 !important;
+}
+
+.pill-code-badge {
+  background: #0B0B0E;
+  color: #FFFFFF;
   font-family: var(--font-mono, monospace);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.pill-active .pill-code-badge {
+  background: #FFE600;
+  color: #0B0B0E;
+  border: 1.5px solid #0B0B0E;
+}
+
+.pill-done .pill-code-badge {
+  background: #10B981;
+}
+
+.pill-text-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.pill-title {
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.88rem;
   font-weight: 800;
   color: var(--ink, #0B0B0E);
-  background: #FFFFFF;
-  border: 1.5px solid var(--ink, #0B0B0E);
-  padding: 0.15rem 0.55rem;
-  border-radius: 6px;
-  box-shadow: 1.5px 1.5px 0px var(--ink, #0B0B0E);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
-body.dark-theme .chest-label {
-  background: #1E1F24 !important;
+body.dark-theme .pill-title {
   color: #F4F4F5 !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 1.5px 1.5px 0px #000000 !important;
 }
 
-/* Trail Node Modal Backdrop & Card */
+.pill-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #71717A;
+  margin-top: 1px;
+}
+
+body.dark-theme .pill-sub {
+  color: #94A3B8 !important;
+}
+
+.pill-status-badge {
+  flex-shrink: 0;
+}
+
+.status-active-badge {
+  background: #FFE600;
+  color: #0B0B0E;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border: 1.5px solid #0B0B0E;
+}
+
+.status-done-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #DCFCE7;
+  color: #166534;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border: 1.5px solid #10B981;
+}
+
+body.dark-theme .status-done-badge {
+  background: #064E3B !important;
+  color: #A7F3D0 !important;
+}
+
+.status-ready-badge {
+  background: #FEF9C3;
+  color: #854D0E;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border: 1.5px solid #EAB308;
+}
+
+body.dark-theme .status-ready-badge {
+  background: #713F12 !important;
+  color: #FEF08A !important;
+}
+
+.status-locked-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #A1A1AA;
+}
+
+/* ── Scenic Wooden Bridge & Mountain Waterfall ── */
+.island-feature-wrap {
+  width: 100%;
+  margin: 0.5rem 0;
+  z-index: 4;
+}
+
+.island-feature-section {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  height: 70px;
+  margin: 0 auto;
+  border-radius: 16px;
+  border: 2px solid var(--ink, #0B0B0E);
+  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.island-overworld-river {
+  background: #60A5FA;
+}
+.river-stream {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+}
+.water-foam {
+  position: absolute;
+  height: 2px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+.water-foam.f1 { top: 18px; left: 15%; width: 50px; }
+.water-foam.f2 { bottom: 20px; right: 20%; width: 65px; }
+
+.island-nether-rift {
+  background: #7F1D1D;
+}
+.lava-stream {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #EA580C 0%, #C2410C 100%);
+}
+
+.island-end-rift {
+  background: #2E1065;
+}
+.void-stream {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #4C1D95 0%, #2E1065 100%);
+}
+
+.feature-bridge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+.bridge-planks {
+  display: flex;
+  gap: 3px;
+  background: #5C3A21;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 2px solid #0B0B0E;
+}
+
+.bridge-planks span {
+  display: block;
+  width: 14px;
+  height: 28px;
+  background: #8B5A2B;
+  border: 1px solid #0B0B0E;
+}
+
+.feature-tag {
+  position: absolute;
+  bottom: 4px;
+  right: 12px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 1px 1px 0px #0B0B0E;
+  z-index: 6;
+}
+
+/* ── Milestone Capstone Summit Dais ── */
+.island-capstone-station {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  z-index: 8;
+}
+
+.capstone-chest-btn {
+  background: #FFFFFF;
+  border: 2.5px solid var(--ink, #0B0B0E);
+  border-radius: 20px;
+  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
+  padding: 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.capstone-chest-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
+  background: #FFFEEB;
+}
+
+body.dark-theme .capstone-chest-btn {
+  background: #1A1D24 !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 4px 4px 0px #000000 !important;
+}
+
+body.dark-theme .capstone-chest-btn:hover {
+  background: #222630 !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+}
+
+.capstone-label-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.capstone-code-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #B45309;
+}
+
+body.dark-theme .capstone-code-tag {
+  color: #FCD34D !important;
+}
+
+.capstone-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink, #0B0B0E);
+}
+
+body.dark-theme .capstone-name {
+  color: #F4F4F5 !important;
+}
+
+.capstone-xp-chip {
+  background: #FFE600;
+  color: #0B0B0E;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  font-weight: 900;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  border: 1.5px solid #0B0B0E;
+}
+
+/* ── Chapter Diorama Popover Modal ── */
 .trail-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(11, 11, 14, 0.65);
-  backdrop-filter: blur(4px);
+  background: rgba(11, 11, 14, 0.68);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -10713,10 +11104,12 @@ body.dark-theme .chest-label {
 .trail-modal-card {
   background: #FFFFFF;
   border: 3px solid var(--ink, #0B0B0E);
-  border-radius: 20px;
+  border-radius: 22px;
   box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
+  max-height: 88vh;
+  overflow-y: auto;
   padding: 1.75rem;
   animation: modalCardPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -10837,7 +11230,7 @@ body.dark-theme .trail-modal-desc {
 .trail-modal-meta {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.25rem;
 }
 
 .trail-meta-chip {
@@ -10859,6 +11252,102 @@ body.dark-theme .trail-meta-chip {
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
+/* Modal Lesson List */
+.modal-lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.modal-lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.85rem;
+  background: #FAF8F5;
+  border: 1.5px solid var(--ink, #0B0B0E);
+  border-radius: 10px;
+}
+
+body.dark-theme .modal-lesson-row {
+  background: #22252D !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+.modal-lesson-row.lesson-done {
+  background: #F0FDF4;
+  border-color: #10B981;
+}
+
+body.dark-theme .modal-lesson-row.lesson-done {
+  background: #0B2519 !important;
+  border-color: #059669 !important;
+}
+
+.modal-lesson-idx {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E4E4E7;
+  border-radius: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.lesson-done .modal-lesson-idx {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+.modal-lesson-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.modal-lesson-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink, #0B0B0E);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.dark-theme .modal-lesson-title {
+  color: #F4F4F5 !important;
+}
+
+.modal-lesson-xp {
+  font-size: 0.7rem;
+  color: #71717A;
+}
+
+.modal-lesson-launch-btn {
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: #FFE600;
+  color: #0B0B0E;
+  border: 1.5px solid #0B0B0E;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.lesson-done .modal-lesson-launch-btn {
+  background: #FFFFFF;
+  color: var(--ink, #0B0B0E);
+}
+
+body.dark-theme .lesson-done .modal-lesson-launch-btn {
+  background: #18191E !important;
+  color: #F4F4F5 !important;
+}
+
 .trail-modal-actions {
   display: flex;
   gap: 0.75rem;
@@ -10866,9 +11355,15 @@ body.dark-theme .trail-meta-chip {
 
 .trail-btn-action {
   flex: 1;
-  padding: 0.75rem 1rem;
-  font-size: 0.92rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
   font-weight: 800;
+  background: #FFE600;
+  color: #0B0B0E;
+  border: 2px solid #0B0B0E;
+  border-radius: 12px;
+  box-shadow: 3px 3px 0px #0B0B0E;
+  cursor: pointer;
 }
 
 @media (max-width: 640px) {
@@ -10882,16 +11377,40 @@ body.dark-theme .trail-meta-chip {
     bottom: 68px;
     max-width: 220px;
   }
-  .adventure-trail-board {
-    border-radius: 16px;
-    padding: 1rem 0.65rem 3rem;
+  .adventure-trail-board.island-mountain-board {
+    border-radius: 20px;
+    padding: 1rem 0.65rem 2.5rem;
   }
-  .trail-scenery-slot.left {
-    left: 2%;
-    opacity: 0.6;
+  .island-header-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    gap: 0.85rem;
   }
-  .trail-scenery-slot.right {
-    right: 2%;
-    opacity: 0.6;
+  .island-header-right {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .island-node-station {
+    transform: none !important;
+    gap: 0.75rem;
+  }
+  .island-quest-pill {
+    min-width: 0;
+    max-width: none;
+    flex: 1;
+    padding: 0.45rem 0.75rem;
+  }
+  .pill-title {
+    font-size: 0.8rem;
+  }
+  .station-scenery {
+    display: none;
+  }
+  .island-feature-section {
+    max-width: 100%;
+    height: 58px;
   }
 }
