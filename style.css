@@ -11505,3 +11505,366 @@ body.dark-theme .lesson-done .modal-lesson-launch-btn {
     height: 58px;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   TERMS OF SERVICE ACCEPTANCE GATE & HOW TO PLAY TUTORIAL
+   ══════════════════════════════════════════════════════════════ */
+
+/* Terms Gate Box */
+.terms-gate-box {
+  width: min(650px, 94vw);
+  max-height: min(88vh, 780px);
+  overflow-y: auto;
+  padding: 2.25rem 2rem;
+  box-sizing: border-box;
+  text-align: left;
+  border-radius: 20px;
+}
+.terms-gate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 230, 0, 0.2);
+  border: 1.5px solid var(--ink);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-family: var(--font-pixel, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin-bottom: 0.85rem;
+}
+body.dark-theme .terms-gate-badge {
+  background: rgba(255, 230, 0, 0.15);
+  border-color: #FFE600;
+  color: #FFE600;
+}
+.terms-gate-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 0.45rem;
+  line-height: 1.25;
+}
+body.dark-theme .terms-gate-title {
+  color: #F4F4F5;
+}
+.terms-gate-sub {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.25rem;
+  line-height: 1.5;
+}
+.terms-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+.terms-card-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: #FAF8F5;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 2px 2px 0px var(--ink);
+}
+body.dark-theme .terms-card-item {
+  background: #18191E;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+.terms-card-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  margin-top: 2px;
+}
+body.dark-theme .terms-card-icon {
+  background: #23272F;
+  border-color: #4B5563;
+  color: #FFE600;
+}
+.terms-card-content h4 {
+  margin: 0 0 0.2rem;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+body.dark-theme .terms-card-content h4 {
+  color: #F4F4F5;
+}
+.terms-card-content p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+.terms-agree-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  background: rgba(34, 197, 94, 0.08);
+  border: 2px solid rgba(34, 197, 94, 0.35);
+  border-radius: 12px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+body.dark-theme .terms-agree-row {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.45);
+  color: #86EFAC;
+}
+.terms-agree-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #16A34A;
+  cursor: pointer;
+}
+.terms-gate-actions {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Tutorial Box & Carousel */
+.tutorial-box {
+  width: min(690px, 94vw);
+  max-height: min(90vh, 790px);
+  overflow-y: auto;
+  padding: 2.25rem 2rem;
+  box-sizing: border-box;
+  text-align: left;
+  border-radius: 20px;
+}
+.tutorial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.tutorial-step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #FFE600;
+  border: 1.5px solid var(--ink);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-family: var(--font-pixel, monospace);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  box-shadow: 2px 2px 0px var(--ink);
+}
+body.dark-theme .tutorial-step-badge {
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+.tutorial-slide {
+  display: none;
+  animation: codexSlideFade 0.22s ease-out;
+}
+.tutorial-slide.active {
+  display: block;
+}
+.tutorial-slide-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 0.3rem;
+  line-height: 1.3;
+}
+body.dark-theme .tutorial-slide-title {
+  color: #F4F4F5;
+}
+.tutorial-slide-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.25rem;
+  line-height: 1.45;
+}
+.tutorial-hero-visual {
+  background: #FAF8F5;
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0px var(--ink);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  min-height: 145px;
+}
+body.dark-theme .tutorial-hero-visual {
+  background: #18191E;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px #000000;
+}
+.tutorial-hero-svg {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  max-height: 150px;
+  display: block;
+}
+.tutorial-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+}
+.tutorial-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 2px 2px 0px var(--ink);
+}
+body.dark-theme .tutorial-feature-item {
+  background: #1E1F24;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+.tutorial-feature-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #FFE600;
+  border: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  margin-top: 1px;
+}
+body.dark-theme .tutorial-feature-icon {
+  border-color: #000000;
+  box-shadow: 1px 1px 0px #000000;
+}
+.tutorial-feature-text {
+  font-size: 0.84rem;
+  color: var(--ink);
+  line-height: 1.45;
+}
+body.dark-theme .tutorial-feature-text {
+  color: #E4E4E7;
+}
+.tutorial-feature-text strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+body.dark-theme .tutorial-feature-text strong {
+  color: #FFFFFF;
+}
+.tutorial-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1.15rem;
+  border-top: 2px solid rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+body.dark-theme .tutorial-footer {
+  border-top-color: rgba(255,255,255,0.12);
+}
+.tutorial-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.tutorial-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: #E4E4E7;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2,0,0,1);
+  padding: 0;
+}
+body.dark-theme .tutorial-dot {
+  background: #3F3F46;
+  border-color: #000000;
+}
+.tutorial-dot.active {
+  background: #FFE600;
+  transform: scale(1.3);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+body.dark-theme .tutorial-dot.active {
+  background: #FFE600;
+  border-color: #000000;
+}
+.tutorial-skip-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.35rem 0.5rem;
+}
+.tutorial-skip-btn:hover {
+  color: var(--ink);
+}
+body.dark-theme .tutorial-skip-btn:hover {
+  color: #F4F4F5;
+}
+
+@media (max-width: 600px) {
+  .terms-gate-box, .tutorial-box {
+    padding: 1.5rem 1.15rem;
+    border-radius: 16px;
+  }
+  .terms-gate-title, .tutorial-slide-title {
+    font-size: 1.25rem;
+  }
+  .tutorial-hero-visual {
+    padding: 0.75rem;
+    min-height: 110px;
+  }
+  .tutorial-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .tutorial-dots {
+    justify-content: center;
+    order: -1;
+  }
+  .terms-gate-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .terms-gate-actions button, .terms-gate-actions a {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}

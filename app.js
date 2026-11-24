@@ -350,7 +350,19 @@ function initAuthUI() {
   var gbs = ge('guest-btn-su'); if(gbs) gbs.addEventListener('click', doGuestLogin);
 }
 
+function hasAcceptedTerms() {
+  try {
+    return (localStorage.getItem('javaqst_terms_accepted') === 'true') ||
+           (localStorage.getItem('javaquest_terms_accepted') === 'true');
+  } catch(e) {
+    return false;
+  }
+}
+
 function doGuestLogin() {
+  if (!hasAcceptedTerms()) {
+    showModal('modal-terms-gate');
+  }
   var enteredName = (ge('su-name') || {}).value;
   var name = (enteredName && enteredName.trim()) ? enteredName.trim() : 'JavaLearner';
   var diff = _signupDiff || 'beginner';
@@ -5465,8 +5477,152 @@ document.addEventListener('DOMContentLoaded', function(){
     sendPromptToChat("Based on my current code and TODOs, what should I implement next? Give me a helpful hint to get started!");
   });
 
+  // ── TERMS GATE & INTERACTIVE TUTORIAL ────────────────────────
+  window.checkTermsGate = function() {
+    if (!hasAcceptedTerms()) {
+      showModal('modal-terms-gate');
+    }
+  };
+
+  window.openTermsModal = function() {
+    showModal('modal-terms-gate');
+  };
+
+  window.acceptTerms = function() {
+    var cb = ge('terms-agree-checkbox');
+    if (cb && !cb.checked) {
+      toast('Please check the box to confirm you agree to the terms.');
+      return;
+    }
+    try {
+      localStorage.setItem('javaqst_terms_accepted', 'true');
+      localStorage.setItem('javaquest_terms_accepted', 'true');
+    } catch(e) {}
+    hideModal('modal-terms-gate');
+    toast('Terms accepted! Welcome to JavaQst.');
+
+    // If first-time user hasn't seen the tutorial, launch it
+    var tutSeen = false;
+    try {
+      tutSeen = (localStorage.getItem('javaqst_tutorial_seen') === 'true') ||
+                (localStorage.getItem('javaquest_tutorial_seen') === 'true');
+    } catch(e) {}
+    if (!tutSeen) {
+      setTimeout(function(){
+        window.openTutorial(0);
+      }, 450);
+    }
+  };
+
+  var _curTutorialStep = 0;
+  var _totalTutorialSteps = 5;
+
+  window.openTutorial = function(stepIdx) {
+    if (typeof stepIdx === 'number') _curTutorialStep = stepIdx;
+    if (_curTutorialStep < 0) _curTutorialStep = 0;
+    if (_curTutorialStep >= _totalTutorialSteps) _curTutorialStep = _totalTutorialSteps - 1;
+    window.renderTutorialStep(_curTutorialStep);
+    showModal('modal-tutorial');
+  };
+
+  window.closeTutorial = function() {
+    try {
+      localStorage.setItem('javaqst_tutorial_seen', 'true');
+      localStorage.setItem('javaquest_tutorial_seen', 'true');
+    } catch(e) {}
+    hideModal('modal-tutorial');
+  };
+
+  window.renderTutorialStep = function(step) {
+    _curTutorialStep = step;
+    var badge = ge('tutorial-step-badge');
+    if (badge) badge.textContent = 'STEP ' + (step + 1) + ' OF ' + _totalTutorialSteps;
+
+    for (var i = 0; i < _totalTutorialSteps; i++) {
+      var slide = ge('tutorial-slide-' + i);
+      if (slide) {
+        if (i === step) slide.classList.add('active');
+        else slide.classList.remove('active');
+      }
+      var dot = ge('tutorial-dot-' + i);
+      if (dot) {
+        if (i === step) dot.classList.add('active');
+        else dot.classList.remove('active');
+      }
+    }
+
+    var prevBtn = ge('btn-tutorial-prev');
+    if (prevBtn) {
+      prevBtn.style.visibility = (step === 0) ? 'hidden' : 'visible';
+    }
+    var nextBtn = ge('btn-tutorial-next');
+    if (nextBtn) {
+      if (step === _totalTutorialSteps - 1) {
+        nextBtn.innerHTML = 'Start Learning! &rarr;';
+      } else {
+        nextBtn.innerHTML = 'Next Step &rarr;';
+      }
+    }
+  };
+
+  window.nextTutorialStep = function() {
+    if (_curTutorialStep < _totalTutorialSteps - 1) {
+      window.renderTutorialStep(_curTutorialStep + 1);
+    } else {
+      window.closeTutorial();
+      toast('Ready to quest! Pick your first quest on the map.');
+    }
+  };
+
+  window.prevTutorialStep = function() {
+    if (_curTutorialStep > 0) {
+      window.renderTutorialStep(_curTutorialStep - 1);
+    }
+  };
+
+  // Keyboard navigation for tutorial
+  document.addEventListener('keydown', function(e) {
+    var tutModal = ge('modal-tutorial');
+    if (tutModal && !tutModal.classList.contains('hidden')) {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        window.nextTutorialStep();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        window.prevTutorialStep();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        window.closeTutorial();
+      }
+    }
+  });
+
+  // Modal backdrop click handlers
+  var termsBg = ge('modal-terms-gate');
+  if (termsBg) {
+    termsBg.addEventListener('click', function(e){
+      // Don't close terms gate on background click if not accepted
+      if (e.target === termsBg && hasAcceptedTerms()) {
+        hideModal('modal-terms-gate');
+      }
+    });
+  }
+  var tutBg = ge('modal-tutorial');
+  if (tutBg) {
+    tutBg.addEventListener('click', function(e){
+      if (e.target === tutBg) window.closeTutorial();
+    });
+  }
+
   // ── BOOT ──────────────────────────────────────────────────────
   try {
+    // Check terms gate for all visitors on startup
+    setTimeout(function(){
+      if (typeof window.checkTermsGate === 'function') {
+        window.checkTermsGate();
+      }
+    }, 200);
+
     var session = sbRestoreSession();
     if (window._sbHashError) {
       showAuthError('si', window._sbHashError + '. Please sign in with your password or click Play as Guest below!');

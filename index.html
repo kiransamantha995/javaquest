@@ -73,7 +73,7 @@
   <title>JavaQst — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=9.4"/>
+  <link rel="stylesheet" href="style.css?v=9.5"/>
 </head>
 <body>
 
@@ -172,6 +172,9 @@
         <div class="auth-switch-prompt">Already have an account? <button type="button" class="btn-link" id="link-to-si">Sign In</button></div>
         <div class="auth-divider"><span>or play without account</span></div>
         <button type="button" class="btn-guest" id="guest-btn-su">Continue as Guest (Local Mode)</button>
+        <p class="auth-terms-note" style="font-size:0.78rem;color:var(--text-secondary);text-align:center;margin-top:0.85rem;line-height:1.4;">
+          By continuing, you agree to JavaQst's <a href="terms.html" target="_blank" style="color:inherit;text-decoration:underline;">Terms of Service</a> &amp; <a href="privacy.html" target="_blank" style="color:inherit;text-decoration:underline;">Privacy Policy</a>.
+        </p>
       </div>
 
       <!-- Sign-in form (hidden by default) -->
@@ -183,6 +186,9 @@
         <div class="auth-switch-prompt">Don't have an account? <button type="button" class="btn-link" id="link-to-su">Create an account</button></div>
         <div class="auth-divider"><span>or play without account</span></div>
         <button type="button" class="btn-guest" id="guest-btn">Continue as Guest (Local Mode)</button>
+        <p class="auth-terms-note" style="font-size:0.78rem;color:var(--text-secondary);text-align:center;margin-top:0.85rem;line-height:1.4;">
+          By continuing, you agree to JavaQst's <a href="terms.html" target="_blank" style="color:inherit;text-decoration:underline;">Terms of Service</a> &amp; <a href="privacy.html" target="_blank" style="color:inherit;text-decoration:underline;">Privacy Policy</a>.
+        </p>
       </div>
 
       <div class="auth-loading hidden" id="auth-loading">
@@ -295,6 +301,12 @@
             <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="9" cy="9" r="2"></circle><circle cx="15" cy="9" r="2"></circle><line x1="8" y1="15" x2="16" y2="15"></line></svg>
           </div>
           <div class="quick-card-label">Pixel Avatar</div>
+        </div>
+        <div class="quick-card" id="qc-tutorial" onclick="window.openTutorial(0)">
+          <div class="quick-card-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </div>
+          <div class="quick-card-label">How to Play</div>
         </div>
       </div>
     </div>
@@ -1011,6 +1023,20 @@
       </div>
     </div>
 
+    <div class="settings-card glass-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+        <h3 style="margin:0;">Platform Guide &amp; Legal</h3>
+        <span class="hud-stat-val" style="font-size:0.82rem;color:var(--primary);background:rgba(255,230,0,0.15);padding:0.25rem 0.6rem;border-radius:999px;border:1px solid rgba(255,230,0,0.3);font-weight:800;">Tutorial &amp; Safety</span>
+      </div>
+      <p style="margin-top:0.5rem;">Review how the adventure map, live code runner, hints, and Meowger companion work, or inspect our platform safety policies:</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:0.75rem;">
+        <button class="btn-secondary" id="settings-tutorial-btn" onclick="window.openTutorial(0)">How to Play (Interactive Tutorial)</button>
+        <button class="btn-secondary" id="settings-terms-btn" onclick="window.openTermsModal()">Review Terms &amp; Conditions</button>
+        <a href="terms.html" target="_blank" class="btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;">Terms of Service</a>
+        <a href="privacy.html" target="_blank" class="btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;">Privacy Policy</a>
+      </div>
+    </div>
+
     <div class="settings-card glass-card danger-card">
       <h3>Danger Zone</h3>
       <p>Irreversible actions for your JavaQst learning profile and account data:</p>
@@ -1377,6 +1403,378 @@
   </div>
 </div>
 
+<!-- ====== TERMS & CONDITIONS ACCEPTANCE GATE ====== -->
+<div class="modal-overlay hidden" id="modal-terms-gate" role="dialog" aria-modal="true" aria-labelledby="terms-gate-title">
+  <div class="modal-box terms-gate-box">
+    <div class="terms-gate-badge">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>PLATFORM TERMS &amp; DATA SAFETY</span>
+    </div>
+    <h2 class="terms-gate-title" id="terms-gate-title">Welcome to JavaQst</h2>
+    <p class="terms-gate-sub">Please review and acknowledge our educational terms, safe OpenJDK execution rules, and data safety before starting your quest.</p>
+
+    <div class="terms-cards-list">
+      <div class="terms-card-item">
+        <div class="terms-card-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        </div>
+        <div class="terms-card-content">
+          <h4>Interactive Educational Platform</h4>
+          <p>JavaQst provides gamified Java curriculum, 24 structured modules, coding challenges, and capstone projects designed solely for educational learning.</p>
+        </div>
+      </div>
+
+      <div class="terms-card-item">
+        <div class="terms-card-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        </div>
+        <div class="terms-card-content">
+          <h4>Safe Isolated OpenJDK Sandbox</h4>
+          <p>Code entered into the editor executes within isolated, ephemeral Linux micro-containers. Malicious scripts, crypto-mining, denial-of-service attempts, and port scanning are strictly prohibited and automatically blocked.</p>
+        </div>
+      </div>
+
+      <div class="terms-card-item">
+        <div class="terms-card-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <div class="terms-card-content">
+          <h4>Local Mode &amp; Privacy by Design</h4>
+          <p>In Local Guest Mode, all progress, XP, and badges are stored entirely within your device storage (<code>localStorage</code>). Registered cloud accounts sync via encrypted Supabase PostgreSQL. We never sell your personal data.</p>
+        </div>
+      </div>
+
+      <div class="terms-card-item">
+        <div class="terms-card-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div class="terms-card-content">
+          <h4>Meowger AI Companion</h4>
+          <p>Socratic hints, code reviews, and compiler explanations from Meowger are generated via AI models for educational guidance. Always verify solutions for real-world projects.</p>
+        </div>
+      </div>
+
+      <div class="terms-card-item">
+        <div class="terms-card-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </div>
+        <div class="terms-card-content">
+          <h4>Non-Affiliation Notice</h4>
+          <p>Java is a registered trademark of Oracle Corporation. Minecraft-inspired voxel themes are original educational creations and are not affiliated with Mojang Studios or Microsoft.</p>
+        </div>
+      </div>
+    </div>
+
+    <label class="terms-agree-row" for="terms-agree-checkbox">
+      <input type="checkbox" id="terms-agree-checkbox" checked />
+      <span>I understand and agree to the <a href="terms.html" target="_blank" onclick="event.stopPropagation()">Terms of Service</a>, <a href="privacy.html" target="_blank" onclick="event.stopPropagation()">Privacy Policy</a>, and Safe Sandbox Execution Rules.</span>
+    </label>
+
+    <div class="terms-gate-actions">
+      <a href="terms.html" target="_blank" class="btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;">Read Full Terms</a>
+      <button class="btn-primary" id="btn-accept-terms" onclick="window.acceptTerms()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:0.35rem;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        I Understand &amp; Accept
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== INTERACTIVE PLATFORM TUTORIAL MODAL ====== -->
+<div class="modal-overlay hidden" id="modal-tutorial" role="dialog" aria-modal="true" aria-labelledby="tutorial-modal-title">
+  <div class="modal-box tutorial-box">
+    <div class="tutorial-header">
+      <div class="tutorial-step-badge" id="tutorial-step-badge">STEP 1 OF 5</div>
+      <button class="modal-close-btn" id="btn-close-tutorial" aria-label="Close Tutorial" onclick="window.closeTutorial()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div id="tutorial-slides-container">
+      <!-- Slide 0: Adventure Trail (Map) -->
+      <div class="tutorial-slide active" id="tutorial-slide-0">
+        <h2 class="tutorial-slide-title" id="tutorial-modal-title">The Adventure Trail</h2>
+        <p class="tutorial-slide-subtitle">Your interactive quest across 24 Java modules &amp; 3 difficulty realms.</p>
+        <div class="tutorial-hero-visual">
+          <svg viewBox="0 0 460 140" class="tutorial-hero-svg">
+            <rect width="460" height="140" rx="12" fill="#E2E8F0" opacity="0.3"/>
+            <!-- Trail line -->
+            <path d="M 35 110 Q 120 125 180 80 T 320 65 T 425 40" fill="none" stroke="#94A3B8" stroke-width="24" stroke-linecap="round"/>
+            <path d="M 35 110 Q 120 125 180 80 T 320 65 T 425 40" fill="none" stroke="#CBD5E1" stroke-width="16" stroke-linecap="round"/>
+            <!-- Pedestal 1: Start -->
+            <circle cx="45" cy="110" r="16" fill="#10B981" stroke="#0B0B0E" stroke-width="3"/>
+            <polyline points="38 110 43 115 52 105" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Pedestal 2: Active Beacon -->
+            <circle cx="180" cy="80" r="22" fill="#8B5CF6" stroke="#0B0B0E" stroke-width="3"/>
+            <circle cx="180" cy="80" r="14" fill="#C4B5FD"/>
+            <!-- Beacon beam -->
+            <path d="M 174 80 L 174 15 L 186 15 L 186 80 Z" fill="#A78BFA" opacity="0.6"/>
+            <!-- Avatar standing on pedestal -->
+            <rect x="174" y="32" width="12" height="12" rx="2" fill="#FBBF24" stroke="#0B0B0E" stroke-width="2"/>
+            <rect x="172" y="44" width="16" height="18" rx="2" fill="#3B82F6" stroke="#0B0B0E" stroke-width="2"/>
+            <!-- Pedestal 3: Locked -->
+            <circle cx="320" cy="65" r="16" fill="#64748B" stroke="#0B0B0E" stroke-width="3"/>
+            <rect x="314" y="60" width="12" height="10" rx="2" fill="#0B0B0E"/>
+            <path d="M 317 60 V 55 A 3 3 0 0 1 323 55 V 60" fill="none" stroke="#0B0B0E" stroke-width="2"/>
+            <!-- Pedestal 4: Trophy Flag End -->
+            <circle cx="420" cy="40" r="16" fill="#F59E0B" stroke="#0B0B0E" stroke-width="3"/>
+            <polygon points="415,22 430,30 415,38" fill="#EF4444" stroke="#0B0B0E" stroke-width="2"/>
+            <line x1="415" y1="20" x2="415" y2="48" stroke="#0B0B0E" stroke-width="3"/>
+            <!-- Pine trees decor -->
+            <polygon points="100,50 85,80 115,80" fill="#15803D" stroke="#0B0B0E" stroke-width="2"/>
+            <polygon points="260,25 248,50 272,50" fill="#15803D" stroke="#0B0B0E" stroke-width="2"/>
+            <polygon points="370,80 355,110 385,110" fill="#047857" stroke="#0B0B0E" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="tutorial-feature-list">
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>3 Immersive Realms:</strong> Progress through Beginner Overworld (core syntax &amp; OOP), Intermediate Nether (data structures &amp; streams), and Advanced The End (virtual threads &amp; cloud architecture).</div>
+          </div>
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Beacon Pedestals:</strong> Click any illuminated pedestal on the map to jump directly into lessons, view progress, and tackle module coding challenges.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 1: Live Code Editor & Runner -->
+      <div class="tutorial-slide" id="tutorial-slide-1">
+        <h2 class="tutorial-slide-title">Real OpenJDK 22 Execution</h2>
+        <p class="tutorial-slide-subtitle">Write authentic Java code and execute it in real Linux containers.</p>
+        <div class="tutorial-hero-visual">
+          <svg viewBox="0 0 460 140" class="tutorial-hero-svg">
+            <!-- Editor window frame -->
+            <rect x="20" y="15" width="230" height="110" rx="10" fill="#18191E" stroke="#0B0B0E" stroke-width="2.5"/>
+            <!-- Window header -->
+            <circle cx="35" cy="28" r="4" fill="#EF4444"/>
+            <circle cx="47" cy="28" r="4" fill="#F59E0B"/>
+            <circle cx="59" cy="28" r="4" fill="#10B981"/>
+            <text x="80" y="32" font-family="monospace" font-size="9" fill="#94A3B8">Main.java</text>
+            <!-- Code lines -->
+            <text x="32" y="52" font-family="monospace" font-size="9" fill="#F43F5E">public class <tspan fill="#38BDF8">Main</tspan> {</text>
+            <text x="42" y="68" font-family="monospace" font-size="9" fill="#F43F5E">  void <tspan fill="#A78BFA">main</tspan>() {</text>
+            <text x="52" y="84" font-family="monospace" font-size="9" fill="#4ADE80">    IO.println("Hello!");</text>
+            <text x="42" y="100" font-family="monospace" font-size="9" fill="#F43F5E">  }</text>
+            <text x="32" y="114" font-family="monospace" font-size="9" fill="#F43F5E">}</text>
+            <!-- Run Arrow -->
+            <circle cx="272" cy="70" r="18" fill="#10B981" stroke="#0B0B0E" stroke-width="2.5"/>
+            <polygon points="268,62 280,70 268,78" fill="#FFFFFF"/>
+            <!-- Terminal Output Window -->
+            <rect x="305" y="15" width="135" height="110" rx="10" fill="#0B0B0E" stroke="#334155" stroke-width="2"/>
+            <text x="318" y="34" font-family="monospace" font-size="8" fill="#64748B">> javac Main.java</text>
+            <text x="318" y="50" font-family="monospace" font-size="8" fill="#64748B">> java Main</text>
+            <rect x="315" y="60" width="115" height="24" rx="4" fill="#1E293B"/>
+            <text x="322" y="76" font-family="monospace" font-size="9" fill="#4ADE80" font-weight="bold">Hello!</text>
+            <text x="318" y="104" font-family="monospace" font-size="8" fill="#38BDF8">&#x2713; Exit 0 (12ms)</text>
+          </svg>
+        </div>
+        <div class="tutorial-feature-list">
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Real OpenJDK 22:</strong> Zero simulated output. Your code is compiled and tested with official OpenJDK compilers on Linux micro-containers.</div>
+          </div>
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="16" x2="12" y2="16"></line></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Interactive Terminal:</strong> When your program prompts for user input with <code>Scanner</code>, type straight into the integrated live console! Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run code instantly.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2: 3-Tier Progressive Hints & Solution Diffs -->
+      <div class="tutorial-slide" id="tutorial-slide-2">
+        <h2 class="tutorial-slide-title">3-Tier Hints &amp; Visual Diffs</h2>
+        <p class="tutorial-slide-subtitle">Socratic guidance ensures you never get stuck without spoiling solutions.</p>
+        <div class="tutorial-hero-visual">
+          <svg viewBox="0 0 460 140" class="tutorial-hero-svg">
+            <!-- 3 Step Staircase -->
+            <rect x="25" y="90" width="60" height="30" rx="6" fill="#38BDF8" stroke="#0B0B0E" stroke-width="2"/>
+            <text x="55" y="109" font-family="sans-serif" font-size="10" font-weight="bold" fill="#0B0B0E" text-anchor="middle">TIER 1</text>
+            <text x="55" y="132" font-family="sans-serif" font-size="8" fill="#64748B" text-anchor="middle">Nudge</text>
+
+            <rect x="95" y="60" width="60" height="60" rx="6" fill="#F59E0B" stroke="#0B0B0E" stroke-width="2"/>
+            <text x="125" y="79" font-family="sans-serif" font-size="10" font-weight="bold" fill="#0B0B0E" text-anchor="middle">TIER 2</text>
+            <text x="125" y="102" font-family="sans-serif" font-size="8" fill="#0B0B0E" text-anchor="middle">Logic</text>
+
+            <rect x="165" y="30" width="60" height="90" rx="6" fill="#10B981" stroke="#0B0B0E" stroke-width="2"/>
+            <text x="195" y="49" font-family="sans-serif" font-size="10" font-weight="bold" fill="#0B0B0E" text-anchor="middle">TIER 3</text>
+            <text x="195" y="72" font-family="sans-serif" font-size="8" fill="#FFFFFF" text-anchor="middle">Diff</text>
+
+            <!-- Lightbulb icon connector -->
+            <circle cx="255" cy="70" r="16" fill="#FEF08A" stroke="#0B0B0E" stroke-width="2"/>
+            <path d="M 251 64 Q 255 60 259 64 Q 262 68 259 72 H 251 Q 248 68 251 64 Z" fill="#EAB308"/>
+
+            <!-- Visual Diff Box on Right -->
+            <rect x="290" y="20" width="150" height="100" rx="8" fill="#1E1F24" stroke="#0B0B0E" stroke-width="2"/>
+            <rect x="298" y="32" width="134" height="24" rx="4" fill="#881337" opacity="0.6"/>
+            <text x="306" y="48" font-family="monospace" font-size="9" fill="#FDA4AF">- int count = 0;</text>
+            <rect x="298" y="64" width="134" height="24" rx="4" fill="#064E3B" opacity="0.7"/>
+            <text x="306" y="80" font-family="monospace" font-size="9" fill="#6EE7B7">+ int count = list.size();</text>
+            <text x="306" y="106" font-family="monospace" font-size="8" fill="#94A3B8">Visual Solution Diff</text>
+          </svg>
+        </div>
+        <div class="tutorial-feature-list">
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2v1"></path><path d="M12 7a5 5 0 1 0 5 5c0-1.5-.7-2.8-1.7-3.6"></path></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Tiered Assistance:</strong> Tier 1 prompts your thinking, Tier 2 explains the required algorithm logic, and Tier 3 unlocks a color-coded code diff so you can compare exact changes.</div>
+          </div>
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Preserve Mastery:</strong> Solve exercises with fewer hints to score maximum XP, level up faster, and maintain your streak prestige!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Meowger: Your Roaming AI Pet & Mentor -->
+      <div class="tutorial-slide" id="tutorial-slide-3">
+        <h2 class="tutorial-slide-title">Meet Meowger, Your AI Digital Pet</h2>
+        <p class="tutorial-slide-subtitle">A playful roaming companion that helps you learn and debug Java.</p>
+        <div class="tutorial-hero-visual">
+          <svg viewBox="0 0 460 140" class="tutorial-hero-svg">
+            <!-- Ground line -->
+            <line x1="30" y1="120" x2="430" y2="120" stroke="#CBD5E1" stroke-width="3" stroke-dasharray="6,6"/>
+            <!-- Meowger pixel character -->
+            <g transform="translate(60, 40)">
+              <!-- Ears -->
+              <polygon points="10,20 22,0 28,20" fill="#F59E0B" stroke="#0B0B0E" stroke-width="2.5"/>
+              <polygon points="46,20 52,0 64,20" fill="#F59E0B" stroke="#0B0B0E" stroke-width="2.5"/>
+              <polygon points="14,18 22,5 26,18" fill="#FDE68A"/>
+              <polygon points="48,18 52,5 60,18" fill="#FDE68A"/>
+              <!-- Head -->
+              <rect x="8" y="16" width="58" height="38" rx="8" fill="#F59E0B" stroke="#0B0B0E" stroke-width="2.5"/>
+              <!-- Eyes -->
+              <rect x="20" y="28" width="8" height="8" rx="2" fill="#0B0B0E"/>
+              <rect x="46" y="28" width="8" height="8" rx="2" fill="#0B0B0E"/>
+              <rect x="22" y="29" width="3" height="3" fill="#FFFFFF"/>
+              <rect x="48" y="29" width="3" height="3" fill="#FFFFFF"/>
+              <!-- Snout -->
+              <ellipse cx="37" cy="42" rx="4" ry="3" fill="#3B1F1A"/>
+              <!-- Body / Suit -->
+              <rect x="14" y="52" width="46" height="26" rx="6" fill="#18191E" stroke="#0B0B0E" stroke-width="2.5"/>
+              <!-- Collar/Tie -->
+              <polygon points="37,53 43,62 37,70 31,62" fill="#FFE600"/>
+            </g>
+            <!-- Paw prints trail -->
+            <circle cx="150" cy="112" r="3" fill="#94A3B8"/>
+            <circle cx="165" cy="106" r="3" fill="#94A3B8"/>
+            <circle cx="180" cy="112" r="3" fill="#94A3B8"/>
+            <!-- Speech Dialog Bubble from Meowger -->
+            <g transform="translate(200, 20)">
+              <rect x="0" y="0" width="230" height="85" rx="12" fill="#FFFFFF" stroke="#0B0B0E" stroke-width="2.5" filter="drop-shadow(3px 3px 0px #0B0B0E)"/>
+              <polygon points="0,40 -14,50 0,60" fill="#FFFFFF" stroke="#0B0B0E" stroke-width="2.5"/>
+              <polygon points="0,42 -10,50 0,58" fill="#FFFFFF"/>
+              <!-- Bubble content -->
+              <text x="16" y="24" font-family="sans-serif" font-size="11" font-weight="bold" fill="#0B0B0E">Meowger AI Mentor</text>
+              <text x="16" y="44" font-family="sans-serif" font-size="9" fill="#4B5563">"Click me anytime! I can explain</text>
+              <text x="16" y="58" font-family="sans-serif" font-size="9" fill="#4B5563">compiler errors, review your code,</text>
+              <text x="16" y="72" font-family="sans-serif" font-size="9" fill="#4B5563">or teach you OOP concepts!"</text>
+              <circle cx="210" cy="22" r="6" fill="#FFE600"/>
+              <text x="210" y="25" font-family="monospace" font-size="8" font-weight="bold" fill="#0B0B0E" text-anchor="middle">&#x2726;</text>
+            </g>
+          </svg>
+        </div>
+        <div class="tutorial-feature-list">
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Roams Your Screen:</strong> Meowger wanders across your window, reacts to successful test passes with joyful leaps, and stays by your side as you learn.</div>
+          </div>
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Click to Ask AI:</strong> Click directly on Meowger to open the AI Tutor dialog. Ask questions about Java syntax, debug tricky edge-cases, or request an explanation in plain English.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4: Voxel Champions, Streaks & Customization -->
+      <div class="tutorial-slide" id="tutorial-slide-4">
+        <h2 class="tutorial-slide-title">Level Up, Earn Medals &amp; Customize</h2>
+        <p class="tutorial-slide-subtitle">Collect 24 voxel medals, protect your streaks, and personalize your hero.</p>
+        <div class="tutorial-hero-visual">
+          <svg viewBox="0 0 460 140" class="tutorial-hero-svg">
+            <!-- Trophy Medal -->
+            <g transform="translate(45, 20)">
+              <circle cx="35" cy="35" r="28" fill="#F59E0B" stroke="#0B0B0E" stroke-width="2.5"/>
+              <circle cx="35" cy="35" r="21" fill="#FEF08A"/>
+              <!-- Star in medal -->
+              <polygon points="35,21 38,29 47,29 40,34 43,43 35,38 27,43 30,34 23,29 32,29" fill="#F59E0B" stroke="#0B0B0E" stroke-width="1.5"/>
+              <!-- Ribbon -->
+              <polygon points="20,60 10,95 25,85 35,95 30,60" fill="#3B82F6" stroke="#0B0B0E" stroke-width="2"/>
+              <polygon points="50,60 40,95 50,85 65,95 55,60" fill="#EF4444" stroke="#0B0B0E" stroke-width="2"/>
+              <text x="35" y="112" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0B0B0E" text-anchor="middle">24 Medals</text>
+            </g>
+
+            <!-- Daily Flame Streak -->
+            <g transform="translate(165, 25)">
+              <rect x="0" y="0" width="110" height="90" rx="12" fill="#FFF1F2" stroke="#0B0B0E" stroke-width="2"/>
+              <!-- Flame -->
+              <path d="M 55 18 C 50 28 42 35 42 46 C 42 58 50 66 60 66 C 70 66 78 58 78 46 C 78 35 68 25 62 18 C 60 26 55 30 55 30 Z" fill="#F43F5E" stroke="#0B0B0E" stroke-width="2"/>
+              <path d="M 57 38 C 54 44 50 48 50 54 C 50 60 55 63 60 63 C 65 63 69 60 69 54 C 69 48 64 42 60 38 Z" fill="#FBBF24"/>
+              <text x="55" y="80" font-family="sans-serif" font-size="9" font-weight="bold" fill="#BE123C" text-anchor="middle">Daily Streaks</text>
+            </g>
+
+            <!-- Streak Freeze Crystal -->
+            <g transform="translate(305, 25)">
+              <rect x="0" y="0" width="115" height="90" rx="12" fill="#F0F9FF" stroke="#0B0B0E" stroke-width="2"/>
+              <!-- Ice Diamond -->
+              <polygon points="57,18 78,45 57,72 36,45" fill="#38BDF8" stroke="#0B0B0E" stroke-width="2"/>
+              <polygon points="57,18 64,45 57,72 50,45" fill="#BAE6FD"/>
+              <text x="57" y="80" font-family="sans-serif" font-size="9" font-weight="bold" fill="#0369A1" text-anchor="middle">Streak Freeze</text>
+            </g>
+          </svg>
+        </div>
+        <div class="tutorial-feature-list">
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Voxel Badges &amp; Trophies:</strong> Complete capstone projects to unlock rare pixel achievements and showcase your developer rank.</div>
+          </div>
+          <div class="tutorial-feature-item">
+            <div class="tutorial-feature-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"></path></svg>
+            </div>
+            <div class="tutorial-feature-text"><strong>Streak Protection:</strong> Equip a <em>Streak Freeze Charm</em> in Settings to protect your daily flame streak if life gets busy. Switch themes between Day &amp; Night mode anytime!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="tutorial-footer">
+      <button class="btn-secondary" id="btn-tutorial-prev" onclick="window.prevTutorialStep()" style="visibility:hidden">
+        &larr; Back
+      </button>
+      <div class="tutorial-dots" id="tutorial-dots">
+        <button class="tutorial-dot active" id="tutorial-dot-0" onclick="window.openTutorial(0)" aria-label="Step 1"></button>
+        <button class="tutorial-dot" id="tutorial-dot-1" onclick="window.openTutorial(1)" aria-label="Step 2"></button>
+        <button class="tutorial-dot" id="tutorial-dot-2" onclick="window.openTutorial(2)" aria-label="Step 3"></button>
+        <button class="tutorial-dot" id="tutorial-dot-3" onclick="window.openTutorial(3)" aria-label="Step 4"></button>
+        <button class="tutorial-dot" id="tutorial-dot-4" onclick="window.openTutorial(4)" aria-label="Step 5"></button>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <button type="button" class="tutorial-skip-btn" id="btn-tutorial-skip" onclick="window.closeTutorial()">Skip Tour</button>
+        <button class="btn-primary" id="btn-tutorial-next" onclick="window.nextTutorialStep()">Next Step &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="config.js" onerror="/* config.js is optional */"></script>
 <script src="curriculum.js?v=9.1"></script>
 <script src="animations.js?v=9.1"></script>
@@ -1384,9 +1782,9 @@
 <script src="ai-tutor.js?v=9.1"></script>
 <script src="lib/editor.bundle.js?v=9.1"></script>
 <script src="lib/game-fx.js?v=9.1"></script>
-<script src="adventure-trail.js?v=9.4"></script>
-<script src="meowger.js?v=9.4"></script>
-<script src="app.js?v=9.4"></script>
+<script src="adventure-trail.js?v=9.5"></script>
+<script src="meowger.js?v=9.5"></script>
+<script src="app.js?v=9.5"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
