@@ -789,6 +789,11 @@ function renderMinecraftSVG(grid, hatGrid) {
   return svg;
 }
 
+window.renderMinecraftSVG = renderMinecraftSVG;
+window.MINECRAFT_SKINS = MINECRAFT_SKINS;
+window.MINECRAFT_HATS = MINECRAFT_HATS;
+window.MINECRAFT_CAPES = MINECRAFT_CAPES;
+
 var MINECRAFT_BADGES = {
   wooden_pickaxe: {
     id: 'wooden_pickaxe',

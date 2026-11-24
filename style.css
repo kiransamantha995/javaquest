@@ -10134,20 +10134,17 @@ body.dark-theme .learner-memory-modal {
    High-Contrast Day Mode & Night Mode Compatibility
    ============================================================ */
 
-/* ── 1. Meowger Pet Companion ── */
+/* ── 1. Meowger Pet Companion (Fixed Absolute Top-Left Origin) ── */
 .meowger-pet-wrap {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1200;
+  top: 0;
+  left: 0;
+  z-index: 9998;
   cursor: pointer;
   user-select: none;
-  transition: transform 0.14s ease-out;
+  pointer-events: auto;
   filter: drop-shadow(0 6px 14px rgba(0,0,0,0.22));
-}
-
-.meowger-pet-wrap:hover {
-  transform: scale(1.08);
+  will-change: transform;
 }
 
 .meowger-sprite-box {
@@ -10156,6 +10153,20 @@ body.dark-theme .learner-memory-modal {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.18s ease-out;
+  transform-origin: center center;
+}
+
+.meowger-sprite-box.facing-left {
+  transform: scaleX(-1);
+}
+
+.meowger-sprite-box.facing-right {
+  transform: scaleX(1);
+}
+
+.meowger-pet-wrap:hover .meowger-svg {
+  transform: scale(1.12);
 }
 
 .meowger-svg {
@@ -10164,6 +10175,8 @@ body.dark-theme .learner-memory-modal {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
+  transform-origin: center center;
+  transition: transform 0.15s ease-out;
 }
 
 /* Animations */
@@ -10196,15 +10209,17 @@ body.dark-theme .learner-memory-modal {
   animation: meowgerTailSway 2.8s ease-in-out infinite;
 }
 
-.meowger-walk .paw-left {
+.meowger-walk .paw-left,
+.meowger-walking .paw-left {
   animation: meowgerPawWalkLeft 0.22s infinite alternate;
 }
 
-.meowger-walk .paw-right {
+.meowger-walk .paw-right,
+.meowger-walking .paw-right {
   animation: meowgerPawWalkRight 0.22s infinite alternate;
 }
 
-.meowger-hop {
+.meowger-hop .meowger-svg {
   animation: meowgerHopAnim 0.75s ease-out forwards;
 }
 
@@ -10215,11 +10230,11 @@ body.dark-theme .learner-memory-modal {
   100% { transform: translateY(0) scale(1); }
 }
 
-.meowger-teleport-out {
+.meowger-teleport-out .meowger-svg {
   animation: meowgerPuffOut 0.2s ease-in forwards;
 }
 
-.meowger-teleport-in {
+.meowger-teleport-in .meowger-svg {
   animation: meowgerPuffIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
@@ -10236,8 +10251,9 @@ body.dark-theme .learner-memory-modal {
 /* Meowger Speech Bubble */
 .meowger-speech-bubble {
   position: absolute;
-  bottom: 74px;
-  right: 0;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
   min-width: 180px;
   max-width: 280px;
   background: #FFFFFF;
@@ -10253,6 +10269,7 @@ body.dark-theme .learner-memory-modal {
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 1250;
+  text-align: center;
 }
 
 .meowger-speech-bubble.hidden {
@@ -10265,7 +10282,7 @@ body.dark-theme .learner-memory-modal {
   content: '';
   position: absolute;
   bottom: -8px;
-  right: 28px;
+  left: calc(50% - 6px);
   width: 12px;
   height: 12px;
   background: #FFFFFF;
@@ -10722,10 +10739,10 @@ body.dark-theme .track-pill-btn.active {
   50% { opacity: 1; transform: scale(1.15); }
 }
 
-/* Character Sprite standing on active pedestal */
+/* Character Sprite standing on active pedestal (Chosen Profile Avatar) */
 .station-character-sprite {
   position: absolute;
-  top: -52px;
+  top: -72px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -10733,12 +10750,12 @@ body.dark-theme .track-pill-btn.active {
   align-items: center;
   pointer-events: none;
   z-index: 15;
-  animation: idleCharacterBob 1.8s ease-in-out infinite;
+  animation: playerMapIdle 2s ease-in-out infinite;
 }
 
-@keyframes idleCharacterBob {
+@keyframes playerMapIdle {
   0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-5px); }
+  50% { transform: translateX(-50%) translateY(-4px); }
 }
 
 .station-speech-bubble {
@@ -10752,11 +10769,85 @@ body.dark-theme .track-pill-btn.active {
   border: 1.5px solid #0B0B0E;
   box-shadow: 1.5px 1.5px 0px #0B0B0E;
   white-space: nowrap;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 
-.station-avatar-inner {
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+/* 3D Voxel Body of Chosen Player Skin */
+.player-voxel-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
+}
+
+.player-voxel-head {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  border: 2px solid #0B0B0E;
+  box-shadow: 1.5px 1.5px 0px #0B0B0E;
+  background: #C68B59;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.player-voxel-torso {
+  position: relative;
+  width: 20px;
+  height: 16px;
+  border: 2px solid #0B0B0E;
+  border-radius: 2px;
+  margin-top: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 2;
+}
+
+.player-arm {
+  position: absolute;
+  top: -1px;
+  width: 5px;
+  height: 14px;
+  border: 1.5px solid #0B0B0E;
+  border-radius: 2px;
+}
+.player-arm.arm-left {
+  left: -6px;
+}
+.player-arm.arm-right {
+  right: -6px;
+}
+
+.player-belt {
+  width: 100%;
+  height: 3px;
+  border-top: 1px solid #0B0B0E;
+}
+
+.player-voxel-legs {
+  display: flex;
+  gap: 2px;
+  margin-top: -1px;
+  z-index: 1;
+}
+
+.player-leg {
+  width: 9px;
+  height: 13px;
+  border: 1.5px solid #0B0B0E;
+  border-radius: 1px;
+}
+
+.player-cape-back {
+  position: absolute;
+  top: 14px;
+  width: 24px;
+  height: 28px;
+  border-radius: 2px;
+  border: 1.5px solid #0B0B0E;
+  z-index: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
 }
 
 /* ── Quest Label Pill (Matches User Reference Image) ── */

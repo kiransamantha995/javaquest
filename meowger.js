@@ -1,7 +1,7 @@
 // JavaQuest — meowger.js
 // Interactive Digital Pet Host & AI Companion "Meowger"
 // Zero emojis — 100% pure inline SVG pixel-art architecture.
-// Features: Autonomous roaming, mouse following, screen jumping, compiler reactions, and AI Tutor trigger.
+// Features: 60fps smooth roaming, mouse following, screen jumping, compiler reactions, and AI Tutor trigger.
 
 (function() {
   'use strict';
@@ -111,13 +111,16 @@
     this.targetX = 80;
     this.targetY = 80;
     this.facing = 1; // 1 = right, -1 = left
-    this.state = 'idle'; // idle, walk, curious, happy, thinking
+    this.state = 'idle'; // idle, walk, happy, thinking
+    this.currentVisualState = 'idle';
     this.isNearMouse = false;
     this.lastWanderTime = Date.now();
     this.bubbleTimeout = null;
     this.activeScreen = 'home';
     this.enabled = true;
     this.dockedOnMobile = window.innerWidth <= 640;
+    this.rafId = null;
+    this.lastFrameTime = performance.now();
 
     this.init();
   }
@@ -135,15 +138,15 @@
     wrap.setAttribute('tabindex', '0');
     wrap.setAttribute('aria-label', 'Meowger the Java Pet. Click to ask AI Tutor.');
 
-    // Speech bubble
+    // Speech bubble (positioned above wrap, never mirrored)
     var bubble = document.createElement('div');
     bubble.className = 'meowger-speech-bubble hidden';
     bubble.id = 'meowger-speech-bubble';
     wrap.appendChild(bubble);
 
-    // Sprite container
+    // Sprite container (handles horizontal flipping cleanly)
     var sprite = document.createElement('div');
-    sprite.className = 'meowger-sprite-box';
+    sprite.className = 'meowger-sprite-box facing-right';
     sprite.innerHTML = getMeowgerSVG('idle');
     wrap.appendChild(sprite);
 
@@ -152,7 +155,7 @@
     this.el = wrap;
     this.bubbleEl = bubble;
 
-    // Position initially at bottom right safe corner
+    // Position initially at safe bottom-right corner
     this.setInitialPosition();
 
     // Bind Interactions
@@ -169,14 +172,14 @@
     });
 
     // Mouse proximity listener (throttle with requestAnimationFrame)
-    var ticking = false;
+    var mouseThrottled = false;
     window.addEventListener('mousemove', function(e) {
-      if (!ticking) {
+      if (!mouseThrottled) {
         window.requestAnimationFrame(function() {
           self.handleMouseMove(e.clientX, e.clientY);
-          ticking = false;
+          mouseThrottled = false;
         });
-        ticking = true;
+        mouseThrottled = true;
       }
     }, { passive: true });
 
@@ -185,37 +188,75 @@
       self.dockedOnMobile = window.innerWidth <= 640;
       if (self.dockedOnMobile) {
         self.dockToMobileCorner();
+      } else {
+        self.clampBounds();
       }
     }, { passive: true });
 
-    // Start Main Pet Loop
+    // Start 60fps Smooth Pet Loop
     this.startLoop();
 
     // Greet user on first launch
     setTimeout(function() {
-      self.say('Meow! I am Meowger, your Java coding pet. Click me anytime for AI tutoring!', 5000);
-    }, 2500);
+      self.say('Meow! I am Meowger, your Java coding pet. Click me anytime for AI tutoring!', 4500);
+    }, 2000);
   };
 
   MeowgerCompanion.prototype.setInitialPosition = function() {
-    var vw = window.innerWidth;
-    var vh = window.innerHeight;
+    var vw = Math.max(320, window.innerWidth || 800);
+    var vh = Math.max(480, window.innerHeight || 600);
     this.x = vw - 96;
     this.y = vh - 110;
+    this.targetX = this.x;
+    this.targetY = this.y;
+    this.facing = -1; // Face inward towards content
     this.updateElementPosition();
   };
 
   MeowgerCompanion.prototype.dockToMobileCorner = function() {
-    var vw = window.innerWidth;
-    var vh = window.innerHeight;
+    var vw = Math.max(320, window.innerWidth || 800);
+    var vh = Math.max(480, window.innerHeight || 600);
     this.x = vw - 76;
     this.y = vh - 86;
+    this.targetX = this.x;
+    this.targetY = this.y;
+    this.facing = -1;
     this.updateElementPosition();
+  };
+
+  MeowgerCompanion.prototype.updateFacing = function() {
+    if (!this.el) return;
+    var sprite = this.el.querySelector('.meowger-sprite-box');
+    if (sprite) {
+      if (this.facing === -1) {
+        sprite.classList.add('facing-left');
+        sprite.classList.remove('facing-right');
+      } else {
+        sprite.classList.add('facing-right');
+        sprite.classList.remove('facing-left');
+      }
+    }
   };
 
   MeowgerCompanion.prototype.updateElementPosition = function() {
     if (!this.el) return;
-    this.el.style.transform = 'translate3d(' + Math.round(this.x) + 'px, ' + Math.round(this.y) + 'px, 0) scaleX(' + this.facing + ')';
+    // translate3d on wrapper ONLY — never overwrites animations on inner SVG
+    this.el.style.transform = 'translate3d(' + Math.round(this.x) + 'px, ' + Math.round(this.y) + 'px, 0)';
+    this.updateFacing();
+  };
+
+  MeowgerCompanion.prototype.clampBounds = function() {
+    var vw = Math.max(320, window.innerWidth || 800);
+    var vh = Math.max(480, window.innerHeight || 600);
+    var minX = 16;
+    var maxX = vw - 80;
+    var minY = 64; // Below navbar
+    var maxY = vh - 86;
+
+    this.targetX = Math.max(minX, Math.min(maxX, this.targetX));
+    this.targetY = Math.max(minY, Math.min(maxY, this.targetY));
+    this.x = Math.max(minX, Math.min(maxX, this.x));
+    this.y = Math.max(minY, Math.min(maxY, this.y));
   };
 
   MeowgerCompanion.prototype.handleMouseMove = function(mx, my) {
@@ -232,6 +273,7 @@
     // Look towards cursor when within 160px
     if (dist < 160) {
       this.facing = dx >= 0 ? 1 : -1;
+      this.updateFacing();
       this.isNearMouse = true;
 
       // Eye tracking reflection
@@ -246,16 +288,16 @@
         pupilRight.setAttribute('y', 17 + offsetY);
       }
 
-      // If mouse is very close (40px - 90px), playfully inch towards or lean
-      if (dist > 50 && dist < 100 && this.state !== 'walk') {
-        this.targetX = this.x + (dx * 0.12);
-        this.targetY = this.y + (dy * 0.12);
+      // If mouse is hovering nearby (60px - 110px), playfully inch towards or lean
+      if (dist > 60 && dist < 110 && this.state !== 'walk') {
+        this.targetX = this.x + (dx * 0.08);
+        this.targetY = this.y + (dy * 0.08);
         this.clampBounds();
       }
     } else {
       if (this.isNearMouse) {
         this.isNearMouse = false;
-        // Reset pupils
+        // Reset pupils to center
         var pl = this.el.querySelector('.pupil-left');
         var pr = this.el.querySelector('.pupil-right');
         if (pl) { pl.setAttribute('x', 16); pl.setAttribute('y', 17); }
@@ -264,29 +306,23 @@
     }
   };
 
-  MeowgerCompanion.prototype.clampBounds = function() {
-    var vw = window.innerWidth;
-    var vh = window.innerHeight;
-    var minX = 16;
-    var maxX = vw - 80;
-    var minY = 64; // Under top navbar
-    var maxY = vh - 96;
-
-    this.targetX = Math.max(minX, Math.min(maxX, this.targetX));
-    this.targetY = Math.max(minY, Math.min(maxY, this.targetY));
-  };
-
   MeowgerCompanion.prototype.startLoop = function() {
     var self = this;
+    this.lastFrameTime = performance.now();
 
-    setInterval(function() {
-      self.tick();
-    }, 120);
+    function loop(now) {
+      var dt = (now - self.lastFrameTime) / 1000;
+      self.lastFrameTime = now;
+      if (dt > 0.1) dt = 0.1; // Guard against tab background throttling
+      self.tick(dt);
+      self.rafId = requestAnimationFrame(loop);
+    }
+    this.rafId = requestAnimationFrame(loop);
 
-    // Periodic roaming check every 4 seconds
+    // Periodic autonomous roaming check every 5 seconds
     setInterval(function() {
       self.maybeWander();
-    }, 4500);
+    }, 5000);
 
     // Periodic tip bubble every 65 seconds
     setInterval(function() {
@@ -294,7 +330,7 @@
     }, 65000);
   };
 
-  MeowgerCompanion.prototype.tick = function() {
+  MeowgerCompanion.prototype.tick = function(dt) {
     if (this.dockedOnMobile) return;
     if (this.state === 'jump') return;
 
@@ -302,14 +338,18 @@
     var dy = this.targetY - this.y;
     var dist = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist > 3) {
-      this.state = 'walk';
+    if (dist > 2) {
+      var speed = Math.min(180, Math.max(60, dist * 2.2));
+      var move = Math.min(dist, speed * (dt || 0.016));
+      this.x += (dx / dist) * move;
+      this.y += (dy / dist) * move;
       this.facing = dx >= 0 ? 1 : -1;
-      var speed = Math.min(6, Math.max(2, dist * 0.15));
-      this.x += (dx / dist) * speed;
-      this.y += (dy / dist) * speed;
       this.updateElementPosition();
-      this.setVisualState('walk');
+
+      if (this.state !== 'walk') {
+        this.state = 'walk';
+        this.setVisualState('walk');
+      }
     } else {
       if (this.state === 'walk') {
         this.state = 'idle';
@@ -321,28 +361,30 @@
   MeowgerCompanion.prototype.maybeWander = function() {
     if (this.dockedOnMobile) return;
     if (this.isNearMouse || this.state === 'walk' || this.state === 'happy') return;
+
+    // Do not wander if chat panel is currently open
+    var cp = document.getElementById('chat-panel');
+    if (cp && !cp.classList.contains('hidden')) return;
+
     var now = Date.now();
-    if (now - this.lastWanderTime < 10000) return;
+    if (now - this.lastWanderTime < 12000) return;
 
-    // 40% probability to wander to a new edge spot
-    if (Math.random() < 0.45) {
+    // 40% probability to wander to a smart anchor
+    if (Math.random() < 0.40) {
       this.lastWanderTime = now;
-      var vw = window.innerWidth;
-      var vh = window.innerHeight;
+      var vw = Math.max(320, window.innerWidth || 800);
+      var vh = Math.max(480, window.innerHeight || 600);
 
-      // Pick a smart safe anchor based on current screen
       if (this.activeScreen === 'map') {
-        // Near the center path or bottom right
+        // Wanders near the trail side
         this.targetX = (vw * 0.5) + (Math.random() > 0.5 ? 180 : -220);
-        this.targetY = Math.random() * (vh - 240) + 120;
+        this.targetY = Math.random() * (vh - 280) + 140;
       } else if (this.activeScreen === 'lesson') {
-        // Sits in bottom right near console
         this.targetX = vw - 88;
         this.targetY = vh - 100;
       } else {
-        // Wanders safe bottom zone
-        this.targetX = Math.random() * (vw - 160) + 80;
-        this.targetY = vh - 96 - (Math.random() * 40);
+        this.targetX = Math.random() * (vw - 180) + 90;
+        this.targetY = vh - 100 - (Math.random() * 30);
       }
       this.clampBounds();
     }
@@ -350,9 +392,13 @@
 
   MeowgerCompanion.prototype.setVisualState = function(stateName) {
     if (!this.el) return;
-    var sprite = this.el.querySelector('.meowger-sprite-box');
-    if (sprite) {
-      sprite.innerHTML = getMeowgerSVG(stateName);
+    if (this.currentVisualState === stateName) return;
+    this.currentVisualState = stateName;
+
+    // Update CSS class on the existing SVG without destroying DOM nodes!
+    var svg = this.el.querySelector('.meowger-svg');
+    if (svg) {
+      svg.setAttribute('class', 'meowger-svg meowger-' + stateName);
     }
   };
 
@@ -362,6 +408,22 @@
     durationMs = durationMs || 4500;
 
     clearTimeout(this.bubbleTimeout);
+
+    // Prevent clipping off-screen on the edges
+    var vw = Math.max(320, window.innerWidth || 800);
+    if (this.x < 140) {
+      this.bubbleEl.style.left = '0px';
+      this.bubbleEl.style.right = 'auto';
+      this.bubbleEl.style.transform = 'none';
+    } else if (this.x > vw - 180) {
+      this.bubbleEl.style.left = 'auto';
+      this.bubbleEl.style.right = '0px';
+      this.bubbleEl.style.transform = 'none';
+    } else {
+      this.bubbleEl.style.left = '50%';
+      this.bubbleEl.style.right = 'auto';
+      this.bubbleEl.style.transform = 'translateX(-50%)';
+    }
 
     this.bubbleEl.innerHTML = (
       '<div class="bubble-inner">'
@@ -378,12 +440,23 @@
 
   MeowgerCompanion.prototype.onPetClick = function() {
     var self = this;
-    // Play happy bounce
+    // Play happy bounce reaction
     this.triggerReaction('happy');
 
-    // Trigger AI Chat Drawer (Replaces the old FAB)
+    // Smoothly toggle AI Chat Drawer (Replaces old FAB)
     if (typeof window.toggleChat === 'function') {
-      window.toggleChat(true);
+      var cp = document.getElementById('chat-panel');
+      var isHidden = !cp || cp.classList.contains('hidden');
+      window.toggleChat(isHidden);
+
+      // If opening chat drawer, hop gracefully to the left side of the drawer
+      if (isHidden) {
+        var vw = Math.max(320, window.innerWidth || 800);
+        var vh = Math.max(480, window.innerHeight || 600);
+        this.targetX = Math.max(20, vw - 450);
+        this.targetY = Math.max(80, vh - 110);
+        this.facing = 1;
+      }
     } else {
       this.say('How can I help you write Java today, Adventurer?', 4000);
     }
@@ -421,26 +494,26 @@
     this.activeScreen = screenName;
     var self = this;
 
-    // Disappear with puff effect
+    // Disappear with puff effect on inner SVG (never moves wrapper to 0,0)
     if (this.el) {
       this.el.classList.add('meowger-teleport-out');
     }
 
     setTimeout(function() {
-      var vw = window.innerWidth;
-      var vh = window.innerHeight;
+      var vw = Math.max(320, window.innerWidth || 800);
+      var vh = Math.max(480, window.innerHeight || 600);
 
       if (screenName === 'map') {
         // Jump onto map area
         self.x = Math.max(30, (vw * 0.5) + 160);
-        self.y = 220;
+        self.y = Math.min(260, vh * 0.35);
         self.targetX = self.x;
         self.targetY = self.y;
         self.say('Welcome to the Adventure Map! Follow the trail to conquer Java.', 4000);
       } else if (screenName === 'lesson') {
         // Dock at bottom right corner of lesson interface
-        self.x = vw - 84;
-        self.y = vh - 96;
+        self.x = vw - 88;
+        self.y = vh - 100;
         self.targetX = self.x;
         self.targetY = self.y;
         self.say('I am watching your code editor! Tap me if you get stuck.', 3500);
@@ -450,6 +523,18 @@
         self.targetX = self.x;
         self.targetY = self.y;
         self.say('Ready to compile! Press Run Code to test your logic.', 3500);
+      } else if (screenName === 'avatar') {
+        self.x = Math.max(20, vw * 0.2);
+        self.y = Math.min(240, vh * 0.3);
+        self.targetX = self.x;
+        self.targetY = self.y;
+        self.say('Customize your voxel champion! I love your style.', 3500);
+      } else if (screenName === 'badges') {
+        self.x = vw - 88;
+        self.y = 120;
+        self.targetX = self.x;
+        self.targetY = self.y;
+        self.say('Look at all your earned trophies and voxel medals!', 3500);
       } else {
         self.x = vw - 96;
         self.y = vh - 110;
@@ -470,7 +555,7 @@
     }, 200);
   };
 
-  // Knowledge bites (Zero emoji)
+  // Knowledge bites (Pure SVG, zero emoji)
   MeowgerCompanion.prototype.maybeShareKnowledge = function() {
     var tips = [
       'Java 21 Virtual Threads let you run millions of lightweight tasks effortlessly.',

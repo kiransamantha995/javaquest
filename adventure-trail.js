@@ -327,7 +327,78 @@
   }
   window.setMapViewMode = setMapViewMode;
 
-  // ── 3. Render Isometric Mountain Trail Map ─────────────────────────────────
+  // ── 3. Render Chosen Voxel Pixel Champion on Active Map Pedestal ─────────
+  function renderPlayerMapSprite(player) {
+    var p = player || (window.STATE && window.STATE.player) || (typeof window.getPlayerState === 'function' ? window.getPlayerState() : {});
+    var rawSkin = p.minecraftSkin || (p.avatar && p.avatar.skin) || p.avatarSkin || 'blockhead';
+    if (rawSkin === 'steve') rawSkin = 'blockhead';
+    else if (rawSkin === 'alex') rawSkin = 'scout';
+    else if (rawSkin === 'creeper') rawSkin = 'hisser';
+    else if (rawSkin === 'diamond_knight') rawSkin = 'crystal_knight';
+    else if (rawSkin === 'ender_coder') rawSkin = 'void_coder';
+    else if (rawSkin === 'redstone') rawSkin = 'circuit_mage';
+    else if (rawSkin === 'cyber_steve') rawSkin = 'cyber_crafter';
+    else if (rawSkin === 'golden_king') rawSkin = 'gilded_monarch';
+
+    var skins = window.MINECRAFT_SKINS || (typeof MINECRAFT_SKINS !== 'undefined' ? MINECRAFT_SKINS : {});
+    var skinData = skins[rawSkin] || skins.blockhead;
+    var hatKey = p.avatarHat || (p.avatar && p.avatar.hat) || 'none';
+    var hats = window.MINECRAFT_HATS || (typeof MINECRAFT_HATS !== 'undefined' ? MINECRAFT_HATS : {});
+    var hatData = hats[hatKey] || null;
+
+    var capeKey = p.avatarCape || (p.avatar && p.avatar.cape) || 'none';
+    var capes = window.MINECRAFT_CAPES || (typeof MINECRAFT_CAPES !== 'undefined' ? MINECRAFT_CAPES : {});
+    var capeData = capes[capeKey] || null;
+
+    var renderFn = window.renderMinecraftSVG || (typeof renderMinecraftSVG === 'function' ? renderMinecraftSVG : null);
+    var faceSvg = '';
+    if (renderFn && skinData) {
+      faceSvg = renderFn(skinData.grid, hatData ? hatData.grid : null);
+    } else {
+      faceSvg = '<div style="width:100%;height:100%;background:#C68B59;"></div>';
+    }
+
+    // Colors matching player skin champion
+    var bodyColors = {
+      blockhead:      { shirt: '#00B4D8', belt: '#5C3A21', pants: '#2C3E82' },
+      scout:          { shirt: '#4C7837', belt: '#3E2723', pants: '#795548' },
+      crystal_knight: { shirt: '#36B3A8', belt: '#26968D', pants: '#1E1E24' },
+      hisser:         { shirt: '#45A03A', belt: '#388E3C', pants: '#1E1E24' },
+      void_coder:     { shirt: '#241D35', belt: '#181424', pants: '#181424' },
+      circuit_mage:   { shirt: '#E63946', belt: '#7F7F7F', pants: '#38210F' },
+      cyber_crafter:  { shirt: '#1E1E24', belt: '#00F0FF', pants: '#111116' },
+      gilded_monarch: { shirt: '#FFD700', belt: '#B45309', pants: '#2B1E16' }
+    };
+
+    var colors = bodyColors[rawSkin] || bodyColors.blockhead;
+    var capeAccent = (capeData && capeData.color && capeData.color !== 'transparent')
+      ? '<div class="player-cape-back" style="background:' + capeData.color + '"></div>'
+      : '';
+
+    return (
+      '<div class="station-character-sprite player-character-sprite">'
+      + '  <div class="station-speech-bubble">Next Quest!</div>'
+      + '  <div class="player-voxel-body">'
+      +      capeAccent
+      + '    <!-- Head Frame (Chosen Profile Avatar) -->'
+      + '    <div class="player-voxel-head">' + faceSvg + '</div>'
+      + '    <!-- Torso & Arms -->'
+      + '    <div class="player-voxel-torso" style="background:' + colors.shirt + '">'
+      + '      <div class="player-arm arm-left" style="background:' + colors.shirt + '"></div>'
+      + '      <div class="player-arm arm-right" style="background:' + colors.shirt + '"></div>'
+      + '      <div class="player-belt" style="background:' + colors.belt + '"></div>'
+      + '    </div>'
+      + '    <!-- Legs & Boots -->'
+      + '    <div class="player-voxel-legs">'
+      + '      <div class="player-leg leg-left" style="background:' + colors.pants + '"></div>'
+      + '      <div class="player-leg leg-right" style="background:' + colors.pants + '"></div>'
+      + '    </div>'
+      + '  </div>'
+      + '</div>'
+    );
+  }
+
+  // ── 4. Render Isometric Mountain Trail Map ─────────────────────────────────
   function renderAdventureTrail(container, filteredMods, activeTrackFilter) {
     if (!container) return;
     container.innerHTML = '';
@@ -522,22 +593,10 @@
       if (isModDone) {
         pedestal.innerHTML = SVGS.pedestalTopCompleted();
       } else if (isActiveStation) {
-        // Glowing portal with player avatar / Meowger standing on top!
+        // Glowing portal with player's chosen pixel champion avatar standing on top!
         pedestal.innerHTML = SVGS.pedestalTopActive()
           + '<div class="pedestal-active-glow"></div>'
-          + '<div class="station-character-sprite">'
-          + '  <div class="station-speech-bubble">Next Quest!</div>'
-          + '  <div class="station-avatar-inner">'
-          + '    <svg viewBox="0 0 24 24" width="32" height="32" shape-rendering="crispEdges">'
-          + '      <polygon points="6,9 8,3 11,9" fill="#A0522D"/>'
-          + '      <polygon points="13,9 16,3 18,9" fill="#A0522D"/>'
-          + '      <rect x="5" y="7" width="14" height="10" rx="2" fill="#B87333"/>'
-          + '      <rect x="9" y="11" width="6" height="4" fill="#FFF8DC"/>'
-          + '      <rect x="7" y="9" width="3" height="3" fill="#18191E"/>'
-          + '      <rect x="14" y="9" width="3" height="3" fill="#18191E"/>'
-          + '    </svg>'
-          + '  </div>'
-          + '</div>';
+          + renderPlayerMapSprite(player);
       } else if (isModUnlocked) {
         pedestal.innerHTML = SVGS.pedestalTopCompleted().replace('#10B981', '#F59E0B').replace('#059669', '#D97706');
       } else {
