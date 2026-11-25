@@ -180,18 +180,6 @@ function sbRestoreSession() {
   } catch(e) { return null; }
 }
 
-function sbRefreshSession() {
-  if (!window._sbSession || !window._sbSession.refresh_token) return Promise.resolve(null);
-  return sbFetch('/auth/v1/token?grant_type=refresh_token', {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + SUPABASE_ANON },
-    body: JSON.stringify({ refresh_token: window._sbSession.refresh_token })
-  }).then(function(data) {
-    if (data.access_token) { window._sbSession = data; sbPersistSession(data); }
-    return data;
-  }).catch(function() { return null; });
-}
-
 function sbCurrentUser() {
   if (!window._sbSession) return null;
   if (window._sbSession.user) return window._sbSession.user;

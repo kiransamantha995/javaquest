@@ -73,7 +73,7 @@
   <title>JavaQst — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=9.7"/>
+  <link rel="stylesheet" href="css/style.css?v=9.8"/>
 </head>
 <body>
 
@@ -1051,17 +1051,6 @@
 <footer class="mojang-disclaimer">JavaQst is not affiliated with or endorsed by Mojang or Microsoft. All Minecraft-inspired visual themes are original educational pixel art.</footer>
 </main>
 
-<!-- ====== MODULE POPUP (fixed overlay) ====== -->
-<div class="mod-popup-bg hidden" id="mod-popup-bg"></div>
-<div class="mod-popup-box hidden" id="mod-popup-box">
-  <button class="popup-close-btn" id="popup-close-btn" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-  <div class="mod-popup-icon" id="mod-popup-icon"></div>
-  <div class="mod-popup-title" id="mod-popup-title">Module</div>
-  <div class="mod-popup-sub" id="mod-popup-sub">Subtitle</div>
-  <div class="mod-popup-lessons" id="mod-popup-lessons"></div>
-  <div class="mod-popup-actions" id="mod-popup-actions"></div>
-</div>
-
 <!-- ====== DIFFICULTY CHANGE MODAL ====== -->
 <div class="modal-overlay hidden" id="modal-diff">
   <div class="modal-box" style="max-width:520px">
@@ -1632,15 +1621,15 @@
 </div>
 
 <script src="config.js" onerror="/* config.js is optional */"></script>
-<script src="curriculum.js?v=9.1"></script>
-<script src="animations.js?v=9.1"></script>
-<script src="supabase.js?v=9.1"></script>
-<script src="ai-tutor.js?v=9.7"></script>
+<script src="js/curriculum.js?v=9.8"></script>
+<script src="js/animations.js?v=9.8"></script>
+<script src="js/supabase.js?v=9.8"></script>
+<script src="js/ai-tutor.js?v=9.8"></script>
 <script src="lib/editor.bundle.js?v=9.1"></script>
 <script src="lib/game-fx.js?v=9.1"></script>
-<script src="adventure-trail.js?v=9.6"></script>
-<script src="meowger.js?v=9.7"></script>
-<script src="app.js?v=9.7"></script>
+<script src="js/adventure-trail.js?v=9.8"></script>
+<script src="js/meowger.js?v=9.8"></script>
+<script src="js/app.js?v=9.8"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {

@@ -83,7 +83,7 @@ From crafting your first `Hello, World!` in the Overworld to mastering Virtual T
 - **Frontend Core**: Vanilla HTML5, modern CSS tokens (Neobrutalism), Vanilla JavaScript (ES2022+ modules).
 - **Editor**: CodeMirror 6 standalone bundle (`lib/editor.bundle.js`, 456 KB, zero external CDNs) with Java syntax mode, line numbers, and error squiggles.
 - **Audio & FX**: Web Audio API retro synthesizer (`lib/game-fx.js`) and particle canvas for glowing XP orbs.
-- **Compiler Backend**: Serverless proxy (`/api/run.js`) with Wandbox OpenJDK 22 backend. (See [`RUNNER_RFC.md`](RUNNER_RFC.md) for self-hosted microVM runner architecture).
+- **Compiler Backend**: Serverless proxy (`/api/run.js`) with Wandbox OpenJDK 22 backend. (See [`docs/RUNNER_RFC.md`](docs/RUNNER_RFC.md) for self-hosted microVM runner architecture).
 - **AI Tutor**: Google Gemini Flash-Lite routed through authenticated Serverless proxy (`/api/ai.js`).
 - **Database & Auth**: Supabase PostgreSQL with strict Row Level Security (RLS) and server-side cryptographic XP verification.
 - **Hosting**: Vercel Serverless & Edge Network.
@@ -102,7 +102,7 @@ cd javaquest
 JavaQst works in **Guest Mode** with zero dependencies:
 ```bash
 # Using Node.js built-in server
-node local-server.js
+node scripts/local-server.js
 
 # Or using Python 3
 python -m http.server 3000

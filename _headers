@@ -1,3 +1,0 @@
-# Security headers are defined exclusively in vercel.json.
-# This file is kept as a stub to avoid Netlify/Vercel conflicts.
-# DO NOT add headers here — vercel.json is the single source of truth.

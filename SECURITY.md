@@ -42,7 +42,7 @@ This document lists every security threat addressed in Phase 1 of the upgrade, r
 
 ### 8. CSP Misconfiguration — Duplicate Sources (`vercel.json`, `_headers`)
 - **Was:** `vercel.json` and `_headers` had conflicting CSPs. `wandbox.org` missing in one. `unsafe-eval` present.
-- **Fixed:** `vercel.json` is the **single source of truth** for all security headers. `_headers` is now a stub comment. `unsafe-eval` removed. `wandbox.org` and `blob:` added where needed. `emkc.org` removed (no longer used).
+- **Fixed:** `vercel.json` is the **single source of truth** for all security headers (`_headers` has been removed). `unsafe-eval` removed. `wandbox.org` and `blob:` added where needed. `emkc.org` removed (no longer used).
 
 ### 9. Privacy Logging
 - **Was:** Console logs could contain code content, chat text, and error details.

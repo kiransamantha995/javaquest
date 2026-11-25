@@ -1,5 +1,5 @@
 # Files to ignore on Vercel deployment
-local-server.js
+scripts/local-server.js
 server.js
 .env
 .env.local

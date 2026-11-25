@@ -27,7 +27,7 @@ git clone https://github.com/kiransamantha995/javaquest.git
 cd javaquest
 
 # 2. Start the local server
-node local-server.js
+node scripts/local-server.js
 
 # 3. Open in your browser
 # Visit http://localhost:3000
@@ -54,7 +54,7 @@ Curriculum tracks are modularized under `curriculum/`:
 - `curriculum/track1.js`: The Overworld (Beginner — B1 to B8)
 - `curriculum/track2.js`: The Nether (Intermediate — I1 to I8)
 - `curriculum/track3.js`: The End (Advanced — A1 to A8)
-- `curriculum.js`: Aggregates the tracks and exposes `window.CURRICULUM`.
+- `js/curriculum.js`: Aggregates all three tracks and exposes `window.CURRICULUM`.
 
 ### Module Structure Specification
 

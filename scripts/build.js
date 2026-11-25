@@ -1,9 +1,9 @@
-// build.js — Optional static build helper for Vercel / Netlify / CI
-// Generates config.js from environment variables during deployment if config.js does not exist
+// scripts/build.js — Static build helper for Vercel / CI
+// Generates config.js at repository root from environment variables during deployment if config.js does not exist
 const fs = require('fs');
 const path = require('path');
 
-const configPath = path.join(__dirname, 'config.js');
+const configPath = path.join(__dirname, '..', 'config.js');
 
 if (!fs.existsSync(configPath)) {
   const config = {

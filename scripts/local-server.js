@@ -6,7 +6,7 @@ const os = require('os');
 const { spawn } = require('child_process');
 
 const PORT = 3000;
-const ROOT = __dirname;
+const ROOT = path.resolve(__dirname, '..');
 
 // Load .env file if present
 function loadEnv() {
@@ -171,7 +171,7 @@ const server = http.createServer((req, res) => {
           }
 
           // Fallback to api/run.js (Wandbox OpenJDK)
-          const runHandler = require('./api/run.js');
+          const runHandler = require('../api/run.js');
           const fakeReq = { method: 'POST', headers: req.headers || {}, body: payload, socket: req.socket };
           const fakeRes = {
             setHeader: (k, v) => res.setHeader(k, v),
@@ -201,7 +201,7 @@ const server = http.createServer((req, res) => {
     req.on('end', () => {
       try {
         const payload = JSON.parse(body || '{}');
-        const aiHandler = require('./api/ai.js');
+        const aiHandler = require('../api/ai.js');
         const fakeReq = { method: 'POST', headers: req.headers || {}, body: payload, socket: req.socket };
         const fakeRes = {
           setHeader: (k, v) => res.setHeader(k, v),

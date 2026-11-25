@@ -108,12 +108,7 @@ function ge(id)      { return document.getElementById(id); }
 function qs(sel)     { return document.querySelector(sel); }
 function qsa(sel)    { return document.querySelectorAll(sel); }
 function setText(id,v){ var e=ge(id); if(e) e.textContent=String(v); }
-function setHTML(id,v){ var e=ge(id); if(e) e.innerHTML=v; }
 function setWidth(id,p){ var e=ge(id); if(e) e.style.width=p; }
-
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
 function fmt(s) {
   if (!s) return '';
   return esc(s)
@@ -621,8 +616,6 @@ var AV_ACC_E = ['','','','','',''];
 var AV_ACC_N  = ['None','Glasses','Grad Cap','Top Hat','Crown','Headphones'];
 var _avDraft  = null;
 var _avTab    = 'skin';
-
-function mkEl(tag,css){ var e=document.createElement(tag); if(css) e.style.cssText=css; return e; }
 
 var MINECRAFT_SKINS = {
   blockhead: {
@@ -2326,7 +2319,7 @@ function openProjectModal(projId) {
 
     var evalBtns = [ge('project-ai-eval-btn'), ge('project-ai-eval-btn-main')];
     evalBtns.forEach(function(b){ if(b) { b.disabled = true; b.textContent = 'AI Evaluating…'; } });
-    toast('JavaBot is analyzing your code against all milestones…');
+    toast('Meowger is analyzing your code against all milestones…');
 
     callAI('eval-project', {
       projectTitle: proj.title,
@@ -2449,114 +2442,10 @@ function openProjectModal(projId) {
   showModal('modal-project');
 }
 
-function openModulePopup(modId) {
-  var mod = getMod(modId);
-  if (!mod) return;
-  setText('mod-popup-icon', mod.icon);
-  setText('mod-popup-title', (mod.code ? mod.code.toUpperCase() + ': ' : '') + mod.title);
-  setText('mod-popup-sub', mod.subtitle || '');
-
-  var lessDiv = ge('mod-popup-lessons');
-  if (!lessDiv) return;
-  lessDiv.innerHTML = '';
-  mod.lessons.forEach(function(lesson){
-    var done = (getPlayerState().completedLessons || []).indexOf(lesson.id) !== -1;
-    var unlocked = isLessonUnlocked(mod.id, lesson.id);
-    var item = document.createElement('div');
-    item.className = 'popup-lesson-item' + (done ? ' completed' : '') + (!unlocked && !done ? ' locked-item' : '');
-    item.innerHTML = '<span class="lesson-check">' + (done ? '<svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="#00c060" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9.5 10.5 2.5"/></svg>' : unlocked ? '•' : '') + '</span>'
-      + '<span class="lesson-item-name">' + esc(lesson.title) + '</span>'
-      + '<span class="lesson-item-xp">+' + lesson.xp + ' XP</span>';
-    if (unlocked || done) {
-      item.style.cursor = 'pointer';
-      item.setAttribute('data-mid', mod.id);
-      item.setAttribute('data-lid', lesson.id);
-      item.addEventListener('click', function(){
-        closeModulePopup();
-        startLesson(this.getAttribute('data-mid'), this.getAttribute('data-lid'));
-      });
-    }
-    lessDiv.appendChild(item);
-  });
-
-  var actDiv = ge('mod-popup-actions');
-  if (!actDiv) return;
-  actDiv.innerHTML = '';
-
-  var allDone = true;
-  for (var i = 0; i < mod.lessons.length; i++) {
-    if ((getPlayerState().completedLessons || []).indexOf(mod.lessons[i].id) === -1) {
-      allDone = false;
-      break;
-    }
-  }
-
-  // Quiz Challenge Button
-  if (mod.challenge) {
-    var challDone = (getPlayerState().completedChallenges || []).indexOf(mod.challenge.id) !== -1;
-    if (allDone || challDone) {
-      var cbtn = document.createElement('button');
-      cbtn.className = challDone ? 'btn-secondary' : 'btn-primary';
-      cbtn.textContent = challDone ? ('Quiz Done (+' + mod.challenge.xp + ' XP)') : ('Take Quiz Challenge (+' + mod.challenge.xp + ' XP)');
-      cbtn.setAttribute('data-mid', mod.id);
-      cbtn.addEventListener('click', function(){
-        closeModulePopup();
-        startChallenge(this.getAttribute('data-mid'));
-      });
-      actDiv.appendChild(cbtn);
-
-      var aiBtn = document.createElement('button');
-      aiBtn.className = 'btn-secondary btn-ai-practice';
-      aiBtn.style.marginTop = '0.5rem';
-      aiBtn.innerHTML = 'Infinite Practice (AI Quiz)';
-      aiBtn.setAttribute('data-mid', mod.id);
-      aiBtn.addEventListener('click', function(){
-        closeModulePopup();
-        generateAIQuiz(this.getAttribute('data-mid'));
-      });
-      actDiv.appendChild(aiBtn);
-    } else {
-      var hint = document.createElement('p');
-      hint.style.cssText = 'color:rgba(255,255,255,.5);font-size:.82rem;text-align:center;margin:.4rem 0';
-      hint.textContent = 'Finish all lessons to unlock the Quiz Challenge!';
-      actDiv.appendChild(hint);
-    }
-  }
-
-  // Interactive Coding Challenge Button
-  if (mod.codingTask) {
-    var codeDone = (getPlayerState().completedCoding || []).indexOf(mod.id) !== -1;
-    var attempts = (STATE.player.codingAttempts && STATE.player.codingAttempts[mod.id]) || 0;
-    var cdBtn = document.createElement('button');
-    cdBtn.className = codeDone ? 'btn-secondary btn-coding-popup' : 'btn-primary btn-coding-popup';
-    cdBtn.style.marginTop = '0.5rem';
-
-    cdBtn.innerHTML = '' + (codeDone ? 'Coding Task Complete' : 'Coding Challenge');
-    cdBtn.setAttribute('data-mid', mod.id);
-    cdBtn.addEventListener('click', function(){
-      closeModulePopup();
-      startCodingChallenge(this.getAttribute('data-mid'));
-    });
-    actDiv.appendChild(cdBtn);
-  }
-
-  ge('mod-popup-bg').classList.remove('hidden');
-  ge('mod-popup-box').classList.remove('hidden');
-}
-
-function closeModulePopup() {
-  ge('mod-popup-bg').classList.add('hidden');
-  ge('mod-popup-box').classList.add('hidden');
-}
-
 /* ═══════════════ CODING CHALLENGE ENGINE ════════════════════════ */
 var _curCodingMod = null;
 var _codingAttempt = 1;
 var _isExecutingTests = false;
-
-function getCodingXP(attempts) {
-  return 0; // Points removed from code section
-}
 
 function updateScoringRibbon(attempt) {
   setText('coding-attempt-label', 'Attempt ' + attempt);
@@ -3000,46 +2889,6 @@ function initDiffModal() {
 /* ═══════════════ LESSON ENGINE ═════════════════════════════════ */
 var _curMod=null, _curLesson=null, _slideIdx=0;
 
-function startLesson(modId, lessonId) {
-  var mod=getMod(modId); if(!mod){toast('Module not found!');return;}
-  var lesson=null;
-  for(var i=0;i<mod.lessons.length;i++) if(mod.lessons[i].id===lessonId){lesson=mod.lessons[i];break;}
-  if(!lesson){toast('Lesson not found!');return;}
-  _curMod=mod; _curLesson=lesson; _slideIdx=0;
-  setText('lesson-module-tag',mod.title); setText('lesson-title',lesson.title); setText('lesson-xp-badge','+'+lesson.xp+' XP');
-  if(typeof updateChatContext==='function') updateChatContext(mod.title);
-  renderSlide(); showScreen('lesson');
-}
-
-function renderSlide() {
-  var slide=_curLesson.slides[_slideIdx], total=_curLesson.slides.length;
-  if(!slide) return;
-  setText('slide-counter',(_slideIdx+1)+' / '+total);
-  setWidth('lesson-progress-fill',Math.round((_slideIdx+1)/total*100)+'%');
-  var dots=ge('slide-dots');
-  if(dots){dots.innerHTML='';for(var d=0;d<total;d++){var dot=document.createElement('div');dot.className='slide-dot'+(d===_slideIdx?' active':'');dots.appendChild(dot);}}
-  var prev=ge('btn-prev-slide'),next=ge('btn-next-slide');
-  if(prev) prev.style.visibility=(_slideIdx===0?'hidden':'visible');
-  if(next) next.textContent=(_slideIdx===total-1?'Finish Lesson':'Next →');
-  var area=ge('slide-area'); if(!area) return;
-  var typeLabel={intro:'Introduction',code:'Code Example',tip:'Pro Tip',visual:'Visualizer'}[slide.type]||'Lesson';
-  var html='<div class="slide slide-type-'+(slide.type||'intro')+'">'
-    +'<div class="slide-inner">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">'
-    +'<span class="slide-type-badge">'+typeLabel+'</span>'
-    +'<button class="btn-deep-dive" onclick="openDeepDive()">AI Deep Dive</button>'
-    +'</div>'
-    +'<h2 class="slide-title">'+esc(slide.title)+'</h2>'
-    +'<div class="slide-content">'+fmt(slide.content)+'</div>';
-  if(slide.code) html+=buildCodeBlock(slide.code);
-  if(slide.type==='tip') html+='<div class="tip-box"><span class="tip-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg></span><div class="tip-text">'+fmt(slide.content)+'</div></div>';
-  html+='</div>';
-  if(slide.visual) html+='<div class="visual-area" id="vis-now"></div>';
-  html+='</div>';
-  area.innerHTML=html;
-  if(slide.visual) setTimeout(function(){ renderVis(slide); },80);
-}
-
 function renderVis(slide) {
   var c = ge('vis-now'); if (!c) return;
   if (typeof renderVisualizer === 'function') {
@@ -3052,9 +2901,6 @@ function renderVis(slide) {
     c.innerHTML = '<div style="text-align:center;padding:1.5rem;font-weight:700;color:var(--text-secondary)">Interactive Diagram</div>';
   }
 }
-
-function nextSlide(){ if(_slideIdx<_curLesson.slides.length-1){_slideIdx++;renderSlide();addXP(5);}else finishLesson(); }
-function prevSlide(){ if(_slideIdx>0){_slideIdx--;renderSlide();} }
 
 function finishLesson() {
   var isNew=getPlayerState().completedLessons.indexOf(_curLesson.id)===-1;
@@ -4603,7 +4449,7 @@ function renderSplitLesson() {
   if (isExerciseStep && curEx && curEx.isGuidedProject) {
     renderGuidedProject(exerciseBox, exerciseInstructions, curEx);
   } else {
-    var taskDesc = (isExerciseStep && curEx && curEx.instructions) || slide.instructions || ('Practice writing the Java code for **' + esc(slide.title) + '**. Run your code or submit to verify tests!');
+    var taskDesc = (isExerciseStep && curEx && curEx.instructions) || slide.instructions || ('Practice writing the Java code for **' + slide.title + '**. Run your code or submit to verify tests!');
     if (exerciseBox && exerciseInstructions) {
       exerciseInstructions.innerHTML = fmt(taskDesc);
     }
@@ -5264,17 +5110,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ── LESSON ────────────────────────────────────────────────────
   var lb=ge('lesson-back-btn'); if(lb)lb.addEventListener('click',function(){showScreen('map');});
-  var bp=ge('btn-prev-slide');   if(bp)bp.addEventListener('click',prevSlide);
-  var bn=ge('btn-next-slide');   if(bn)bn.addEventListener('click',nextSlide);
 
   // ── CHALLENGE ─────────────────────────────────────────────────
   var cb=ge('challenge-back-btn'); if(cb)cb.addEventListener('click',function(){showScreen('map');});
   var bca=ge('btn-check-answer');  if(bca)bca.addEventListener('click',checkAnswer);
   var bnq=ge('btn-next-question'); if(bnq)bnq.addEventListener('click',nextQuestion);
-
-  // ── MODULE POPUP ──────────────────────────────────────────────
-  var pbg=ge('mod-popup-bg');   if(pbg)pbg.addEventListener('click',closeModulePopup);
-  var pbc=ge('popup-close-btn');if(pbc)pbc.addEventListener('click',closeModulePopup);
 
   // ── COMPILER ──────────────────────────────────────────────────
   var rb=ge('run-btn');     if(rb)rb.addEventListener('click',runCode);

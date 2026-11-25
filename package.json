@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "JavaQst — Gamified Java Learning Platform with 24-module roadmap, native Java compiler, Supabase authentication & database, and Gemini Flash-Lite AI tutor.",
   "scripts": {
-    "build": "node build.js",
-    "start": "node local-server.js",
-    "dev": "node local-server.js",
+    "build": "node scripts/build.js",
+    "build:editor": "esbuild src/editor-entry.js --bundle --outfile=lib/editor.bundle.js --minify",
+    "start": "node scripts/local-server.js",
+    "dev": "node scripts/local-server.js",
     "test": "node --test test/**/*.test.js"
   },
   "engines": {

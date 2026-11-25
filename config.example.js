@@ -3,7 +3,7 @@
 // 'config.js' is excluded from git tracking via .gitignore to prevent exposing keys.
 
 window.CONFIG = {
-  // Optional: Google Gemini API Key for JavaBot (AI Tutor).
+  // Optional: Google Gemini API Key for Meowger (AI Tutor).
   // Obtain a free key at: https://aistudio.google.com/apikey
   // You can also enter this key directly inside the app Settings (⚙️).
   GEMINI_API_KEY: '',
