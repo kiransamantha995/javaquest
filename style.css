@@ -3264,9 +3264,9 @@ body {
 
 /* Chat Drawer Popup */
 .chat-panel {
-  position: absolute; bottom: 4.2rem; right: 0;
-  width: 380px; max-width: calc(100vw - 2rem); height: 520px;
-  max-height: calc(100vh - 6rem);
+  position: absolute; bottom: 0; right: 0;
+  width: 410px; max-width: calc(100vw - 2rem); height: 550px;
+  max-height: calc(100vh - 5.5rem);
   z-index: 10000;
   background: #FFFFFF;
   border: 3px solid var(--ink);
@@ -3282,17 +3282,29 @@ body {
 .chat-panel-header {
   background: var(--codedex-yellow);
   border-bottom: 2.5px solid var(--ink);
-  padding: 0.85rem 1.15rem;
+  padding: 0.85rem 1rem;
   display: flex; align-items: center; justify-content: space-between;
+  gap: 0.5rem;
 }
-.chat-bot-info { display: flex; align-items: center; gap: 0.65rem; }
-.chat-bot-avatar { font-size: 1.5rem; }
-.chat-bot-name { font-size: 1rem; font-weight: 800; color: var(--ink); }
-.chat-bot-status { font-size: 0.74rem; font-weight: 700; color: var(--text-secondary); }
+.chat-bot-info { display: flex; align-items: center; gap: 0.65rem; min-width: 0; flex: 1; }
+.chat-bot-avatar {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  font-size: 1.5rem;
+}
+.chat-bot-name {
+  font-size: 0.96rem; font-weight: 800; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;
+}
+.chat-bot-status {
+  font-size: 0.72rem; font-weight: 700; color: #3F3F46;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.25;
+}
 .chat-close-btn, .btn-clear-chat {
-  background: #FFFFFF; border: 1.5px solid var(--ink); border-radius: 6px;
-  padding: 0.2rem 0.55rem; font-size: 0.74rem; font-weight: 800; cursor: pointer;
+  background: #FFFFFF; color: var(--ink); border: 1.5px solid var(--ink); border-radius: 8px;
+  padding: 0.28rem 0.55rem; font-size: 0.72rem; font-weight: 800; cursor: pointer;
   box-shadow: 1.5px 1.5px 0px var(--ink);
+  display: inline-flex; align-items: center; justify-content: center; gap: 2px;
+  white-space: nowrap; flex-shrink: 0; line-height: 1;
 }
 
 .chat-context-pill {
@@ -3727,8 +3739,13 @@ body {
 /* Quick Actions Cards (Clean Vector Neobrutalist Cards - No Photos) */
 .quick-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.15rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 960px) {
+  .quick-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 .quick-card {
   background: #FFFFFF;
@@ -4675,8 +4692,27 @@ body.dark-theme .chat-message.user .message-bubble {
 }
 body.dark-theme .chat-panel-header {
   background: #18191D !important;
-  border-color: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
   color: #F4F4F5 !important;
+}
+body.dark-theme .chat-bot-name {
+  color: #FFFFFF !important;
+}
+body.dark-theme .chat-bot-status {
+  color: #A1A1AA !important;
+}
+body.dark-theme .chat-close-btn,
+body.dark-theme .btn-clear-chat {
+  background: #24262C !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: none !important;
+}
+body.dark-theme .chat-close-btn:hover,
+body.dark-theme .btn-clear-chat:hover {
+  background: #2E313A !important;
+  color: #FFE600 !important;
+  border-color: #FFE600 !important;
 }
 body.dark-theme .chat-quick-chips {
   background: #18191D !important;

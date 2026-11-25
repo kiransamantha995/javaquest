@@ -4,7 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { _testExports } = require('../api/ai.js');
-const { escHtml, redactSecrets, userStr } = _testExports;
+const { escHtml, redactSecrets, userStr, cleanText, sanitizePlayerName } = _testExports;
 
 test('escHtml: escapes all dangerous HTML characters', () => {
   const dangerousInput = '<script>alert("XSS")</script>&foo=\'bar\'';
@@ -50,4 +50,22 @@ test('userStr: enforces length caps and converts types cleanly', () => {
   assert.equal(userStr(null, 50), '');
   assert.equal(userStr(undefined, 50), '');
   assert.equal(userStr(42, 50), '42');
+});
+
+test('cleanText: preserves apostrophes and quotes without HTML-entity mangling while redacting secrets', () => {
+  const txt = "Hello! I'm Meowger. Use System.out.println(\"Hi\"); AIzaSyA_testKey1234567890abcdefghijklmn";
+  const out = cleanText(txt, 500);
+  assert.equal(out.includes("I'm Meowger"), true);
+  assert.equal(out.includes('&#x27;'), false);
+  assert.equal(out.includes('&quot;'), false);
+  assert.equal(out.includes('AIzaSyA_testKey'), false);
+  assert.equal(out.includes('[REDACTED_SECRET]'), true);
+});
+
+test('sanitizePlayerName: strips control chars, tags, and backticks safely and falls back when empty', () => {
+  assert.equal(sanitizePlayerName('Advaith_99'), 'Advaith_99');
+  assert.equal(sanitizePlayerName('meow\n<script>x`hi`'), 'meow script x hi');
+  assert.equal(sanitizePlayerName('A'.repeat(60)).length, 32);
+  assert.equal(sanitizePlayerName('   '), 'JavaLearner');
+  assert.equal(sanitizePlayerName(null), 'JavaLearner');
 });

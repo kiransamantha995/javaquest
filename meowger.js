@@ -438,6 +438,23 @@
     }, durationMs);
   };
 
+  function escMeowgerText(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;');
+  }
+
+  function getMeowgerLearnerName() {
+    var p = (typeof getPlayerState === 'function')
+      ? getPlayerState()
+      : ((window.STATE && window.STATE.player) ? window.STATE.player : null);
+    var n = (p && p.name) ? String(p.name).trim() : '';
+    return escMeowgerText((n && n.length > 0) ? n.slice(0, 32) : 'JavaLearner');
+  }
+
   MeowgerCompanion.prototype.onPetClick = function() {
     var self = this;
     // Play happy bounce reaction
@@ -449,16 +466,21 @@
       var isHidden = !cp || cp.classList.contains('hidden');
       window.toggleChat(isHidden);
 
-      // If opening chat drawer, hop gracefully to the left side of the drawer
+      // If opening chat drawer, hop clearly beside the drawer so it never overlaps the UI
       if (isHidden) {
         var vw = Math.max(320, window.innerWidth || 800);
         var vh = Math.max(480, window.innerHeight || 600);
-        this.targetX = Math.max(20, vw - 450);
-        this.targetY = Math.max(80, vh - 110);
-        this.facing = 1;
+        if (vw > 540) {
+          this.targetX = Math.max(20, vw - 510);
+          this.targetY = Math.max(80, vh - 96);
+          this.facing = 1;
+        } else {
+          this.targetX = 16;
+          this.targetY = 82;
+        }
       }
     } else {
-      this.say('How can I help you write Java today, Adventurer?', 4000);
+      this.say('How can I help you write Java today, ' + getMeowgerLearnerName() + '?', 4000);
     }
   };
 
@@ -502,6 +524,7 @@
     setTimeout(function() {
       var vw = Math.max(320, window.innerWidth || 800);
       var vh = Math.max(480, window.innerHeight || 600);
+      var uName = getMeowgerLearnerName();
 
       if (screenName === 'map') {
         // Jump onto map area
@@ -509,32 +532,32 @@
         self.y = Math.min(260, vh * 0.35);
         self.targetX = self.x;
         self.targetY = self.y;
-        self.say('Welcome to the Adventure Map! Follow the trail to conquer Java.', 4000);
+        self.say('Welcome to the Adventure Map, ' + uName + '! Follow the trail to conquer Java.', 4000);
       } else if (screenName === 'lesson') {
         // Dock at bottom right corner of lesson interface
         self.x = vw - 88;
         self.y = vh - 100;
         self.targetX = self.x;
         self.targetY = self.y;
-        self.say('I am watching your code editor! Tap me if you get stuck.', 3500);
+        self.say('I am watching your code, ' + uName + '! Tap me if you get stuck.', 3500);
       } else if (screenName === 'compiler') {
         self.x = vw - 88;
         self.y = 80;
         self.targetX = self.x;
         self.targetY = self.y;
-        self.say('Ready to compile! Press Run Code to test your logic.', 3500);
+        self.say('Ready to compile, ' + uName + '! Press Run Code to test your logic.', 3500);
       } else if (screenName === 'avatar') {
         self.x = Math.max(20, vw * 0.2);
         self.y = Math.min(240, vh * 0.3);
         self.targetX = self.x;
         self.targetY = self.y;
-        self.say('Customize your voxel champion! I love your style.', 3500);
+        self.say('Customize your voxel champion, ' + uName + '! I love your style.', 3500);
       } else if (screenName === 'badges') {
         self.x = vw - 88;
         self.y = 120;
         self.targetX = self.x;
         self.targetY = self.y;
-        self.say('Look at all your earned trophies and voxel medals!', 3500);
+        self.say('Look at all your earned trophies and medals, ' + uName + '!', 3500);
       } else {
         self.x = vw - 96;
         self.y = vh - 110;
@@ -557,11 +580,12 @@
 
   // Knowledge bites (Pure SVG, zero emoji)
   MeowgerCompanion.prototype.maybeShareKnowledge = function() {
+    var uName = getMeowgerLearnerName();
     var tips = [
-      'Java 21 Virtual Threads let you run millions of lightweight tasks effortlessly.',
-      'Remember: In Java, primitive types like int and boolean are passed by value.',
-      'Always compare Strings using .equals() instead of == in Java.',
-      'Stuck on an exception? Click me and ask JavaBot for a Socratic hint!',
+      'Java 21 Virtual Threads let you run millions of lightweight tasks effortlessly, ' + uName + '!',
+      'Remember, ' + uName + ': primitive types like int and boolean are passed by value.',
+      'Always compare Strings using .equals() instead of == in Java!',
+      'Stuck on an exception, ' + uName + '? Click me and ask Meowger for a Socratic hint!',
       'Check the Adventure Trail on the Map to see what capstone awaits you!'
     ];
     var randomTip = tips[Math.floor(Math.random() * tips.length)];
@@ -586,12 +610,13 @@
   // Hook into compiler events
   window.meowgerReactToRun = function(success, errorMsg) {
     if (!window.Meowger) return;
+    var uName = getMeowgerLearnerName();
     if (success) {
       window.Meowger.triggerReaction('happy');
-      window.Meowger.say('Clean execution! All tests passed.', 3500);
+      window.Meowger.say('Clean execution, ' + uName + '! All tests passed.', 3500);
     } else {
       window.Meowger.triggerReaction('thinking');
-      window.Meowger.say('Compiler spotted an issue. Tap me if you need an explanation.', 4500);
+      window.Meowger.say('Compiler spotted an issue, ' + uName + '. Tap me for an explanation.', 4500);
     }
   };
 

@@ -40,10 +40,28 @@
   var _lastChatSendTime = 0;
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // 2. Network Caller (/api/ai)
+  // 2. Network Caller (/api/ai) & Learner Profile Context
   // ─────────────────────────────────────────────────────────────────────────────
+  function getLearnerProfile() {
+    var p = (typeof getPlayerState === 'function')
+      ? getPlayerState()
+      : ((window.STATE && window.STATE.player) ? window.STATE.player : null);
+    var name = (p && p.name) ? String(p.name).trim() : '';
+    return {
+      name: (name && name.length > 0) ? name.slice(0, 32) : 'JavaLearner',
+      level: (p && typeof p.level === 'number' && !isNaN(p.level)) ? p.level : 1,
+      difficulty: (p && p.difficulty) ? String(p.difficulty) : 'beginner'
+    };
+  }
+
   function callAI(action, payload) {
-    var bodyData = Object.assign({ action: action }, payload || {});
+    var profile = getLearnerProfile();
+    var bodyData = Object.assign({
+      action: action,
+      playerName: profile.name,
+      playerLevel: profile.level,
+      difficulty: profile.difficulty
+    }, payload || {});
     delete bodyData.apiKey; // Safety: Never send client apiKey
 
     var token = (window._sbSession && window._sbSession.access_token) ? window._sbSession.access_token : '';
@@ -59,7 +77,7 @@
     .then(function (res) {
       if (res.status === 401) {
         return res.json().catch(function () { return {}; }).then(function (e) {
-          throw new Error(e.error || 'Please sign in or continue as guest to use JavaBot.');
+          throw new Error(e.error || 'Please sign in or continue as guest to ask Meowger.');
         });
       }
       if (res.status === 429) {
@@ -69,7 +87,7 @@
       }
       if (!res.ok) {
         return res.json().catch(function () { return {}; }).then(function (errObj) {
-          throw new Error(errObj.error || ('AI service temporarily busy (HTTP ' + res.status + '). Please try again in a moment.'));
+          throw new Error(errObj.error || ('Meowger AI is temporarily busy (HTTP ' + res.status + '). Please try again in a moment.'));
         });
       }
       return res.json();
@@ -134,9 +152,12 @@
     if (!container) return;
     var mem = getLearnerMemory();
     if (mem.length === 0) {
+      var prof = getLearnerProfile();
       container.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--text-secondary);font-size:0.9rem;">'
-        + '<div style="font-size:2rem;margin-bottom:0.5rem">✨</div>'
-        + 'No learning weak spots tracked yet! As you write and debug code, JavaBot remembers tricky concepts to help you master them.'
+        + '<div style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:rgba(255,230,0,0.16);border:1.5px solid var(--ink);margin-bottom:0.75rem;color:var(--ink);">'
+        + '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'
+        + '</div><br/>'
+        + 'No learning weak spots tracked yet for <strong>' + esc(prof.name) + '</strong>! As you write and debug code, Meowger remembers tricky concepts to help you master them.'
         + '</div>';
       return;
     }
@@ -322,7 +343,7 @@
     updateWatcherUI();
 
     if (typeof toast === 'function') {
-      toast(_isLiveWatchingPaused ? 'JavaBot live code watching paused.' : 'JavaBot is actively watching your code.');
+      toast(_isLiveWatchingPaused ? 'Meowger live code watching paused.' : 'Meowger is actively watching your code.');
     }
   }
 
@@ -333,12 +354,12 @@
         btn.innerHTML = '<svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="8"></circle><line x1="4" y1="4" x2="16" y2="16"></line></svg> Watching: Paused';
         btn.classList.add('paused');
         btn.style.opacity = '0.65';
-        btn.setAttribute('title', 'JavaBot watching is paused. Click to resume.');
+        btn.setAttribute('title', 'Meowger watching is paused. Click to resume.');
       } else {
         btn.innerHTML = '<svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 10c3-5.5 15-5.5 18 0-3 5.5-15 5.5-18 0z"/><circle cx="10" cy="10" r="2.5"/></svg> Watching: Active';
         btn.classList.remove('paused');
         btn.style.opacity = '1';
-        btn.setAttribute('title', 'JavaBot is watching your code. Click to pause.');
+        btn.setAttribute('title', 'Meowger is watching your code. Click to pause.');
       }
     });
 
@@ -382,12 +403,12 @@
     var msgEl = document.getElementById('javabot-toast-msg');
     var btnEl = document.getElementById('javabot-toast-action-btn');
 
-    if (titleEl) titleEl.textContent = 'JavaBot Tip: ' + concept;
+    if (titleEl) titleEl.textContent = 'Meowger Tip: ' + concept;
     if (msgEl) msgEl.textContent = message;
     if (btnEl) {
       btnEl.onclick = function () {
         dismissJavaBotToast();
-        openSocraticHintModal(1);
+        requestSocraticHint(1);
       };
     }
 
@@ -433,7 +454,7 @@
 
     // 2. Fall back to /api/ai if code is nuanced or has compiler error
     var panel = document.getElementById('chat-panel');
-    if (panel && panel.classList.contains('hidden')) toggleChat();
+    if (panel && panel.classList.contains('hidden')) toggleChat(true);
 
     appendChatMsg('user', 'Hint please (Tier ' + _currentSocraticTier + ') for ' + lessonTitle);
     var typing = document.getElementById('chat-typing');
@@ -453,11 +474,14 @@
     })
     .catch(function (err) {
       if (typing) typing.classList.add('hidden');
-      appendChatMsg('bot', 'JavaBot encountered a hiccup: ' + esc(err.message) + '. Review your logic or try again in a moment!');
+      appendChatMsg('bot', 'Meowger encountered a hiccup: ' + err.message + '. Review your logic or try again in a moment!');
     });
   }
 
   function displaySocraticGuidance(data) {
+    var panel = document.getElementById('chat-panel');
+    if (panel && panel.classList.contains('hidden')) toggleChat(true);
+
     var tier = data.tier || _currentSocraticTier;
     var badgeName = tier === 1 ? 'Guiding Question' : (tier === 2 ? 'Syntax Hint' : 'Concrete Fix');
     var badgeColor = tier === 1 ? '#3B82F6' : (tier === 2 ? '#F59E0B' : '#10B981');
@@ -573,7 +597,7 @@
     closeDiffModal();
 
     if (applied) {
-      if (typeof toast === 'function') toast('JavaBot suggestion applied to editor!');
+      if (typeof toast === 'function') toast('Meowger suggestion applied to editor!');
       // Flash editor border to give tactile feedback
       var activeWrap = document.querySelector('.cm-editor-wrap:not(.hidden)');
       if (activeWrap) {
@@ -599,7 +623,7 @@
     }
 
     var panel = document.getElementById('chat-panel');
-    if (panel && panel.classList.contains('hidden')) toggleChat();
+    if (panel && panel.classList.contains('hidden')) toggleChat(true);
 
     appendChatMsg('user', 'Can you explain this compiler error in plain English?');
     var typing = document.getElementById('chat-typing');
@@ -635,7 +659,7 @@
     })
     .catch(function (err) {
       if (typing) typing.classList.add('hidden');
-      appendChatMsg('bot', 'Could not diagnose error: ' + esc(err.message));
+      appendChatMsg('bot', 'Could not diagnose error: ' + err.message);
     });
   }
 
@@ -653,7 +677,7 @@
     }
 
     var panel = document.getElementById('chat-panel');
-    if (panel && panel.classList.contains('hidden')) toggleChat();
+    if (panel && panel.classList.contains('hidden')) toggleChat(true);
 
     appendChatMsg('user', 'Can you review my code for best practices and Effective Java tips?');
     var typing = document.getElementById('chat-typing');
@@ -670,15 +694,15 @@
         + '<span style="background:rgba(16,185,129,0.15);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-size:0.7rem;font-weight:800;padding:0.15rem 0.5rem;border-radius:999px;">'
         + 'Code Review • ' + esc(res.bookCitation || 'Effective Java') + '</span>'
         + '</div>'
-        + '<div style="margin-bottom:0.5rem;"><strong>🌟 Strength:</strong> ' + esc(res.strength) + '</div>'
-        + '<div style="margin-bottom:0.5rem;"><strong>💡 Clean Code Tip:</strong> ' + esc(res.improvement) + '</div>'
-        + '<div><strong>☕ Effective Java:</strong> ' + esc(res.effectiveJavaTip) + '</div>';
+        + '<div style="margin-bottom:0.5rem;"><strong style="color:#10B981;">Strength:</strong> ' + esc(res.strength) + '</div>'
+        + '<div style="margin-bottom:0.5rem;"><strong style="color:#F59E0B;">Clean Code Tip:</strong> ' + esc(res.improvement) + '</div>'
+        + '<div><strong>Effective Java:</strong> ' + esc(res.effectiveJavaTip) + '</div>';
 
       appendChatMsg('bot', html, true);
     })
     .catch(function (err) {
       if (typing) typing.classList.add('hidden');
-      appendChatMsg('bot', 'Review temporarily unavailable: ' + esc(err.message));
+      appendChatMsg('bot', 'Review temporarily unavailable: ' + err.message);
     });
   }
 
@@ -735,6 +759,23 @@
     };
   }
 
+  function refreshChatGreeting() {
+    var prof = getLearnerProfile();
+    var statusEl = document.getElementById('chat-bot-status');
+    if (statusEl) {
+      statusEl.textContent = 'Mentoring ' + prof.name + ' (Lv.' + prof.level + ')';
+    }
+    var container = document.getElementById('chat-messages');
+    if (!container) return;
+    var msgs = container.querySelectorAll('.chat-message');
+    if (msgs.length === 1 && msgs[0].classList.contains('bot')) {
+      var bubble = msgs[0].querySelector('.message-bubble');
+      if (bubble) {
+        bubble.textContent = "Meow, " + prof.name + "! I'm Meowger, your feline Java coding companion & AI mentor. Ask me anything about Java syntax, debugging, or your quest!";
+      }
+    }
+  }
+
   var _lastToggleChatTime = 0;
   function toggleChat(forceState) {
     var now = Date.now();
@@ -751,6 +792,7 @@
     if (shouldOpen) {
       panel.classList.remove('hidden');
       if (fab) fab.classList.add('chat-open');
+      refreshChatGreeting();
       updateChatContextPill();
       var input = document.getElementById('chat-input');
       if (input) setTimeout(function () { input.focus(); }, 150);
@@ -774,18 +816,17 @@
     }
   }
 
-  function sendChatMessage() {
+  function sendChatMessage(overrideText) {
     var now = Date.now();
-    if (_isSendingChat || (now - _lastChatSendTime < 500)) return;
+    if (_isSendingChat || (now - _lastChatSendTime < 450)) return;
 
     var input = document.getElementById('chat-input');
-    if (!input) return;
-    var msg = input.value.trim();
+    var msg = (typeof overrideText === 'string') ? overrideText.trim() : (input ? input.value.trim() : '');
     if (!msg) return;
 
     _isSendingChat = true;
     _lastChatSendTime = now;
-    input.value = '';
+    if (input && typeof overrideText !== 'string') input.value = '';
     appendChatMsg('user', msg);
 
     var sendBtn = document.getElementById('chat-send-btn');
@@ -813,26 +854,42 @@
         + 'Student Question: ' + msg;
     }
 
+    var prof = getLearnerProfile();
     callAI('chat', { message: enrichedMsg, messages: chatHistory })
       .then(function (res) {
         if (typing) typing.classList.add('hidden');
-        var reply = res.reply || 'I am ready to help with your Java journey!';
+        var reply = res.reply || ('Meow, ' + prof.name + '! I am ready to help with your Java journey!');
         chatHistory.push({ role: 'model', text: reply });
         appendChatMsg('bot', reply);
         resetControls();
       })
       .catch(function (err) {
         if (typing) typing.classList.add('hidden');
-        appendChatMsg('bot', 'JavaBot encountered an issue: ' + esc(err.message));
+        appendChatMsg('bot', 'Meowger encountered an issue: ' + err.message);
         resetControls();
       });
   }
 
+  function sendPromptToChat(promptText) {
+    if (!promptText) return;
+    var panel = document.getElementById('chat-panel');
+    if (panel && panel.classList.contains('hidden')) toggleChat(true);
+    sendChatMessage(String(promptText));
+  }
+
   function clearChat() {
     chatHistory = [];
+    var prof = getLearnerProfile();
     var container = document.getElementById('chat-messages');
     if (container) {
-      container.innerHTML = '<div class="chat-message bot"><div class="message-bubble">Chat cleared! What Java concept or coding challenge can I help you master?</div></div>';
+      container.innerHTML = '';
+      var div = document.createElement('div');
+      div.className = 'chat-message bot';
+      var bubble = document.createElement('div');
+      bubble.className = 'message-bubble';
+      bubble.textContent = "Chat cleared, " + prof.name + "! What Java concept or coding challenge can Meowger help you master next?";
+      div.appendChild(bubble);
+      container.appendChild(div);
     }
     _currentSocraticTier = 1;
     if (typeof toast === 'function') toast('Chat history reset.');
@@ -872,10 +929,10 @@
       reportBtn.type = 'button';
       reportBtn.className = 'btn-report-ai';
       reportBtn.title = 'Report inappropriate or inaccurate response';
-      reportBtn.innerHTML = '<span style="font-size:0.72rem;opacity:0.7;cursor:pointer;">⚑ Report</span>';
+      reportBtn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;font-size:0.72rem;opacity:0.72;cursor:pointer;"><svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14V2h9l-1.5 3.5L12 9H3"/></svg>Report</span>';
       reportBtn.style.cssText = 'background:none;border:none;padding:2px 6px;cursor:pointer;color:inherit;font-family:inherit;';
       reportBtn.onclick = function() {
-        reportBtn.innerHTML = '<span style="font-size:0.72rem;color:#10B981;font-weight:700;">✓ Flagged for review</span>';
+        reportBtn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;font-size:0.72rem;color:#10B981;font-weight:700;"><svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8 6.5 11.5 13 4.5"/></svg>Flagged for review</span>';
         reportBtn.disabled = true;
         if (typeof toast === 'function') {
           toast('Thank you for reporting. This response has been flagged for safety review.');
@@ -1035,7 +1092,7 @@
 
     if (btn) { btn.disabled = true; btn.textContent = 'Diagnosing…'; }
     aiBox.classList.remove('hidden');
-    aiBox.innerHTML = '<span class="run-spinner" style="width:14px;height:14px;margin-right:8px;display:inline-block;"></span> JavaBot is diagnosing why that answer was tempting…';
+    aiBox.innerHTML = '<span class="run-spinner" style="width:14px;height:14px;margin-right:8px;display:inline-block;"></span> Meowger is diagnosing why that answer was tempting…';
 
     callAI('explain-mistake', {
       question: q.question,
@@ -1045,7 +1102,7 @@
     })
     .then(function (res) {
       if (btn) btn.classList.add('hidden');
-      aiBox.innerHTML = '<strong>JavaBot Insight:</strong> ' + esc(res.explanation);
+      aiBox.innerHTML = '<strong>Meowger Insight:</strong> ' + esc(res.explanation);
     })
     .catch(function (e) {
       if (btn) { btn.disabled = false; btn.textContent = 'Explain My Mistake'; }
@@ -1120,7 +1177,9 @@
   // ─────────────────────────────────────────────────────────────────────────────
   window.callAI = callAI;
   window.toggleChat = toggleChat;
+  window.refreshChatGreeting = refreshChatGreeting;
   window.sendChatMessage = sendChatMessage;
+  window.sendPromptToChat = sendPromptToChat;
   window.clearChat = clearChat;
   window.clearChatHistory = clearChat;
   window.toggleLiveWatching = toggleLiveWatching;
@@ -1146,6 +1205,7 @@
   // Initialize UI buttons once DOM is loaded
   function initTutorUI() {
     updateWatcherUI();
+    refreshChatGreeting();
 
     var fab = document.getElementById('ai-chat-fab');
     if (fab && !fab._hasAiListener) {
@@ -1166,13 +1226,35 @@
     }
 
     var clearBtn = document.getElementById('chat-clear-btn');
-    if (clearBtn) clearBtn.addEventListener('click', clearChat);
+    if (clearBtn && !clearBtn._hasAiListener) {
+      clearBtn._hasAiListener = true;
+      clearBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        clearChat();
+      });
+    }
+
+    var memBtn = document.getElementById('chat-memory-btn');
+    if (memBtn && !memBtn._hasAiListener) {
+      memBtn._hasAiListener = true;
+      memBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openLearnerMemoryModal();
+      });
+    }
 
     var sendBtn = document.getElementById('chat-send-btn');
-    if (sendBtn) sendBtn.addEventListener('click', sendChatMessage);
+    if (sendBtn && !sendBtn._hasAiListener) {
+      sendBtn._hasAiListener = true;
+      sendBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        sendChatMessage();
+      });
+    }
 
     var chatInput = document.getElementById('chat-input');
-    if (chatInput) {
+    if (chatInput && !chatInput._hasAiListener) {
+      chatInput._hasAiListener = true;
       chatInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
@@ -1182,13 +1264,34 @@
     }
 
     var chipReview = document.getElementById('chip-review-code');
-    if (chipReview) chipReview.addEventListener('click', reviewCodeWithAI);
+    if (chipReview && !chipReview._hasAiListener) {
+      chipReview._hasAiListener = true;
+      chipReview.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        reviewCodeWithAI();
+      });
+    }
 
     var chipError = document.getElementById('chip-explain-error');
-    if (chipError) chipError.addEventListener('click', function () { translateErrorWithAI(); });
+    if (chipError && !chipError._hasAiListener) {
+      chipError._hasAiListener = true;
+      chipError.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        translateErrorWithAI();
+      });
+    }
 
     var chipNext = document.getElementById('chip-next-step');
-    if (chipNext) chipNext.addEventListener('click', function () { requestSocraticHint(); });
+    if (chipNext && !chipNext._hasAiListener) {
+      chipNext._hasAiListener = true;
+      chipNext.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        requestSocraticHint();
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

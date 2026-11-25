@@ -1397,6 +1397,7 @@ function saveAvatar() {
     if (_avDraft.avatarCape) STATE.player.avatarCape = _avDraft.avatarCape;
   }
   localSave(); renderAllAvatars(); updateNav();
+  if (typeof window.refreshChatGreeting === 'function') window.refreshChatGreeting();
   showScreen('home'); toast('Pixel avatar & cosmetics saved!');
 }
 
@@ -1413,6 +1414,7 @@ function renderHome() {
   setText('home-streak',p.streak); setText('home-xp',p.xp);
   setText('home-lessons',p.completedLessons.length); setText('home-badges',p.badges.length);
   renderContinueCard(); renderAllAvatars();
+  if (typeof window.refreshChatGreeting === 'function') window.refreshChatGreeting();
 }
 
 function getModulesForDifficulty() {
@@ -5457,53 +5459,7 @@ document.addEventListener('DOMContentLoaded', function(){
     codeEd.addEventListener('input',handleEditorInput);
   }
 
-  // ── AI CHAT ───────────────────────────────────────────────────
-  var fab=ge('ai-chat-fab');
-  if(fab && !fab._hasAiListener){
-    fab._hasAiListener = true;
-    fab.addEventListener('click',function(e){
-      e.stopPropagation();
-      if(typeof window.toggleChat==='function') window.toggleChat();
-    });
-  }
-  var chc=ge('chat-close-btn');
-  if(chc && !chc._hasAiListener){
-    chc._hasAiListener = true;
-    chc.addEventListener('click',function(e){
-      e.stopPropagation();
-      if(typeof window.toggleChat==='function') window.toggleChat(false);
-    });
-  }
-  var clr=ge('chat-clear-btn'); if(clr)clr.addEventListener('click',function(){ if(typeof clearChat==='function') clearChat(); else if(typeof clearChatHistory==='function') clearChatHistory(); });
-  var chs=ge('chat-send-btn');  if(chs)chs.addEventListener('click',function(e){ e.preventDefault(); if(typeof sendChatMessage==='function') sendChatMessage(); });
-  var chi=ge('chat-input');
-  if(chi){
-    chi.addEventListener('keydown',function(e){
-      if(e.key==='Enter'&&!e.shiftKey){
-        e.preventDefault();
-        if(typeof sendChatMessage==='function') sendChatMessage();
-      }
-    });
-  }
-
-  var chipReview = ge('chip-review-code');
-  if (chipReview) chipReview.addEventListener('click', function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    sendPromptToChat("Can you review the code I wrote in the editor? Check for errors, syntax issues, or bad practices and tell me how to improve it!");
-  });
-  var chipError = ge('chip-explain-error');
-  if (chipError) chipError.addEventListener('click', function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    sendPromptToChat("I am getting an error or unexpected output with my current code. Can you explain what went wrong and how to fix it?");
-  });
-  var chipNext = ge('chip-next-step');
-  if (chipNext) chipNext.addEventListener('click', function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    sendPromptToChat("Based on my current code and TODOs, what should I implement next? Give me a helpful hint to get started!");
-  });
+  // ── AI CHAT (Managed cleanly by ai-tutor.js initTutorUI) ───────
 
   // ── TERMS GATE & INTERACTIVE TUTORIAL ────────────────────────
   window.checkTermsGate = function() {

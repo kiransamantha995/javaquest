@@ -73,7 +73,7 @@
   <title>JavaQst — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="style.css?v=9.6"/>
+  <link rel="stylesheet" href="style.css?v=9.7"/>
 </head>
 <body>
 
@@ -1171,19 +1171,19 @@
             <rect x="14" y="9" width="3" height="3" fill="#18191E"/>
           </svg>
         </div>
-        <div>
+        <div style="min-width:0;flex:1;">
           <div class="chat-bot-name">Meowger AI</div>
           <div class="chat-bot-status" id="chat-bot-status">Your Feline Java Mentor</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:.4rem;">
-        <button class="btn-clear-chat" id="chat-memory-btn" onclick="window.openLearnerMemoryModal()" title="View learner weak spots">
-          <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:3px;vertical-align:-1px"><path d="M5 2a3 3 0 0 0-3 3c0 1.2.7 2.2 1.7 2.7A3 3 0 0 0 5 13h1V2H5zM11 2a3 3 0 0 1 3 3c0 1.2-.7 2.2-1.7 2.7A3 3 0 0 1 11 13h-1V2h1z"/></svg>Memory
+      <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;">
+        <button class="btn-clear-chat" id="chat-memory-btn" type="button" title="View learner weak spots">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:2px;"><path d="M5 2a3 3 0 0 0-3 3c0 1.2.7 2.2 1.7 2.7A3 3 0 0 0 5 13h1V2H5zM11 2a3 3 0 0 1 3 3c0 1.2-.7 2.2-1.7 2.7A3 3 0 0 1 11 13h-1V2h1z"/></svg>Memory
         </button>
-        <button class="btn-clear-chat" id="chat-clear-btn" onclick="window.clearChat && window.clearChat()" title="Clear chat history">
-          <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:3px;vertical-align:-1px"><path d="M2 8a6 6 0 1 1 2 4.5M2 8V4m0 4h4"/></svg>Reset
+        <button class="btn-clear-chat" id="chat-clear-btn" type="button" title="Clear chat history">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:2px;"><path d="M2 8a6 6 0 1 1 2 4.5M2 8V4m0 4h4"/></svg>Reset
         </button>
-        <button class="chat-close-btn" id="chat-close-btn" aria-label="Close" onclick="event.stopPropagation(); window.toggleChat && window.toggleChat(false);"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="chat-close-btn" id="chat-close-btn" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     </div>
     <div class="chat-context-pill hidden" id="chat-context-pill">
@@ -1197,13 +1197,13 @@
     </div>
     <div class="chat-typing-indicator hidden" id="chat-typing"><span></span><span></span><span></span></div>
     <div class="chat-quick-chips" id="chat-quick-chips">
-      <button class="chat-chip" id="chip-review-code" type="button" onclick="window.reviewCodeWithAI && window.reviewCodeWithAI()">Review My Code</button>
-      <button class="chat-chip" id="chip-explain-error" type="button" onclick="window.translateErrorWithAI && window.translateErrorWithAI()">Explain Error</button>
-      <button class="chat-chip" id="chip-next-step" type="button" onclick="window.requestSocraticHint && window.requestSocraticHint()">Hint for Next Step</button>
+      <button class="chat-chip" id="chip-review-code" type="button">Review My Code</button>
+      <button class="chat-chip" id="chip-explain-error" type="button">Explain Error</button>
+      <button class="chat-chip" id="chip-next-step" type="button">Hint for Next Step</button>
     </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" class="chat-input" placeholder="Ask Meowger about your code…"/>
-      <button class="chat-send-btn" id="chat-send-btn" type="button" onclick="window.sendChatMessage && window.sendChatMessage()" title="Send Message"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
+      <button class="chat-send-btn" id="chat-send-btn" type="button" title="Send Message"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
     </div>
     <div class="ai-disclaimer" style="font-size:0.68rem;text-align:center;padding:0.35rem 0.5rem;color:var(--text-secondary,#71717A);opacity:0.85;">
       Meowger AI may produce inaccuracies. Verify code with compiler.
@@ -1338,7 +1338,7 @@
       </button>
     </div>
     <h3 class="diff-modal-title" id="learner-memory-title" style="margin:0 0 0.5rem;font-size:1.25rem;font-weight:800;color:var(--ink);">Tracked Coding Weak Spots</h3>
-    <p style="color:var(--text-secondary);font-size:0.88rem;margin:0 0 1.25rem;line-height:1.45;">JavaBot tracks recurring syntax and logic pitfalls locally on your device to personalize review questions and Socratic hints.</p>
+    <p style="color:var(--text-secondary);font-size:0.88rem;margin:0 0 1.25rem;line-height:1.45;">Meowger tracks recurring syntax and logic pitfalls locally on your device to personalize review questions and Socratic hints.</p>
     <div id="learner-memory-full-list" class="learner-memory-grid" style="max-height:340px;overflow-y:auto;padding-right:0.25rem;"></div>
     <div class="diff-modal-actions" style="margin-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
       <button class="btn-secondary" style="color:#EF4444;border-color:rgba(239,68,68,0.3);" onclick="window.clearLearnerMemory()">Clear All Memory</button>
@@ -1635,12 +1635,12 @@
 <script src="curriculum.js?v=9.1"></script>
 <script src="animations.js?v=9.1"></script>
 <script src="supabase.js?v=9.1"></script>
-<script src="ai-tutor.js?v=9.1"></script>
+<script src="ai-tutor.js?v=9.7"></script>
 <script src="lib/editor.bundle.js?v=9.1"></script>
 <script src="lib/game-fx.js?v=9.1"></script>
 <script src="adventure-trail.js?v=9.6"></script>
-<script src="meowger.js?v=9.6"></script>
-<script src="app.js?v=9.6"></script>
+<script src="meowger.js?v=9.7"></script>
+<script src="app.js?v=9.7"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
