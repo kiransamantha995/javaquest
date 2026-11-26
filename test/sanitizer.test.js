@@ -4,7 +4,9 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { _testExports } = require('../api/ai.js');
+const { _testExports: runExports } = require('../api/run.js');
 const { escHtml, redactSecrets, userStr, cleanText, sanitizePlayerName } = _testExports;
+const { sanitizeJavaCode, sanitizeStdin } = runExports;
 
 test('escHtml: escapes all dangerous HTML characters', () => {
   const dangerousInput = '<script>alert("XSS")</script>&foo=\'bar\'';
@@ -68,4 +70,23 @@ test('sanitizePlayerName: strips control chars, tags, and backticks safely and f
   assert.equal(sanitizePlayerName('A'.repeat(60)).length, 32);
   assert.equal(sanitizePlayerName('   '), 'JavaLearner');
   assert.equal(sanitizePlayerName(null), 'JavaLearner');
+});
+
+test('sanitizeJavaCode: strips zero-width/bidi bytes, normalizes smart quotes & typos', () => {
+  const dirty = '\uFEFFport\u00A0java.util.Scanner;\r\npublic class Main {\n  String s = \u201CHello\u201D + \u2018!\u2019;\u200B\u202E\n}';
+  const cleaned = sanitizeJavaCode(dirty);
+  assert.equal(cleaned.includes('\uFEFF'), false);
+  assert.equal(cleaned.includes('\u200B'), false);
+  assert.equal(cleaned.includes('\u202E'), false);
+  assert.equal(cleaned.includes('\u00A0'), false);
+  assert.equal(cleaned.includes('\r'), false);
+  assert.equal(cleaned.startsWith('import java.util.Scanner;'), true);
+  assert.equal(cleaned.includes('String s = "Hello" + \'!\';'), true);
+  assert.equal(cleaned.includes('class Main {'), true);
+});
+
+test('sanitizeStdin: strips unsafe control chars and caps length', () => {
+  const dirty = 'alice\u0000\u200B\r\nbob\u0007';
+  assert.equal(sanitizeStdin(dirty), 'alice\nbob');
+  assert.equal(sanitizeStdin('x'.repeat(5000)).length <= 2048, true);
 });

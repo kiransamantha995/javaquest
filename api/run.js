@@ -87,13 +87,30 @@ async function verifySupabaseJwt(authHeader) {
   return { id: payload.sub, email: payload.email, role: payload.role };
 }
 
-// ─── Code sanitizer (compile-time helpers only, NOT security) ─────────────────
+// ─── Code & Stdin sanitizer (strips unsafe control/bidi bytes + compile helpers) ─
 function sanitizeJavaCode(code) {
+  if (typeof code !== 'string') return '';
+  let prepared = code
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
+    .replace(/\u00A0/g, ' ')
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/\r\n?/g, '\n');
   // Auto-repair common copy-paste typo: "port java..." -> "import java..."
-  let prepared = code.replace(/^[ \t]*port[ \t]+/gm, 'import ');
+  prepared = prepared.replace(/^[ \t]*port[ \t]+/gm, 'import ');
   // Strip 'public' from top-level types so multi-class files work in Wandbox
   prepared = prepared.replace(/\bpublic\s+(class|interface|record|enum)\b/g, '$1');
   return prepared;
+}
+
+function sanitizeStdin(stdin) {
+  if (stdin == null) return '';
+  return String(stdin)
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
+    .replace(/\r\n?/g, '\n')
+    .slice(0, MAX_STDIN_BYTES);
 }
 
 // ─── Privacy-safe logger ──────────────────────────────────────────────────────
@@ -203,8 +220,8 @@ module.exports = async function handler(req, res) {
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
   body = body || {};
 
-  const code  = (body.code  || '').trim();
-  const stdin = (body.stdin || '').slice(0, MAX_STDIN_BYTES);
+  const code  = sanitizeJavaCode(body.code || '').trim();
+  const stdin = sanitizeStdin(body.stdin);
 
   if (!code) {
     res.status(400).json({ error: 'No Java code provided.' });
@@ -227,3 +244,5 @@ module.exports = async function handler(req, res) {
     });
   }
 };
+
+module.exports._testExports = { sanitizeJavaCode, sanitizeStdin, MAX_CODE_BYTES, MAX_STDIN_BYTES };

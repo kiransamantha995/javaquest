@@ -568,9 +568,19 @@ body {
   box-shadow: 1px 1px 0px var(--ink, #0B0B0E) !important;
 }
 .diff-card.selected .diff-name,
-.diff-card.selected .diff-desc,
+.diff-card.selected .diff-desc {
+  color: #0B0B0E !important;
+}
 .diff-card.selected .diff-modules {
   color: #0B0B0E !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-color: rgba(11, 11, 14, 0.28) !important;
+  box-shadow: none !important;
+}
+.diff-card.selected .track-code-badge {
+  background: #0B0B0E !important;
+  color: #FFE600 !important;
+  border-color: #0B0B0E !important;
 }
 
 /* Skin Picker */
@@ -1722,18 +1732,26 @@ body {
 }
 
 .deep-dive-modal {
-  max-width: 760px;
-  width: 92%;
-  max-height: 88vh;
+  width: min(820px, 94vw) !important;
+  max-width: 820px !important;
+  max-height: min(86vh, 86dvh) !important;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background: #FFFFFF;
-  border: 3.5px solid var(--ink);
-  border-radius: 20px;
-  box-shadow: 8px 8px 0px var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), 6px 6px 0px var(--ink);
   padding: 0;
   text-align: left;
+}
+.deep-dive-body .code-block pre {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  padding: 0.9rem 1.05rem !important;
+  font-size: 0.85rem !important;
+  line-height: 1.55 !important;
 }
 .deep-dive-header {
   display: flex;
@@ -2328,30 +2346,19 @@ body {
 }
 .vis-uml-item.method { color: #B45309; }
 
+#screen-compiler.active,
+#screen-coding.active {
+  padding-bottom: 1.5rem;
+}
+
 /* ═══ COMPILER / PLAYGROUND SCREEN ═════════════════════════════ */
-.compiler-container { max-width: 1100px; margin: 0 auto; }
-.compiler-header { margin-bottom: 1.5rem; text-align: center; }
+.compiler-container { max-width: 1120px; margin: 0 auto; }
+.compiler-header { margin-bottom: 0.85rem; text-align: center; }
 .compiler-header h1 {
-  font-size: 2.25rem; font-weight: 800; letter-spacing: -0.035em; color: var(--ink); margin-bottom: 0.35rem;
+  font-size: clamp(1.5rem, 2.5vw, 1.9rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 0.2rem;
 }
 .compiler-header p {
-  color: var(--text-secondary); font-size: 1rem; font-weight: 600;
-}
-.compiler-templates {
-  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;
-  justify-content: center;
-}
-.template-label { font-size: 0.82rem; font-weight: 800; color: var(--ink); text-transform: uppercase; }
-.btn-template {
-  background: #FFFFFF; border: 2px solid var(--ink); border-radius: 8px;
-  padding: 0.35rem 0.75rem; font-size: 0.8rem; font-weight: 700; color: var(--ink);
-  box-shadow: 2px 2px 0px var(--ink); cursor: pointer; transition: all var(--t);
-}
-.btn-template:hover {
-  background: #FFFEEB; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--ink);
-}
-.btn-template:active {
-  transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--ink);
+  color: var(--text-secondary); font-size: 0.9rem; font-weight: 600; margin: 0;
 }
 
 .capstone-editor-banner {
@@ -2370,9 +2377,11 @@ body {
 .capstone-save-status { font-size: 0.8rem; font-weight: 700; color: #166534; }
 .capstone-banner-actions { display: flex; gap: 0.5rem; }
 
-/* Compiler Layout (Retro Arcade Terminal) */
+/* Compiler Layout (Screen-Fitted Studio Split View) */
 .compiler-layout {
   display: flex; gap: 0; align-items: stretch; width: 100%;
+  height: clamp(390px, calc(100vh - 255px), 560px);
+  height: clamp(390px, calc(100dvh - 255px), 560px);
 }
 .editor-panel, .output-panel {
   background: var(--bg-dark);
@@ -2381,6 +2390,8 @@ body {
   box-shadow: 5px 5px 0px var(--ink);
   overflow: hidden;
   display: flex; flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 .editor-panel { flex: 0 0 55%; min-width: 320px; }
 .output-panel { flex: 1 1 0; min-width: 300px; }
@@ -2388,9 +2399,10 @@ body {
 .editor-toolbar, .output-toolbar {
   background: #24242A;
   border-bottom: 2px solid var(--ink);
-  padding: 0.65rem 1.15rem;
+  padding: 0.6rem 1.15rem;
   display: flex; align-items: center; justify-content: space-between;
   color: #F4F4F5; font-size: 0.86rem; font-weight: 700;
+  flex-shrink: 0;
 }
 .editor-lang-badge {
   background: #18181B; color: #FFE600;
@@ -2399,16 +2411,16 @@ body {
   font-family: var(--font-code);
 }
 .code-editor {
-  flex: 1; width: 100%; min-height: 440px;
+  flex: 1; width: 100%; min-height: 0;
   background: #101014; color: #F4F4F5;
   font-family: var(--font-code); font-size: 0.92rem; line-height: 1.65;
-  padding: 1.25rem 1.35rem; border: none; outline: none; resize: none;
+  padding: 1.15rem 1.3rem; border: none; outline: none; resize: none;
 }
 .output-area {
-  flex: 1; min-height: 380px; max-height: 440px; overflow-y: auto;
+  flex: 1; min-height: 0; overflow-y: auto;
   background: #0D0D10; color: #00F59B;
   font-family: var(--font-code); font-size: 0.88rem; line-height: 1.65;
-  padding: 1.25rem 1.35rem; white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal;
+  padding: 1.15rem 1.3rem; white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal;
 }
 .output-placeholder { color: #71717A; font-style: italic; }
 .output-error { color: #FF6B8B !important; }
@@ -2587,17 +2599,17 @@ body {
 .coding-screen-container { max-width: 1200px; margin: 0 auto; }
 .coding-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;
+  margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.75rem;
 }
 .coding-title-block { flex: 1; }
 .code-level-tag {
   display: inline-block; background: #E0E7FF; color: #3730A3;
   border: 2px solid var(--ink); border-radius: 8px;
   padding: 0.2rem 0.65rem; font-size: 0.76rem; font-weight: 800;
-  box-shadow: 2px 2px 0px var(--ink); margin-bottom: 0.35rem;
+  box-shadow: 2px 2px 0px var(--ink); margin-bottom: 0.3rem;
 }
 .coding-title-block h2 {
-  font-size: 1.5rem; font-weight: 800; color: var(--ink); letter-spacing: -0.025em;
+  font-size: 1.4rem; font-weight: 800; color: var(--ink); letter-spacing: -0.025em;
 }
 .attempt-badge {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -2609,12 +2621,14 @@ body {
 
 .coding-workspace {
   display: flex; flex-direction: row; align-items: stretch; width: 100%;
+  height: clamp(460px, calc(100vh - 235px), 660px);
+  height: clamp(460px, calc(100dvh - 235px), 660px);
 }
 .coding-instructions {
   flex: 0 0 38%; min-width: 280px; max-width: 75%;
   background: #FFFFFF; border: 2.5px solid var(--ink);
   border-radius: 16px; box-shadow: 4px 4px 0px var(--ink);
-  padding: 1.65rem; max-height: 84vh; overflow-y: auto;
+  padding: 1.35rem 1.45rem; height: 100%; overflow-y: auto;
 }
 .coding-instructions h3 {
   font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-bottom: 0.85rem;
@@ -2655,26 +2669,33 @@ body {
 .hint-item:last-child { margin-bottom: 0; }
 
 .coding-editor-panel {
-  flex: 1 1 0; min-width: 340px;
+  flex: 1 1 0; min-width: 340px; height: 100%; min-height: 0;
   background: #18181B; border: 2.5px solid var(--ink);
   border-radius: 16px; box-shadow: 5px 5px 0px var(--ink);
   display: flex; flex-direction: column; overflow: hidden;
 }
 .coding-editor-toolbar {
   background: #24242A; border-bottom: 2px solid var(--ink);
-  padding: 0.65rem 1.15rem; display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;
+  padding: 0.6rem 1.1rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; flex-shrink: 0;
+}
+#cm-coding-editor {
+  flex: 1 1 auto; min-height: 200px; height: auto;
+}
+#cm-coding-editor.editor-tall {
+  flex: 0 0 auto;
+  height: 540px !important;
 }
 #coding-editor {
-  height: 440px; min-height: 300px; flex-shrink: 0; width: 100%;
-  border: none; outline: none; resize: vertical;
+  height: 340px; min-height: 220px; flex: 1 1 auto; width: 100%;
+  border: none; outline: none; resize: none;
   background: #101014; color: #F4F4F5; font-family: var(--font-code);
-  font-size: 0.92rem; line-height: 1.65; padding: 1.25rem 1.35rem;
+  font-size: 0.92rem; line-height: 1.65; padding: 1.15rem 1.3rem;
 }
-#coding-editor.editor-tall { height: 620px !important; }
+#coding-editor.editor-tall { height: 540px !important; }
 
 .test-results-panel {
   background: #0E0E12; border-top: 2px solid var(--ink);
-  padding: 1rem 1.35rem; max-height: 280px; overflow-y: auto;
+  padding: 0.85rem 1.25rem; max-height: 210px; flex-shrink: 0; overflow-y: auto;
 }
 .test-results-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -3314,12 +3335,14 @@ body {
 
 /* ═══ MODALS & POPUPS ══════════════════════════════════════════ */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(4px); z-index: 200;
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: saturate(140%) blur(6px);
+  -webkit-backdrop-filter: saturate(140%) blur(6px);
+  z-index: 1600 !important;
 }
 .modal-box {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  z-index: 201; width: min(520px, 92vw);
+  z-index: 1601 !important; width: min(520px, 92vw);
   background: #FFFFFF;
   border: 3px solid var(--ink);
   border-radius: 20px;
@@ -3563,10 +3586,13 @@ body.dark-theme ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 860px) {
-  .compiler-layout, .coding-workspace { flex-direction: column; }
+  .compiler-layout, .coding-workspace { flex-direction: column; height: auto; }
   .editor-panel, .output-panel, .coding-instructions, .coding-editor-panel {
-    flex: 1 1 100%; min-width: 100%;
+    flex: 1 1 100%; min-width: 100%; height: auto;
   }
+  .compiler-layout .editor-panel { min-height: 300px; }
+  .compiler-layout .output-panel { min-height: 240px; }
+  #cm-coding-editor { min-height: 280px; }
   .split-gutter-h { display: none; }
   .avatar-editor { flex-direction: column; }
   .avatar-preview-col { width: 100%; }
@@ -4113,13 +4139,13 @@ body.dark-theme .btn-link {
 }
 body.dark-theme .diff-card {
   background: #18191D !important;
-  border: 2px solid rgba(255, 255, 255, 0.18) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
   box-shadow: 2.5px 2.5px 0px #000000 !important;
   color: #F4F4F5 !important;
 }
 body.dark-theme .diff-card:hover {
-  background: #24262C !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: #22242B !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
 }
 body.dark-theme .diff-card .diff-name {
   color: #F4F4F5 !important;
@@ -4127,21 +4153,34 @@ body.dark-theme .diff-card .diff-name {
 body.dark-theme .diff-card .diff-desc {
   color: #A1A1AA !important;
 }
+body.dark-theme .diff-modules {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #E4E4E7 !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: none !important;
+}
 body.dark-theme .diff-card.selected {
   background: #FFE600 !important;
   border-color: #FFE600 !important;
-  box-shadow: 3.5px 3.5px 0px #000000 !important;
+  box-shadow: 0 10px 24px rgba(255, 230, 0, 0.18), 3.5px 3.5px 0px #000000 !important;
   color: #0B0B0E !important;
 }
-body.dark-theme .diff-card.selected .diff-name,
-body.dark-theme .diff-card.selected .diff-desc,
+body.dark-theme .diff-card.selected .diff-name {
+  color: #0B0B0E !important;
+}
+body.dark-theme .diff-card.selected .diff-desc {
+  color: #27272A !important;
+}
 body.dark-theme .diff-card.selected .diff-modules {
+  background: rgba(255, 255, 255, 0.68) !important;
   color: #0B0B0E !important;
+  border-color: rgba(11, 11, 14, 0.25) !important;
+  box-shadow: none !important;
 }
-body.dark-theme .diff-modules {
-  background: #24262C !important;
-  color: #F4F4F5 !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+body.dark-theme .diff-card.selected .track-code-badge {
+  background: #0B0B0E !important;
+  color: #FFE600 !important;
+  border-color: #0B0B0E !important;
 }
 body.dark-theme .auth-error {
   background: #450A0A !important;
@@ -4895,10 +4934,10 @@ body.dark-theme .chat-message.bot .message-bubble pre {
 
 /* Deep Dive Modal Dark Mode Fixes */
 body.dark-theme .deep-dive-modal {
-  background: #1E1F24 !important;
-  border-color: #000000 !important;
+  background: #161820 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
   color: #F4F4F5 !important;
-  box-shadow: 8px 8px 0px #000000 !important;
+  box-shadow: 0 28px 68px rgba(0, 0, 0, 0.65) !important;
 }
 body.dark-theme .deep-dive-header {
   border-bottom-color: #27272A !important;

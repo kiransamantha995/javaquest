@@ -1053,11 +1053,22 @@
     titleEl.textContent = slide.title;
     if (subEl) subEl.textContent = 'Module: ' + mod.title + ' • JVM Architecture Deep Dive';
     modal.classList.remove('hidden');
+    contentEl.scrollTop = 0;
+
+    if (!modal._deepDiveBound) {
+      modal._deepDiveBound = true;
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeDeepDive();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeDeepDive();
+      });
+    }
 
     contentEl.innerHTML = '<div style="text-align:center;padding:3rem 1rem;">'
       + '<span class="run-spinner" style="width:28px;height:28px;margin-bottom:1.2rem;display:inline-block;"></span>'
-      + '<div style="font-size:1.15rem;font-weight:800;color:var(--ink);">Analyzing HotSpot JIT & JVM Internals…</div>'
-      + '<div style="font-size:0.86rem;color:var(--text-secondary);margin-top:0.35rem;">Consulting Java Language Specification and Effective Java best practices</div>'
+      + '<div style="font-size:1.1rem;font-weight:800;">Analyzing HotSpot JIT & JVM Internals…</div>'
+      + '<div style="font-size:0.86rem;opacity:0.72;margin-top:0.35rem;">Consulting Java Language Specification and Effective Java best practices</div>'
       + '</div>';
 
     callAI('deep-dive', {
@@ -1068,12 +1079,13 @@
     })
     .then(function (res) {
       contentEl.innerHTML = '<div class="deep-dive-body">' + formatDeepDiveMarkdown(res.markdown) + '</div>';
+      contentEl.scrollTop = 0;
     })
     .catch(function (err) {
       contentEl.innerHTML = '<div style="text-align:center;padding:2rem 1rem;">'
         + '<div style="font-size:2rem;font-weight:900;color:#DC2626;margin-bottom:0.5rem">!</div>'
-        + '<h3 style="font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:0.5rem">Deep Dive Unavailable</h3>'
-        + '<p style="color:var(--text-secondary);font-size:0.92rem;max-width:440px;margin:0 auto 1.25rem;">' + esc(err.message) + '</p>'
+        + '<h3 style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem">Deep Dive Unavailable</h3>'
+        + '<p style="opacity:0.75;font-size:0.92rem;max-width:440px;margin:0 auto 1.25rem;">' + esc(err.message) + '</p>'
         + '<button class="btn-primary" onclick="window.openDeepDive()">Try Again</button>'
         + '</div>';
     });
@@ -1131,21 +1143,82 @@
 
   function formatDeepDiveMarkdown(md) {
     if (!md) return '';
-    return md
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/```(?:java)?\n?([\s\S]*?)```/g, function (_, codeSnippet) {
-        var unesc = codeSnippet.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-        return '<div class="code-block" style="margin:1rem 0;"><div class="code-block-header"><span class="code-lang-tag">Java</span></div><pre>'
-          + (typeof highlightSyntax === 'function' ? highlightSyntax(unesc.trim()) : unesc.trim())
-          + '</pre></div>';
-      })
-      .replace(/^### (.*$)/gim, '<h3 class="deep-dive-h3">$1</h3>')
-      .replace(/^## (.*$)/gim, '<h3 class="deep-dive-h3">$1</h3>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
-      .replace(/^\* (.*$)/gim, '<li>$1</li>')
-      .replace(/^- (.*$)/gim, '<li>$1</li>')
-      .replace(/\n\n/g, '<p></p>');
+    var codeBlocks = [];
+    // Extract all fenced code blocks first (any language tag: java, bytecode, jvm, text, etc.)
+    var text = String(md).replace(/\r\n?/g, '\n').replace(/```([a-zA-Z0-9_+-]*)[ \t]*\n?([\s\S]*?)```/g, function (_, lang, codeSnippet) {
+      var cleanCode = String(codeSnippet || '').replace(/^\n+|\n+$/g, '');
+      var langLabel = (lang && lang.trim()) ? lang.trim().toUpperCase() : 'JAVA';
+      var isJavaLike = !lang || /^(java|js|c|cpp|ts)$/i.test(lang.trim());
+      var rendered = (isJavaLike && typeof highlightSyntax === 'function')
+        ? highlightSyntax(cleanCode)
+        : esc(cleanCode);
+      var token = '@@CODEBLOCK_' + codeBlocks.length + '@@';
+      codeBlocks.push(
+        '<div class="code-block" style="margin:0.85rem 0;">'
+        + '<div class="code-block-header"><span class="code-lang-tag">' + esc(langLabel) + '</span></div>'
+        + '<pre>' + rendered + '</pre>'
+        + '</div>'
+      );
+      return '\n\n' + token + '\n\n';
+    });
+
+    var lines = text.split('\n');
+    var out = [];
+    var inUl = false;
+    var inOl = false;
+
+    function closeLists() {
+      if (inUl) { out.push('</ul>'); inUl = false; }
+      if (inOl) { out.push('</ol>'); inOl = false; }
+    }
+
+    function formatInline(str) {
+      return esc(str)
+        .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+    }
+
+    for (var i = 0; i < lines.length; i++) {
+      var rawLine = lines[i];
+      var trimmed = rawLine.trim();
+      if (!trimmed) {
+        closeLists();
+        continue;
+      }
+      var cbMatch = trimmed.match(/^@@CODEBLOCK_(\d+)@@$/);
+      if (cbMatch) {
+        closeLists();
+        out.push(codeBlocks[parseInt(cbMatch[1], 10)] || '');
+        continue;
+      }
+      if (/^####\s+/.test(trimmed)) {
+        closeLists();
+        out.push('<h4 class="deep-dive-h4">' + formatInline(trimmed.replace(/^####\s+/, '')) + '</h4>');
+        continue;
+      }
+      if (/^###?\s+/.test(trimmed)) {
+        closeLists();
+        out.push('<h3 class="deep-dive-h3">' + formatInline(trimmed.replace(/^###?\s+/, '')) + '</h3>');
+        continue;
+      }
+      if (/^[-*]\s+/.test(trimmed)) {
+        if (inOl) { out.push('</ol>'); inOl = false; }
+        if (!inUl) { out.push('<ul>'); inUl = true; }
+        out.push('<li>' + formatInline(trimmed.replace(/^[-*]\s+/, '')) + '</li>');
+        continue;
+      }
+      if (/^\d+\.\s+/.test(trimmed)) {
+        if (inUl) { out.push('</ul>'); inUl = false; }
+        if (!inOl) { out.push('<ol>'); inOl = true; }
+        out.push('<li>' + formatInline(trimmed.replace(/^\d+\.\s+/, '')) + '</li>');
+        continue;
+      }
+      closeLists();
+      out.push('<p>' + formatInline(trimmed) + '</p>');
+    }
+    closeLists();
+    return out.join('\n');
   }
 
   // ─────────────────────────────────────────────────────────────────────────────

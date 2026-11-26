@@ -224,6 +224,10 @@ function showScreen(name) {
     var el = ge('screen-'+ALL_SCREENS[i]);
     if (el) el.classList.toggle('active', ALL_SCREENS[i]===name);
   }
+  if (name !== 'lesson') {
+    try { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }
+    catch (_) { if (window.scrollTo) window.scrollTo(0, 0); }
+  }
   var nav = ge('navbar');
   if (nav) nav.style.display = (name==='auth' || name==='lesson') ? 'none' : 'flex';
   var aiChat = ge('ai-chat-wrapper');
@@ -2488,10 +2492,8 @@ function startCodingChallenge(modId) {
       : '<div>Follow standard Java conventions and test each case thoroughly.</div>';
   }
 
-  var editor = ge('coding-editor');
-  if (editor) {
-    editor.value = task.starterCode || '// Write your Java solution here\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}\n';
-  }
+  var starterCode = task.starterCode || '// Write your Java solution here\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}\n';
+  setEditorCode('coding', starterCode);
 
   updateScoringRibbon(_codingAttempt);
 
@@ -2508,6 +2510,11 @@ function startCodingChallenge(modId) {
   if (fb) fb.classList.add('hidden');
 
   showScreen('coding');
+  setTimeout(function() {
+    initCodeMirrorEditors();
+    setEditorCode('coding', starterCode);
+    if (_cmCoding && typeof _cmCoding.focus === 'function') _cmCoding.focus();
+  }, 50);
 }
 
 function generateNewCodingChallenge() {
@@ -2544,11 +2551,10 @@ function generateNewCodingChallenge() {
         : '<div>Follow standard Java conventions and test each case thoroughly.</div>';
     }
 
-    var editor = ge('coding-editor');
-    if (editor) {
-      editor.value = task.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // TODO: Write your solution here\n    }\n}\n';
-      editor.focus();
-    }
+    var aiStarter = task.starterCode || 'public class Main {\n    public static void main(String[] args) {\n        // TODO: Write your solution here\n    }\n}\n';
+    initCodeMirrorEditors();
+    setEditorCode('coding', aiStarter);
+    if (_cmCoding && typeof _cmCoding.focus === 'function') _cmCoding.focus();
 
     renderTestCasesList(task.testCases || []);
     var overall = ge('test-overall-status');
@@ -2585,7 +2591,42 @@ function renderTestCasesList(testCases) {
   });
 }
 
+function sanitizeJavaCodeInput(raw) {
+  if (typeof raw !== 'string') return '';
+  return raw
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
+    .replace(/\u00A0/g, ' ')
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/\r\n?/g, '\n');
+}
+
+function sanitizeStdinInput(raw) {
+  if (raw == null) return '';
+  return String(raw)
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
+    .replace(/\r\n?/g, '\n')
+    .slice(0, 2048);
+}
+
 function executeJava(code, stdin) {
+  var cleanCode = sanitizeJavaCodeInput(code).trim();
+  var cleanStdin = sanitizeStdinInput(stdin);
+  if (!cleanCode) {
+    return Promise.resolve({
+      compile: { code: 1, stderr: 'No valid Java code provided.' },
+      run: { stdout: '', stderr: 'No valid Java code provided.', code: 1 }
+    });
+  }
+  if (new Blob([cleanCode]).size > 20 * 1024) {
+    return Promise.resolve({
+      compile: { code: 1, stderr: 'Code exceeds the 20 KB maximum size limit.' },
+      run: { stdout: '', stderr: 'Code exceeds the 20 KB maximum size limit.', code: 1 }
+    });
+  }
+
   // Authenticated serverless OpenJDK 22 runner (/api/run)
   var token = (window._sbSession && window._sbSession.access_token) ? window._sbSession.access_token : '';
   return fetch('/api/run', {
@@ -2594,7 +2635,7 @@ function executeJava(code, stdin) {
       'Content-Type': 'application/json',
       'Authorization': token ? ('Bearer ' + token) : ''
     },
-    body: JSON.stringify({ code: code, stdin: stdin || '' })
+    body: JSON.stringify({ code: cleanCode, stdin: cleanStdin })
   })
   .then(function(res){
     if (res.status === 401) throw new Error('Sign in to use the Java compiler.');
@@ -2606,7 +2647,7 @@ function executeJava(code, stdin) {
   .catch(function(err){
     // Network failure — try Wandbox directly as fallback (no AI simulation)
     console.warn('/api/run failed:', err.message, '— trying Wandbox direct...');
-    return executeWandboxDirect(code, stdin)
+    return executeWandboxDirect(cleanCode, cleanStdin)
       .catch(function(wErr){
         console.warn('Wandbox direct also failed:', wErr.message);
         return {
@@ -3126,25 +3167,18 @@ function renderHearts(){
 }
 
 /* ═══════════════ COMPILER ═══════════════════════════════════════ */
-var TEMPLATES = {
-  hello:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n        System.out.println("I am learning Java with JavaQst!");\n    }\n}',
-  variables:'public class Main {\n    public static void main(String[] args) {\n        int age = 20;\n        double price = 9.99;\n        boolean isLearning = true;\n        String name = "JavaLearner";\n        char grade = \'A\';\n        System.out.println("Name: " + name);\n        System.out.println("Age: " + age);\n        System.out.println("Learning: " + isLearning);\n    }\n}',
-  ifelse:'public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        if (score >= 90) System.out.println("Grade: A");\n        else if (score >= 80) System.out.println("Grade: B");\n        else System.out.println("Grade: C or below");\n        String status = score >= 60 ? "Passed" : "Failed";\n        System.out.println("Status: " + status);\n    }\n}',
-  loops:'public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) System.out.println("Step " + i);\n        int count = 0;\n        while (count < 3) { System.out.println("Count: " + count); count++; }\n        int[] nums = {10, 20, 30};\n        for (int num : nums) System.out.println(num);\n    }\n}',
-  arrays:'public class Main {\n    public static void main(String[] args) {\n        int[] scores = {95, 87, 76, 92, 88};\n        int sum = 0;\n        for (int s : scores) sum += s;\n        System.out.println("Average: " + (double)sum / scores.length);\n    }\n}',
-  methods:'public class Main {\n    static int add(int a, int b) { return a + b; }\n    static boolean isEven(int n) { return n % 2 == 0; }\n    static int factorial(int n) { return n <= 1 ? 1 : n * factorial(n-1); }\n    public static void main(String[] args) {\n        System.out.println("5+3 = " + add(5,3));\n        System.out.println("4 even? " + isEven(4));\n        System.out.println("5! = " + factorial(5));\n    }\n}',
-  oop:'public class Main {\n    static class Animal {\n        String name, sound;\n        Animal(String n, String s) { name=n; sound=s; }\n        void speak() { System.out.println(name+" says "+sound+"!"); }\n    }\n    public static void main(String[] args) {\n        Animal dog = new Animal("Dog","Woof");\n        Animal cat = new Animal("Cat","Meow");\n        dog.speak(); cat.speak();\n    }\n}',
-  scanner:'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println("=== JavaQst Interactive Scanner Demo ===");\n        System.out.print("Enter your adventurer name: ");\n        String name = sc.nextLine();\n\n        System.out.print("Enter your level: ");\n        int level = Integer.parseInt(sc.nextLine());\n\n        System.out.println("\\nWelcome to JavaQst, " + name + "! (Level " + level + ")");\n        System.out.println(level >= 10 ? "Status: Master Coder!" : "Status: Rising Apprentice!");\n        sc.close();\n    }\n}'
-};
+var DEFAULT_PLAYGROUND_CODE = 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, JavaQst!");\n    }\n}';
 
-var _compilerReady=false;
-function initCompiler(){ if(_compilerReady)return; _compilerReady=true; var ed=ge('code-editor'); if(ed&&!ed.value) ed.value=TEMPLATES.hello; }
-function loadTemplate(name){
-  var ed=ge('code-editor');
-  if(ed&&TEMPLATES[name]){
-    ed.value=TEMPLATES[name];
-    ed.focus();
-    clearOutput();
+var _compilerReady = false;
+function initCompiler() {
+  initCodeMirrorEditors();
+  if (!_compilerReady) {
+    _compilerReady = true;
+    if (!getEditorCode('playground').trim()) {
+      setEditorCode('playground', DEFAULT_PLAYGROUND_CODE);
+    }
+  } else if (_cmPlayground && !getEditorCode('playground').trim()) {
+    setEditorCode('playground', DEFAULT_PLAYGROUND_CODE);
   }
 }
 
@@ -3177,12 +3211,16 @@ function clearOutput() {
 }
 
 function runCode() {
-  var code = getEditorCode('playground').trim();
+  var rawCode = getEditorCode('playground');
+  var code = sanitizeJavaCodeInput(rawCode).trim();
   if (!code) {
     var ed = ge('code-editor');
-    if (ed) code = ed.value.trim();
+    if (ed) code = sanitizeJavaCodeInput(ed.value).trim();
   }
   if (!code) { toast('Write some code first!'); return; }
+  if (rawCode !== code && sanitizeJavaCodeInput(rawCode) !== rawCode) {
+    setEditorCode('playground', sanitizeJavaCodeInput(rawCode));
+  }
   if (_activeCapstoneProj) saveCapstoneCode();
   var outEl = ge('output-area'); if (!outEl) return;
   var bar = ge('terminal-interactive-bar'); if (bar) bar.style.display = 'none';
@@ -3834,7 +3872,7 @@ function initResizableWorkspaces() {
 
   // ── 2. Coding Workspace: Vertical Split (Editor vs Test Results) ──
   var codingGutterV = ge('coding-resizer-v');
-  var codingEditor = ge('coding-editor');
+  var codingEditor = ge('cm-coding-editor') || ge('coding-editor');
   var codingExpandBtn = ge('coding-expand-btn');
   var testToggleHeader = ge('test-results-toggle-header');
   var testPanel = ge('test-results-panel');
@@ -3864,12 +3902,11 @@ function initResizableWorkspaces() {
 
   if (codingGutterV && codingEditor) {
     var savedV = localStorage.getItem('jq_coding_editor_h');
-    if (!codingEditor.classList.contains('editor-tall')) {
-      if (savedV) {
-        var h = parseInt(savedV, 10);
-        codingEditor.style.height = (h >= 300 && h <= 900 ? h : 440) + 'px';
-      } else {
-        codingEditor.style.height = '440px';
+    if (!codingEditor.classList.contains('editor-tall') && savedV) {
+      var h = parseInt(savedV, 10);
+      if (h >= 240 && h <= 880) {
+        codingEditor.style.flex = '0 0 auto';
+        codingEditor.style.height = h + 'px';
       }
     }
 
@@ -3887,8 +3924,9 @@ function initResizableWorkspaces() {
       function onMove(cy) {
         var delta = cy - startY;
         var newH = startH + delta;
-        if (newH < 280) newH = 280;
+        if (newH < 220) newH = 220;
         if (newH > 880) newH = 880;
+        codingEditor.style.flex = '0 0 auto';
         codingEditor.style.height = newH + 'px';
         try { localStorage.setItem('jq_coding_editor_h', newH); } catch(e){}
       }
@@ -5096,6 +5134,7 @@ document.addEventListener('DOMContentLoaded', function(){
   initAuthUI();
   initDiffModal();
   initResizableWorkspaces();
+  initCodeMirrorEditors();
   initTheme();
 
   // ── THEME TOGGLES ──
@@ -5151,8 +5190,6 @@ document.addEventListener('DOMContentLoaded', function(){
   if(ce){
     ce.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,end=this.selectionEnd;this.value=this.value.substring(0,s)+'    '+this.value.substring(end);this.selectionStart=this.selectionEnd=s+4;}if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();runCode();}});
   }
-  var tplMap={'tpl-hello':'hello','tpl-variables':'variables','tpl-ifelse':'ifelse','tpl-loops':'loops','tpl-arrays':'arrays','tpl-methods':'methods','tpl-oop':'oop','tpl-scanner':'scanner'};
-  Object.keys(tplMap).forEach(function(id){var b=ge(id);if(b){b.setAttribute('data-tpl',tplMap[id]);b.addEventListener('click',function(){loadTemplate(this.getAttribute('data-tpl'));});}});
 
   // Live Interactive Console Terminal Listeners
   var termInp = ge('terminal-input');
@@ -5256,8 +5293,11 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   var crb=ge('coding-reset-btn');   if(crb)crb.addEventListener('click',function(){
     if(_curCodingMod && _curCodingMod.codingTask){
-      var ed=ge('coding-editor');
-      if(ed){ ed.value = _curCodingMod.codingTask.starterCode || ''; ed.focus(); toast('Reset to starter code ↺'); }
+      var starter = _curCodingMod.codingTask.starterCode || '';
+      setEditorCode('coding', starter);
+      if (_cmCoding && typeof _cmCoding.focus === 'function') _cmCoding.focus();
+      else { var ed=ge('coding-editor'); if(ed) ed.focus(); }
+      toast('Reset to starter code ↺');
     }
   });
   var csb=ge('coding-submit-btn');  if(csb)csb.addEventListener('click',runCodingTests);

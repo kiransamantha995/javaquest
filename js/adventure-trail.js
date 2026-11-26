@@ -1097,74 +1097,146 @@
       var cy = pt.y - 6 + bob - worldState.heroHopY;
       var sScale = worldState.isCompact ? 0.85 : 1.04;
 
-      // Cast shadow on pedestal
-      var shAlpha = clamp(0.36 - worldState.heroHopY * 0.008, 0.1, 0.36);
+      // Soft contact shadow + pulsing enchanted portal ring on pedestal
+      var shAlpha = clamp(0.38 - worldState.heroHopY * 0.008, 0.1, 0.38);
       ctx.beginPath();
-      ctx.ellipse(pt.x, pt.y - 2, 11 * sScale, 5 * sScale, 0, 0, Math.PI * 2);
+      ctx.ellipse(pt.x, pt.y - 2, 13 * sScale, 6 * sScale, 0, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(0,0,0,' + shAlpha + ')';
       ctx.fill();
+
+      if (!reducedMotion) {
+        for (var spIdx = 0; spIdx < 3; spIdx++) {
+          var orbAng = t * 2.2 + spIdx * ((Math.PI * 2) / 3);
+          var oxOrb = pt.x + Math.cos(orbAng) * 19 * sScale;
+          var oyOrb = pt.y - 8 - ((t * 16 + spIdx * 9) % 28);
+          ctx.fillStyle = spIdx === 0 ? '#FFE600' : '#E9D5FF';
+          ctx.globalAlpha = 0.72;
+          ctx.beginPath();
+          ctx.arc(oxOrb, oyOrb, 1.8 * sScale, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // Isometric 3D cuboid helper anchored at front-bottom vertex (fx, fy)
+      function isoPart(fx, fy, wL, wR, h, colTop, colLeft, colRight, lineW) {
+        var sl = 0.44;
+        var lB = { x: fx - wL, y: fy - wL * sl };
+        var rB = { x: fx + wR, y: fy - wR * sl };
+        var fT = { x: fx, y: fy - h };
+        var lT = { x: fx - wL, y: fy - h - wL * sl };
+        var rT = { x: fx + wR, y: fy - h - wR * sl };
+        var bT = { x: fx - wL + wR, y: fy - h - (wL + wR) * sl };
+
+        // Left-front face
+        ctx.beginPath();
+        ctx.moveTo(lB.x, lB.y); ctx.lineTo(fx, fy); ctx.lineTo(fT.x, fT.y); ctx.lineTo(lT.x, lT.y);
+        ctx.closePath();
+        ctx.fillStyle = colLeft; ctx.fill();
+
+        // Right-side face
+        ctx.beginPath();
+        ctx.moveTo(fx, fy); ctx.lineTo(rB.x, rB.y); ctx.lineTo(rT.x, rT.y); ctx.lineTo(fT.x, fT.y);
+        ctx.closePath();
+        ctx.fillStyle = colRight; ctx.fill();
+
+        // Top crown face
+        ctx.beginPath();
+        ctx.moveTo(lT.x, lT.y); ctx.lineTo(fT.x, fT.y); ctx.lineTo(rT.x, rT.y); ctx.lineTo(bT.x, bT.y);
+        ctx.closePath();
+        ctx.fillStyle = colTop; ctx.fill();
+
+        if (lineW) {
+          ctx.strokeStyle = 'rgba(11,11,14,0.85)';
+          ctx.lineWidth = lineW;
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(lB.x, lB.y); ctx.lineTo(fx, fy); ctx.lineTo(rB.x, rB.y);
+          ctx.lineTo(rT.x, rT.y); ctx.lineTo(bT.x, bT.y); ctx.lineTo(lT.x, lT.y);
+          ctx.closePath();
+          ctx.stroke();
+        }
+        return { lT: lT, fT: fT, rT: rT, bT: bT };
+      }
 
       ctx.save();
       ctx.translate(pt.x, cy);
       ctx.scale(sScale, sScale);
 
-      // Cape flutter behind champion
+      var walkBob = reducedMotion ? 0 : Math.sin(t * 3.1) * 1.6;
+      var cShirt = spriteMeta.colors.shirt;
+      var cShirtHi = mixRgbStr(cShirt, '#FFFFFF', 0.22);
+      var cShirtSh = mixRgbStr(cShirt, '#000000', 0.34);
+      var cPants = spriteMeta.colors.pants;
+      var cPantsSh = mixRgbStr(cPants, '#000000', 0.36);
+
+      // Extract matching top & side head tones from user's chosen skin/hat palette
+      var topSkinColor = '#4A3121';
+      var sideSkinColor = '#8E5F3D';
+      if (spriteMeta.hatData && Array.isArray(spriteMeta.hatData.grid) && spriteMeta.hatData.grid[0]) {
+        var hSample = spriteMeta.hatData.grid[0][3] || spriteMeta.hatData.grid[1][3];
+        if (hSample && hSample !== 'transparent') topSkinColor = hSample;
+      } else if (spriteMeta.skinData && Array.isArray(spriteMeta.skinData.grid) && spriteMeta.skinData.grid[0]) {
+        topSkinColor = spriteMeta.skinData.grid[0][3] || topSkinColor;
+      }
+      if (spriteMeta.skinData && Array.isArray(spriteMeta.skinData.grid) && spriteMeta.skinData.grid[4]) {
+        sideSkinColor = mixRgbStr(spriteMeta.skinData.grid[4][0] || '#C68B59', '#000000', 0.28);
+      }
+
+      // 1. Optional 3D Flowing Cape tucked behind shoulder/torso
       if (spriteMeta.capeColor) {
-        var sway = Math.sin(t * 4) * 2.2;
-        ctx.fillStyle = spriteMeta.capeColor;
+        var capeSway = reducedMotion ? 0 : Math.sin(t * 4.2) * 2.5;
         ctx.beginPath();
-        ctx.moveTo(-8, -32);
-        ctx.lineTo(8, -32);
-        ctx.lineTo(10 + sway, -8);
-        ctx.lineTo(-10 + sway, -8);
+        ctx.moveTo(4, -30);
+        ctx.lineTo(13, -34);
+        ctx.lineTo(17 + capeSway, -12);
+        ctx.lineTo(6 + capeSway, -8);
         ctx.closePath();
+        ctx.fillStyle = spriteMeta.capeColor;
         ctx.fill();
-        ctx.strokeStyle = '#0B0B0E';
+        ctx.strokeStyle = 'rgba(11,11,14,0.85)';
         ctx.lineWidth = 1.2;
         ctx.stroke();
       }
 
-      // Legs
-      ctx.fillStyle = spriteMeta.colors.pants;
-      ctx.strokeStyle = '#0B0B0E';
-      ctx.lineWidth = 1.3;
-      ctx.fillRect(-6.5, -14, 6, 13);
-      ctx.strokeRect(-6.5, -14, 6, 13);
-      ctx.fillRect(0.5, -14, 6, 13);
-      ctx.strokeRect(0.5, -14, 6, 13);
+      // 2. Right-back & Left-front 3D Voxel Legs / Boots
+      isoPart(5, -3 + walkBob * 0.35, 6, 5.5, 13, cPants, cPants, cPantsSh, 1.15);
+      isoPart(-1, -0.5 - walkBob * 0.35, 6, 5.5, 13, cPants, cPants, cPantsSh, 1.15);
 
-      // Arms (gentle swing)
-      var armSwing = Math.sin(t * 3.1) * 1.8;
-      ctx.fillStyle = spriteMeta.colors.shirt;
-      ctx.fillRect(-12, -31 + armSwing, 5, 14);
-      ctx.strokeRect(-12, -31 + armSwing, 5, 14);
-      ctx.fillRect(7, -31 - armSwing, 5, 14);
-      ctx.strokeRect(7, -31 - armSwing, 5, 14);
+      // 3. Back-right Arm (recessed behind torso)
+      isoPart(7.5, -16 - walkBob * 0.6, 4.5, 4.5, 14, cShirtHi, cShirt, cShirtSh, 1.15);
 
-      // Torso + Belt
-      ctx.fillStyle = spriteMeta.colors.shirt;
-      ctx.fillRect(-7, -32, 14, 18);
-      ctx.strokeRect(-7, -32, 14, 18);
-      ctx.fillStyle = spriteMeta.colors.belt;
-      ctx.fillRect(-7, -18, 14, 4);
+      // 4. 3D Sculpted Iso Torso + Belt Buckle
+      isoPart(2.5, -13.5, 13.5, 8.5, 17, cShirtHi, cShirt, cShirtSh, 1.25);
+      // Isometric belt trim
+      isoPart(2.5, -13.5, 13.5, 8.5, 3.6, spriteMeta.colors.belt, spriteMeta.colors.belt, mixRgbStr(spriteMeta.colors.belt, '#000000', 0.3), 0.9);
 
-      // Voxel Pixel Head (exact chosen 8x8 skin + hat palette!)
-      var hx = -11;
-      var hy = -54;
-      var ps = 22 / 8;
+      // 5. Front-left Swinging 3D Arm
+      isoPart(-8.5, -15 + walkBob * 0.6, 5, 4.5, 14, cShirtHi, cShirt, cShirtSh, 1.15);
+
+      // 6. 3D Isometric Voxel Head Cube (with user's chosen 8x8 pixel face & hat mapped in perspective!)
+      var hFx = 3.5;
+      var hFy = -30.5;
+      var hWL = 16.5;
+      var hWR = 11.5;
+      var hH = 17.5;
+      var headGeo = isoPart(hFx, hFy, hWL, hWR, hH, topSkinColor, '#C68B59', sideSkinColor, 1.4);
+
+      // Map exact 8x8 skin grid + hat grid cleanly onto the isometric front-left cube face
+      ctx.save();
+      ctx.translate(headGeo.lT.x, headGeo.lT.y);
+      ctx.transform(1, 0.44, 0, 1, 0, 0);
+      var pw = hWL / 8;
+      var ph = hH / 8;
       if (spriteMeta.skinData && Array.isArray(spriteMeta.skinData.grid)) {
         for (var gy = 0; gy < 8; gy++) {
           var rowStr = spriteMeta.skinData.grid[gy] || [];
           for (var gx = 0; gx < 8; gx++) {
             ctx.fillStyle = rowStr[gx] || '#C68B59';
-            ctx.fillRect(hx + gx * ps, hy + gy * ps, ps + 0.35, ps + 0.35);
+            ctx.fillRect(gx * pw, gy * ph, pw + 0.3, ph + 0.3);
           }
         }
-      } else {
-        ctx.fillStyle = '#C68B59';
-        ctx.fillRect(hx, hy, 22, 22);
       }
-
       if (spriteMeta.hatData && Array.isArray(spriteMeta.hatData.grid)) {
         for (var hgy = 0; hgy < 8; hgy++) {
           var hrow = spriteMeta.hatData.grid[hgy] || [];
@@ -1172,15 +1244,15 @@
             var hc = hrow[hgx];
             if (hc && hc !== 'transparent') {
               ctx.fillStyle = hc;
-              ctx.fillRect(hx + hgx * ps, hy + hgy * ps, ps + 0.35, ps + 0.35);
+              ctx.fillRect(hgx * pw, hgy * ph, pw + 0.3, ph + 0.3);
             }
           }
         }
       }
-
-      ctx.strokeStyle = '#0B0B0E';
-      ctx.lineWidth = 1.6;
-      ctx.strokeRect(hx, hy, 22, 22);
+      ctx.strokeStyle = 'rgba(11,11,14,0.85)';
+      ctx.lineWidth = 1.25;
+      ctx.strokeRect(0, 0, hWL, hH);
+      ctx.restore();
 
       ctx.restore();
 
@@ -1189,8 +1261,8 @@
         type: 'hero',
         x: pt.x,
         y: cy - 28 * sScale,
-        rx: 18,
-        ry: 32,
+        rx: 20,
+        ry: 34,
         hint: 'Tap Champion to cheer!'
       });
     }
