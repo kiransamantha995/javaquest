@@ -3421,7 +3421,12 @@ function addXP(amount, lessonId) {
   }
 }
 function triggerLevelUp(){
-  if (window.GameFX) window.GameFX.playLevelUp();var lv=getLv();setText('levelup-new-level','Level '+STATE.player.level);setText('levelup-rank',lv.name);setText('levelup-rank-icon',lv.icon);checkBadge('level_5');checkBadge('level_10');burstParticles('levelup-particles');setTimeout(function(){showModal('modal-levelup');},300);}
+  if (window.GameFX) window.GameFX.playLevelUp();
+  if (window.Meowger && typeof window.Meowger.celebrateEvent === 'function') {
+    window.Meowger.celebrateEvent('levelup', 'Level ' + STATE.player.level);
+  }
+  var lv=getLv();setText('levelup-new-level','Level '+STATE.player.level);setText('levelup-rank',lv.name);setText('levelup-rank-icon',lv.icon);checkBadge('level_5');checkBadge('level_10');burstParticles('levelup-particles');setTimeout(function(){showModal('modal-levelup');},300);
+}
 function getLv(){if(!window.LEVELS)return{level:1,name:'Novice',xpRequired:0,icon:''};var r=LEVELS[0];for(var i=0;i<LEVELS.length;i++)if(STATE.player.xp>=LEVELS[i].xpRequired)r=LEVELS[i];return r;}
 function getNextLv(){if(!window.LEVELS)return null;var cur=getLv();for(var i=0;i<LEVELS.length;i++)if(LEVELS[i].level===cur.level+1)return LEVELS[i];return null;}
 
@@ -3504,6 +3509,9 @@ function checkBadge(condition){
   STATE.player.badges.push(badge.id);
   sbQueueBadge(badge.id);
   localSave();
+  if (window.Meowger && typeof window.Meowger.celebrateEvent === 'function') {
+    window.Meowger.celebrateEvent('badge', badge.name);
+  }
   var b=badge;
   var itemKey = BADGE_MINECRAFT_MAP[b.id] || 'wooden_pickaxe';
   var item = MINECRAFT_BADGES[itemKey];
@@ -3525,6 +3533,9 @@ function awardBadgeDirect(badgeId){
   STATE.player.badges.push(badge.id);
   sbQueueBadge(badge.id);
   localSave();
+  if (window.Meowger && typeof window.Meowger.celebrateEvent === 'function') {
+    window.Meowger.celebrateEvent('badge', badge.name);
+  }
   var b=badge;
   var itemKey = BADGE_MINECRAFT_MAP[b.id] || 'wooden_pickaxe';
   var item = MINECRAFT_BADGES[itemKey];

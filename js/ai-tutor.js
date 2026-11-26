@@ -66,6 +66,10 @@
 
     var token = (window._sbSession && window._sbSession.access_token) ? window._sbSession.access_token : '';
 
+    if (window.Meowger && typeof window.Meowger.setThinking === 'function') {
+      window.Meowger.setThinking(true);
+    }
+
     return fetch('/api/ai', {
       method: 'POST',
       headers: {
@@ -91,6 +95,18 @@
         });
       }
       return res.json();
+    })
+    .then(function (data) {
+      if (window.Meowger && typeof window.Meowger.setThinking === 'function') {
+        window.Meowger.setThinking(false, true);
+      }
+      return data;
+    })
+    .catch(function (err) {
+      if (window.Meowger && typeof window.Meowger.setThinking === 'function') {
+        window.Meowger.setThinking(false, false);
+      }
+      throw err;
     });
   }
 
@@ -801,6 +817,9 @@
       panel.classList.add('hidden');
       if (fab) fab.classList.remove('chat-open');
     }
+    if (window.Meowger && typeof window.Meowger.onChatToggle === 'function') {
+      window.Meowger.onChatToggle(shouldOpen);
+    }
   }
 
   function updateChatContextPill() {
@@ -1139,6 +1158,9 @@
     togglePause: toggleLiveWatching,
     onCodeChange: function (code) {
       triggerLiveCodeWatcher(code);
+      if (window.Meowger && typeof window.Meowger.onUserCoding === 'function') {
+        window.Meowger.onUserCoding();
+      }
     },
     onExecutionResult: function (data) {
       if (!data) return;

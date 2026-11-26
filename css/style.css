@@ -9464,27 +9464,52 @@ body.dark-theme .learner-memory-modal {
    High-Contrast Day Mode & Night Mode Compatibility
    ============================================================ */
 
-/* ── 1. Meowger Pet Companion (Fixed Absolute Top-Left Origin) ── */
+/* ── 1. Meowger Pet Companion 2.0 (Apple Fluid Spring & Frosted Companion UI) ── */
 .meowger-pet-wrap {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9998;
-  cursor: pointer;
+  width: 68px;
+  height: 68px;
+  z-index: 1500;
+  cursor: grab;
   user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
   pointer-events: auto;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.22));
   will-change: transform;
+  outline: none;
+  transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.meowger-pet-wrap.meowger-modal-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.meowger-pet-wrap:active {
+  cursor: grabbing;
+}
+
+.meowger-pet-wrap:focus-visible .meowger-sprite-box {
+  outline: 2.5px solid #FFE600;
+  outline-offset: 4px;
+  border-radius: 18px;
 }
 
 .meowger-sprite-box {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.18s ease-out;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease;
   transform-origin: center center;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.16));
+}
+
+body.dark-theme .meowger-sprite-box {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.26)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0.55));
 }
 
 .meowger-sprite-box.facing-left {
@@ -9495,130 +9520,375 @@ body.dark-theme .learner-memory-modal {
   transform: scaleX(1);
 }
 
-.meowger-pet-wrap:hover .meowger-svg {
-  transform: scale(1.12);
+.meowger-pet-wrap:hover .meowger-sprite-box {
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.22));
 }
 
 .meowger-svg {
-  width: 64px;
-  height: 64px;
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
+  width: 68px;
+  height: 68px;
+  overflow: visible;
+  transform-origin: center bottom;
+}
+
+/* FX Animations (Minimalist Apple Vector Accents) */
+@keyframes meowgerFloatSoft {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.92; }
+  50% { transform: translateY(-4px) scale(1.06); opacity: 1; }
+}
+
+@keyframes meowgerThinkPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.45; }
+  50% { transform: translateY(-3px); opacity: 1; }
+}
+
+@keyframes meowgerSleepDrift {
+  0% { transform: translate(0, 2px) scale(0.8); opacity: 0; }
+  35% { opacity: 0.9; }
+  100% { transform: translate(4px, -10px) scale(1.1); opacity: 0; }
+}
+
+@keyframes meowgerPurrWave {
+  0%, 100% { opacity: 0.3; transform: scale(0.96); }
+  50% { opacity: 0.95; transform: scale(1.04); }
+}
+
+.meowger-svg .fx-heart,
+.meowger-svg .fx-sparkles {
   transform-origin: center center;
-  transition: transform 0.15s ease-out;
+  animation: meowgerFloatSoft 1.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
-/* Animations */
-@keyframes meowgerBreathe {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-1.5px); }
+.meowger-svg .fx-purr-waves {
+  transform-origin: center center;
+  animation: meowgerPurrWave 0.9s ease-in-out infinite;
 }
 
-@keyframes meowgerTailSway {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(10deg); }
-}
+.meowger-svg .think-dot-1 { animation: meowgerThinkPulse 1.1s ease-in-out infinite; }
+.meowger-svg .think-dot-2 { animation: meowgerThinkPulse 1.1s ease-in-out 0.18s infinite; }
+.meowger-svg .think-dot-3 { animation: meowgerThinkPulse 1.1s ease-in-out 0.36s infinite; }
+.meowger-svg .sleep-z-1 { animation: meowgerSleepDrift 2.4s ease-out infinite; }
+.meowger-svg .sleep-z-2 { animation: meowgerSleepDrift 2.4s ease-out 1.1s infinite; }
 
-@keyframes meowgerPawWalkLeft {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-
-@keyframes meowgerPawWalkRight {
-  0%, 100% { transform: translateY(-3px); }
-  50% { transform: translateY(0); }
-}
-
-.meowger-idle .meowger-head {
-  animation: meowgerBreathe 2.4s ease-in-out infinite;
-}
-
-.meowger-idle .meowger-tail {
-  transform-origin: 36px 32px;
-  animation: meowgerTailSway 2.8s ease-in-out infinite;
-}
-
-.meowger-walk .paw-left,
-.meowger-walking .paw-left {
-  animation: meowgerPawWalkLeft 0.22s infinite alternate;
-}
-
-.meowger-walk .paw-right,
-.meowger-walking .paw-right {
-  animation: meowgerPawWalkRight 0.22s infinite alternate;
-}
-
-.meowger-hop .meowger-svg {
-  animation: meowgerHopAnim 0.75s ease-out forwards;
-}
-
-@keyframes meowgerHopAnim {
-  0% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-24px) scale(1.15); }
-  70% { transform: translateY(0) scale(0.92); }
-  100% { transform: translateY(0) scale(1); }
-}
-
+/* Apple Spring Portal on Screen Transition */
 .meowger-teleport-out .meowger-svg {
-  animation: meowgerPuffOut 0.2s ease-in forwards;
+  animation: meowgerPuffOut 0.17s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 .meowger-teleport-in .meowger-svg {
-  animation: meowgerPuffIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: meowgerPuffIn 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes meowgerPuffOut {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(0.1); opacity: 0; }
+  0% { transform: scale(1); opacity: 1; filter: blur(0px); }
+  100% { transform: scale(0.82); opacity: 0; filter: blur(4px); }
 }
 
 @keyframes meowgerPuffIn {
-  0% { transform: scale(0.1); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: scale(0.82) translateY(8px); opacity: 0; filter: blur(4px); }
+  100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
 }
 
-/* Meowger Speech Bubble */
-.meowger-speech-bubble {
+/* ── Apple Frosted Companion Dock ── */
+.meowger-dock {
   position: absolute;
-  bottom: 70px;
+  bottom: 78px;
   left: 50%;
-  transform: translateX(-50%);
-  min-width: 180px;
-  max-width: 280px;
-  background: #FFFFFF;
+  width: 284px;
+  padding: 0.7rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  backdrop-filter: saturate(180%) blur(22px);
+  border: 1px solid rgba(11, 11, 14, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   color: #0B0B0E;
-  border: 2px solid #0B0B0E;
-  border-radius: 14px;
-  padding: 0.65rem 0.95rem;
-  box-shadow: 3.5px 3.5px 0px #0B0B0E;
+  z-index: 1260;
+  cursor: default;
+  pointer-events: auto;
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(1) translateY(0);
+}
+
+.meowger-dock.dock-below {
+  bottom: auto;
+  top: 78px;
+}
+
+.meowger-dock.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92) translateY(8px);
+}
+
+.meowger-dock.dock-below.hidden {
+  transform: scale(0.92) translateY(-8px);
+}
+
+body.dark-theme .meowger-dock {
+  background: rgba(24, 25, 32, 0.88) !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.meowger-dock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+  padding: 0 0.15rem;
+}
+
+.meowger-mood-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.meowger-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22);
+}
+.meowger-status-dot.state-purr { background: #F43F5E; box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.24); }
+.meowger-status-dot.state-excited,
+.meowger-status-dot.state-pounce { background: #F59E0B; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25); }
+.meowger-status-dot.state-nap { background: #60A5FA; box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.24); }
+.meowger-status-dot.state-thinking { background: #38BDF8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.28); }
+.meowger-status-dot.state-oops { background: #EF4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.24); }
+
+.meowger-bond-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.meowger-bond-lvl {
+  font-size: 0.69rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.meowger-bond-track {
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(11, 11, 14, 0.1);
+  overflow: hidden;
+  display: inline-block;
+}
+
+body.dark-theme .meowger-bond-track {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.meowger-bond-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FFE600, #10B981);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.meowger-primary-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.52rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: 1.5px solid #0B0B0E;
+  background: #FFE600;
+  color: #0B0B0E;
   font-family: var(--font-ui, 'Space Grotesk', sans-serif);
   font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), background 0.15s ease;
+}
+
+.meowger-primary-btn:hover {
+  background: #FFED4A;
+  transform: translateY(-1px);
+}
+
+.meowger-primary-btn:active {
+  transform: scale(0.965);
+}
+
+.meowger-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.32rem;
+}
+
+.meowger-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.22rem;
+  padding: 0.44rem 0.2rem;
+  border-radius: 11px;
+  border: 1px solid rgba(11, 11, 14, 0.08);
+  background: rgba(11, 11, 14, 0.04);
+  color: #0B0B0E;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.66rem;
   font-weight: 700;
-  line-height: 1.35;
+  cursor: pointer;
+  transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background 0.15s ease, border-color 0.15s ease;
+}
+
+.meowger-action-btn:hover {
+  background: rgba(11, 11, 14, 0.09);
+  transform: translateY(-1px);
+}
+
+.meowger-action-btn:active {
+  transform: scale(0.93);
+}
+
+.meowger-action-btn.is-active {
+  background: rgba(255, 230, 0, 0.28);
+  border-color: rgba(180, 140, 0, 0.55);
+}
+
+body.dark-theme .meowger-action-btn {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+body.dark-theme .meowger-action-btn:hover {
+  background: rgba(255, 255, 255, 0.13) !important;
+}
+
+body.dark-theme .meowger-action-btn.is-active {
+  background: rgba(255, 230, 0, 0.22) !important;
+  border-color: rgba(255, 230, 0, 0.5) !important;
+  color: #FFE600 !important;
+}
+
+.meowger-action-btn .btn-svg,
+.meowger-primary-btn .btn-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dropped Roasted Java Bean Treat */
+@keyframes meowgerTreatDrop {
+  0% { transform: translateY(-24px) scale(0.6); opacity: 0; }
+  65% { transform: translateY(3px) scale(1.08); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.meowger-treat {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  z-index: 1499;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  animation: meowgerTreatDrop 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.meowger-treat.consumed {
+  transform: scale(0.3) translateY(-10px);
+  opacity: 0;
+}
+
+/* Interactive Optical Laser Chase Dot */
+.meowger-laser-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #FFFFFF 0%, #FB7185 38%, #E11D48 100%);
+  box-shadow: 0 0 12px 3px rgba(244, 63, 94, 0.65), 0 0 24px 6px rgba(244, 63, 94, 0.25);
+  z-index: 1505;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Refined Actionable Speech Bubble */
+.meowger-speech-bubble {
+  position: absolute;
+  bottom: 76px;
+  left: 50%;
+  transform: translateX(var(--bx, -50%)) translateY(0) scale(1);
+  min-width: 196px;
+  max-width: 288px;
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
+  color: #0B0B0E;
+  border: 1px solid rgba(11, 11, 14, 0.14);
+  border-radius: 15px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.06);
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 1250;
-  text-align: center;
+  text-align: left;
+  cursor: default;
+}
+
+.meowger-speech-bubble.has-actions {
+  pointer-events: auto;
+  min-width: 248px;
+  max-width: 312px;
+}
+
+.meowger-speech-bubble.bubble-below {
+  bottom: auto;
+  top: 76px;
 }
 
 .meowger-speech-bubble.hidden {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateX(var(--bx, -50%)) translateY(6px) scale(0.96);
   pointer-events: none;
 }
 
 .meowger-speech-bubble::after {
   content: '';
   position: absolute;
-  bottom: -8px;
-  left: calc(50% - 6px);
-  width: 12px;
-  height: 12px;
-  background: #FFFFFF;
-  border-right: 2px solid #0B0B0E;
-  border-bottom: 2px solid #0B0B0E;
+  bottom: -6px;
+  left: var(--arrow-left, calc(50% - 6px));
+  width: 11px;
+  height: 11px;
+  background: inherit;
+  border-right: 1px solid rgba(11, 11, 14, 0.14);
+  border-bottom: 1px solid rgba(11, 11, 14, 0.14);
   transform: rotate(45deg);
+}
+
+.meowger-speech-bubble.bubble-below::after {
+  bottom: auto;
+  top: -6px;
+  border-right: none;
+  border-bottom: none;
+  border-left: 1px solid rgba(11, 11, 14, 0.14);
+  border-top: 1px solid rgba(11, 11, 14, 0.14);
 }
 
 .meowger-speech-bubble .bubble-inner {
@@ -9629,23 +9899,89 @@ body.dark-theme .learner-memory-modal {
 
 .meowger-speech-bubble .bubble-icon {
   flex-shrink: 0;
-  color: #FFE600;
-  background: #0B0B0E;
-  padding: 3px;
-  border-radius: 4px;
+  color: #0B0B0E;
+  background: #FFE600;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(11, 11, 14, 0.12);
+}
+
+.bubble-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgba(11, 11, 14, 0.08);
+}
+
+.bubble-action-btn {
+  padding: 0.3rem 0.62rem;
+  border-radius: 8px;
+  border: 1px solid rgba(11, 11, 14, 0.16);
+  background: #FFE600;
+  color: #0B0B0E;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.bubble-action-btn:hover {
+  background: #FFED4A;
+}
+
+.bubble-action-btn:active {
+  transform: scale(0.95);
+}
+
+.bubble-close-x {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(11, 11, 14, 0.06);
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 body.dark-theme .meowger-speech-bubble {
-  background: #18191E !important;
+  background: rgba(24, 25, 32, 0.9) !important;
   color: #F4F4F5 !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 3.5px 3.5px 0px #000000 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
 }
 
 body.dark-theme .meowger-speech-bubble::after {
-  background: #18191E !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-theme .bubble-actions {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .bubble-close-x {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meowger-svg *,
+  .meowger-dock,
+  .meowger-speech-bubble,
+  .meowger-sprite-box {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ── 2. Map View Switcher ── */
