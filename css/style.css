@@ -2707,20 +2707,237 @@ body {
   box-shadow: 3px 3px 0px var(--ink); background: #FAF8F5;
 }
 
-/* Split Gutters */
+/* Split Gutters — Apple-refined seamless channel dividers */
 .split-gutter {
-  position: relative; background: #D4D4D8; transition: background 0.15s ease;
+  position: relative;
+  background: transparent;
   user-select: none;
+  touch-action: none;
+  flex-shrink: 0;
 }
-.split-gutter-h { width: 10px; cursor: col-resize; flex-shrink: 0; }
-.split-gutter-v { height: 10px; cursor: row-resize; width: 100%; flex-shrink: 0; }
-.split-gutter:hover, .split-gutter.is-resizing { background: var(--codedex-yellow); }
+
+/* Floating bento-card horizontal divider (#compiler-resizer-h, #coding-resizer-h) */
+.split-gutter-h {
+  width: 18px;
+  cursor: col-resize;
+  overflow: visible;
+}
+.split-gutter-h::before {
+  content: '';
+  position: absolute;
+  left: calc(50% + 2px);
+  top: 18px;
+  bottom: 18px;
+  width: 1.5px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(11, 11, 14, 0.12) 18%,
+    rgba(11, 11, 14, 0.12) calc(50% - 26px),
+    transparent calc(50% - 14px),
+    transparent calc(50% + 14px),
+    rgba(11, 11, 14, 0.12) calc(50% + 26px),
+    rgba(11, 11, 14, 0.12) 82%,
+    transparent 100%
+  );
+  opacity: 0.9;
+  transition: top 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              bottom 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.2s ease,
+              background 0.2s ease;
+}
+.split-gutter-h::after {
+  content: '';
+  position: absolute;
+  inset: 0 -2px;
+  cursor: col-resize;
+}
+
 .gutter-handle {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background: var(--ink); border-radius: 999px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  pointer-events: none;
+  transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              height 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.2s ease,
+              box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.split-gutter-h .gutter-handle { width: 4px; height: 28px; }
-.split-gutter-v .gutter-handle { width: 28px; height: 4px; }
+
+.split-gutter-h .gutter-handle {
+  left: calc(50% + 2px);
+  width: 3px;
+  height: 30px;
+  background: rgba(11, 11, 14, 0.24);
+}
+.split-gutter-h:hover::before {
+  top: 12px;
+  bottom: 12px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(11, 11, 14, 0.22) 16%,
+    rgba(11, 11, 14, 0.22) calc(50% - 34px),
+    transparent calc(50% - 22px),
+    transparent calc(50% + 22px),
+    rgba(11, 11, 14, 0.22) calc(50% + 34px),
+    rgba(11, 11, 14, 0.22) 84%,
+    transparent 100%
+  );
+  opacity: 1;
+}
+.split-gutter-h:hover .gutter-handle {
+  width: 4px;
+  height: 48px;
+  background: #18181B;
+  box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.38), 0 2px 8px rgba(11, 11, 14, 0.14);
+}
+.split-gutter-h.dragging::before,
+.split-gutter-h.is-resizing::before {
+  top: 10px;
+  bottom: 10px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(217, 119, 6, 0.45) 16%,
+    rgba(217, 119, 6, 0.45) calc(50% - 42px),
+    transparent calc(50% - 28px),
+    transparent calc(50% + 28px),
+    rgba(217, 119, 6, 0.45) calc(50% + 42px),
+    rgba(217, 119, 6, 0.45) 84%,
+    transparent 100%
+  );
+  opacity: 1;
+}
+.split-gutter-h.dragging .gutter-handle,
+.split-gutter-h.is-resizing .gutter-handle {
+  width: 4.5px;
+  height: 64px;
+  background: #F59E0B;
+  box-shadow: 0 0 0 4px rgba(255, 230, 0, 0.42), 0 4px 14px rgba(245, 158, 11, 0.28);
+}
+
+/* Flush full-height lesson SplitView seam (#lesson-resizer-h) */
+#lesson-resizer-h {
+  width: 1px;
+  background: transparent;
+  z-index: 25;
+}
+#lesson-resizer-h::before {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: none;
+  border-radius: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 11, 14, 0.14) 0%,
+    rgba(11, 11, 14, 0.14) calc(50% - 26px),
+    transparent calc(50% - 14px),
+    transparent calc(50% + 14px),
+    rgba(11, 11, 14, 0.14) calc(50% + 26px),
+    rgba(11, 11, 14, 0.14) 100%
+  );
+}
+#lesson-resizer-h::after {
+  inset: 0 -6px;
+}
+#lesson-resizer-h .gutter-handle {
+  left: 50%;
+  width: 3.5px;
+  height: 32px;
+  background: #A1A1AA;
+  box-shadow: 0 0 0 2px #FAF8F5;
+  z-index: 26;
+}
+#lesson-resizer-h:hover .gutter-handle {
+  width: 4px;
+  height: 48px;
+  background: #18181B;
+  box-shadow: 0 0 0 2px #FAF8F5, 0 0 0 5px rgba(255, 230, 0, 0.36);
+}
+#lesson-resizer-h.dragging .gutter-handle,
+#lesson-resizer-h.is-resizing .gutter-handle {
+  width: 4.5px;
+  height: 64px;
+  background: #F59E0B;
+  box-shadow: 0 0 0 2px #FAF8F5, 0 0 0 6px rgba(255, 230, 0, 0.42);
+}
+#lesson-resizer-h:hover::before {
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 11, 14, 0.28) 0%,
+    rgba(11, 11, 14, 0.28) calc(50% - 34px),
+    transparent calc(50% - 22px),
+    transparent calc(50% + 22px),
+    rgba(11, 11, 14, 0.28) calc(50% + 34px),
+    rgba(11, 11, 14, 0.28) 100%
+  );
+}
+#lesson-resizer-h.dragging::before,
+#lesson-resizer-h.is-resizing::before {
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(217, 119, 6, 0.55) 0%,
+    rgba(217, 119, 6, 0.55) calc(50% - 42px),
+    transparent calc(50% - 28px),
+    transparent calc(50% + 28px),
+    rgba(217, 119, 6, 0.55) calc(50% + 42px),
+    rgba(217, 119, 6, 0.55) 100%
+  );
+}
+
+/* Dark IDE horizontal seam (#coding-resizer-v inside .coding-editor-panel) */
+.split-gutter-v {
+  height: 10px;
+  width: 100%;
+  cursor: row-resize;
+  background: #141418;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.72);
+  transition: background 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease;
+}
+.split-gutter-v + .test-results-panel {
+  border-top: none !important;
+}
+.split-gutter-v .gutter-handle {
+  width: 34px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.22);
+}
+.split-gutter-v:hover {
+  background: #1C1C22;
+  border-top-color: rgba(255, 230, 0, 0.24);
+}
+.split-gutter-v:hover .gutter-handle {
+  width: 52px;
+  height: 3.5px;
+  background: #FFE600;
+  box-shadow: 0 0 8px rgba(255, 230, 0, 0.3);
+}
+.split-gutter-v.dragging,
+.split-gutter-v.is-resizing {
+  background: #202028;
+  border-top-color: rgba(255, 230, 0, 0.45);
+  border-bottom-color: rgba(255, 230, 0, 0.26);
+}
+.split-gutter-v.dragging .gutter-handle,
+.split-gutter-v.is-resizing .gutter-handle {
+  width: 68px;
+  height: 4px;
+  background: #FFE600;
+  box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.16), 0 0 12px rgba(255, 230, 0, 0.42);
+}
 
 /* ─── AVATAR SCREEN ──────────────────────────────────────────── */
 .avatar-container { max-width: 900px; margin: 0 auto; }
@@ -3328,13 +3545,17 @@ body {
   100% { opacity: 0; transform: translateY(-60px); }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #FAF8F5; }
+/* Custom Scrollbar — Clean macOS-style translucent trackless pill */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: #D4D4D8; border: 1.5px solid var(--ink); border-radius: 4px;
+  background: rgba(11, 11, 14, 0.2);
+  border-radius: 999px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--codedex-yellow); }
+::-webkit-scrollbar-thumb:hover { background: rgba(11, 11, 14, 0.36); }
+body.dark-theme ::-webkit-scrollbar-track { background: transparent; }
+body.dark-theme ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+body.dark-theme ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.34); }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 860px) {
@@ -4382,11 +4603,125 @@ body.dark-theme .hint-box {
   color: #FDE68A !important;
   border-color: #000000 !important;
 }
-body.dark-theme .split-gutter {
-  background: #27272A !important;
+body.dark-theme .split-gutter-h {
+  background: transparent !important;
 }
-body.dark-theme .gutter-handle {
-  background: #71717A !important;
+body.dark-theme .split-gutter-h::before {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 18%,
+    rgba(255, 255, 255, 0.12) calc(50% - 26px),
+    transparent calc(50% - 14px),
+    transparent calc(50% + 14px),
+    rgba(255, 255, 255, 0.12) calc(50% + 26px),
+    rgba(255, 255, 255, 0.12) 82%,
+    transparent 100%
+  ) !important;
+}
+body.dark-theme .split-gutter-h .gutter-handle {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+body.dark-theme .split-gutter-h:hover::before {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.24) 16%,
+    rgba(255, 255, 255, 0.24) calc(50% - 34px),
+    transparent calc(50% - 22px),
+    transparent calc(50% + 22px),
+    rgba(255, 255, 255, 0.24) calc(50% + 34px),
+    rgba(255, 255, 255, 0.24) 84%,
+    transparent 100%
+  ) !important;
+}
+body.dark-theme .split-gutter-h:hover .gutter-handle {
+  background: #FFE600 !important;
+  box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.2), 0 0 10px rgba(255, 230, 0, 0.3) !important;
+}
+body.dark-theme .split-gutter-h.dragging::before,
+body.dark-theme .split-gutter-h.is-resizing::before {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 230, 0, 0.5) 16%,
+    rgba(255, 230, 0, 0.5) calc(50% - 42px),
+    transparent calc(50% - 28px),
+    transparent calc(50% + 28px),
+    rgba(255, 230, 0, 0.5) calc(50% + 42px),
+    rgba(255, 230, 0, 0.5) 84%,
+    transparent 100%
+  ) !important;
+}
+body.dark-theme .split-gutter-h.dragging .gutter-handle,
+body.dark-theme .split-gutter-h.is-resizing .gutter-handle {
+  background: #FFE600 !important;
+  box-shadow: 0 0 0 4px rgba(255, 230, 0, 0.26), 0 0 14px rgba(255, 230, 0, 0.42) !important;
+}
+body.dark-theme #lesson-resizer-h::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.12) calc(50% - 26px),
+    transparent calc(50% - 14px),
+    transparent calc(50% + 14px),
+    rgba(255, 255, 255, 0.12) calc(50% + 26px),
+    rgba(255, 255, 255, 0.12) 100%
+  ) !important;
+}
+body.dark-theme #lesson-resizer-h:hover::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0.26) calc(50% - 34px),
+    transparent calc(50% - 22px),
+    transparent calc(50% + 22px),
+    rgba(255, 255, 255, 0.26) calc(50% + 34px),
+    rgba(255, 255, 255, 0.26) 100%
+  ) !important;
+}
+body.dark-theme #lesson-resizer-h.dragging::before,
+body.dark-theme #lesson-resizer-h.is-resizing::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 230, 0, 0.5) 0%,
+    rgba(255, 230, 0, 0.5) calc(50% - 42px),
+    transparent calc(50% - 28px),
+    transparent calc(50% + 28px),
+    rgba(255, 230, 0, 0.5) calc(50% + 42px),
+    rgba(255, 230, 0, 0.5) 100%
+  ) !important;
+}
+body.dark-theme #lesson-resizer-h .gutter-handle {
+  background: #52525B !important;
+  box-shadow: 0 0 0 2px #0E0E12 !important;
+}
+body.dark-theme #lesson-resizer-h:hover .gutter-handle {
+  background: #FFE600 !important;
+  box-shadow: 0 0 0 2px #0E0E12, 0 0 12px rgba(255, 230, 0, 0.35) !important;
+}
+body.dark-theme #lesson-resizer-h.dragging .gutter-handle,
+body.dark-theme #lesson-resizer-h.is-resizing .gutter-handle {
+  background: #FFE600 !important;
+  box-shadow: 0 0 0 2px #0E0E12, 0 0 16px rgba(255, 230, 0, 0.48) !important;
+}
+body.dark-theme .split-gutter-v {
+  background: #141418 !important;
+}
+body.dark-theme .split-gutter-v:hover {
+  background: #1C1C22 !important;
+}
+body.dark-theme .split-gutter-v.dragging,
+body.dark-theme .split-gutter-v.is-resizing {
+  background: #202028 !important;
+}
+body.dark-theme .split-gutter-v .gutter-handle {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+body.dark-theme .split-gutter-v:hover .gutter-handle,
+body.dark-theme .split-gutter-v.dragging .gutter-handle,
+body.dark-theme .split-gutter-v.is-resizing .gutter-handle {
+  background: #FFE600 !important;
 }
 body.dark-theme .test-results-panel {
   background: #141518 !important;
@@ -7242,13 +7577,19 @@ body.dark-theme .step-pill.locked {
   flex-direction: column;
   gap: 1.25rem;
   background: #FAF8F5;
-  border-right: 2px solid var(--ink, #0B0B0E);
+  border-right: none;
 }
 
 body.dark-theme .lesson-guide-col {
   background: #0E0E13 !important;
-  border-right: 1px solid #27272A !important;
+  border-right: none !important;
 }
+.lesson-guide-col::-webkit-scrollbar { width: 4px; }
+.lesson-guide-col::-webkit-scrollbar-track { background: transparent; margin: 10px 0; }
+.lesson-guide-col::-webkit-scrollbar-thumb { background: rgba(11, 11, 14, 0.13); border-radius: 999px; }
+.lesson-guide-col:hover::-webkit-scrollbar-thumb { background: rgba(11, 11, 14, 0.28); }
+body.dark-theme .lesson-guide-col::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); }
+body.dark-theme .lesson-guide-col:hover::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.26); }
 
 .lesson-story-card {
   display: flex;
@@ -7724,6 +8065,11 @@ body.dark-theme .lesson-editor-top {
   flex-wrap: nowrap !important;
   overflow-x: auto;
   white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.lesson-editor-col .coding-editor-toolbar::-webkit-scrollbar {
+  display: none;
 }
 
 body.dark-theme .lesson-editor-col .coding-editor-toolbar {
