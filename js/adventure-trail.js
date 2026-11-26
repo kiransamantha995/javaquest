@@ -1,14 +1,14 @@
 // JavaQst — js/adventure-trail.js
-// Living Isometric Biome Diorama Map (Apple Design & Motion Craftsmanship)
-// 100% Pure Inline SVG Architecture — Zero Unicode Emojis
-// Features: Synced SVG Terrain & Glowing Cubic-Bezier Path, Animated Waterfall & River Boat,
-// Interactive Campfires, Swaying Trees, Mineable Biome Relics, Clickable Pixel Champion,
-// Spatial Pointer Parallax, Tactile Spring Modals, & Full Day/Night High-Contrast Support.
+// Rebuilt Ground-Up 2.5D Isometric Voxel Diorama Map Engine
+// Apple-Crafted HiDPI Canvas Terrain + Dynamic Lighting + Interactive Biome Props + Frosted Glass Pin Overlay
+// Zero External Dependencies, Zero Emojis, 100% Day/Night & Mobile Responsive.
 
 (function() {
   'use strict';
 
   var STORAGE_KEY_RELICS = 'javaqst_map_relics_v1';
+  var STORAGE_KEY_ATMOS = 'javaqst_map_atmos_v1';
+  var _activeCleanup = null;
 
   function esc(s) {
     return String(s || '')
@@ -23,7 +23,28 @@
     return Math.max(min, Math.min(max, v));
   }
 
-  // ── 1. Persistent Map Relic Collector (Cosmetic Exploration Discovery) ──────
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function hexToRgb(hex) {
+    var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '#000000');
+    return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [0, 0, 0];
+  }
+
+  function mixRgbStr(c1, c2, t, alpha) {
+    var a = hexToRgb(c1);
+    var b = hexToRgb(c2);
+    var r = Math.round(lerp(a[0], b[0], clamp(t, 0, 1)));
+    var g = Math.round(lerp(a[1], b[1], clamp(t, 0, 1)));
+    var bl = Math.round(lerp(a[2], b[2], clamp(t, 0, 1)));
+    if (typeof alpha === 'number') {
+      return 'rgba(' + r + ',' + g + ',' + bl + ',' + alpha + ')';
+    }
+    return 'rgb(' + r + ',' + g + ',' + bl + ')';
+  }
+
+  // ── 1. Persistent Relics & View Mode Storage ──────────────────────────────
   function loadCollectedRelics() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY_RELICS);
@@ -42,324 +63,24 @@
     } catch (e) {}
   }
 
-  // ── 2. Ephemeral Floating Particle & Map Callout Utilities ──────────────────
-  function spawnMapParticles(anchorEl, colors, count) {
-    if (!anchorEl || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
-    var board = anchorEl.closest('.island-mountain-board') || anchorEl.offsetParent;
-    if (!board) return;
-
-    var aRect = anchorEl.getBoundingClientRect();
-    var bRect = board.getBoundingClientRect();
-    var cx = (aRect.left - bRect.left) + (aRect.width * 0.5);
-    var cy = (aRect.top - bRect.top) + (aRect.height * 0.45);
-    var palette = colors || ['#FFE600', '#10B981', '#38BDF8', '#FFFFFF'];
-    var total = count || 8;
-
-    for (var i = 0; i < total; i++) {
-      var p = document.createElement('span');
-      p.className = 'map-fx-particle';
-      var angle = (Math.PI * 2 * i / total) + (Math.random() - 0.5) * 0.5;
-      var dist = 22 + Math.random() * 28;
-      p.style.left = Math.round(cx) + 'px';
-      p.style.top = Math.round(cy) + 'px';
-      p.style.background = palette[i % palette.length];
-      p.style.setProperty('--dx', Math.round(Math.cos(angle) * dist) + 'px');
-      p.style.setProperty('--dy', Math.round(Math.sin(angle) * dist - 16) + 'px');
-      p.style.setProperty('--rot', Math.round((Math.random() - 0.5) * 180) + 'deg');
-      board.appendChild(p);
-      setTimeout((function(node) {
-        return function() { if (node.parentNode) node.parentNode.removeChild(node); };
-      })(p), 720);
+  function getAtmospherePref() {
+    try {
+      return localStorage.getItem(STORAGE_KEY_ATMOS) !== '0';
+    } catch (e) {
+      return true;
     }
   }
 
-  function showPropPopCallout(anchorEl, text) {
-    if (!anchorEl) return;
-    var board = anchorEl.closest('.island-mountain-board');
-    if (!board) return;
-
-    // Remove previous callout
-    var old = board.querySelector('.map-prop-callout');
-    if (old) old.remove();
-
-    var tip = document.createElement('div');
-    tip.className = 'map-prop-callout';
-    tip.textContent = text;
-
-    var aRect = anchorEl.getBoundingClientRect();
-    var bRect = board.getBoundingClientRect();
-    var left = clamp((aRect.left - bRect.left) + (aRect.width * 0.5), 115, Math.max(120, bRect.width - 115));
-    var top = Math.max(16, (aRect.top - bRect.top) - 14);
-    tip.style.left = Math.round(left) + 'px';
-    tip.style.top = Math.round(top) + 'px';
-
-    board.appendChild(tip);
-    setTimeout(function() {
-      tip.classList.add('fading-out');
-      setTimeout(function() { if (tip.parentNode) tip.remove(); }, 240);
-    }, 2400);
+  function setAtmospherePref(on) {
+    try {
+      localStorage.setItem(STORAGE_KEY_ATMOS, on ? '1' : '0');
+    } catch (e) {}
   }
 
-  // ── 3. Pure SVG Generators (Zero Emojis — Crafted Diorama Assets) ────────────
-  var SVGS = {
-    grassBlock: function() {
-      return (
-        '<svg class="biome-cube-svg" viewBox="0 0 36 36" width="36" height="36">'
-        + '<polygon points="18,3 33,11 18,20 3,11" fill="#52B756"/>'
-        + '<polygon points="3,11 18,20 18,33 3,24" fill="#6D4321"/>'
-        + '<polygon points="3,11 18,20 18,23.5 3,14.5" fill="#3D8B40"/>'
-        + '<polygon points="18,20 33,11 33,24 18,33" fill="#8B5A2B"/>'
-        + '<polygon points="18,20 33,11 33,14.5 18,23.5" fill="#52B756"/>'
-        + '<polygon points="18,3 33,11 33,24 18,33 3,24 3,11" fill="none" stroke="#0B0B0E" stroke-width="1.6" stroke-linejoin="round"/>'
-        + '<line x1="18" y1="20" x2="18" y2="33" stroke="#0B0B0E" stroke-width="1.6"/>'
-        + '</svg>'
-      );
-    },
-
-    netherrackBlock: function() {
-      return (
-        '<svg class="biome-cube-svg" viewBox="0 0 36 36" width="36" height="36">'
-        + '<polygon points="18,3 33,11 18,20 3,11" fill="#991B1B"/>'
-        + '<polygon points="3,11 18,20 18,33 3,24" fill="#450A0A"/>'
-        + '<polygon points="18,20 33,11 33,24 18,33" fill="#7F1D1D"/>'
-        + '<rect x="16" y="9" width="3" height="3" rx="0.5" fill="#F97316"/>'
-        + '<rect x="8" y="19" width="3" height="3" rx="0.5" fill="#FB923C"/>'
-        + '<rect x="24" y="21" width="3" height="3" rx="0.5" fill="#FBBF24"/>'
-        + '<polygon points="18,3 33,11 33,24 18,33 3,24 3,11" fill="none" stroke="#0B0B0E" stroke-width="1.6" stroke-linejoin="round"/>'
-        + '<line x1="18" y1="20" x2="18" y2="33" stroke="#0B0B0E" stroke-width="1.6"/>'
-        + '</svg>'
-      );
-    },
-
-    endStoneBlock: function() {
-      return (
-        '<svg class="biome-cube-svg" viewBox="0 0 36 36" width="36" height="36">'
-        + '<polygon points="18,3 33,11 18,20 3,11" fill="#E6E4A8"/>'
-        + '<polygon points="3,11 18,20 18,33 3,24" fill="#A3A06A"/>'
-        + '<polygon points="18,20 33,11 33,24 18,33" fill="#C4C184"/>'
-        + '<circle cx="17" cy="10" r="1.6" fill="#7C3AED"/>'
-        + '<circle cx="25" cy="20" r="1.6" fill="#A855F7"/>'
-        + '<polygon points="18,3 33,11 33,24 18,33 3,24 3,11" fill="none" stroke="#0B0B0E" stroke-width="1.6" stroke-linejoin="round"/>'
-        + '<line x1="18" y1="20" x2="18" y2="33" stroke="#0B0B0E" stroke-width="1.6"/>'
-        + '</svg>'
-      );
-    },
-
-    treeProp: function(biome) {
-      if (biome === 'nether') {
-        return (
-          '<svg class="prop-svg" viewBox="0 0 48 58" width="46" height="56">'
-          + '<ellipse cx="24" cy="53" rx="14" ry="3.5" fill="rgba(0,0,0,0.28)"/>'
-          + '<rect x="19" y="28" width="10" height="24" rx="2" fill="#3B1526" stroke="#0B0B0E" stroke-width="1.4"/>'
-          + '<g class="prop-canopy">'
-          + '  <path d="M6 28 C6 10 42 10 42 28 Z" fill="#991B1B" stroke="#0B0B0E" stroke-width="1.5"/>'
-          + '  <path d="M10 24 C10 13 38 13 38 24 Z" fill="#DC2626"/>'
-          + '  <circle cx="16" cy="18" r="2.3" fill="#FCA5A5"/><circle cx="30" cy="19" r="2.2" fill="#FCA5A5"/>'
-          + '  <circle cx="23" cy="14" r="1.8" fill="#FDE047"/>'
-          + '</g>'
-          + '</svg>'
-        );
-      }
-      if (biome === 'end') {
-        return (
-          '<svg class="prop-svg" viewBox="0 0 44 64" width="42" height="62">'
-          + '<ellipse cx="22" cy="59" rx="14" ry="3.5" fill="rgba(0,0,0,0.35)"/>'
-          + '<g class="prop-canopy">'
-          + '  <polygon points="11,57 16,12 28,12 33,57" fill="#1C142B" stroke="#0B0B0E" stroke-width="1.5" stroke-linejoin="round"/>'
-          + '  <polygon points="15,57 18,12 26,12 29,57" fill="#31244E"/>'
-          + '  <circle cx="22" cy="8" r="4.8" fill="#C084FC" stroke="#0B0B0E" stroke-width="1.2"/>'
-          + '  <circle cx="22" cy="8" r="2.2" fill="#FFFFFF"/>'
-          + '  <rect x="18" y="25" width="2.5" height="6" rx="1" fill="#A855F7"/>'
-          + '  <rect x="24" y="38" width="2.5" height="5" rx="1" fill="#A855F7"/>'
-          + '</g>'
-          + '</svg>'
-        );
-      }
-      return (
-        '<svg class="prop-svg" viewBox="0 0 48 58" width="46" height="56">'
-        + '<ellipse cx="24" cy="53" rx="14" ry="3.5" fill="rgba(0,0,0,0.18)"/>'
-        + '<rect x="19" y="31" width="10" height="21" rx="2" fill="#5C3A21" stroke="#0B0B0E" stroke-width="1.4"/>'
-        + '<rect x="22" y="35" width="3" height="13" fill="#7D502E"/>'
-        + '<g class="prop-canopy">'
-        + '  <rect x="6" y="19" width="36" height="15" rx="4" fill="#2E6F34" stroke="#0B0B0E" stroke-width="1.4"/>'
-        + '  <rect x="9" y="11" width="30" height="13" rx="4" fill="#439B48" stroke="#0B0B0E" stroke-width="1.4"/>'
-        + '  <rect x="14" y="4" width="20" height="10" rx="3.5" fill="#5CCB62" stroke="#0B0B0E" stroke-width="1.3"/>'
-        + '  <rect x="16" y="6.5" width="7" height="3" rx="1" fill="#8AE48F"/>'
-        + '  <rect x="26" y="13.5" width="6" height="3" rx="1" fill="#8AE48F"/>'
-        + '</g>'
-        + '</svg>'
-      );
-    },
-
-    campfireProp: function(biome) {
-      var glow = biome === 'end' ? '#A855F7' : (biome === 'nether' ? '#FB923C' : '#F97316');
-      var core = biome === 'end' ? '#F3E8FF' : '#FEF08A';
-      return (
-        '<svg class="prop-svg" viewBox="0 0 38 40" width="36" height="38">'
-        + '<ellipse cx="19" cy="35" rx="14" ry="4" fill="rgba(0,0,0,0.22)"/>'
-        + '<circle class="prop-flame-halo" cx="19" cy="21" r="14" fill="' + glow + '" opacity="0.22"/>'
-        + '<rect x="9" y="29" width="20" height="5" rx="2" fill="#5C3A21" stroke="#0B0B0E" stroke-width="1.2" transform="rotate(-12 19 31.5)"/>'
-        + '<rect x="9" y="29" width="20" height="5" rx="2" fill="#7A4E2D" stroke="#0B0B0E" stroke-width="1.2" transform="rotate(14 19 31.5)"/>'
-        + '<g class="prop-flame-group">'
-        + '  <path d="M19 8 C24 14 27 20 24 27 C22 30 16 30 14 27 C11 20 14 14 19 8 Z" fill="' + glow + '" stroke="#0B0B0E" stroke-width="1.2"/>'
-        + '  <path d="M19 15 C22 19 22.5 23 21 26 C19.8 28 18.2 28 17 26 C15.5 23 16 19 19 15 Z" fill="' + core + '"/>'
-        + '</g>'
-        + '</svg>'
-      );
-    },
-
-    oreRelicProp: function(biome, isCollected) {
-      var crystal = isCollected ? '#94A3B8' : (biome === 'nether' ? '#FBBF24' : (biome === 'end' ? '#C084FC' : '#38BDF8'));
-      var crystalHi = isCollected ? '#CBD5E1' : (biome === 'nether' ? '#FEF08A' : (biome === 'end' ? '#F3E8FF' : '#BAE6FD'));
-      return (
-        '<svg class="prop-svg" viewBox="0 0 38 36" width="36" height="34">'
-        + '<ellipse cx="19" cy="32" rx="14" ry="3.5" fill="rgba(0,0,0,0.22)"/>'
-        + '<polygon points="6,29 10,17 20,14 31,19 33,29" fill="#52525B" stroke="#0B0B0E" stroke-width="1.4" stroke-linejoin="round"/>'
-        + '<polygon points="9,29 12,19 20,17 27,21 29,29" fill="#71717A"/>'
-        + '<g class="prop-crystal">'
-        + '  <polygon points="15,21 19,8 23,21 19,25" fill="' + crystal + '" stroke="#0B0B0E" stroke-width="1.2" stroke-linejoin="round"/>'
-        + '  <polygon points="12,24 11,14 16,20" fill="' + crystal + '" stroke="#0B0B0E" stroke-width="1.1"/>'
-        + '  <polygon points="22,22 27,13 26,24" fill="' + crystalHi + '" stroke="#0B0B0E" stroke-width="1.1"/>'
-        + '  <line x1="19" y1="11" x2="19" y2="18" stroke="' + crystalHi + '" stroke-width="1.5" stroke-linecap="round"/>'
-        + '</g>'
-        + '</svg>'
-      );
-    },
-
-    lanternSignProp: function(lit) {
-      return (
-        '<svg class="prop-svg" viewBox="0 0 34 42" width="32" height="40">'
-        + '<ellipse cx="17" cy="38" rx="10" ry="3" fill="rgba(0,0,0,0.2)"/>'
-        + '<rect x="15" y="13" width="4" height="24" rx="1.2" fill="#5C3A21" stroke="#0B0B0E" stroke-width="1.2"/>'
-        + '<rect x="14" y="11" width="13" height="3" rx="1" fill="#7A4E2D" stroke="#0B0B0E" stroke-width="1.2"/>'
-        + (lit ? '<circle class="prop-lantern-halo" cx="24" cy="21" r="10" fill="#FFE600" opacity="0.32"/>' : '')
-        + '<rect x="20" y="15" width="8" height="10" rx="2" fill="' + (lit ? '#FFE600' : '#475569') + '" stroke="#0B0B0E" stroke-width="1.3"/>'
-        + '<rect x="22" y="17" width="4" height="6" rx="1" fill="' + (lit ? '#FFFFFF' : '#94A3B8') + '"/>'
-        + '</svg>'
-      );
-    },
-
-    boatProp: function(biome) {
-      var hull = biome === 'end' ? '#6D28D9' : (biome === 'nether' ? '#7F1D1D' : '#92400E');
-      var trim = biome === 'end' ? '#C084FC' : (biome === 'nether' ? '#F59E0B' : '#FDE68A');
-      return (
-        '<svg class="prop-svg" viewBox="0 0 42 28" width="40" height="26">'
-        + '<ellipse cx="21" cy="24" rx="16" ry="3" fill="rgba(255,255,255,0.28)"/>'
-        + '<polygon points="4,15 38,15 32,23 10,23" fill="' + hull + '" stroke="#0B0B0E" stroke-width="1.4" stroke-linejoin="round"/>'
-        + '<rect x="19.5" y="4" width="2.4" height="11" fill="#5C3A21" stroke="#0B0B0E" stroke-width="0.9"/>'
-        + '<polygon points="22,5 33,10 22,13" fill="' + trim + '" stroke="#0B0B0E" stroke-width="1.1" stroke-linejoin="round"/>'
-        + '</svg>'
-      );
-    },
-
-    bridgeAndWaterfall: function(biome) {
-      var label = biome === 'nether' ? 'Magma Gorge Crossing' : (biome === 'end' ? 'Void Rift Bridge' : 'Whispering Falls Bridge');
-      var cls = biome === 'nether' ? 'island-nether-rift' : (biome === 'end' ? 'island-end-rift' : 'island-overworld-river');
-      var streamCls = biome === 'nether' ? 'lava-stream' : (biome === 'end' ? 'void-stream' : 'river-stream');
-      return (
-        '<div class="island-feature-section ' + cls + '">'
-        + '  <div class="feature-stream ' + streamCls + '">'
-        + '    <div class="water-foam f1"></div>'
-        + '    <div class="water-foam f2"></div>'
-        + '    <div class="water-foam f3"></div>'
-        + '  </div>'
-        + '  <button type="button" class="map-boat-btn" title="Sail across!">' + SVGS.boatProp(biome) + '</button>'
-        + '  <div class="feature-bridge">'
-        + '    <div class="bridge-planks">'
-        + '      <span></span><span></span><span></span><span></span><span></span>'
-        + '    </div>'
-        + '  </div>'
-        + '  <span class="feature-tag">' + label + '</span>'
-        + '</div>'
-      );
-    },
-
-    treasureChest: function(isUnlocked) {
-      var goldColor = isUnlocked ? '#FFE600' : '#A1A1AA';
-      var bodyColor = isUnlocked ? '#8B4513' : '#4A4A55';
-      var rimColor  = isUnlocked ? '#D97706' : '#27272A';
-      return (
-        '<svg class="scenery-svg scenery-chest" viewBox="0 0 46 42" width="56" height="52">'
-        + '<ellipse cx="23" cy="38" rx="17" ry="4" fill="rgba(0,0,0,0.24)"/>'
-        + (isUnlocked ? '<circle cx="23" cy="20" r="19" fill="#FFE600" opacity="0.16" class="chest-aura"/>' : '')
-        + '<rect x="6" y="19" width="34" height="18" rx="3" fill="' + bodyColor + '" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<rect x="9" y="21" width="28" height="4" fill="' + rimColor + '"/>'
-        + '<rect x="6" y="9" width="34" height="10" rx="3.5" fill="' + bodyColor + '" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<rect x="9" y="11" width="28" height="3" rx="1" fill="' + (isUnlocked ? '#CD853F' : '#64748B') + '"/>'
-        + '<rect x="13.5" y="9" width="4" height="28" fill="' + goldColor + '" stroke="#0B0B0E" stroke-width="1.1"/>'
-        + '<rect x="28.5" y="9" width="4" height="28" fill="' + goldColor + '" stroke="#0B0B0E" stroke-width="1.1"/>'
-        + '<rect x="19.5" y="16" width="7" height="8" rx="1.5" fill="' + goldColor + '" stroke="#0B0B0E" stroke-width="1.4"/>'
-        + '<circle cx="23" cy="19.5" r="1.2" fill="#0B0B0E"/>'
-        + '</svg>'
-      );
-    },
-
-    pedestalTopActive: function() {
-      return (
-        '<svg viewBox="0 0 76 50" width="76" height="50">'
-        + '<ellipse cx="38" cy="41" rx="31" ry="8" fill="rgba(0,0,0,0.28)"/>'
-        + '<path d="M9,23 A29,11 0 0 0 67,23 L67,31 A29,11 0 0 1 9,31 Z" fill="#3B3B45" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<ellipse cx="38" cy="23" rx="29" ry="11.5" fill="#7C3AED" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<ellipse cx="38" cy="23" rx="22" ry="8.5" fill="#A855F7"/>'
-        + '<ellipse cx="38" cy="23" rx="14" ry="5" fill="#C084FC"/>'
-        + '<ellipse cx="38" cy="23" rx="7" ry="2.6" fill="#FFFFFF"/>'
-        + '</svg>'
-      );
-    },
-
-    pedestalTopCompleted: function() {
-      return (
-        '<svg viewBox="0 0 76 46" width="76" height="46">'
-        + '<ellipse cx="38" cy="39" rx="29" ry="6.8" fill="rgba(0,0,0,0.2)"/>'
-        + '<path d="M9,19 A29,10.5 0 0 0 67,19 L67,27 A29,10.5 0 0 1 9,27 Z" fill="#1F2937" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<ellipse cx="38" cy="19" rx="29" ry="10.5" fill="#10B981" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<ellipse cx="38" cy="19" rx="22" ry="7.4" fill="#059669"/>'
-        + '<polyline points="31,18.5 35.5,22.5 45,15" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>'
-        + '</svg>'
-      );
-    },
-
-    pedestalTopReady: function() {
-      return (
-        '<svg viewBox="0 0 76 46" width="76" height="46">'
-        + '<ellipse cx="38" cy="39" rx="29" ry="6.8" fill="rgba(0,0,0,0.2)"/>'
-        + '<path d="M9,19 A29,10.5 0 0 0 67,19 L67,27 A29,10.5 0 0 1 9,27 Z" fill="#78350F" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<ellipse cx="38" cy="19" rx="29" ry="10.5" fill="#FBBF24" stroke="#0B0B0E" stroke-width="1.8"/>'
-        + '<ellipse cx="38" cy="19" rx="22" ry="7.4" fill="#F59E0B"/>'
-        + '<polygon points="38,13 39.8,17 44,17.5 40.8,20.2 41.6,24.2 38,22.1 34.4,24.2 35.2,20.2 32,17.5 36.2,17" fill="#FFFFFF"/>'
-        + '</svg>'
-      );
-    },
-
-    pedestalTopLocked: function() {
-      return (
-        '<svg viewBox="0 0 76 46" width="76" height="46">'
-        + '<ellipse cx="38" cy="39" rx="29" ry="6.5" fill="rgba(0,0,0,0.16)"/>'
-        + '<path d="M9,19 A29,10.5 0 0 0 67,19 L67,27 A29,10.5 0 0 1 9,27 Z" fill="#27272A" stroke="#0B0B0E" stroke-width="1.6"/>'
-        + '<ellipse cx="38" cy="19" rx="29" ry="10.5" fill="#52525B" stroke="#0B0B0E" stroke-width="1.6"/>'
-        + '<ellipse cx="38" cy="19" rx="22" ry="7.2" fill="#3F3F46"/>'
-        + '<rect x="33.5" y="16.5" width="9" height="6.8" rx="1.4" fill="#E4E4E7" stroke="#0B0B0E" stroke-width="1.1"/>'
-        + '<path d="M35.8,16.5 V13.8 a2.2,2.2 0 0 1 4.4,0 V16.5" fill="none" stroke="#E4E4E7" stroke-width="1.4"/>'
-        + '</svg>'
-      );
-    },
-
-    check: '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 6.5 12 13 4"/></svg>',
-    lock: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V4.5a3 3 0 0 1 6 0V7"/></svg>',
-    star: '<svg viewBox="0 0 16 16" width="14" height="14" fill="#FFE600" stroke="#0B0B0E" stroke-width="1.2"><polygon points="8 1 10.2 5.5 15 6.2 11.5 9.6 12.3 14.5 8 12.2 3.7 14.5 4.5 9.6 1 6.2 5.8 5.5 8 1"/></svg>',
-    coin: '<svg viewBox="0 0 16 16" width="14" height="14" fill="#FFE600" stroke="#0B0B0E" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="3.2" fill="#F59E0B"/></svg>',
-    compass: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6"/><polygon points="10.5,5.5 9,9.5 5.5,10.5 7,6.5" fill="currentColor"/></svg>',
-    gem: '<svg viewBox="0 0 16 16" width="13" height="13" fill="#38BDF8" stroke="#0B0B0E" stroke-width="1.1"><polygon points="4,2 12,2 15,6 8,14 1,6"/></svg>',
-    close: '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>'
-  };
-
-  // ── 4. View Mode Toggle ─────────────────────────────────────────────────────
   var _mapViewMode = 'trail';
   try {
     var savedMode = localStorage.getItem('javaqst_map_view_mode') || localStorage.getItem('javaquest_map_view_mode');
-    if (savedMode === 'trail' || savedMode === 'list') {
-      _mapViewMode = savedMode;
-    }
+    if (savedMode === 'trail' || savedMode === 'list') _mapViewMode = savedMode;
   } catch (e) {}
 
   function setMapViewMode(mode) {
@@ -370,9 +91,9 @@
     } catch (e) {}
 
     var btnTrail = document.getElementById('btn-map-view-trail');
-    var btnList  = document.getElementById('btn-map-view-list');
+    var btnList = document.getElementById('btn-map-view-list');
     var trailWrap = document.getElementById('adventure-trail-wrap');
-    var listWrap  = document.getElementById('chapters-accordion');
+    var listWrap = document.getElementById('chapters-accordion');
 
     if (btnTrail && btnList) {
       btnTrail.classList.toggle('active', _mapViewMode === 'trail');
@@ -388,9 +109,100 @@
   }
   window.setMapViewMode = setMapViewMode;
 
-  // ── 5. Player Voxel Avatar Sprite (Interactive Click-to-Cheer!) ─────────────
-  function renderPlayerMapSprite(player, modTitle) {
-    var p = player || (window.STATE && window.STATE.player) || (typeof window.getPlayerState === 'function' ? window.getPlayerState() : {});
+  // ── 2. Inline SVG UI Icons (Zero Unicode Emojis) ──────────────────────────
+  var SVGS = {
+    grassCube: '<svg viewBox="0 0 32 32" width="28" height="28"><polygon points="16,3 29,10 16,17 3,10" fill="#6CBF5B"/><polygon points="3,10 16,17 16,28 3,21" fill="#7D5337"/><polygon points="3,10 16,17 16,20.2 3,13.2" fill="#4E9440"/><polygon points="16,17 29,10 29,21 16,28" fill="#563824"/><polygon points="16,17 29,10 29,13.2 16,20.2" fill="#6CBF5B"/><polygon points="16,3 29,10 29,21 16,28 3,21 3,10" fill="none" stroke="rgba(11,11,14,0.65)" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+    netherCube: '<svg viewBox="0 0 32 32" width="28" height="28"><polygon points="16,3 29,10 16,17 3,10" fill="#991B1B"/><polygon points="3,10 16,17 16,28 3,21" fill="#450A0A"/><polygon points="16,17 29,10 29,21 16,28" fill="#6B141A"/><rect x="14" y="8" width="3" height="2.5" rx="0.5" fill="#F97316"/><rect x="8" y="17" width="3" height="2.5" rx="0.5" fill="#FBBF24"/><polygon points="16,3 29,10 29,21 16,28 3,21 3,10" fill="none" stroke="rgba(0,0,0,0.65)" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+    endCube: '<svg viewBox="0 0 32 32" width="28" height="28"><polygon points="16,3 29,10 16,17 3,10" fill="#DCD89E"/><polygon points="3,10 16,17 16,28 3,21" fill="#3D325C"/><polygon points="16,17 29,10 29,21 16,28" fill="#241C3A"/><circle cx="15" cy="9" r="1.5" fill="#7C3AED"/><circle cx="22" cy="18" r="1.4" fill="#C084FC"/><polygon points="16,3 29,10 29,21 16,28 3,21 3,10" fill="none" stroke="rgba(0,0,0,0.65)" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+    gem: '<svg viewBox="0 0 16 16" width="13" height="13" fill="#38BDF8" stroke="rgba(11,11,14,0.7)" stroke-width="1.1"><polygon points="4,2 12,2 15,6 8,14 1,6"/></svg>',
+    compass: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6"/><polygon points="10.5,5.5 9,9.5 5.5,10.5 7,6.5" fill="currentColor"/></svg>',
+    sparkles: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 1.5V4M8 12v2.5M1.5 8H4M12 8h2.5M3.5 3.5l1.8 1.8M10.7 10.7l1.8 1.8M12.5 3.5l-1.8 1.8M5.3 10.7l-1.8 1.8"/></svg>',
+    check: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 8.5 6.5 12 13 4"/></svg>',
+    lock: '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V4.5a3 3 0 0 1 6 0V7"/></svg>',
+    star: '<svg viewBox="0 0 16 16" width="14" height="14" fill="#FFE600" stroke="#0B0B0E" stroke-width="1.2"><polygon points="8 1 10.2 5.5 15 6.2 11.5 9.6 12.3 14.5 8 12.2 3.7 14.5 4.5 9.6 1 6.2 5.8 5.5 8 1"/></svg>',
+    coin: '<svg viewBox="0 0 16 16" width="14" height="14" fill="#FFE600" stroke="#0B0B0E" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="3.2" fill="#F59E0B"/></svg>',
+    close: '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>'
+  };
+
+  // ── 3. Tamed Biome Palettes (Day & Night Seamless) ────────────────────────
+  var BIOME_PALETTES = {
+    overworld: {
+      day: {
+        topA: '#70C15F', topB: '#61B451', topTrim: '#8AD97A',
+        wallLeft: '#7B5336', wallRight: '#573924', subLeft: '#4E443C', subRight: '#38302A',
+        bedrock: '#28221E', edge: 'rgba(11,11,14,0.16)',
+        roadA: '#E5DCC5', roadB: '#D8CEB3', roadLeft: '#B0A386', roadRight: '#8E8267',
+        waterTop: '#38BDF8', waterDeep: '#0284C7', waterLeft: '#0369A1', waterRight: '#075985', foam: '#F0F9FF',
+        bridgeTop: '#9A6334', bridgeRail: '#754822', bridgeDark: '#523015',
+        treeLeavesA: '#439E46', treeLeavesB: '#2E7D34', treeTopHi: '#6CD46F', trunkL: '#7B4F2B', trunkR: '#56361D',
+        litGlow: '#10B981', hoverGlow: '#FFE600', fireGlow: '#F59E0B', mote: '#FBBF24',
+        skyTop: 'rgba(224, 242, 254, 0.42)', skyBottom: 'rgba(247, 245, 238, 0.05)'
+      },
+      night: {
+        topA: '#2D604E', topB: '#255040', topTrim: '#3E826A',
+        wallLeft: '#3E2D24', wallRight: '#291D17', subLeft: '#282C38', subRight: '#1A1E28',
+        bedrock: '#10131A', edge: 'rgba(255,255,255,0.08)',
+        roadA: '#4A5568', roadB: '#3B4557', roadLeft: '#2D3748', roadRight: '#1E2533',
+        waterTop: '#0EA5E9', waterDeep: '#0369A1', waterLeft: '#075985', waterRight: '#0C4A6E', foam: '#BAE6FD',
+        bridgeTop: '#784A26', bridgeRail: '#59351A', bridgeDark: '#3B2210',
+        treeLeavesA: '#1E6141', treeLeavesB: '#154730', treeTopHi: '#2E8B57', trunkL: '#593920', trunkR: '#3D2614',
+        litGlow: '#34D399', hoverGlow: '#FFE600', fireGlow: '#FB923C', mote: '#FDE047',
+        skyTop: 'rgba(15, 23, 42, 0.55)', skyBottom: 'rgba(13, 17, 23, 0.0)'
+      }
+    },
+    nether: {
+      day: {
+        topA: '#7F232D', topB: '#6B1C25', topTrim: '#9F323E',
+        wallLeft: '#461C24', wallRight: '#2B1016', subLeft: '#292226', subRight: '#1A1518',
+        bedrock: '#110C0F', edge: 'rgba(255,140,80,0.14)',
+        roadA: '#54353D', roadB: '#442930', roadLeft: '#2E1A1F', roadRight: '#1E1014',
+        waterTop: '#F97316', waterDeep: '#EA580C', waterLeft: '#C2410C', waterRight: '#9A3412', foam: '#FEF08A',
+        bridgeTop: '#4A3238', bridgeRail: '#332025', bridgeDark: '#1F1216',
+        treeLeavesA: '#B91C1C', treeLeavesB: '#991B1B', treeTopHi: '#F59E0B', trunkL: '#4B2335', trunkR: '#311522',
+        litGlow: '#F59E0B', hoverGlow: '#FFE600', fireGlow: '#FB923C', mote: '#FB923C',
+        skyTop: 'rgba(69, 10, 10, 0.35)', skyBottom: 'rgba(24, 9, 13, 0.1)'
+      },
+      night: {
+        topA: '#6E1E28', topB: '#5B1720', topTrim: '#8C2A36',
+        wallLeft: '#3B161E', wallRight: '#240C12', subLeft: '#221C22', subRight: '#151115',
+        bedrock: '#0C080B', edge: 'rgba(255,140,80,0.12)',
+        roadA: '#462A32', roadB: '#382027', roadLeft: '#261419', roadRight: '#180B0F',
+        waterTop: '#FB923C', waterDeep: '#EA580C', waterLeft: '#C2410C', waterRight: '#7C2D12', foam: '#FEF08A',
+        bridgeTop: '#3E282E', bridgeRail: '#2B1B20', bridgeDark: '#1A0F13',
+        treeLeavesA: '#991B1B', treeLeavesB: '#7F1D1D', treeTopHi: '#FB923C', trunkL: '#3F1C2C', trunkR: '#29101C',
+        litGlow: '#FBBF24', hoverGlow: '#FFE600', fireGlow: '#F97316', mote: '#FDBA74',
+        skyTop: 'rgba(42, 10, 14, 0.5)', skyBottom: 'rgba(13, 7, 10, 0.05)'
+      }
+    },
+    end: {
+      day: {
+        topA: '#DEDAA0', topB: '#CEC98B', topTrim: '#ECE8B8',
+        wallLeft: '#4C3D6E', wallRight: '#31264A', subLeft: '#271E3E', subRight: '#19122B',
+        bedrock: '#0F0A1B', edge: 'rgba(168,85,247,0.18)',
+        roadA: '#6A529B', roadB: '#5A4486', roadLeft: '#3E2D60', roadRight: '#2B1E45',
+        waterTop: '#8B5CF6', waterDeep: '#6D28D9', waterLeft: '#5B21B6', waterRight: '#4C1D95', foam: '#F3E8FF',
+        bridgeTop: '#58447D', bridgeRail: '#3F2F5E', bridgeDark: '#2A1E42',
+        treeLeavesA: '#A855F7', treeLeavesB: '#7E22CE', treeTopHi: '#E9D5FF', trunkL: '#2D2148', trunkR: '#1D1432',
+        litGlow: '#C084FC', hoverGlow: '#FFE600', fireGlow: '#A855F7', mote: '#E9D5FF',
+        skyTop: 'rgba(46, 16, 101, 0.35)', skyBottom: 'rgba(15, 7, 32, 0.08)'
+      },
+      night: {
+        topA: '#ABA679', topB: '#999469', topTrim: '#C7C291',
+        wallLeft: '#3B2E59', wallRight: '#241B3B', subLeft: '#1D1530', subRight: '#120D20',
+        bedrock: '#090612', edge: 'rgba(192,132,252,0.15)',
+        roadA: '#55417D', roadB: '#46346A', roadLeft: '#31234E', roadRight: '#211637',
+        waterTop: '#9333EA', waterDeep: '#6B21A8', waterLeft: '#581C87', waterRight: '#3B0764', foam: '#F5D0FE',
+        bridgeTop: '#473669', bridgeRail: '#32244D', bridgeDark: '#1F1533',
+        treeLeavesA: '#9333EA', treeLeavesB: '#6B21A8', treeTopHi: '#E9D5FF', trunkL: '#23183A', trunkR: '#160E26',
+        litGlow: '#D8B4FE', hoverGlow: '#FFE600', fireGlow: '#C084FC', mote: '#C084FC',
+        skyTop: 'rgba(24, 10, 54, 0.52)', skyBottom: 'rgba(9, 4, 20, 0.05)'
+      }
+    }
+  };
+
+  // ── 4. Player Voxel Skin Helper ───────────────────────────────────────────
+  function getPlayerSpriteMeta(player) {
+    var p = player || (window.STATE && window.STATE.player) || {};
     var rawSkin = p.minecraftSkin || (p.avatar && p.avatar.skin) || p.avatarSkin || 'blockhead';
     var skinAlias = {
       steve: 'blockhead', alex: 'scout', creeper: 'hisser', diamond_knight: 'crystal_knight',
@@ -399,18 +211,13 @@
     if (skinAlias[rawSkin]) rawSkin = skinAlias[rawSkin];
 
     var skins = window.MINECRAFT_SKINS || (typeof MINECRAFT_SKINS !== 'undefined' ? MINECRAFT_SKINS : {});
-    var skinData = skins[rawSkin] || skins.blockhead;
+    var skinData = skins[rawSkin] || skins.blockhead || null;
     var hatKey = p.avatarHat || (p.avatar && p.avatar.hat) || 'none';
     var hats = window.MINECRAFT_HATS || (typeof MINECRAFT_HATS !== 'undefined' ? MINECRAFT_HATS : {});
     var hatData = hats[hatKey] || null;
     var capeKey = p.avatarCape || (p.avatar && p.avatar.cape) || 'none';
     var capes = window.MINECRAFT_CAPES || (typeof MINECRAFT_CAPES !== 'undefined' ? MINECRAFT_CAPES : {});
     var capeData = capes[capeKey] || null;
-
-    var renderFn = window.renderMinecraftSVG || (typeof renderMinecraftSVG === 'function' ? renderMinecraftSVG : null);
-    var faceSvg = (renderFn && skinData)
-      ? renderFn(skinData.grid, hatData ? hatData.grid : null)
-      : '<div style="width:100%;height:100%;background:#C68B59;"></div>';
 
     var bodyColors = {
       blockhead:      { shirt: '#00B4D8', belt: '#5C3A21', pants: '#2C3E82' },
@@ -423,170 +230,186 @@
       gilded_monarch: { shirt: '#FFD700', belt: '#B45309', pants: '#2B1E16' }
     };
 
-    var colors = bodyColors[rawSkin] || bodyColors.blockhead;
-    var capeAccent = (capeData && capeData.color && capeData.color !== 'transparent')
-      ? '<div class="player-cape-back" style="background:' + capeData.color + '"></div>'
-      : '';
-
-    return (
-      '<div class="station-character-sprite player-character-sprite" role="button" tabindex="0" title="Tap champion to cheer!" data-mod-title="' + esc(modTitle || 'Next Quest') + '">'
-      + '  <div class="station-speech-bubble">Next Quest</div>'
-      + '  <div class="player-voxel-body">'
-      +      capeAccent
-      + '    <div class="player-voxel-head">' + faceSvg + '</div>'
-      + '    <div class="player-voxel-torso" style="background:' + colors.shirt + '">'
-      + '      <div class="player-arm arm-left" style="background:' + colors.shirt + '"></div>'
-      + '      <div class="player-arm arm-right" style="background:' + colors.shirt + '"></div>'
-      + '      <div class="player-belt" style="background:' + colors.belt + '"></div>'
-      + '    </div>'
-      + '    <div class="player-voxel-legs">'
-      + '      <div class="player-leg leg-left" style="background:' + colors.pants + '"></div>'
-      + '      <div class="player-leg leg-right" style="background:' + colors.pants + '"></div>'
-      + '    </div>'
-      + '  </div>'
-      + '</div>'
-    );
+    return {
+      skinData: skinData,
+      hatData: hatData,
+      capeColor: (capeData && capeData.color && capeData.color !== 'transparent') ? capeData.color : null,
+      colors: bodyColors[rawSkin] || bodyColors.blockhead
+    };
   }
 
-  // ── 6. Measure Stations & Draw Winding Cobblestone SVG Path + Terrain ───────
-  function buildTrailPathsSVG(canvas, biome, activeIdx) {
-    if (!canvas) return;
-    var svg = canvas.querySelector('.trail-world-svg');
-    if (!svg) return;
-
-    var w = canvas.clientWidth || 720;
-    var h = canvas.scrollHeight || canvas.clientHeight || 960;
-    if (w < 10 || h < 10) return;
-
-    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
-
-    var pedestals = canvas.querySelectorAll('.island-pedestal');
-    var chestBtn = canvas.querySelector('.capstone-chest-btn');
-    var cRect = canvas.getBoundingClientRect();
-
-    var points = [];
-    pedestals.forEach(function(p) {
-      var r = p.getBoundingClientRect();
-      points.push({
-        x: (r.left - cRect.left) + (r.width * 0.5),
-        y: (r.top - cRect.top) + (r.height * 0.65)
-      });
-    });
-    if (chestBtn) {
-      var cr = chestBtn.getBoundingClientRect();
-      points.push({
-        x: (cr.left - cRect.left) + (cr.width * 0.5),
-        y: (cr.top - cRect.top) + 32
-      });
-    }
-
-    if (points.length < 2) return;
-
-    // Terrain Biome Palettes
-    var isDark = document.body.classList.contains('dark-theme');
-    var terrainTheme = {
-      overworld: isDark ? {
-        plateauTop: '#162822', plateauRim: '#0F1C18', plateauBorder: 'rgba(110, 231, 183, 0.16)',
-        roadOuter: '#1F2937', roadInner: '#334155', cobble: '#475569',
-        litGlow: '#10B981', water: '#0284C7', foam: '#7DD3FC'
-      } : {
-        plateauTop: '#E4F3D8', plateauRim: '#C5DFB3', plateauBorder: 'rgba(22, 101, 52, 0.22)',
-        roadOuter: '#9A7B56', roadInner: '#E7D8BE', cobble: '#B89F7D',
-        litGlow: '#10B981', water: '#38BDF8', foam: '#FFFFFF'
-      },
-      nether: {
-        plateauTop: '#2A1116', plateauRim: '#1A080C', plateauBorder: 'rgba(249, 115, 22, 0.25)',
-        roadOuter: '#18181B', roadInner: '#3F1D24', cobble: '#5C262E',
-        litGlow: '#F59E0B', water: '#EA580C', foam: '#FDBA74'
-      },
-      end: {
-        plateauTop: '#1A112C', plateauRim: '#110920', plateauBorder: 'rgba(192, 132, 252, 0.26)',
-        roadOuter: '#1E1B2E', roadInner: '#2E234B', cobble: '#4C3B78',
-        litGlow: '#A855F7', water: '#6D28D9', foam: '#E9D5FF'
-      }
-    }[biome || 'overworld'];
-
-    // Measure exact river bridge crossing height so plateaus & waterfall meet it cleanly
-    var featureEl = canvas.querySelector('.island-feature-section');
-    var bridgeRect = featureEl ? featureEl.getBoundingClientRect() : null;
-    var riverTop = bridgeRect ? Math.round(bridgeRect.top - cRect.top) : Math.round(h * 0.45);
-    var riverBottom = bridgeRect ? Math.round(bridgeRect.bottom - cRect.top) : Math.round(h * 0.52);
-
-    var pLeft = Math.max(22, Math.round(w * 0.045));
-    var pRight = Math.min(w - 14, Math.round(w * 0.96));
-    var p1Bottom = Math.max(160, riverTop - 10);
-    var p2Top = Math.min(h - 160, riverBottom + 10);
-
-    var plateau1 = 'M ' + (pLeft + 18) + ' 26 L ' + (pRight - 22) + ' 26 Q ' + pRight + ' 26 ' + pRight + ' 54 L ' + (pRight - 6) + ' ' + (p1Bottom - 20) + ' Q ' + (pRight - 8) + ' ' + p1Bottom + ' ' + (pRight - 36) + ' ' + p1Bottom + ' L ' + (pLeft + 26) + ' ' + p1Bottom + ' Q ' + pLeft + ' ' + p1Bottom + ' ' + pLeft + ' ' + (p1Bottom - 24) + ' L ' + (pLeft + 4) + ' 54 Q ' + (pLeft + 6) + ' 26 ' + (pLeft + 18) + ' 26 Z';
-    var plateau2 = 'M ' + (pLeft + 24) + ' ' + p2Top + ' L ' + (pRight - 20) + ' ' + p2Top + ' Q ' + pRight + ' ' + p2Top + ' ' + pRight + ' ' + (p2Top + 26) + ' L ' + (pRight - 14) + ' ' + (h - 28) + ' Q ' + (pRight - 18) + ' ' + (h - 8) + ' ' + (w * 0.5 + 90) + ' ' + (h - 8) + ' L ' + (w * 0.5 - 90) + ' ' + (h - 8) + ' Q ' + (pLeft + 22) + ' ' + (h - 8) + ' ' + (pLeft + 14) + ' ' + (h - 32) + ' L ' + (pLeft + 6) + ' ' + (p2Top + 26) + ' Q ' + (pLeft + 8) + ' ' + p2Top + ' ' + (pLeft + 24) + ' ' + p2Top + ' Z';
-
-    // Cascading Waterfall Column anchored on far-left outer cliff bank, draining right into river bank
-    var wfX = 4;
-    var wfEndY = Math.max(120, riverTop + 14);
-    var waterfallSVG = ''
-      + '<g class="trail-waterfall">'
-      + '  <rect x="' + wfX + '" y="46" width="13" height="' + (wfEndY - 46) + '" rx="6" fill="' + terrainTheme.water + '" opacity="0.9"/>'
-      + '  <line class="wf-stream-line" x1="' + (wfX + 4) + '" y1="54" x2="' + (wfX + 4) + '" y2="' + (wfEndY - 6) + '" stroke="' + terrainTheme.foam + '" stroke-width="1.8" stroke-dasharray="10 12" stroke-linecap="round"/>'
-      + '  <line class="wf-stream-line wf-delay" x1="' + (wfX + 9) + '" y1="62" x2="' + (wfX + 9) + '" y2="' + (wfEndY - 6) + '" stroke="' + terrainTheme.foam + '" stroke-width="1.4" stroke-dasharray="7 14" stroke-linecap="round"/>'
-      + '  <ellipse cx="' + (wfX + 7) + '" cy="' + wfEndY + '" rx="12" ry="4.5" fill="' + terrainTheme.foam + '" opacity="0.5" class="wf-mist"/>'
-      + '</g>';
-
-    // Build smooth Cubic Bezier segments between consecutive waypoints
-    var fullPathD = 'M ' + points[0].x.toFixed(1) + ' ' + points[0].y.toFixed(1);
-    var litIdx = clamp(typeof activeIdx === 'number' ? activeIdx : 0, 0, points.length - 1);
-    var litPathD = 'M ' + points[0].x.toFixed(1) + ' ' + points[0].y.toFixed(1);
-    var segPathsHtml = '';
-
-    for (var i = 0; i < points.length - 1; i++) {
-      var a = points[i];
-      var b = points[i + 1];
-      var cpY1 = a.y + (b.y - a.y) * 0.55;
-      var cpY2 = a.y + (b.y - a.y) * 0.45;
-      var seg = ' C ' + a.x.toFixed(1) + ' ' + cpY1.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + cpY2.toFixed(1) + ', ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
-      fullPathD += seg;
-      if (i < litIdx) {
-        litPathD += seg;
-      }
-      segPathsHtml += '<path class="trail-segment-hover" data-seg-idx="' + (i + 1) + '" d="M ' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + seg + '" fill="none" stroke="' + terrainTheme.litGlow + '" stroke-width="20" stroke-linecap="round" opacity="0"/>';
-    }
-
-    svg.innerHTML = (
-      '<!-- Upper & Lower Sculpted Island Plateaus -->'
-      + '<g class="terrain-plateaus">'
-      + '  <path d="' + plateau1 + '" transform="translate(0, 10)" fill="' + terrainTheme.plateauRim + '"/>'
-      + '  <path d="' + plateau1 + '" fill="' + terrainTheme.plateauTop + '" stroke="' + terrainTheme.plateauBorder + '" stroke-width="2"/>'
-      + '  <path d="' + plateau2 + '" transform="translate(0, 10)" fill="' + terrainTheme.plateauRim + '"/>'
-      + '  <path d="' + plateau2 + '" fill="' + terrainTheme.plateauTop + '" stroke="' + terrainTheme.plateauBorder + '" stroke-width="2"/>'
-      + '</g>'
-      + waterfallSVG
-      + '<!-- Layered Winding Cobblestone Trail -->'
-      + '<g class="terrain-road">'
-      + '  <path d="' + fullPathD + '" fill="none" stroke="' + terrainTheme.roadOuter + '" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>'
-      + '  <path d="' + fullPathD + '" fill="none" stroke="' + terrainTheme.roadInner + '" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>'
-      + '  <path d="' + fullPathD + '" fill="none" stroke="' + terrainTheme.cobble + '" stroke-width="10" stroke-dasharray="2 16" stroke-linecap="round" opacity="0.85"/>'
-      +    segPathsHtml
-      + (litIdx > 0
-          ? ('<path class="trail-progress-glow" d="' + litPathD + '" fill="none" stroke="' + terrainTheme.litGlow + '" stroke-width="5" stroke-dasharray="10 10" stroke-linecap="round"/>')
-          : '')
-      + '</g>'
-    );
+  // ── 5. Terrain & Waypoint Sculptor ────────────────────────────────────────
+  function buildStationCoords(isCompact) {
+    var ux = isCompact ? 2.1 : 3.0;
+    var uxS = isCompact ? 1.6 : 2.3;
+    return [
+      { u: -uxS, v: 6,    labelSide: 'right' }, // 01
+      { u: ux,   v: 11,   labelSide: 'left'  }, // 02
+      { u: -uxS, v: 15.5, labelSide: 'right' }, // 03 (pre-river overlook)
+      { u: ux,   v: 26.5, labelSide: 'left'  }, // 04 (post-bridge riverbank)
+      { u: -ux,  v: 31,   labelSide: 'right' }, // 05
+      { u: ux,   v: 35.5, labelSide: 'left'  }, // 06
+      { u: -uxS, v: 40,   labelSide: 'right' }, // 07
+      { u: uxS,  v: 44,   labelSide: 'left'  }, // 08
+      { u: 0,    v: 48.5, labelSide: 'bottom', isCapstone: true } // Capstone Vault
+    ];
   }
 
-  window.relayoutAdventurePaths = function() {
-    var activeBoard = document.querySelector('#adventure-trail-wrap .island-canvas');
-    if (!activeBoard) return;
-    var biome = activeBoard.getAttribute('data-biome') || 'overworld';
-    var activeIdx = parseInt(activeBoard.getAttribute('data-active-idx') || '0', 10);
-    buildTrailPathsSVG(activeBoard, biome, activeIdx);
-  };
+  function buildRoadSplinePoints(stationCoords) {
+    // Route cleanly through stations and across center wooden bridge (u=0, v=19..23)
+    var pts = [
+      { u: stationCoords[0].u, v: stationCoords[0].v },
+      { u: stationCoords[1].u, v: stationCoords[1].v },
+      { u: stationCoords[2].u, v: stationCoords[2].v },
+      { u: 0, v: 18.5 },
+      { u: 0, v: 23.0 },
+      { u: stationCoords[3].u, v: stationCoords[3].v },
+      { u: stationCoords[4].u, v: stationCoords[4].v },
+      { u: stationCoords[5].u, v: stationCoords[5].v },
+      { u: stationCoords[6].u, v: stationCoords[6].v },
+      { u: stationCoords[7].u, v: stationCoords[7].v },
+      { u: stationCoords[8].u, v: stationCoords[8].v }
+    ];
+    return pts;
+  }
 
-  var _trailResizeObserver = null;
+  function pointToSegmentDistSq(u, v, a, b) {
+    var dx = b.u - a.u;
+    var dy = b.v - a.v;
+    var len2 = dx * dx + dy * dy;
+    if (len2 === 0) return (u - a.u) * (u - a.u) + (v - a.v) * (v - a.v);
+    var t = clamp(((u - a.u) * dx + (v - a.v) * dy) / len2, 0, 1);
+    var px = a.u + t * dx;
+    var py = a.v + t * dy;
+    return (u - px) * (u - px) + (v - py) * (v - py);
+  }
 
-  // ── 7. Render Living Interactive Diorama Trail Map ──────────────────────────
+  function buildIslandVoxels(isCompact, stationCoords) {
+    var vMax = 53;
+    var maxHalfW = isCompact ? 6.2 : 8.4;
+    var roadPts = buildRoadSplinePoints(stationCoords);
+    var tiles = [];
+    var tileMap = Object.create(null);
+
+    function islandHalfW(v) {
+      if (v < 3 || v > 51) return 0;
+      if (v < 7) return lerp(2.2, maxHalfW * 0.85, (v - 3) / 4);
+      if (v >= 18 && v <= 23.5) {
+        // Gorge canyon narrowing subtly + waterfall mouth notch on left
+        return maxHalfW * 0.96;
+      }
+      if (v > 43) return lerp(maxHalfW * 0.88, 2.8, (v - 43) / 8);
+      return maxHalfW * (0.9 + 0.1 * Math.sin(v * 0.35));
+    }
+
+    function baseElevAt(u, v) {
+      var elev = 2.6;
+      // Upper northern bluff peak
+      if (v < 18) {
+        elev += Math.max(0, 1.4 * (1 - v / 18));
+        if (u < -2) elev += 0.55;
+        if (u > 3 && v < 14) elev += 0.35;
+      } else if (v > 23) {
+        // Lower southern rising ridge toward capstone temple
+        elev += 0.3 * Math.sin((v - 23) * 0.25);
+        if (v >= 45 && Math.abs(u) <= 2.5) elev = 3.5;
+        else if (v >= 43 && Math.abs(u) <= 3.5) elev = 3.1;
+      }
+      // Quantize gently to crisp half-block isometric terraces!
+      return Math.round(elev * 2) / 2;
+    }
+
+    for (var v = 2; v <= vMax; v++) {
+      var hw = islandHalfW(v);
+      if (hw <= 0) continue;
+
+      var uStart = Math.ceil(-hw);
+      var uEnd = Math.floor(hw);
+      for (var u = uStart; u <= uEnd; u++) {
+        // Isometric staggered diamond lattice parity: (u + v) must be even
+        if (((u + v) & 1) !== 0) continue;
+
+        // Waterfall notch cut cleanly into upper-left rock face (u <= -4, v 12..19)
+        var inRiverChannel = (v >= 19 && v <= 23);
+        var isWaterfallLedge = (v >= 13 && v <= 18 && u <= -4 && u >= -6);
+
+        var topZ = baseElevAt(u, v);
+        var botZ = -1.6 - Math.max(0, 1.4 * (1 - Math.abs(u) / (hw + 0.5)));
+        // Taper jagged hanging bedrock at extreme bottom point & flanks
+        if (v > 44) botZ += 0.6;
+        if (Math.abs(u) >= hw - 1.2) botZ += 1.0;
+
+        var kind = 'grass';
+        if (inRiverChannel) {
+          kind = 'water';
+          topZ = 1.45;
+          // Recessed canyon rock frame on outermost bank tip
+          if (Math.abs(u) >= hw - 0.8 && u > 0) {
+            kind = 'cliff';
+            topZ = 2.3;
+          }
+        } else if (isWaterfallLedge) {
+          kind = 'waterfall';
+          topZ = (v <= 15) ? 3.2 : (v <= 17 ? 2.55 : 1.75);
+        } else {
+          // Check proximity to road or bridge deck or stations
+          var onBridge = (v >= 18 && v <= 24 && Math.abs(u) <= 1.2);
+          if (onBridge) {
+            kind = 'bridge';
+            topZ = 2.6;
+          } else {
+            var minD2 = 99;
+            for (var s = 0; s < roadPts.length - 1; s++) {
+              var d2 = pointToSegmentDistSq(u, v, roadPts[s], roadPts[s + 1]);
+              if (d2 < minD2) minD2 = d2;
+            }
+            if (minD2 <= 1.05) {
+              kind = 'road';
+            }
+            // Level stations evenly on sculpted pedestals
+            for (var stIdx = 0; stIdx < stationCoords.length; stIdx++) {
+              var st = stationCoords[stIdx];
+              var sd2 = (u - st.u) * (u - st.u) + (v - st.v) * (v - st.v);
+              if (sd2 <= 2.3) {
+                topZ = baseElevAt(st.u, st.v);
+                if (sd2 <= 1.1) kind = 'road';
+              }
+            }
+          }
+        }
+
+        var tile = {
+          u: u,
+          v: v,
+          topZ: topZ,
+          botZ: botZ,
+          kind: kind,
+          shadeSeed: (((u * 13 + v * 7) & 3) === 0) ? 1 : 0,
+          hasFlower: (kind === 'grass' && ((u * 29 + v * 17) & 15) === 3)
+        };
+        tiles.push(tile);
+        tileMap[u + ',' + v] = tile;
+      }
+    }
+
+    // Flatten road elevations slightly at bridge approaches
+    for (var ti = 0; ti < tiles.length; ti++) {
+      var tl = tiles[ti];
+      if (tl.kind === 'road' && tl.v >= 16 && tl.v <= 25) {
+        tl.topZ = 2.6;
+      }
+    }
+
+    return { tiles: tiles, tileMap: tileMap, roadPts: roadPts };
+  }
+
+  // ── 6. Main Interactive 2.5D Voxel Map Renderer ───────────────────────────
   function renderAdventureTrail(container, filteredMods, activeTrackFilter) {
     if (!container) return;
+    if (typeof _activeCleanup === 'function') {
+      _activeCleanup();
+      _activeCleanup = null;
+    }
     container.innerHTML = '';
 
     var player = (typeof getPlayerState === 'function') ? getPlayerState() : { completedLessons: [], completedModules: [] };
@@ -601,7 +424,6 @@
       var hasAdvanced = completedModules.some(function(id) { return id.startsWith('i8') || id.startsWith('a'); });
       if (hasAdvanced) currentTrack = 'advanced';
       else if (hasIntermediate) currentTrack = 'intermediate';
-      else currentTrack = 'beginner';
     }
 
     var trackMods = allCurriculum.filter(function(m) { return m.level === currentTrack; });
@@ -609,284 +431,75 @@
       trackMods = filteredMods.slice(0, 8);
     }
 
-    var trackTitles = {
+    var trackMeta = {
       beginner: {
-        badge: 'TRACK 1 • BEGINNER OVERWORLD',
         title: 'Beginner Overworld',
-        sub: 'Tap quests, poke trees & campfires, mine glowing crystals, or sail the river bridge!',
-        cube: SVGS.grassBlock(),
+        sub: 'Tap quests, mine cliff crystals, stoke campfires, or steer the skiff!',
+        cubeSvg: SVGS.grassCube,
         biomeName: 'overworld',
         capstoneId: 'proj-beginner',
         capstoneTitle: 'Personal Expense Tracker',
-        lore: ['Oak leaves whisper: Everything extends Object.', 'Campfire JVM warms bytecode cleanly!', 'Crystal Vein: Java 21 brings Virtual Threads!', 'Lantern Note: Prefer final fields where safe.']
+        lore: {
+          tree: 'Oak Canopy: In Java, every object inherits java.lang.Object.',
+          campfire: 'Hearth stoked! HotSpot JIT warms hot loops dynamically.',
+          ore1: 'Crystal Vein mined! Java 21 brings Virtual Threads.',
+          ore2: 'Emerald Pocket unlocked! Prefer immutable records where safe.',
+          boat: 'River Skiff launched across Whispering Falls Gorge!',
+          water: 'Ripple! Streams evaluate lazily only at terminal ops.',
+          ground: 'Waypoint tapped! Click any stone pedestal to enter.'
+        }
       },
       intermediate: {
-        badge: 'TRACK 2 • INTERMEDIATE THE NETHER',
         title: 'The Nether Realm',
-        sub: 'Master OOP, Collections, Streams & I/O across volcanic basalt ridges!',
-        cube: SVGS.netherrackBlock(),
+        sub: 'Master OOP, Collections, Streams & I/O across basalt terraces!',
+        cubeSvg: SVGS.netherCube,
         biomeName: 'nether',
         capstoneId: 'proj-intermediate',
         capstoneTitle: 'Library Management System',
-        lore: ['Crimson Shroom: Streams evaluate lazily!', 'Soul Brazier stoked: Try-with-resources guards I/O!', 'Gold Ore: HashMap lookup averages O(1)!', 'Nether Sign: Records make immutable DTOs effortless.']
+        lore: {
+          tree: 'Crimson Shroom: Polymorphism dispatches at runtime.',
+          campfire: 'Soul Brazier blazing! try-with-resources closes streams safely.',
+          ore1: 'Nether Gold mined! HashMap lookup averages O(1).',
+          ore2: 'Quartz Seam discovered! Generics enforce compile-time safety.',
+          boat: 'Magma Skiff surging through Basalt Gorge!',
+          water: 'Magma ripple! CompletableFuture chains async work cleanly.',
+          ground: 'Obsidian path active — choose your next chapter!'
+        }
       },
       advanced: {
-        badge: 'TRACK 3 • ADVANCED THE END',
         title: 'The End Gateway',
-        sub: 'Conquer JVM Memory, Virtual Threads & Spring Cloud across obsidian spires!',
-        cube: SVGS.endStoneBlock(),
+        sub: 'Conquer JVM Memory, Virtual Threads & Spring Cloud spires!',
+        cubeSvg: SVGS.endCube,
         biomeName: 'end',
         capstoneId: 'proj-advanced',
         capstoneTitle: 'Cloud Banking Core Engine',
-        lore: ['Obsidian Obelisk hums with JIT C2 compilation!', 'End Crystal charged: G1GC balances low pauses!', 'Ender Shard: StructuredTaskScope prevents leaks!', 'Void Sign: Spring Boot Actuator monitors health cleanly.']
-      }
-    };
-
-    var meta = trackTitles[currentTrack] || trackTitles.beginner;
-    var doneModCount = 0;
-    trackMods.forEach(function(m) {
-      if (completedModules.indexOf(m.id) !== -1) doneModCount++;
-    });
-
-    // Relic count for current realm (2 mineable ore nodes + 1 lantern/lore discovery + 1 crossing voyage = trackable fun relics!)
-    var collectedRelics = loadCollectedRelics();
-    var biomeRelicKeys = [
-      meta.biomeName + '_ore_1',
-      meta.biomeName + '_ore_2',
-      meta.biomeName + '_campfire',
-      meta.biomeName + '_boat'
-    ];
-    function countBiomeRelics() {
-      var c = loadCollectedRelics();
-      var total = 0;
-      biomeRelicKeys.forEach(function(k) { if (c[k]) total++; });
-      return total;
-    }
-
-    // ── Outer Interactive Diorama Board ──
-    var board = document.createElement('div');
-    board.className = 'adventure-trail-board island-mountain-board';
-    board.setAttribute('data-biome', meta.biomeName);
-
-    // Spatial Apple Parallax Depth on Pointer Move
-    if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-      var parallaxQueued = false;
-      board.addEventListener('pointermove', function(e) {
-        if (parallaxQueued) return;
-        parallaxQueued = true;
-        requestAnimationFrame(function() {
-          var rect = board.getBoundingClientRect();
-          if (rect.width > 0 && rect.height > 0) {
-            var nx = (((e.clientX - rect.left) / rect.width) - 0.5) * 2;
-            var ny = (((e.clientY - rect.top) / rect.height) - 0.5) * 2;
-            board.style.setProperty('--mx', clamp(nx, -1, 1).toFixed(3));
-            board.style.setProperty('--my', clamp(ny, -1, 1).toFixed(3));
-          }
-          parallaxQueued = false;
-        });
-      }, { passive: true });
-      board.addEventListener('pointerleave', function() {
-        board.style.setProperty('--mx', '0');
-        board.style.setProperty('--my', '0');
-      });
-    }
-
-    // Atmospheric Floating Sky Clouds & Ambient Fireflies/Embers
-    var skyDecor = document.createElement('div');
-    skyDecor.className = 'island-sky-decor';
-    skyDecor.innerHTML = (
-      '<div class="pixel-cloud c1"></div>'
-      + '<div class="pixel-cloud c2"></div>'
-      + '<div class="pixel-cloud c3"></div>'
-      + '<div class="ambient-mote m1"></div>'
-      + '<div class="ambient-mote m2"></div>'
-      + '<div class="ambient-mote m3"></div>'
-      + '<div class="ambient-mote m4"></div>'
-    );
-    board.appendChild(skyDecor);
-
-    // ── Top Frosted Apple-Styled Biome HUD Bar ──
-    var headerBar = document.createElement('div');
-    headerBar.className = 'island-header-bar';
-    var relicCount = countBiomeRelics();
-    headerBar.innerHTML = (
-      '<div class="island-header-left">'
-      + '  <div class="island-biome-cube" title="Interactive Realm Block">' + meta.cube + '</div>'
-      + '  <div class="island-title-group">'
-      + '    <div class="island-badge-pill">' + esc(meta.badge) + '</div>'
-      + '    <h2 class="island-heading">' + esc(meta.title) + '</h2>'
-      + '    <p class="island-sub">' + esc(meta.sub) + '</p>'
-      + '  </div>'
-      + '</div>'
-      + '<div class="island-header-right">'
-      + '  <div class="island-stats-row">'
-      + '    <div class="island-stat-chip" title="Realm exploration discoveries (tap glowing crystals, campfire, & boat!)">'
-      + '      <span class="chip-icon">' + SVGS.gem + '</span>'
-      + '      <span class="chip-val" id="island-relic-count">' + relicCount + '/4</span>'
-      + '    </div>'
-      + '    <div class="island-stat-chip">'
-      + '      <span class="chip-val">' + doneModCount + '/' + trackMods.length + '</span>'
-      + '      <div class="island-mini-bar"><div class="mini-bar-fill" style="width:' + (doneModCount / (trackMods.length || 1) * 100) + '%"></div></div>'
-      + '    </div>'
-      + '    <button type="button" class="island-locate-btn" id="btn-locate-champion" title="Scroll to your active quest pedestal">'
-      +        SVGS.compass + '<span>Locate</span>'
-      + '    </button>'
-      + '  </div>'
-      + '  <div class="island-track-tabs">'
-      + '    <button type="button" class="track-pill-btn ' + (currentTrack === 'beginner' ? 'active' : '') + '" data-track="beginner">Beginner</button>'
-      + '    <button type="button" class="track-pill-btn ' + (currentTrack === 'intermediate' ? 'active' : '') + '" data-track="intermediate">Intermediate</button>'
-      + '    <button type="button" class="track-pill-btn ' + (currentTrack === 'advanced' ? 'active' : '') + '" data-track="advanced">Advanced</button>'
-      + '  </div>'
-      + '</div>'
-    );
-    board.appendChild(headerBar);
-
-    headerBar.querySelectorAll('.track-pill-btn').forEach(function(btn) {
-      btn.onclick = function() {
-        var trk = btn.getAttribute('data-track');
-        if (typeof window.setTrackFilter === 'function') {
-          window.setTrackFilter(trk);
-        } else {
-          renderAdventureTrail(container, filteredMods, trk);
+        lore: {
+          tree: 'Chorus Spire hums: G1 & ZGC keep tail latency tiny.',
+          campfire: 'Void Beacon ignited! Structured concurrency prevents leaks.',
+          ore1: 'Amethyst Geode mined! Escape analysis scalar-replaces objects.',
+          ore2: 'Ender Shard extracted! Spring Actuator exposes live health.',
+          boat: 'Astral Skiff gliding across Void Rift Rapids!',
+          water: 'Void ripple! Reactive backpressure regulates throughput.',
+          ground: 'Endstone dais ready — tap a portal stone!'
         }
-      };
-    });
+      }
+    }[currentTrack];
 
-    // ── Island Canvas & Synced Terrain Layer ──
-    var canvas = document.createElement('div');
-    canvas.className = 'island-canvas';
-    canvas.setAttribute('data-biome', meta.biomeName);
-
-    var terrainSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    terrainSvg.setAttribute('class', 'trail-world-svg');
-    terrainSvg.setAttribute('aria-hidden', 'true');
-    canvas.appendChild(terrainSvg);
-
-    var offsets = [
-      { x: -58, align: 'pill-right' },
-      { x: 34,  align: 'pill-left' },
-      { x: 72,  align: 'pill-left' },
-      { x: -46, align: 'pill-right' },
-      { x: 64,  align: 'pill-left' },
-      { x: -54, align: 'pill-right' },
-      { x: 36,  align: 'pill-left' },
-      { x: 0,   align: 'pill-right' }
-    ];
-
+    var doneModCount = 0;
     var firstActiveFound = false;
     var activeStationIdx = 0;
 
-    function refreshRelicCounter() {
-      var el = headerBar.querySelector('#island-relic-count');
-      if (el) el.textContent = countBiomeRelics() + '/4';
-    }
-
-    // Helper for Interactive Map Props
-    function attachInteractiveProp(station, sideClass, propType, relicKey, loreText, html) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'station-scenery interactive-prop prop-' + propType + ' ' + sideClass;
-      if (relicKey && collectedRelics[relicKey]) btn.classList.add('prop-discovered');
-      btn.setAttribute('aria-label', loreText || 'Interactive biome prop');
-      btn.innerHTML = html;
-
-      btn.onclick = function(e) {
-        e.stopPropagation();
-        btn.classList.remove('prop-bouncing');
-        void btn.offsetWidth;
-        btn.classList.add('prop-bouncing');
-        setTimeout(function() { btn.classList.remove('prop-bouncing'); }, 520);
-
-        if (propType === 'campfire') {
-          btn.classList.toggle('fire-stoked');
-          spawnMapParticles(btn, ['#F97316', '#FFE600', '#FFFFFF'], 9);
-          if (window.GameFX && window.GameFX.playXpPop) window.GameFX.playXpPop();
-        } else if (propType === 'tree') {
-          var pColors = meta.biomeName === 'nether' ? ['#DC2626', '#FCA5A5', '#FFE600'] : (meta.biomeName === 'end' ? ['#A855F7', '#E9D5FF', '#FFFFFF'] : ['#52B756', '#8AE48F', '#FDE047']);
-          spawnMapParticles(btn, pColors, 8);
-          if (window.GameFX && window.GameFX.playClick) window.GameFX.playClick();
-        } else if (propType === 'ore') {
-          spawnMapParticles(btn, ['#38BDF8', '#FFE600', '#FFFFFF'], 11);
-          if (window.GameFX && window.GameFX.playBlockBreak) window.GameFX.playBlockBreak();
-          btn.classList.add('prop-discovered');
-          btn.innerHTML = SVGS.oreRelicProp(meta.biomeName, true);
-        } else if (propType === 'lantern') {
-          var nowLit = !btn.classList.contains('lantern-lit');
-          btn.classList.toggle('lantern-lit', nowLit);
-          btn.innerHTML = SVGS.lanternSignProp(nowLit);
-          spawnMapParticles(btn, ['#FFE600', '#FEF08A'], 6);
-          if (window.GameFX && window.GameFX.playClick) window.GameFX.playClick();
-        }
-
-        if (relicKey) {
-          saveCollectedRelic(relicKey);
-          refreshRelicCounter();
-        }
-        if (loreText) showPropPopCallout(btn, loreText);
-      };
-      station.appendChild(btn);
-    }
-
-    // Render 8 Stepping Stone Stations
-    trackMods.forEach(function(mod, modIdx) {
-      var isModDone = completedModules.indexOf(mod.id) !== -1;
-      var isModUnlocked = (typeof window.isModUnlocked === 'function') ? window.isModUnlocked(mod.id) : true;
-      var isActiveStation = !isModDone && isModUnlocked && !firstActiveFound;
-
-      if (isActiveStation) {
+    var stationData = trackMods.slice(0, 8).map(function(mod, idx) {
+      var isDone = completedModules.indexOf(mod.id) !== -1;
+      var isUnlocked = (typeof window.isModUnlocked === 'function') ? window.isModUnlocked(mod.id) : true;
+      var isActive = !isDone && isUnlocked && !firstActiveFound;
+      if (isActive) {
         firstActiveFound = true;
-        activeStationIdx = modIdx;
-      } else if (isModDone) {
-        activeStationIdx = Math.max(activeStationIdx, modIdx + 1);
+        activeStationIdx = idx;
+      } else if (isDone) {
+        activeStationIdx = Math.max(activeStationIdx, idx + 1);
       }
 
-      // Scenic River & Sailboat Crossing between Ch 03 & Ch 04
-      if (modIdx === 3) {
-        var bridgeWrap = document.createElement('div');
-        bridgeWrap.className = 'island-feature-wrap';
-        bridgeWrap.innerHTML = SVGS.bridgeAndWaterfall(meta.biomeName);
-        var boatBtn = bridgeWrap.querySelector('.map-boat-btn');
-        if (boatBtn) {
-          boatBtn.onclick = function(e) {
-            e.stopPropagation();
-            boatBtn.classList.remove('boat-sailing');
-            void boatBtn.offsetWidth;
-            boatBtn.classList.add('boat-sailing');
-            spawnMapParticles(boatBtn, ['#38BDF8', '#FFFFFF', '#FFE600'], 8);
-            if (window.GameFX && window.GameFX.playMeowChirp) window.GameFX.playMeowChirp();
-            saveCollectedRelic(meta.biomeName + '_boat');
-            refreshRelicCounter();
-            showPropPopCallout(boatBtn, 'Bon voyage! Crossing the midpoint rapids!');
-            setTimeout(function() { boatBtn.classList.remove('boat-sailing'); }, 1500);
-          };
-        }
-        canvas.appendChild(bridgeWrap);
-      }
-
-      var pos = offsets[modIdx % offsets.length];
-      var station = document.createElement('div');
-      station.className = 'island-node-station ' + (pos.align === 'pill-left' ? 'layout-pill-left' : 'layout-pill-right') + (isActiveStation ? ' is-active-station' : '');
-      station.style.setProperty('--node-x', pos.x + 'px');
-      station.style.setProperty('--stagger-i', modIdx);
-      station.setAttribute('data-station-idx', modIdx);
-
-      // Attach Interactive World Props cleanly on the wide Pill-side outer flank (never overlaps pedestal/champion!)
-      var propSide = (pos.align === 'pill-left') ? 'prop-side-left' : 'prop-side-right';
-      if (modIdx === 0) {
-        attachInteractiveProp(station, propSide, 'campfire', meta.biomeName + '_campfire', meta.lore[1], SVGS.campfireProp(meta.biomeName));
-      } else if (modIdx === 1) {
-        attachInteractiveProp(station, propSide, 'tree', null, meta.lore[0], SVGS.treeProp(meta.biomeName));
-      } else if (modIdx === 2) {
-        var ore1Key = meta.biomeName + '_ore_1';
-        attachInteractiveProp(station, propSide, 'ore', ore1Key, meta.lore[2], SVGS.oreRelicProp(meta.biomeName, !!collectedRelics[ore1Key]));
-      } else if (modIdx === 4) {
-        attachInteractiveProp(station, propSide, 'lantern', null, meta.lore[3], SVGS.lanternSignProp(false));
-      } else if (modIdx === 6) {
-        var ore2Key = meta.biomeName + '_ore_2';
-        attachInteractiveProp(station, propSide, 'ore', ore2Key, 'Rare Relic Discovered! Check your Capstone ahead.', SVGS.oreRelicProp(meta.biomeName, !!collectedRelics[ore2Key]));
-      }
-
-      // Compute module completion ratio for progress pill bar
       var pCompletedLessons = player.completedLessons || [];
       var lessonsList = mod.lessons || [];
       var modDoneEx = 0;
@@ -894,157 +507,1521 @@
       lessonsList.forEach(function(l) { if (pCompletedLessons.indexOf(l.id) !== -1) modDoneEx++; });
       if (mod.challenge && (player.completedChallenges || []).indexOf(mod.challenge.id) !== -1) modDoneEx++;
       if (mod.codingTask && (player.completedCoding || []).indexOf(mod.id) !== -1) modDoneEx++;
-      var modPct = modTotalEx > 0 ? Math.round((modDoneEx / modTotalEx) * 100) : 0;
 
-      // ── 3D Stepping Stone Pedestal Button ──
-      var pedestal = document.createElement('button');
-      pedestal.type = 'button';
-      pedestal.className = 'island-pedestal ' + (isModDone ? 'pedestal-done' : (isActiveStation ? 'pedestal-active' : (isModUnlocked ? 'pedestal-unlocked' : 'pedestal-locked')));
-      pedestal.setAttribute('aria-label', mod.title + ' (Chapter ' + (modIdx + 1) + ')');
-
-      if (isModDone) {
-        pedestal.innerHTML = SVGS.pedestalTopCompleted();
-      } else if (isActiveStation) {
-        pedestal.innerHTML = SVGS.pedestalTopActive()
-          + '<div class="pedestal-active-ring"></div>'
-          + '<div class="pedestal-active-glow"></div>'
-          + renderPlayerMapSprite(player, mod.title);
-      } else if (isModUnlocked) {
-        pedestal.innerHTML = SVGS.pedestalTopReady();
-      } else {
-        pedestal.innerHTML = SVGS.pedestalTopLocked();
-      }
-
-      // Clickable Voxel Avatar Cheer interaction
-      var heroSprite = pedestal.querySelector('.player-character-sprite');
-      if (heroSprite) {
-        heroSprite.onclick = function(e) {
-          e.stopPropagation();
-          heroSprite.classList.remove('hero-cheering');
-          void heroSprite.offsetWidth;
-          heroSprite.classList.add('hero-cheering');
-          spawnMapParticles(pedestal, ['#FFE600', '#A855F7', '#10B981'], 10);
-          if (window.GameFX && window.GameFX.playXpPop) window.GameFX.playXpPop();
-          var bubble = heroSprite.querySelector('.station-speech-bubble');
-          if (bubble) {
-            var name = (player && player.name) ? String(player.name).slice(0, 18) : 'Hero';
-            var phrases = ['Let\'s go, ' + name + '!', 'Ready to code!', 'Next Quest!'];
-            bubble.textContent = phrases[Math.floor(Math.random() * phrases.length)];
-          }
-          setTimeout(function() { heroSprite.classList.remove('hero-cheering'); }, 650);
-        };
-      }
-
-      // ── Tactile Quest Label Pill ──
-      var pill = document.createElement('div');
-      pill.className = 'island-quest-pill ' + (isModDone ? 'pill-done' : (isActiveStation ? 'pill-active' : (isModUnlocked ? 'pill-unlocked' : 'pill-locked')));
-      var numPrefix = (modIdx + 1 < 10) ? ('0' + (modIdx + 1)) : (modIdx + 1);
-
-      pill.innerHTML = (
-        '<div class="pill-code-badge">' + numPrefix + '</div>'
-        + '<div class="pill-text-col">'
-        + '  <div class="pill-title">' + esc(mod.title) + '</div>'
-        + '  <div class="pill-sub">' + modDoneEx + '/' + modTotalEx + ' Quests • ' + esc(mod.biome || 'Kingdom') + '</div>'
-        + '  <div class="pill-micro-track"><div class="pill-micro-fill" style="width:' + modPct + '%"></div></div>'
-        + '</div>'
-        + '<div class="pill-status-badge">'
-        + (isModDone
-            ? ('<span class="status-done-badge">' + SVGS.check + ' DONE</span>')
-            : (isActiveStation
-                ? '<span class="status-active-badge">START</span>'
-                : (isModUnlocked ? '<span class="status-ready-badge">READY</span>' : '<span class="status-locked-badge">' + SVGS.lock + '</span>')
-              )
-          )
-        + '</div>'
-      );
-
-      // Highlight connecting SVG path segment on hover
-      function highlightSeg(on) {
-        var seg = canvas.querySelector('.trail-segment-hover[data-seg-idx="' + modIdx + '"]');
-        if (seg) seg.style.opacity = on ? '0.32' : '0';
-      }
-      station.addEventListener('pointerenter', function() { highlightSeg(true); });
-      station.addEventListener('pointerleave', function() { highlightSeg(false); });
-
-      pedestal.onclick = function() {
-        openChapterNodeModal(mod, isModDone, isModUnlocked);
+      if (isDone) doneModCount++;
+      return {
+        idx: idx,
+        mod: mod,
+        isDone: isDone,
+        isUnlocked: isUnlocked,
+        isActive: isActive,
+        doneEx: modDoneEx,
+        totalEx: modTotalEx,
+        pct: modTotalEx > 0 ? Math.round((modDoneEx / modTotalEx) * 100) : 0
       };
-      pill.onclick = function() {
-        openChapterNodeModal(mod, isModDone, isModUnlocked);
-      };
-
-      station.appendChild(pedestal);
-      station.appendChild(pill);
-      canvas.appendChild(station);
     });
 
-    // ── Capstone Summit Dais ──
-    var capstoneStation = document.createElement('div');
-    capstoneStation.className = 'island-capstone-station';
-    var isCapstoneReady = doneModCount >= trackMods.length;
+    var isCapstoneReady = doneModCount >= trackMods.length && trackMods.length > 0;
+    var relicKeys = [
+      trackMeta.biomeName + '_campfire',
+      trackMeta.biomeName + '_ore_1',
+      trackMeta.biomeName + '_ore_2',
+      trackMeta.biomeName + '_boat'
+    ];
+    function countBiomeRelics() {
+      var r = loadCollectedRelics();
+      var cnt = 0;
+      relicKeys.forEach(function(k) { if (r[k]) cnt++; });
+      return cnt;
+    }
 
-    var chestBtn = document.createElement('button');
-    chestBtn.type = 'button';
-    chestBtn.className = 'capstone-chest-btn ' + (isCapstoneReady ? 'chest-ready' : 'chest-locked');
-    chestBtn.setAttribute('aria-label', meta.capstoneTitle + ' Capstone Reward');
-    chestBtn.innerHTML = (
-      SVGS.treasureChest(isCapstoneReady)
-      + '<div class="capstone-label-pill">'
-      + '  <span class="capstone-code-tag">' + (meta.biomeName.toUpperCase()) + ' CAPSTONE • ' + doneModCount + '/' + trackMods.length + ' CHAPTERS</span>'
-      + '  <span class="capstone-name">' + esc(meta.capstoneTitle) + '</span>'
-      + '  <span class="capstone-xp-chip">' + (isCapstoneReady ? 'OPEN WORKBENCH (+250 XP)' : '+250 XP REWARD') + '</span>'
+    // ── Build Diorama Frame DOM ───────────────────────────────────────────
+    var board = document.createElement('div');
+    board.className = 'diorama-board';
+    board.setAttribute('data-biome', trackMeta.biomeName);
+
+    var atmosphereOn = getAtmospherePref();
+    var reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+    board.innerHTML = (
+      '<div class="diorama-hud-top">'
+      + '  <div class="diorama-hud-pill diorama-title-pill">'
+      + '    <span class="diorama-cube-badge">' + trackMeta.cubeSvg + '</span>'
+      + '    <div class="diorama-title-copy">'
+      + '      <div class="diorama-realm-title">' + esc(trackMeta.title) + '</div>'
+      + '      <div class="diorama-realm-sub">' + esc(trackMeta.sub) + '</div>'
+      + '    </div>'
+      + '  </div>'
+      + '  <div class="diorama-hud-actions">'
+      + '    <button type="button" class="diorama-hud-btn" id="btn-diorama-relics" title="Tap campfire, river boat, and 2 cliff crystal veins on the island">'
+      +        SVGS.gem + ' <span id="island-relic-count">' + countBiomeRelics() + '/4</span>'
+      + '    </button>'
+      + '    <button type="button" class="diorama-hud-btn ' + (atmosphereOn ? 'is-on' : '') + '" id="btn-diorama-atmos" title="Toggle fireflies & floating sparks">'
+      +        SVGS.sparkles + ' <span>Glow</span>'
+      + '    </button>'
+      + '    <button type="button" class="diorama-hud-btn diorama-locate-btn" id="btn-locate-champion" title="Locate active quest pedestal">'
+      +        SVGS.compass + ' <span>Locate</span>'
+      + '    </button>'
+      + '  </div>'
+      + '</div>'
+      + '<div class="diorama-viewport" id="diorama-viewport">'
+      + '  <canvas class="diorama-canvas" id="diorama-canvas"></canvas>'
+      + '  <svg class="diorama-leader-svg" aria-hidden="true"></svg>'
+      + '  <div class="diorama-pins-layer"></div>'
+      + '  <div class="diorama-hover-hint hidden" id="diorama-hover-hint"></div>'
       + '</div>'
     );
+    container.appendChild(board);
 
-    chestBtn.onclick = function() {
-      spawnMapParticles(chestBtn, ['#FFE600', '#10B981', '#F59E0B'], 12);
-      if (typeof window.openProjectModal === 'function') {
-        window.openProjectModal(meta.capstoneId);
-      } else if (typeof openProjectModal === 'function') {
-        openProjectModal(meta.capstoneId);
-      } else if (typeof window.toast === 'function') {
-        window.toast(meta.capstoneTitle + ' Workbench');
-      }
+    var viewport = board.querySelector('#diorama-viewport');
+    var canvas = board.querySelector('#diorama-canvas');
+    var leaderSvg = board.querySelector('.diorama-leader-svg');
+    var pinsLayer = board.querySelector('.diorama-pins-layer');
+    var hoverHint = board.querySelector('#diorama-hover-hint');
+    var ctx = canvas.getContext('2d');
+
+    var spriteMeta = getPlayerSpriteMeta(player);
+
+    // ── Interactive Diorama World State ───────────────────────────────────
+    var worldState = {
+      width: 740,
+      height: 1180,
+      isCompact: false,
+      ox: 370,
+      oy: 88,
+      tw: 36,
+      th: 18,
+      bh: 15,
+      dpr: Math.min(window.devicePixelRatio || 1, 2.5),
+      mx: 0,
+      my: 0,
+      pointerX: 0,
+      pointerY: 0,
+      hoveredTarget: null,
+      hoveredStationIdx: -1,
+      campfireLevel: loadCollectedRelics()[trackMeta.biomeName + '_campfire'] ? 2 : 1,
+      oreHits: {
+        ore1: loadCollectedRelics()[trackMeta.biomeName + '_ore_1'] ? 3 : 0,
+        ore2: loadCollectedRelics()[trackMeta.biomeName + '_ore_2'] ? 3 : 0
+      },
+      boatSurge: 0,
+      boatDir: 1,
+      boatU: -4.2,
+      heroHopY: 0,
+      heroHopVel: 0,
+      heroFacingIdx: activeStationIdx,
+      beaconPulseT: 0,
+      hintSecretsTimer: 0,
+      treeSprings: {
+        t1: { angle: 0, vel: 0 },
+        t2: { angle: 0, vel: 0 },
+        t3: { angle: 0, vel: 0 },
+        t4: { angle: 0, vel: 0 }
+      },
+      pedestalLifts: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      particles: [],
+      ripples: [],
+      motes: [],
+      stationCoords: [],
+      terrain: null,
+      hitTargets: []
     };
 
-    capstoneStation.appendChild(chestBtn);
-    canvas.appendChild(capstoneStation);
-    canvas.setAttribute('data-active-idx', String(activeStationIdx));
+    for (var m = 0; m < 18; m++) {
+      worldState.motes.push({
+        x: Math.random(),
+        y: Math.random(),
+        r: 1.4 + Math.random() * 2.2,
+        speedY: 0.008 + Math.random() * 0.014,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
 
-    // Locate Current Champion Button
-    var locateBtn = headerBar.querySelector('#btn-locate-champion');
+    function refreshRelicCounter() {
+      var el = board.querySelector('#island-relic-count');
+      if (el) el.textContent = countBiomeRelics() + '/4';
+    }
+
+    function showMapCallout(px, py, text) {
+      if (!viewport || !text) return;
+      var old = viewport.querySelector('.diorama-callout');
+      if (old) old.remove();
+
+      var pop = document.createElement('div');
+      pop.className = 'diorama-callout';
+      pop.textContent = text;
+      var left = clamp(px, 118, Math.max(122, worldState.width - 118));
+      var top = clamp(py - 18, 22, worldState.height - 60);
+      pop.style.left = Math.round(left) + 'px';
+      pop.style.top = Math.round(top) + 'px';
+      viewport.appendChild(pop);
+
+      setTimeout(function() {
+        pop.classList.add('fading-out');
+        setTimeout(function() { if (pop.parentNode) pop.remove(); }, 220);
+      }, 2500);
+    }
+
+    function emitCanvasParticles(x, y, colors, count, spread) {
+      if (reducedMotion) return;
+      var n = count || 10;
+      var sp = spread || 36;
+      for (var i = 0; i < n; i++) {
+        var ang = (Math.PI * 2 * i / n) + (Math.random() - 0.5) * 0.45;
+        var spd = sp * (0.5 + Math.random() * 0.8);
+        worldState.particles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd - 45,
+          size: 3 + Math.random() * 3.5,
+          color: colors[i % colors.length],
+          life: 0,
+          maxLife: 0.55 + Math.random() * 0.35
+        });
+      }
+    }
+
+    // ── Project Voxel Coordinates to Canvas Screen Space ──────────────────
+    function proj(u, v, z) {
+      var pxOff = worldState.mx * 4.5;
+      var pyOff = worldState.my * 2.5;
+      return {
+        x: worldState.ox + u * worldState.tw + pxOff,
+        y: worldState.oy + v * worldState.th - (z || 0) * worldState.bh + pyOff
+      };
+    }
+
+    // ── Build Frosted Pin Overlay Cards (Zero Truncation & Clean Alignment)
+    var pinRefs = [];
+    var capstonePinEl = null;
+
+    function createPinOverlay() {
+      pinsLayer.innerHTML = '';
+      pinRefs = [];
+
+      stationData.forEach(function(st) {
+        var numPrefix = (st.idx + 1 < 10) ? ('0' + (st.idx + 1)) : String(st.idx + 1);
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'diorama-pin-card '
+          + (st.isDone ? 'pin-done' : (st.isActive ? 'pin-active' : (st.isUnlocked ? 'pin-unlocked' : 'pin-locked')));
+        btn.setAttribute('data-station-idx', String(st.idx));
+
+        btn.innerHTML = (
+          '<span class="dpin-badge">' + numPrefix + '</span>'
+          + '<span class="dpin-copy">'
+          + '  <span class="dpin-title">' + esc(st.mod.title) + '</span>'
+          + '  <span class="dpin-meta">'
+          + '    <span class="dpin-sub">' + st.doneEx + '/' + st.totalEx + ' Quests • ' + esc(st.mod.biome || 'Realm') + '</span>'
+          + '    <span class="dpin-bar"><span class="dpin-bar-fill" style="width:' + st.pct + '%"></span></span>'
+          + '  </span>'
+          + '</span>'
+          + '<span class="dpin-status">'
+          + (st.isDone
+              ? '<span class="st-pill st-done">' + SVGS.check + ' Done</span>'
+              : (st.isActive
+                  ? '<span class="st-pill st-active">Start</span>'
+                  : (st.isUnlocked ? '<span class="st-pill st-ready">Ready</span>' : '<span class="st-pill st-lock">' + SVGS.lock + '</span>')
+                )
+            )
+          + '</span>'
+        );
+
+        btn.onpointerenter = function() {
+          worldState.hoveredStationIdx = st.idx;
+          worldState.heroFacingIdx = st.idx;
+          if (reducedMotion) requestAnimationFrame(renderFrame);
+        };
+        btn.onpointerleave = function() {
+          if (worldState.hoveredStationIdx === st.idx) {
+            worldState.hoveredStationIdx = -1;
+            worldState.heroFacingIdx = activeStationIdx;
+            if (reducedMotion) requestAnimationFrame(renderFrame);
+          }
+        };
+        btn.onclick = function() {
+          openChapterNodeModal(st.mod, st.isDone, st.isUnlocked);
+        };
+
+        pinsLayer.appendChild(btn);
+        pinRefs.push({ btn: btn, data: st });
+      });
+
+      // Hero speech badge anchored above active pedestal
+      var heroBadge = document.createElement('div');
+      heroBadge.className = 'diorama-hero-tag';
+      heroBadge.textContent = 'Next Quest';
+      pinsLayer.appendChild(heroBadge);
+      worldState.heroBadgeEl = heroBadge;
+
+      // Capstone Card pinned cleanly beneath summit chest
+      capstonePinEl = document.createElement('button');
+      capstonePinEl.type = 'button';
+      capstonePinEl.className = 'diorama-capstone-card ' + (isCapstoneReady ? 'cap-ready' : 'cap-locked');
+      capstonePinEl.innerHTML = (
+        '<div class="dcap-tag">' + esc(trackMeta.biomeName.toUpperCase()) + ' CAPSTONE • ' + doneModCount + '/' + trackMods.length + '</div>'
+        + '<div class="dcap-title">' + esc(trackMeta.capstoneTitle) + '</div>'
+        + '<div class="dcap-xp">' + (isCapstoneReady ? 'Open Workbench (+250 XP)' : '+250 XP Reward') + '</div>'
+      );
+      capstonePinEl.onclick = function() {
+        var stCap = worldState.stationCoords[8];
+        if (stCap) {
+          var pt = proj(stCap.u, stCap.v, 3.6);
+          emitCanvasParticles(pt.x, pt.y - 24, ['#FFE600', '#10B981', '#F59E0B'], 14, 48);
+        }
+        if (typeof window.openProjectModal === 'function') {
+          window.openProjectModal(trackMeta.capstoneId);
+        } else if (typeof openProjectModal === 'function') {
+          openProjectModal(trackMeta.capstoneId);
+        }
+      };
+      pinsLayer.appendChild(capstonePinEl);
+    }
+
+    // ── Layout Calculator on Init / Container Resize ──────────────────────
+    function computeLayoutGeometry() {
+      var cw = viewport.clientWidth || container.clientWidth || 720;
+      worldState.isCompact = cw < 560;
+      worldState.width = cw;
+      worldState.dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+
+      if (worldState.isCompact) {
+        worldState.tw = Math.max(22, cw * 0.056);
+        worldState.th = worldState.tw * 0.58;
+        worldState.bh = worldState.tw * 0.44;
+        worldState.oy = 78;
+        worldState.height = Math.round(worldState.oy + 54 * worldState.th + 135);
+      } else {
+        worldState.tw = clamp(cw * 0.048, 28, 39);
+        worldState.th = worldState.tw * 0.5;
+        worldState.bh = worldState.tw * 0.42;
+        worldState.oy = 88;
+        worldState.height = Math.round(worldState.oy + 54 * worldState.th + 135);
+      }
+
+      worldState.ox = Math.round(cw * 0.5);
+      viewport.style.height = worldState.height + 'px';
+      canvas.width = Math.round(worldState.width * worldState.dpr);
+      canvas.height = Math.round(worldState.height * worldState.dpr);
+      canvas.style.width = worldState.width + 'px';
+      canvas.style.height = worldState.height + 'px';
+
+      leaderSvg.setAttribute('viewBox', '0 0 ' + worldState.width + ' ' + worldState.height);
+      leaderSvg.setAttribute('width', worldState.width);
+      leaderSvg.setAttribute('height', worldState.height);
+
+      worldState.stationCoords = buildStationCoords(worldState.isCompact);
+      worldState.terrain = buildIslandVoxels(worldState.isCompact, worldState.stationCoords);
+      syncOverlayPositions();
+    }
+
+    function syncOverlayPositions() {
+      var leaderHtml = '';
+      var isDark = document.body.classList.contains('dark-theme');
+      var leaderStroke = isDark ? 'rgba(255,255,255,0.22)' : 'rgba(11,11,14,0.22)';
+      var activeLeaderStroke = '#F59E0B';
+
+      pinRefs.forEach(function(item) {
+        var stCoord = worldState.stationCoords[item.data.idx];
+        var tile = worldState.terrain.tileMap[Math.round(stCoord.u) + ',' + Math.round(stCoord.v)]
+          || { topZ: 2.8 };
+        var pPt = proj(stCoord.u, stCoord.v, tile.topZ);
+
+        var cardW = worldState.isCompact ? Math.min(162, Math.floor(worldState.width * 0.48)) : Math.min(285, Math.floor(worldState.width * 0.41));
+        item.btn.style.width = cardW + 'px';
+
+        var gap = worldState.isCompact ? 22 : 44;
+        var leftPx;
+        var anchorX;
+        if (stCoord.labelSide === 'right') {
+          leftPx = worldState.isCompact ? (worldState.width - cardW - 6) : clamp(pPt.x + gap, 8, worldState.width - cardW - 10);
+          anchorX = leftPx;
+        } else {
+          leftPx = worldState.isCompact ? 6 : clamp(pPt.x - gap - cardW, 10, worldState.width - cardW - 8);
+          anchorX = leftPx + cardW;
+        }
+
+        var topPx = clamp(pPt.y - (worldState.isCompact ? 2 : 0), 46, worldState.height - 150);
+        item.btn.style.left = Math.round(leftPx) + 'px';
+        item.btn.style.top = Math.round(topPx) + 'px';
+
+        var strokeColor = item.data.isActive ? activeLeaderStroke : leaderStroke;
+        var pedEdgeX = pPt.x + (stCoord.labelSide === 'right' ? 18 : -18);
+        leaderHtml += '<line x1="' + pedEdgeX.toFixed(1) + '" y1="' + pPt.y.toFixed(1) + '" x2="' + anchorX.toFixed(1) + '" y2="' + topPx.toFixed(1) + '" stroke="' + strokeColor + '" stroke-width="1.5" stroke-dasharray="' + (item.data.isActive ? 'none' : '3 3') + '" />';
+        leaderHtml += '<circle cx="' + anchorX.toFixed(1) + '" cy="' + topPx.toFixed(1) + '" r="3" fill="' + (item.data.isActive ? '#FFE600' : strokeColor) + '" />';
+      });
+
+      leaderSvg.innerHTML = leaderHtml;
+
+      // Active hero floating speech tag positioned cleanly above avatar head
+      if (worldState.heroBadgeEl && worldState.stationCoords[activeStationIdx]) {
+        var hc = worldState.stationCoords[activeStationIdx];
+        var hTile = worldState.terrain.tileMap[Math.round(hc.u) + ',' + Math.round(hc.v)] || { topZ: 3.0 };
+        var hp = proj(hc.u, hc.v, hTile.topZ);
+        worldState.heroBadgeEl.style.left = Math.round(hp.x) + 'px';
+        worldState.heroBadgeEl.style.top = Math.round(hp.y - (worldState.isCompact ? 78 : 92)) + 'px';
+      }
+
+      // Capstone card anchored beneath 3D treasure chest
+      if (capstonePinEl && worldState.stationCoords[8]) {
+        var capC = worldState.stationCoords[8];
+        var capP = proj(capC.u, capC.v, 3.5);
+        capstonePinEl.style.left = Math.round(capP.x) + 'px';
+        capstonePinEl.style.top = Math.round(capP.y + 18) + 'px';
+      }
+    }
+
+    // ── Canvas Low-Level Isometric Block & Entity Drawing Primitives ────────
+    function drawDiamondTile(px, py, tw, th, fill, stroke) {
+      ctx.beginPath();
+      ctx.moveTo(px, py - th);
+      ctx.lineTo(px + tw, py);
+      ctx.lineTo(px, py + th);
+      ctx.lineTo(px - tw, py);
+      ctx.closePath();
+      ctx.fillStyle = fill;
+      ctx.fill();
+      if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 0.85;
+        ctx.stroke();
+      }
+    }
+
+    function drawIsoPrism(u, v, botZ, topZ, topFill, leftFill, rightFill, edgeStroke, trimTopFill) {
+      var tw = worldState.tw;
+      var th = worldState.th;
+      var pTop = proj(u, v, topZ);
+      var pBot = proj(u, v, botZ);
+
+      if (topZ > botZ + 0.02) {
+        // Left shaded wall
+        ctx.beginPath();
+        ctx.moveTo(pTop.x - tw, pTop.y);
+        ctx.lineTo(pTop.x, pTop.y + th);
+        ctx.lineTo(pBot.x, pBot.y + th);
+        ctx.lineTo(pBot.x - tw, pBot.y);
+        ctx.closePath();
+        ctx.fillStyle = leftFill;
+        ctx.fill();
+
+        // Right deep-shaded wall
+        ctx.beginPath();
+        ctx.moveTo(pTop.x, pTop.y + th);
+        ctx.lineTo(pTop.x + tw, pTop.y);
+        ctx.lineTo(pBot.x + tw, pBot.y);
+        ctx.lineTo(pBot.x, pBot.y + th);
+        ctx.closePath();
+        ctx.fillStyle = rightFill;
+        ctx.fill();
+
+        // Turf lip overhang on upper rim of exposed cliffs
+        if (trimTopFill) {
+          var lipD = Math.min(worldState.bh * 0.34, (pBot.y - pTop.y) * 0.45);
+          ctx.beginPath();
+          ctx.moveTo(pTop.x - tw, pTop.y);
+          ctx.lineTo(pTop.x, pTop.y + th);
+          ctx.lineTo(pTop.x, pTop.y + th + lipD);
+          ctx.lineTo(pTop.x - tw, pTop.y + lipD);
+          ctx.closePath();
+          ctx.fillStyle = trimTopFill;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(pTop.x, pTop.y + th);
+          ctx.lineTo(pTop.x + tw, pTop.y);
+          ctx.lineTo(pTop.x + tw, pTop.y + lipD);
+          ctx.lineTo(pTop.x, pTop.y + th + lipD);
+          ctx.closePath();
+          ctx.fillStyle = leftFill;
+          ctx.globalAlpha = 0.25;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      drawDiamondTile(pTop.x, pTop.y, tw, th, topFill, edgeStroke);
+      return pTop;
+    }
+
+    function drawMiniIsoBox(cx, cy, rX, rY, heightPx, topCol, leftCol, rightCol, outline) {
+      ctx.beginPath();
+      ctx.moveTo(cx - rX, cy);
+      ctx.lineTo(cx, cy + rY);
+      ctx.lineTo(cx, cy + rY + heightPx);
+      ctx.lineTo(cx - rX, cy + heightPx);
+      ctx.closePath();
+      ctx.fillStyle = leftCol;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy + rY);
+      ctx.lineTo(cx + rX, cy);
+      ctx.lineTo(cx + rX, cy + heightPx);
+      ctx.lineTo(cx, cy + rY + heightPx);
+      ctx.closePath();
+      ctx.fillStyle = rightCol;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - rY);
+      ctx.lineTo(cx + rX, cy);
+      ctx.lineTo(cx, cy + rY);
+      ctx.lineTo(cx - rX, cy);
+      ctx.closePath();
+      ctx.fillStyle = topCol;
+      ctx.fill();
+
+      if (outline) {
+        ctx.strokeStyle = outline;
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+      }
+    }
+
+    function draw3DPedestal(pt, stData, t, pal) {
+      var idx = stData.idx;
+      var isHovered = (worldState.hoveredStationIdx === idx) || (worldState.hoveredTarget && worldState.hoveredTarget.id === 'station_' + idx);
+      var targetLift = isHovered ? 5 : (stData.isActive ? 2.5 : 0);
+      worldState.pedestalLifts[idx] += (targetLift - worldState.pedestalLifts[idx]) * 0.2;
+      var lift = worldState.pedestalLifts[idx];
+
+      var rx = worldState.tw * 0.72;
+      var ry = worldState.th * 0.68;
+      var depth = 8;
+      var cy = pt.y - lift;
+
+      // Ground shadow
+      ctx.beginPath();
+      ctx.ellipse(pt.x, pt.y + 4, rx * 1.06, ry * 1.1, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,0.28)';
+      ctx.fill();
+
+      // Active portal aura ring
+      if (stData.isActive || isHovered) {
+        var pulse = 0.85 + 0.15 * Math.sin(t * 3.4);
+        ctx.beginPath();
+        ctx.ellipse(pt.x, cy - 1, rx * 1.24 * pulse, ry * 1.28 * pulse, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = stData.isActive ? 'rgba(192,132,252,0.75)' : 'rgba(255,230,0,0.85)';
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+      }
+
+      // Stone pedestal skirt
+      var skirtCol = stData.isDone ? '#065F46' : (stData.isActive ? '#4C1D95' : (stData.isUnlocked ? '#92400E' : '#27272A'));
+      var topCol = stData.isDone ? '#10B981' : (stData.isActive ? '#8B5CF6' : (stData.isUnlocked ? '#FBBF24' : '#52525B'));
+      var innerCol = stData.isDone ? '#059669' : (stData.isActive ? '#C084FC' : (stData.isUnlocked ? '#F59E0B' : '#3F3F46'));
+
+      ctx.beginPath();
+      ctx.ellipse(pt.x, cy + depth, rx, ry, 0, 0, Math.PI);
+      ctx.lineTo(pt.x - rx, cy);
+      ctx.ellipse(pt.x, cy, rx, ry, 0, Math.PI, 0, true);
+      ctx.closePath();
+      ctx.fillStyle = skirtCol;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Top disc
+      ctx.beginPath();
+      ctx.ellipse(pt.x, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = topCol;
+      ctx.fill();
+      ctx.strokeStyle = isHovered ? '#FFE600' : 'rgba(0,0,0,0.6)';
+      ctx.lineWidth = isHovered ? 2 : 1.3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(pt.x, cy, rx * 0.72, ry * 0.72, 0, 0, Math.PI * 2);
+      ctx.fillStyle = innerCol;
+      ctx.fill();
+
+      // Emblem on pedestal center
+      ctx.save();
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.lineWidth = 2.1;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      if (stData.isDone) {
+        ctx.beginPath();
+        ctx.moveTo(pt.x - 5, cy);
+        ctx.lineTo(pt.x - 1, cy + 3);
+        ctx.lineTo(pt.x + 6, cy - 4);
+        ctx.stroke();
+      } else if (stData.isActive) {
+        ctx.beginPath();
+        ctx.ellipse(pt.x, cy, rx * 0.36, ry * 0.36, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (stData.isUnlocked) {
+        ctx.beginPath();
+        ctx.arc(pt.x, cy, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = '#E4E4E7';
+        ctx.fillRect(pt.x - 4, cy - 1, 8, 5);
+        ctx.beginPath();
+        ctx.arc(pt.x, cy - 2, 2.5, Math.PI, 0);
+        ctx.strokeStyle = '#E4E4E7';
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Vertical beacon light on active station
+      if (stData.isActive) {
+        var beamG = ctx.createLinearGradient(pt.x, cy - 88, pt.x, cy);
+        beamG.addColorStop(0, 'rgba(192,132,252,0)');
+        beamG.addColorStop(1, 'rgba(168,85,247,0.32)');
+        ctx.fillStyle = beamG;
+        ctx.fillRect(pt.x - rx * 0.65, cy - 88, rx * 1.3, 88);
+      }
+
+      worldState.hitTargets.push({
+        id: 'station_' + idx,
+        type: 'station',
+        idx: idx,
+        x: pt.x,
+        y: cy,
+        rx: rx + 6,
+        ry: ry + 8,
+        hint: 'Ch ' + (idx + 1) + ' • ' + stData.mod.title
+      });
+    }
+
+    function draw3DChampion(pt, t) {
+      var bob = reducedMotion ? 0 : Math.sin(t * 3.1) * 3;
+      // Spring jump physics
+      var cy = pt.y - 6 + bob - worldState.heroHopY;
+      var sScale = worldState.isCompact ? 0.85 : 1.04;
+
+      // Cast shadow on pedestal
+      var shAlpha = clamp(0.36 - worldState.heroHopY * 0.008, 0.1, 0.36);
+      ctx.beginPath();
+      ctx.ellipse(pt.x, pt.y - 2, 11 * sScale, 5 * sScale, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,' + shAlpha + ')';
+      ctx.fill();
+
+      ctx.save();
+      ctx.translate(pt.x, cy);
+      ctx.scale(sScale, sScale);
+
+      // Cape flutter behind champion
+      if (spriteMeta.capeColor) {
+        var sway = Math.sin(t * 4) * 2.2;
+        ctx.fillStyle = spriteMeta.capeColor;
+        ctx.beginPath();
+        ctx.moveTo(-8, -32);
+        ctx.lineTo(8, -32);
+        ctx.lineTo(10 + sway, -8);
+        ctx.lineTo(-10 + sway, -8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#0B0B0E';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      // Legs
+      ctx.fillStyle = spriteMeta.colors.pants;
+      ctx.strokeStyle = '#0B0B0E';
+      ctx.lineWidth = 1.3;
+      ctx.fillRect(-6.5, -14, 6, 13);
+      ctx.strokeRect(-6.5, -14, 6, 13);
+      ctx.fillRect(0.5, -14, 6, 13);
+      ctx.strokeRect(0.5, -14, 6, 13);
+
+      // Arms (gentle swing)
+      var armSwing = Math.sin(t * 3.1) * 1.8;
+      ctx.fillStyle = spriteMeta.colors.shirt;
+      ctx.fillRect(-12, -31 + armSwing, 5, 14);
+      ctx.strokeRect(-12, -31 + armSwing, 5, 14);
+      ctx.fillRect(7, -31 - armSwing, 5, 14);
+      ctx.strokeRect(7, -31 - armSwing, 5, 14);
+
+      // Torso + Belt
+      ctx.fillStyle = spriteMeta.colors.shirt;
+      ctx.fillRect(-7, -32, 14, 18);
+      ctx.strokeRect(-7, -32, 14, 18);
+      ctx.fillStyle = spriteMeta.colors.belt;
+      ctx.fillRect(-7, -18, 14, 4);
+
+      // Voxel Pixel Head (exact chosen 8x8 skin + hat palette!)
+      var hx = -11;
+      var hy = -54;
+      var ps = 22 / 8;
+      if (spriteMeta.skinData && Array.isArray(spriteMeta.skinData.grid)) {
+        for (var gy = 0; gy < 8; gy++) {
+          var rowStr = spriteMeta.skinData.grid[gy] || [];
+          for (var gx = 0; gx < 8; gx++) {
+            ctx.fillStyle = rowStr[gx] || '#C68B59';
+            ctx.fillRect(hx + gx * ps, hy + gy * ps, ps + 0.35, ps + 0.35);
+          }
+        }
+      } else {
+        ctx.fillStyle = '#C68B59';
+        ctx.fillRect(hx, hy, 22, 22);
+      }
+
+      if (spriteMeta.hatData && Array.isArray(spriteMeta.hatData.grid)) {
+        for (var hgy = 0; hgy < 8; hgy++) {
+          var hrow = spriteMeta.hatData.grid[hgy] || [];
+          for (var hgx = 0; hgx < 8; hgx++) {
+            var hc = hrow[hgx];
+            if (hc && hc !== 'transparent') {
+              ctx.fillStyle = hc;
+              ctx.fillRect(hx + hgx * ps, hy + hgy * ps, ps + 0.35, ps + 0.35);
+            }
+          }
+        }
+      }
+
+      ctx.strokeStyle = '#0B0B0E';
+      ctx.lineWidth = 1.6;
+      ctx.strokeRect(hx, hy, 22, 22);
+
+      ctx.restore();
+
+      worldState.hitTargets.push({
+        id: 'hero',
+        type: 'hero',
+        x: pt.x,
+        y: cy - 28 * sScale,
+        rx: 18,
+        ry: 32,
+        hint: 'Tap Champion to cheer!'
+      });
+    }
+
+    function draw3DTree(id, u, v, tile, pal, biome, t) {
+      var sp = worldState.treeSprings[id];
+      var basePt = proj(u, v, tile.topZ);
+      var idleSway = reducedMotion ? 0 : Math.sin(t * 1.4 + u) * 0.025;
+      var swayAngle = idleSway + sp.angle;
+
+      // Ground shadow
+      ctx.beginPath();
+      ctx.ellipse(basePt.x + 2, basePt.y + 3, 18, 9, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,0.22)';
+      ctx.fill();
+
+      ctx.save();
+      ctx.translate(basePt.x, basePt.y);
+
+      // Trunk
+      drawMiniIsoBox(0, -18, 5.5, 3, 18, pal.trunkL, pal.trunkL, pal.trunkR, 'rgba(0,0,0,0.45)');
+
+      ctx.rotate(swayAngle);
+      if (biome === 'end') {
+        // Crystal Chorus Spire
+        drawMiniIsoBox(0, -40, 12, 6, 18, pal.treeLeavesA, pal.treeLeavesA, pal.treeLeavesB, 'rgba(0,0,0,0.5)');
+        drawMiniIsoBox(0, -55, 7, 3.5, 14, pal.treeTopHi, pal.treeLeavesA, pal.treeLeavesB, 'rgba(0,0,0,0.45)');
+      } else if (biome === 'nether') {
+        // Layered Crimson Shroom Canopy
+        drawMiniIsoBox(0, -34, 17, 9, 12, pal.treeLeavesA, pal.treeLeavesA, pal.treeLeavesB, 'rgba(0,0,0,0.5)');
+        drawMiniIsoBox(-6, -32, 3.5, 2, 4, pal.treeTopHi, pal.treeTopHi, '#D97706', null);
+        drawMiniIsoBox(6, -30, 3, 1.8, 3, pal.treeTopHi, pal.treeTopHi, '#D97706', null);
+      } else {
+        // Tiered Overworld Voxel Oak/Pine
+        drawMiniIsoBox(0, -34, 17, 9, 13, pal.treeTopHi, pal.treeLeavesA, pal.treeLeavesB, 'rgba(0,0,0,0.45)');
+        drawMiniIsoBox(0, -46, 12, 6.5, 11, pal.treeTopHi, pal.treeLeavesA, pal.treeLeavesB, 'rgba(0,0,0,0.4)');
+      }
+      ctx.restore();
+
+      worldState.hitTargets.push({
+        id: id,
+        type: 'tree',
+        u: u,
+        v: v,
+        x: basePt.x,
+        y: basePt.y - 26,
+        rx: 20,
+        ry: 28,
+        hint: 'Tap foliage to shake'
+      });
+    }
+
+    function draw3DCampfire(u, v, tile, pal, t) {
+      var pt = proj(u, v, tile.topZ);
+      var lvl = worldState.campfireLevel;
+      var flicker = reducedMotion ? 0 : Math.sin(t * 11) * 1.8 + Math.cos(t * 7) * 1.1;
+
+      // Dynamic warm radial halo baked over hearth ground
+      var haloR = 32 + lvl * 14;
+      var g = ctx.createRadialGradient(pt.x, pt.y, 2, pt.x, pt.y, haloR);
+      g.addColorStop(0, mixRgbStr(pal.fireGlow, '#FFE600', 0.4, 0.35 + lvl * 0.08));
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(pt.x, pt.y, haloR, haloR * 0.65, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Crossed voxel logs (anchored at pt.x!)
+      drawMiniIsoBox(pt.x - 3, pt.y - 4, 8, 3.5, 4, '#78350F', '#5C290B', '#3E1B07', '#0B0B0E');
+      drawMiniIsoBox(pt.x + 3, pt.y - 3, 7, 3.5, 4, '#92400E', '#6D300B', '#451D06', '#0B0B0E');
+
+      // Multi-layered animated flame cone
+      var fh = 13 + lvl * 4.5 + flicker;
+      ctx.beginPath();
+      ctx.moveTo(pt.x, pt.y - 6 - fh);
+      ctx.quadraticCurveTo(pt.x + 8 + lvl, pt.y - 8, pt.x + 5, pt.y - 2);
+      ctx.lineTo(pt.x - 5, pt.y - 2);
+      ctx.quadraticCurveTo(pt.x - 8 - lvl, pt.y - 8, pt.x, pt.y - 6 - fh);
+      ctx.closePath();
+      ctx.fillStyle = pal.fireGlow;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(pt.x, pt.y - 5 - fh * 0.62);
+      ctx.quadraticCurveTo(pt.x + 4, pt.y - 6, pt.x + 2.5, pt.y - 3);
+      ctx.lineTo(pt.x - 2.5, pt.y - 3);
+      ctx.quadraticCurveTo(pt.x - 4, pt.y - 6, pt.x, pt.y - 5 - fh * 0.62);
+      ctx.closePath();
+      ctx.fillStyle = '#FEF08A';
+      ctx.fill();
+
+      worldState.hitTargets.push({
+        id: 'campfire',
+        type: 'campfire',
+        u: u,
+        v: v,
+        x: pt.x,
+        y: pt.y - 10,
+        rx: 18,
+        ry: 18,
+        hint: 'Tap campfire to stoke'
+      });
+    }
+
+    function draw3DOreVein(id, u, v, tile, biome, t) {
+      var hits = worldState.oreHits[id];
+      var depleted = hits >= 3;
+      var pt = proj(u, v, tile.topZ);
+
+      var crystal = depleted ? '#64748B' : (biome === 'nether' ? '#FBBF24' : (biome === 'end' ? '#D8B4FE' : '#38BDF8'));
+      var crystalHi = depleted ? '#94A3B8' : (biome === 'nether' ? '#FEF08A' : (biome === 'end' ? '#F5D0FE' : '#E0F2FE'));
+
+      // Rocky boulder base (anchored at pt.x!)
+      drawMiniIsoBox(pt.x, pt.y - 12, 13, 7.5, 11, '#71717A', '#52525B', '#3F3F46', '#0B0B0E');
+
+      if (!depleted) {
+        var glint = Math.sin(t * 4 + u) * 0.25 + 0.75;
+        ctx.save();
+        ctx.globalAlpha = glint;
+        drawMiniIsoBox(pt.x - 4, pt.y - 20, 4.5, 2.5, 8, crystalHi, crystal, crystal, '#0B0B0E');
+        drawMiniIsoBox(pt.x + 4, pt.y - 18, 4, 2.2, 6, crystalHi, crystal, crystal, '#0B0B0E');
+        drawMiniIsoBox(pt.x, pt.y - 24, 3.8, 2.2, 7, '#FFFFFF', crystalHi, crystal, '#0B0B0E');
+        ctx.restore();
+
+        // Fracture lines after partial hits
+        if (hits > 0) {
+          ctx.strokeStyle = '#0B0B0E';
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(pt.x - 4, pt.y - 11);
+          ctx.lineTo(pt.x, pt.y - 7);
+          if (hits >= 2) {
+            ctx.lineTo(pt.x + 5, pt.y - 10);
+          }
+          ctx.stroke();
+        }
+      }
+
+      worldState.hitTargets.push({
+        id: id,
+        type: 'ore',
+        u: u,
+        v: v,
+        x: pt.x,
+        y: pt.y - 14,
+        rx: 18,
+        ry: 18,
+        hint: depleted ? 'Crystal vein harvested' : ('Mine crystal (' + (3 - hits) + ' hits left)')
+      });
+    }
+
+    function draw3DBoat(t, biome, pal) {
+      // Drifts gently along recessed canyon river (v = 21.2)
+      var bob = reducedMotion ? 0 : Math.sin(t * 2.5) * 1.8;
+      var u = worldState.boatU;
+      var pt = proj(u, 21.3, 1.55);
+      var bx = pt.x;
+      var by = pt.y + bob;
+
+      // Water wake chevron when surging
+      if (worldState.boatSurge > 0.05) {
+        ctx.strokeStyle = 'rgba(255,255,255,' + (worldState.boatSurge * 0.7).toFixed(2) + ')';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(bx - 18 * worldState.boatDir, by - 2);
+        ctx.lineTo(bx - 4 * worldState.boatDir, by + 3);
+        ctx.lineTo(bx - 16 * worldState.boatDir, by + 8);
+        ctx.stroke();
+      }
+
+      var hullTop = biome === 'end' ? '#6D28D9' : (biome === 'nether' ? '#991B1B' : '#92400E');
+      var sailCol = biome === 'end' ? '#E9D5FF' : (biome === 'nether' ? '#FBBF24' : '#FEF3C7');
+      drawMiniIsoBox(bx, by - 5, 13, 6.5, 5, hullTop, '#5C290B', '#3E1B07', '#0B0B0E');
+
+      // Mast & sail
+      ctx.fillStyle = '#451A03';
+      ctx.fillRect(bx - 1, by - 22, 2.2, 17);
+      ctx.beginPath();
+      ctx.moveTo(bx + 1, by - 21);
+      ctx.lineTo(bx + 12, by - 13);
+      ctx.lineTo(bx + 1, by - 10);
+      ctx.closePath();
+      ctx.fillStyle = sailCol;
+      ctx.fill();
+      ctx.strokeStyle = '#0B0B0E';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      worldState.hitTargets.push({
+        id: 'boat',
+        type: 'boat',
+        x: bx,
+        y: by - 10,
+        rx: 18,
+        ry: 16,
+        hint: 'Tap skiff to sail the rapids'
+      });
+    }
+
+    function draw3DCapstoneChest(pt, t) {
+      var hoverChest = worldState.hoveredTarget && worldState.hoveredTarget.id === 'capstone';
+      var bob = (isCapstoneReady && !reducedMotion) ? Math.sin(t * 2.6) * 2.5 : 0;
+      var cy = pt.y - 6 + bob - (hoverChest ? 3 : 0);
+
+      // Golden plinth aura
+      if (isCapstoneReady || hoverChest) {
+        ctx.beginPath();
+        ctx.ellipse(pt.x, pt.y + 1, 28, 14, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,230,0,0.24)';
+        ctx.fill();
+      }
+
+      // Shadow
+      ctx.beginPath();
+      ctx.ellipse(pt.x, pt.y + 3, 20, 9.5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,0,0,0.32)';
+      ctx.fill();
+
+      var bodyA = isCapstoneReady ? '#B45309' : '#52525B';
+      var bodyB = isCapstoneReady ? '#78350F' : '#3F3F46';
+      var gold = isCapstoneReady ? '#FFE600' : '#94A3B8';
+
+      // Chest lower body
+      drawMiniIsoBox(pt.x, cy - 11, 16, 8.5, 11, bodyA, bodyA, bodyB, '#0B0B0E');
+      // Chest lid
+      drawMiniIsoBox(pt.x, cy - 18, 16.5, 8.8, 6.5, '#D97706', bodyA, bodyB, '#0B0B0E');
+      // Gold clasp front
+      ctx.fillStyle = gold;
+      ctx.fillRect(pt.x + 4, cy - 13, 4.5, 6);
+      ctx.strokeStyle = '#0B0B0E';
+      ctx.lineWidth = 1.1;
+      ctx.strokeRect(pt.x + 4, cy - 13, 4.5, 6);
+
+      worldState.hitTargets.push({
+        id: 'capstone',
+        type: 'capstone',
+        x: pt.x,
+        y: cy - 10,
+        rx: 24,
+        ry: 20,
+        hint: trackMeta.capstoneTitle + ' (Capstone)'
+      });
+    }
+
+    function drawBridgeDeckAndRails(uStart, uEnd, vBridge, pal, t) {
+      var pL = proj(uStart - 0.6, vBridge, 2.75);
+      var pR = proj(uEnd + 0.6, vBridge, 2.75);
+      // Warm glowing lantern posts at corners
+      var posts = [
+        { u: uStart - 0.8, v: 18.8 },
+        { u: uEnd + 0.8, v: 18.8 },
+        { u: uStart - 0.8, v: 22.8 },
+        { u: uEnd + 0.8, v: 22.8 }
+      ];
+      posts.forEach(function(po) {
+        var pp = proj(po.u, po.v, 2.65);
+        ctx.fillStyle = pal.bridgeDark;
+        ctx.fillRect(pp.x - 2, pp.y - 16, 4, 16);
+        // Tiny warm lantern bulb
+        var flk = 0.75 + 0.25 * Math.sin(t * 7 + po.u);
+        ctx.fillStyle = 'rgba(255,230,0,' + flk + ')';
+        ctx.beginPath();
+        ctx.arc(pp.x, pp.y - 17, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      // Plank seams across deck
+      ctx.strokeStyle = 'rgba(0,0,0,0.22)';
+      ctx.lineWidth = 1.2;
+      for (var pv = 18.5; pv <= 23.2; pv += 0.85) {
+        var sL = proj(-1.2, pv, 2.62);
+        var sR = proj(1.2, pv, 2.62);
+        ctx.beginPath();
+        ctx.moveTo(sL.x, sL.y);
+        ctx.lineTo(sR.x, sR.y);
+        ctx.stroke();
+      }
+      void pL; void pR;
+    }
+
+    // ── Main Frame Render Loop ────────────────────────────────────────────
+    var lastTime = performance.now();
+    var rafId = null;
+
+    function renderFrame(now) {
+      var dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+      var t = now / 1000;
+
+      var isDark = document.body.classList.contains('dark-theme');
+      var pal = BIOME_PALETTES[trackMeta.biomeName][isDark ? 'night' : 'day'];
+
+      // Physics updates
+      ['t1', 't2', 't3', 't4'].forEach(function(k) {
+        var sp = worldState.treeSprings[k];
+        if (!sp) return;
+        sp.vel += (-85 * sp.angle - 6.5 * sp.vel) * dt;
+        sp.angle += sp.vel * dt;
+      });
+      if (worldState.heroHopY > 0 || worldState.heroHopVel !== 0) {
+        worldState.heroHopVel -= 380 * dt;
+        worldState.heroHopY += worldState.heroHopVel * dt;
+        if (worldState.heroHopY <= 0) {
+          worldState.heroHopY = 0;
+          worldState.heroHopVel = 0;
+        }
+      }
+      if (worldState.boatSurge > 0.01) {
+        worldState.boatU += worldState.boatDir * worldState.boatSurge * 3.8 * dt;
+        worldState.boatSurge *= Math.pow(0.28, dt);
+        if (worldState.boatU > 4.2) worldState.boatDir = -1;
+        if (worldState.boatU < -5.2) worldState.boatDir = 1;
+      } else {
+        worldState.boatU = lerp(worldState.boatU, -4.0 + Math.sin(t * 0.45) * 0.85, dt * 1.5);
+      }
+
+      if (worldState.beaconPulseT > 0) worldState.beaconPulseT = Math.max(0, worldState.beaconPulseT - dt);
+      if (worldState.hintSecretsTimer > 0) worldState.hintSecretsTimer = Math.max(0, worldState.hintSecretsTimer - dt);
+
+      // Draw frame
+      ctx.save();
+      ctx.setTransform(worldState.dpr, 0, 0, worldState.dpr, 0, 0);
+      ctx.clearRect(0, 0, worldState.width, worldState.height);
+
+      // Subtle atmospheric sky wash behind floating island
+      var skyGrad = ctx.createLinearGradient(0, 0, 0, worldState.height);
+      skyGrad.addColorStop(0, pal.skyTop);
+      skyGrad.addColorStop(1, pal.skyBottom);
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, worldState.width, worldState.height);
+
+      // Floating soft drifting cloud silhouettes under & behind island flanks
+      var cloudShift = reducedMotion ? 0 : Math.sin(t * 0.25) * 14;
+      ctx.fillStyle = isDark ? 'rgba(255,255,255,0.035)' : 'rgba(255,255,255,0.68)';
+      [
+        { x: worldState.width * 0.16 + cloudShift * 0.7, y: worldState.height * 0.28, w: 94, h: 24 },
+        { x: worldState.width * 0.84 - cloudShift * 0.9, y: worldState.height * 0.56, w: 112, h: 28 },
+        { x: worldState.width * 0.22 + cloudShift * 0.5, y: worldState.height * 0.85, w: 120, h: 26 }
+      ].forEach(function(cl) {
+        ctx.beginPath();
+        ctx.roundRect(cl.x - cl.w * 0.5, cl.y - cl.h * 0.5, cl.w, cl.h, cl.h * 0.5);
+        ctx.fill();
+      });
+
+      worldState.hitTargets = [];
+      var terrain = worldState.terrain;
+      if (!terrain) { ctx.restore(); return; }
+
+      // Valid integer even-parity prop placements cleanly clear of glass pin cards ((u + v) % 2 === 0)
+      var propTree1 = { id: 't1', u: worldState.isCompact ? -4 : -6, v: 8 };
+      var propTree2 = { id: 't2', u: worldState.isCompact ? 4 : 6, v: 28 };
+      var propTree3 = { id: 't3', u: worldState.isCompact ? -4 : -6, v: 24 };
+      var propTree4 = { id: 't4', u: worldState.isCompact ? 4 : 6, v: 14 };
+      var propCamp = { u: worldState.isCompact ? -2 : -4, v: worldState.isCompact ? 48 : 6 };
+      var propOre1 = { id: 'ore1', u: worldState.isCompact ? 2 : 4, v: 24 };
+      var propOre2 = { id: 'ore2', u: worldState.isCompact ? 3 : 4, v: worldState.isCompact ? 47 : 46 };
+      var drawnMist = false;
+
+      var drawnStations = {};
+      var drawnHero = false;
+      var drawnBoat = false;
+      var drawnBridgeDetail = false;
+      var drawnCapstone = false;
+
+      // Strict Painter's Algorithm back-to-front pass (v ascending)
+      for (var i = 0; i < terrain.tiles.length; i++) {
+        var tile = terrain.tiles[i];
+
+        if (tile.kind === 'water') {
+          var wave = reducedMotion ? 0 : Math.sin(t * 2.8 + tile.u * 0.7 + tile.v * 0.5) * 0.06;
+          drawIsoPrism(tile.u, tile.v, tile.botZ, tile.topZ + wave,
+            tile.shadeSeed ? pal.waterTop : pal.waterDeep,
+            pal.waterLeft, pal.waterRight, 'rgba(255,255,255,0.1)', null
+          );
+          // Animated shimmer streaks on river water
+          if (!reducedMotion && ((tile.u + tile.v + Math.floor(t * 2)) % 4 === 0)) {
+            var wp = proj(tile.u, tile.v, tile.topZ + wave + 0.03);
+            ctx.fillStyle = pal.foam;
+            ctx.globalAlpha = 0.25;
+            ctx.fillRect(wp.x - 6, wp.y - 1, 12, 2);
+            ctx.globalAlpha = 1;
+          }
+        } else if (tile.kind === 'waterfall') {
+          var wDrop = reducedMotion ? 0 : Math.sin(t * 6 + tile.v) * 0.05;
+          drawIsoPrism(tile.u, tile.v, 0.8, tile.topZ + wDrop,
+            pal.waterTop, pal.waterDeep, pal.waterLeft, 'rgba(255,255,255,0.2)', null
+          );
+          // Cascading animated vertical foam ribbons down waterfall wall
+          var fp = proj(tile.u, tile.v, tile.topZ);
+          ctx.strokeStyle = pal.foam;
+          ctx.lineWidth = 2.2;
+          ctx.setLineDash([6, 8]);
+          ctx.lineDashOffset = -(t * 42);
+          ctx.globalAlpha = 0.78;
+          ctx.beginPath();
+          ctx.moveTo(fp.x - 4, fp.y);
+          ctx.lineTo(fp.x - 4, fp.y + 18);
+          ctx.moveTo(fp.x + 5, fp.y - 2);
+          ctx.lineTo(fp.x + 5, fp.y + 16);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.globalAlpha = 1;
+        } else if (tile.kind === 'bridge') {
+          // Under-bridge water bed first!
+          drawIsoPrism(tile.u, tile.v, tile.botZ, 1.4,
+            pal.waterDeep, pal.waterLeft, pal.waterRight, null, null
+          );
+          // Hovering 3D wooden bridge deck slab above water
+          drawIsoPrism(tile.u, tile.v, 2.28, tile.topZ,
+            pal.bridgeTop, pal.bridgeRail, pal.bridgeDark, 'rgba(0,0,0,0.35)', null
+          );
+        } else if (tile.kind === 'road') {
+          drawIsoPrism(tile.u, tile.v, tile.botZ, tile.topZ,
+            tile.shadeSeed ? pal.roadA : pal.roadB,
+            pal.roadLeft, pal.roadRight, pal.edge, null
+          );
+        } else {
+          // Terraced Grass / Netherrack / Endstone Cliff Column
+          var isDeepCliff = (tile.topZ - tile.botZ) > 2.2;
+          drawIsoPrism(tile.u, tile.v, tile.botZ, tile.topZ,
+            tile.shadeSeed ? pal.topA : pal.topB,
+            isDeepCliff ? pal.subLeft : pal.wallLeft,
+            isDeepCliff ? pal.subRight : pal.wallRight,
+            pal.edge, pal.topTrim
+          );
+          if (tile.hasFlower) {
+            var flP = proj(tile.u, tile.v, tile.topZ);
+            ctx.fillStyle = trackMeta.biomeName === 'nether' ? '#FB923C' : (trackMeta.biomeName === 'end' ? '#C084FC' : '#FFE600');
+            ctx.beginPath();
+            ctx.arc(flP.x + (tile.u % 2 ? 4 : -4), flP.y + 1, 2.1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Draw entities cleanly in exact (u, v) depth order right after ground tile!
+        if (tile.u === propCamp.u && tile.v === propCamp.v) {
+          draw3DCampfire(propCamp.u, propCamp.v, tile, pal, t);
+        }
+        if (tile.u === propTree1.u && tile.v === propTree1.v) {
+          draw3DTree('t1', propTree1.u, propTree1.v, tile, pal, trackMeta.biomeName, t);
+        }
+        if (tile.u === propTree2.u && tile.v === propTree2.v) {
+          draw3DTree('t2', propTree2.u, propTree2.v, tile, pal, trackMeta.biomeName, t);
+        }
+        if (tile.u === propTree3.u && tile.v === propTree3.v) {
+          draw3DTree('t3', propTree3.u, propTree3.v, tile, pal, trackMeta.biomeName, t);
+        }
+        if (tile.u === propTree4.u && tile.v === propTree4.v) {
+          draw3DTree('t4', propTree4.u, propTree4.v, tile, pal, trackMeta.biomeName, t);
+        }
+        if (tile.u === propOre1.u && tile.v === propOre1.v) {
+          draw3DOreVein('ore1', propOre1.u, propOre1.v, tile, trackMeta.biomeName, t);
+        }
+        if (tile.u === propOre2.u && tile.v === propOre2.v) {
+          draw3DOreVein('ore2', propOre2.u, propOre2.v, tile, trackMeta.biomeName, t);
+        }
+
+        // Waterfall splash mist puff where cascade enters canyon pool
+        if (!drawnMist && tile.v >= 19) {
+          var mp = proj(worldState.isCompact ? -4 : -5, 19.2, 1.55);
+          var mistPulse = reducedMotion ? 0.45 : (0.35 + 0.2 * Math.sin(t * 5));
+          ctx.fillStyle = pal.foam;
+          ctx.globalAlpha = mistPulse;
+          ctx.beginPath();
+          ctx.ellipse(mp.x, mp.y, 24, 9, 0, 0, Math.PI * 2);
+          ctx.ellipse(mp.x + 12, mp.y - 3, 14, 6, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          drawnMist = true;
+        }
+
+        if (!drawnBoat && tile.v >= 22) {
+          draw3DBoat(t, trackMeta.biomeName, pal);
+          drawnBoat = true;
+        }
+        if (!drawnBridgeDetail && tile.v >= 23) {
+          drawBridgeDeckAndRails(-1, 1, 20.5, pal, t);
+          drawnBridgeDetail = true;
+        }
+
+        // Stations & Hero depth check
+        for (var si = 0; si < 8; si++) {
+          if (!drawnStations[si] && stationData[si]) {
+            var sc = worldState.stationCoords[si];
+            if (Math.round(sc.v) === tile.v && Math.abs(sc.u - tile.u) <= 1.2) {
+              var sTile = terrain.tileMap[Math.round(sc.u) + ',' + Math.round(sc.v)] || tile;
+              var sp = proj(sc.u, sc.v, sTile.topZ);
+              draw3DPedestal(sp, stationData[si], t, pal);
+              if (stationData[si].isActive && !drawnHero) {
+                draw3DChampion(sp, t);
+                drawnHero = true;
+              }
+              drawnStations[si] = true;
+            }
+          }
+        }
+
+        // Capstone Chest at Summit
+        if (!drawnCapstone && tile.v >= 48 && Math.abs(tile.u) <= 1) {
+          var cp = proj(0, 48.5, tile.topZ);
+          draw3DCapstoneChest(cp, t);
+          drawnCapstone = true;
+        }
+      }
+
+      // Draw Illuminated Progress Spine over Road Pavers
+      var activeLimit = clamp(worldState.hoveredStationIdx >= 0 ? worldState.hoveredStationIdx : activeStationIdx, 0, 8);
+      if (terrain.roadPts && terrain.roadPts.length > 1) {
+        ctx.save();
+        ctx.beginPath();
+        for (var rpi = 0; rpi <= Math.min(activeLimit + (activeLimit >= 3 ? 2 : 0), terrain.roadPts.length - 1); rpi++) {
+          var rp = terrain.roadPts[rpi];
+          var rt = terrain.tileMap[Math.round(rp.u) + ',' + Math.round(rp.v)] || { topZ: 2.65 };
+          var screenR = proj(rp.u, rp.v, rt.topZ + 0.08);
+          if (rpi === 0) ctx.moveTo(screenR.x, screenR.y);
+          else ctx.lineTo(screenR.x, screenR.y);
+        }
+        ctx.strokeStyle = worldState.hoveredStationIdx >= 0 ? pal.hoverGlow : pal.litGlow;
+        ctx.lineWidth = 3.2;
+        ctx.lineCap = 'round';
+        ctx.setLineDash([8, 8]);
+        ctx.lineDashOffset = -(t * 28);
+        ctx.globalAlpha = 0.72;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // River & Terrain Interactive Tap Ripples
+      for (var ri = worldState.ripples.length - 1; ri >= 0; ri--) {
+        var rpObj = worldState.ripples[ri];
+        rpObj.life += dt;
+        if (rpObj.life >= rpObj.maxLife) {
+          worldState.ripples.splice(ri, 1);
+          continue;
+        }
+        var pFrac = rpObj.life / rpObj.maxLife;
+        var rad = 6 + pFrac * 28;
+        ctx.beginPath();
+        ctx.ellipse(rpObj.x, rpObj.y, rad, rad * 0.52, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = rpObj.color;
+        ctx.lineWidth = 2 * (1 - pFrac);
+        ctx.globalAlpha = 1 - pFrac;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      // Rising Biome Atmospheric Fireflies / Embers / Stardust
+      if (atmosphereOn && !reducedMotion) {
+        for (var mi = 0; mi < worldState.motes.length; mi++) {
+          var mt = worldState.motes[mi];
+          var mxP = mt.x * worldState.width + Math.sin(t * 1.4 + mt.phase) * 14;
+          var myP = ((mt.y - t * mt.speedY) % 1);
+          if (myP < 0) myP += 1;
+          var mAlpha = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(t * 2.5 + mt.phase));
+          ctx.fillStyle = pal.mote;
+          ctx.globalAlpha = mAlpha;
+          ctx.beginPath();
+          ctx.arc(mxP, myP * worldState.height, mt.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // Secret Relic Pulse Hints when Relics Pill is clicked
+      if (worldState.hintSecretsTimer > 0) {
+        var pulseA = 0.4 + 0.4 * Math.sin(t * 8);
+        var collectedMap = loadCollectedRelics();
+        worldState.hitTargets.forEach(function(ht) {
+          var rKey = null;
+          if (ht.id === 'campfire') rKey = trackMeta.biomeName + '_campfire';
+          else if (ht.id === 'ore1') rKey = trackMeta.biomeName + '_ore_1';
+          else if (ht.id === 'ore2') rKey = trackMeta.biomeName + '_ore_2';
+          else if (ht.id === 'boat') rKey = trackMeta.biomeName + '_boat';
+          if (rKey && !collectedMap[rKey]) {
+            ctx.beginPath();
+            ctx.arc(ht.x, ht.y, 24 + Math.sin(t * 6) * 4, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(56,189,248,' + pulseA + ')';
+            ctx.lineWidth = 2.4;
+            ctx.stroke();
+          }
+        });
+      }
+
+      // Locate Champion Sonar Beacon
+      if (worldState.beaconPulseT > 0 && worldState.stationCoords[activeStationIdx]) {
+        var ac = worldState.stationCoords[activeStationIdx];
+        var at = terrain.tileMap[Math.round(ac.u) + ',' + Math.round(ac.v)] || { topZ: 2.8 };
+        var ap = proj(ac.u, ac.v, at.topZ);
+        var bFrac = 1 - (worldState.beaconPulseT / 1.4);
+        ctx.beginPath();
+        ctx.ellipse(ap.x, ap.y, 20 + bFrac * 70, (20 + bFrac * 70) * 0.52, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,230,0,' + (1 - bFrac) + ')';
+        ctx.lineWidth = 3 * (1 - bFrac);
+        ctx.stroke();
+      }
+
+      // Dynamic Burst Particles with Gravity
+      for (var pi = worldState.particles.length - 1; pi >= 0; pi--) {
+        var ptc = worldState.particles[pi];
+        ptc.life += dt;
+        if (ptc.life >= ptc.maxLife) {
+          worldState.particles.splice(pi, 1);
+          continue;
+        }
+        ptc.vy += 180 * dt;
+        ptc.x += ptc.vx * dt;
+        ptc.y += ptc.vy * dt;
+        var pOp = 1 - (ptc.life / ptc.maxLife);
+        ctx.fillStyle = ptc.color;
+        ctx.globalAlpha = pOp;
+        ctx.fillRect(ptc.x - ptc.size * 0.5, ptc.y - ptc.size * 0.5, ptc.size, ptc.size);
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+
+      if (!reducedMotion) {
+        rafId = requestAnimationFrame(renderFrame);
+      }
+    }
+
+    // ── Pointer Hit-Testing & Rich Interactivity on Canvas ────────────────
+    function findHitTarget(cx, cy) {
+      for (var i = worldState.hitTargets.length - 1; i >= 0; i--) {
+        var ht = worldState.hitTargets[i];
+        var dx = (cx - ht.x) / ht.rx;
+        var dy = (cy - ht.y) / ht.ry;
+        if (dx * dx + dy * dy <= 1.0) return ht;
+      }
+      return null;
+    }
+
+    function onCanvasPointerMove(e) {
+      var rect = canvas.getBoundingClientRect();
+      var cx = e.clientX - rect.left;
+      var cy = e.clientY - rect.top;
+      worldState.pointerX = cx;
+      worldState.pointerY = cy;
+
+      if (!reducedMotion) {
+        worldState.mx = clamp(((cx / rect.width) - 0.5) * 2, -1, 1);
+        worldState.my = clamp(((cy / rect.height) - 0.5) * 2, -1, 1);
+      }
+
+      var hit = findHitTarget(cx, cy);
+      worldState.hoveredTarget = hit;
+      worldState.hoveredStationIdx = (hit && hit.type === 'station') ? hit.idx : -1;
+      canvas.style.cursor = hit ? 'pointer' : 'default';
+
+      if (hoverHint) {
+        if (hit && hit.hint) {
+          hoverHint.textContent = hit.hint;
+          hoverHint.classList.remove('hidden');
+        } else {
+          hoverHint.classList.add('hidden');
+        }
+      }
+      if (reducedMotion) requestAnimationFrame(renderFrame);
+    }
+
+    function onCanvasPointerLeave() {
+      worldState.mx = 0;
+      worldState.my = 0;
+      worldState.hoveredTarget = null;
+      worldState.hoveredStationIdx = -1;
+      canvas.style.cursor = 'default';
+      if (hoverHint) hoverHint.classList.add('hidden');
+      if (reducedMotion) requestAnimationFrame(renderFrame);
+    }
+
+    function onCanvasClick(e) {
+      var rect = canvas.getBoundingClientRect();
+      var cx = e.clientX - rect.left;
+      var cy = e.clientY - rect.top;
+      var hit = findHitTarget(cx, cy);
+
+      if (hit) {
+        if (hit.type === 'station' && stationData[hit.idx]) {
+          var st = stationData[hit.idx];
+          openChapterNodeModal(st.mod, st.isDone, st.isUnlocked);
+          return;
+        }
+        if (hit.type === 'capstone') {
+          capstonePinEl && capstonePinEl.click();
+          return;
+        }
+        if (hit.type === 'hero') {
+          worldState.heroHopVel = 145;
+          emitCanvasParticles(hit.x, hit.y, ['#FFE600', '#A855F7', '#10B981'], 12, 42);
+          if (window.GameFX && window.GameFX.playXpPop) window.GameFX.playXpPop();
+          var name = (player && player.name) ? String(player.name).slice(0, 18) : 'Hero';
+          var quips = ['Let\'s code, ' + name + '!', 'Ready for Quest ' + (activeStationIdx + 1) + '!', 'Full JVM speed ahead!'];
+          showMapCallout(hit.x, hit.y - 24, quips[Math.floor(Math.random() * quips.length)]);
+          return;
+        }
+        if (hit.type === 'tree') {
+          var sp = worldState.treeSprings[hit.id];
+          sp.vel = (Math.random() > 0.5 ? 1 : -1) * 4.5;
+          var pCol = trackMeta.biomeName === 'nether' ? ['#DC2626', '#F97316', '#FDE047'] : (trackMeta.biomeName === 'end' ? ['#A855F7', '#E9D5FF'] : ['#52B756', '#8AE48F', '#FFE600']);
+          emitCanvasParticles(hit.x, hit.y - 12, pCol, 9, 34);
+          if (window.GameFX && window.GameFX.playClick) window.GameFX.playClick();
+          showMapCallout(hit.x, hit.y - 20, trackMeta.lore.tree);
+          return;
+        }
+        if (hit.type === 'campfire') {
+          worldState.campfireLevel = (worldState.campfireLevel % 3) + 1;
+          emitCanvasParticles(hit.x, hit.y - 8, ['#F97316', '#FFE600', '#FFFFFF'], 11, 38);
+          if (window.GameFX && window.GameFX.playXpPop) window.GameFX.playXpPop();
+          saveCollectedRelic(trackMeta.biomeName + '_campfire');
+          refreshRelicCounter();
+          showMapCallout(hit.x, hit.y - 18, trackMeta.lore.campfire);
+          return;
+        }
+        if (hit.type === 'ore') {
+          var hCount = worldState.oreHits[hit.id];
+          if (hCount < 3) {
+            worldState.oreHits[hit.id] = hCount + 1;
+            emitCanvasParticles(hit.x, hit.y - 6, ['#38BDF8', '#FFE600', '#FFFFFF'], 10, 42);
+            if (window.GameFX && window.GameFX.playBlockBreak) window.GameFX.playBlockBreak();
+            if (worldState.oreHits[hit.id] >= 3) {
+              var keySuffix = hit.id === 'ore1' ? '_ore_1' : '_ore_2';
+              saveCollectedRelic(trackMeta.biomeName + keySuffix);
+              refreshRelicCounter();
+              showMapCallout(hit.x, hit.y - 18, trackMeta.lore[hit.id]);
+            } else {
+              showMapCallout(hit.x, hit.y - 18, 'Mining... ' + (3 - worldState.oreHits[hit.id]) + ' more!');
+            }
+          } else {
+            showMapCallout(hit.x, hit.y - 18, 'Crystal Relic already mined!');
+          }
+          return;
+        }
+        if (hit.type === 'boat') {
+          worldState.boatSurge = 1.0;
+          emitCanvasParticles(hit.x, hit.y, ['#38BDF8', '#FFFFFF', '#FFE600'], 10, 32);
+          if (window.GameFX && window.GameFX.playMeowChirp) window.GameFX.playMeowChirp();
+          saveCollectedRelic(trackMeta.biomeName + '_boat');
+          refreshRelicCounter();
+          showMapCallout(hit.x, hit.y - 18, trackMeta.lore.boat);
+          return;
+        }
+      }
+
+      // Click anywhere on open terrain or water -> isometric water/ground sonar ripple!
+      var approxV = (cy - worldState.oy) / worldState.th;
+      var inWaterZone = approxV >= 17.5 && approxV <= 24.5;
+      worldState.ripples.push({
+        x: cx,
+        y: cy,
+        life: 0,
+        maxLife: 0.75,
+        color: inWaterZone ? '#7DD3FC' : '#FFE600'
+      });
+      if (reducedMotion) requestAnimationFrame(renderFrame);
+    }
+
+    canvas.addEventListener('pointermove', onCanvasPointerMove, { passive: true });
+    canvas.addEventListener('pointerleave', onCanvasPointerLeave);
+    canvas.addEventListener('click', onCanvasClick);
+
+    // ── Header HUD Control Wiring ─────────────────────────────────────────
+    var locateBtn = board.querySelector('#btn-locate-champion');
     if (locateBtn) {
       locateBtn.onclick = function() {
-        var targetStation = canvas.querySelector('.is-active-station') || canvas.querySelector('.island-node-station');
-        if (targetStation && typeof targetStation.scrollIntoView === 'function') {
-          targetStation.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          targetStation.classList.remove('station-pulse-highlight');
-          void targetStation.offsetWidth;
-          targetStation.classList.add('station-pulse-highlight');
-          setTimeout(function() { targetStation.classList.remove('station-pulse-highlight'); }, 1200);
+        var ac = worldState.stationCoords[activeStationIdx];
+        if (ac) {
+          var at = (worldState.terrain && worldState.terrain.tileMap[Math.round(ac.u) + ',' + Math.round(ac.v)]) || { topZ: 2.8 };
+          var ap = proj(ac.u, ac.v, at.topZ);
+          var rect = viewport.getBoundingClientRect();
+          window.scrollTo({ top: Math.max(0, window.scrollY + rect.top + ap.y - window.innerHeight * 0.45), behavior: 'smooth' });
+        }
+        worldState.beaconPulseT = 1.4;
+        if (reducedMotion) requestAnimationFrame(renderFrame);
+      };
+    }
+
+    var atmosBtn = board.querySelector('#btn-diorama-atmos');
+    if (atmosBtn) {
+      atmosBtn.onclick = function() {
+        atmosphereOn = !atmosphereOn;
+        setAtmospherePref(atmosphereOn);
+        atmosBtn.classList.toggle('is-on', atmosphereOn);
+        showMapCallout(worldState.width - 110, 42, atmosphereOn ? 'Biome ambient glow ON' : 'Biome ambient glow OFF');
+      };
+    }
+
+    var relicsBtn = board.querySelector('#btn-diorama-relics');
+    if (relicsBtn) {
+      relicsBtn.onclick = function() {
+        worldState.hintSecretsTimer = 3.0;
+        var cnt = countBiomeRelics();
+        if (cnt >= 4) {
+          showMapCallout(worldState.width - 130, 42, 'All 4 Realm Relics discovered!');
+        } else {
+          showMapCallout(worldState.width - 130, 42, 'Find: Campfire, Boat & 2 Cliff Ores (' + cnt + '/4)');
         }
       };
     }
 
-    board.appendChild(canvas);
-    container.appendChild(board);
+    createPinOverlay();
+    computeLayoutGeometry();
 
-    // Measure coordinates on next frame to draw exact connecting SVG terrain + road
-    requestAnimationFrame(function() {
-      buildTrailPathsSVG(canvas, meta.biomeName, activeStationIdx);
-    });
-
-    if (typeof ResizeObserver !== 'undefined') {
-      if (_trailResizeObserver) _trailResizeObserver.disconnect();
-      _trailResizeObserver = new ResizeObserver(function() {
-        buildTrailPathsSVG(canvas, meta.biomeName, activeStationIdx);
-      });
-      _trailResizeObserver.observe(canvas);
+    if (reducedMotion) {
+      renderFrame(performance.now());
+    } else {
+      rafId = requestAnimationFrame(renderFrame);
     }
+
+    var ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(function() {
+        computeLayoutGeometry();
+        if (reducedMotion) renderFrame(performance.now());
+      });
+      ro.observe(viewport);
+    }
+
+    window.relayoutAdventurePaths = function() {
+      computeLayoutGeometry();
+    };
+
+    _activeCleanup = function() {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (ro) ro.disconnect();
+      canvas.removeEventListener('pointermove', onCanvasPointerMove);
+      canvas.removeEventListener('pointerleave', onCanvasPointerLeave);
+      canvas.removeEventListener('click', onCanvasClick);
+    };
   }
   window.renderAdventureTrail = renderAdventureTrail;
 
-  // ── 8. Apple-Crafted Chapter Sheet Modal (Lessons + Quiz + Coding Lab) ──────
+  // ── 7. Apple-Crafted Chapter Inspection Sheet Modal ───────────────────────
   function openChapterNodeModal(mod, isModDone, isModUnlocked) {
     var existing = document.getElementById('trail-node-popover-modal');
     if (existing) existing.remove();
@@ -1096,7 +2073,6 @@
       );
     });
 
-    // Include Quiz Challenge & Coding Workbench directly in the Chapter Modal
     var extrasUnlocked = isModUnlocked && doneCount >= lessons.length;
     if (mod.challenge) {
       var qDone = completedChallenges.indexOf(mod.challenge.id) !== -1;

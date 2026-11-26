@@ -73,7 +73,7 @@
   <title>JavaQst — Learn Java Like a Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7.4"/>
-  <link rel="stylesheet" href="css/style.css?v=10.2"/>
+  <link rel="stylesheet" href="css/style.css?v=10.3"/>
 </head>
 <body>
 
@@ -317,77 +317,78 @@
 <section class="screen" id="screen-map">
   <div class="course-hub-container">
     
-    <!-- Hero Panoramic Banner: Underground Redstone & Diamond Cavern -->
-    <div class="course-hero-cavern" id="course-hero-cavern">
-      <div class="cavern-hero-content">
-        <div class="hero-tag-row">
-          <span class="hero-level-tag"><span class="pixel-dot"></span>JAVA QUEST</span>
-          <span class="hero-track-tag" id="hero-track-tag">OVERWORLD • BEGINNER</span>
+    <!-- Compact Expedition Header Banner -->
+    <div class="course-hero-cavern course-hero-compact" id="course-hero-cavern">
+      <div class="cavern-hero-content cavern-hero-flex">
+        <div class="hero-copy-col">
+          <div class="hero-tag-row">
+            <span class="hero-level-tag"><span class="pixel-dot"></span>JAVAQST</span>
+            <span class="hero-track-tag" id="hero-track-tag">OVERWORLD • BEGINNER</span>
+          </div>
+          <h1 class="hero-course-title">JavaQst <span class="hero-badge-edition">21 LTS</span></h1>
+          <p class="hero-course-desc">
+            Interactive 3D biome expedition from core Java syntax &amp; OOP to Streams and Cloud architecture.
+          </p>
         </div>
-        <h1 class="hero-course-title">Java Quest <span class="hero-badge-edition">21 LTS</span></h1>
-        <p class="hero-course-desc">
-          Master modern Java 21 LTS from core syntax to OOP, JVM memory layout, high-performance Streams, and cloud architecture.
-        </p>
-        <div class="hero-actions-row">
+        <div class="hero-actions-col">
           <button class="btn-resume-quest" id="btn-resume-quest">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="btn-play-svg"><polygon points="6 4 20 12 6 20 6 4"/></svg> <span>Resume Learning</span>
           </button>
           <div class="hero-meta-stats">
-            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span id="hero-time-estimate">~24h of learning</span></span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span id="hero-time-estimate">~24h</span></span>
             <span class="meta-item-divider">•</span>
-            <span class="meta-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <span id="hero-modules-count">24 Modules</span></span>
+            <span class="meta-item"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <span id="hero-modules-count">24 Modules</span></span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Top Track Switcher Tabs -->
-    <div class="track-tab-bar" id="track-tab-bar">
-      <button class="track-tab-btn active" data-track="all">
-        <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 4 7 1 13 4 19 1 19 16 13 19 7 16 1 19"/><line x1="7" y1="1" x2="7" y2="16"/><line x1="13" y1="4" x2="13" y2="19"/></svg></span>
-        <span class="track-tab-label">All Tracks</span>
-        <span class="track-tab-count" id="track-count-all">24</span>
-      </button>
-      <button class="track-tab-btn" data-track="beginner">
-        <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none"><rect x="1" y="8" width="18" height="11" fill="#5a8c3c"/><rect x="1" y="4" width="18" height="4" fill="#8B6914"/><rect x="3" y="10" width="3" height="3" fill="#3a6a28"/><rect x="11" y="10" width="3" height="3" fill="#3a6a28"/><rect x="8" y="7" width="3" height="3" fill="#3a6a28"/></svg></span>
-        <span class="track-tab-label">Track 1: Overworld (Beginner)</span>
-        <span class="track-tab-count" id="track-count-beginner">8</span>
-      </button>
-      <button class="track-tab-btn" data-track="intermediate">
-        <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none"><rect x="1" y="1" width="18" height="18" fill="#6b0000"/><rect x="4" y="4" width="5" height="5" fill="#8B0000"/><rect x="11" y="4" width="5" height="5" fill="#8B0000"/><rect x="7" y="11" width="6" height="5" fill="#a00000"/><rect x="3" y="13" width="2" height="5" fill="#500000"/><rect x="15" y="13" width="2" height="5" fill="#500000"/></svg></span>
-        <span class="track-tab-label">Track 2: The Nether (Intermediate)</span>
-        <span class="track-tab-count" id="track-count-intermediate">8</span>
-      </button>
-      <button class="track-tab-btn" data-track="advanced">
-        <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="18" height="18" fill="none"><rect x="1" y="1" width="18" height="18" fill="#1a0a2e"/><circle cx="5" cy="5" r="1.5" fill="#fff" opacity=".9"/><circle cx="15" cy="7" r="1" fill="#fff" opacity=".7"/><circle cx="8" cy="14" r="1.5" fill="#fff" opacity=".8"/><circle cx="16" cy="16" r=".8" fill="#fff" opacity=".6"/><circle cx="2" cy="15" r="1" fill="#a855f7" opacity=".9"/><circle cx="12" cy="2" r=".7" fill="#a855f7" opacity=".7"/></svg></span>
-        <span class="track-tab-label">Track 3: The End (Advanced)</span>
-        <span class="track-tab-count" id="track-count-advanced">8</span>
-      </button>
+    <!-- Unified Realm Tabs + View Switcher Strip -->
+    <div class="map-toolbar-row">
+      <div class="track-tab-bar" id="track-tab-bar">
+        <button class="track-tab-btn active" data-track="all">
+          <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 4 7 1 13 4 19 1 19 16 13 19 7 16 1 19"/><line x1="7" y1="1" x2="7" y2="16"/><line x1="13" y1="4" x2="13" y2="19"/></svg></span>
+          <span class="track-tab-label">All</span>
+          <span class="track-tab-count" id="track-count-all">24</span>
+        </button>
+        <button class="track-tab-btn" data-track="beginner">
+          <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="16" height="16" fill="none"><rect x="1" y="8" width="18" height="11" fill="#5a8c3c"/><rect x="1" y="4" width="18" height="4" fill="#8B6914"/><rect x="3" y="10" width="3" height="3" fill="#3a6a28"/><rect x="11" y="10" width="3" height="3" fill="#3a6a28"/></svg></span>
+          <span class="track-tab-label">Overworld</span>
+          <span class="track-tab-count" id="track-count-beginner">8</span>
+        </button>
+        <button class="track-tab-btn" data-track="intermediate">
+          <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="16" height="16" fill="none"><rect x="1" y="1" width="18" height="18" fill="#7F1D1D"/><rect x="4" y="4" width="5" height="5" fill="#B91C1C"/><rect x="11" y="10" width="5" height="5" fill="#F97316"/></svg></span>
+          <span class="track-tab-label">The Nether</span>
+          <span class="track-tab-count" id="track-count-intermediate">8</span>
+        </button>
+        <button class="track-tab-btn" data-track="advanced">
+          <span class="track-tab-icon"><svg viewBox="0 0 20 20" width="16" height="16" fill="none"><rect x="1" y="1" width="18" height="18" fill="#1a0a2e"/><circle cx="6" cy="6" r="1.5" fill="#E9D5FF"/><circle cx="14" cy="12" r="1.4" fill="#A855F7"/></svg></span>
+          <span class="track-tab-label">The End</span>
+          <span class="track-tab-count" id="track-count-advanced">8</span>
+        </button>
+      </div>
+
+      <div class="map-view-switcher" id="map-view-switcher">
+        <button class="map-view-toggle-btn active" id="btn-map-view-trail" type="button" onclick="window.setMapViewMode && window.setMapViewMode('trail')" title="View 3D Adventure Map">
+          <svg viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15 C3 11 9 11 9 7 C9 3 15 3 15 3"/><circle cx="3" cy="15" r="1.5" fill="currentColor"/><circle cx="15" cy="3" r="1.5" fill="currentColor"/></svg>
+          <span>Adventure Map</span>
+        </button>
+        <button class="map-view-toggle-btn" id="btn-map-view-list" type="button" onclick="window.setMapViewMode && window.setMapViewMode('list')" title="View Curriculum Accordion List">
+          <svg viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="15" y2="5"/><line x1="3" y1="9" x2="15" y2="9"/><line x1="3" y1="13" x2="15" y2="13"/></svg>
+          <span>List</span>
+        </button>
+      </div>
     </div>
 
-    <!-- 2-Column Course Layout (Codédex Style) -->
+    <!-- 2-Column Course Layout -->
     <div class="course-hub-grid">
       
-      <!-- Left Column: Adventure Trail & Chapter Accordions -->
+      <!-- Left Column: Interactive 2.5D Biome Diorama & Chapter Accordions -->
       <div class="course-chapters-col">
-        <!-- View Switcher (Zero Emoji - Pure SVGs) -->
-        <div class="map-view-switcher" id="map-view-switcher">
-          <button class="map-view-toggle-btn active" id="btn-map-view-trail" type="button" onclick="window.setMapViewMode && window.setMapViewMode('trail')" title="View RPG Adventure Trail">
-            <svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15 C3 11 9 11 9 7 C9 3 15 3 15 3"/><circle cx="3" cy="15" r="1.5" fill="currentColor"/><circle cx="15" cy="3" r="1.5" fill="currentColor"/></svg>
-            <span>Adventure Trail</span>
-          </button>
-          <button class="map-view-toggle-btn" id="btn-map-view-list" type="button" onclick="window.setMapViewMode && window.setMapViewMode('list')" title="View Curriculum Accordion List">
-            <svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="15" y2="5"/><line x1="3" y1="9" x2="15" y2="9"/><line x1="3" y1="13" x2="15" y2="13"/></svg>
-            <span>Curriculum List</span>
-          </button>
-        </div>
-
-        <!-- W3Schools-Style Winding Adventure Trail Container -->
         <div class="adventure-trail-wrap" id="adventure-trail-wrap">
-          <!-- Populated dynamically by renderMap() -->
+          <!-- Populated dynamically by renderAdventureTrail() -->
         </div>
 
-        <!-- Traditional Chapter Accordions Container (Toggled via Switcher) -->
         <div class="chapters-accordion hidden" id="chapters-accordion">
           <!-- Populated dynamically by renderMap() -->
         </div>
@@ -1632,7 +1633,7 @@
 <script src="js/ai-tutor.js?v=9.9"></script>
 <script src="lib/editor.bundle.js?v=9.1"></script>
 <script src="lib/game-fx.js?v=9.9"></script>
-<script src="js/adventure-trail.js?v=10.0"></script>
+<script src="js/adventure-trail.js?v=10.3"></script>
 <script src="js/meowger.js?v=9.9"></script>
 <script src="js/app.js?v=10.0"></script>
 <script>
