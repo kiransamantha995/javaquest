@@ -1,5 +1,5 @@
 // JavaQst Service Worker — Offline Shell & Mobile PWA / TWA Support
-const CACHE_NAME = 'javaqst-cache-v2.1';
+const CACHE_NAME = 'javaqst-cache-v2.2';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
