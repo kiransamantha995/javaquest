@@ -167,6 +167,9 @@ function applyTheme(theme) {
   if (typeof syncEditorThemes === 'function') {
     syncEditorThemes(isDark);
   }
+  if (typeof window.relayoutAdventurePaths === 'function') {
+    window.relayoutAdventurePaths();
+  }
 }
 
 function updateThemeUI(isDark) {

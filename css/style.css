@@ -10033,51 +10033,52 @@ body.dark-theme .map-view-toggle-btn.active {
   border-color: #000000 !important;
 }
 
-/* ── 3. Adventure Trail: Isometric Mountain Island Diorama (Tamed Neobrutalist) ── */
+/* ── 3. Adventure Trail: Living Isometric Biome Diorama Map (Apple Craftsmanship) ── */
 .adventure-trail-wrap {
   width: 100%;
 }
 
 .adventure-trail-board.island-mountain-board {
+  --mx: 0;
+  --my: 0;
   position: relative;
   width: 100%;
-  max-width: 780px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 3.5rem;
   display: flex;
   flex-direction: column;
-  background: #FAF8F5;
-  border: 3px solid var(--ink, #0B0B0E);
+  background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, #F4F7EE 55%, #EAF2E3 100%);
+  border: 2.5px solid var(--ink, #0B0B0E);
   border-radius: 28px;
-  box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.08), 5px 5px 0px var(--ink, #0B0B0E);
   overflow: hidden;
-  transition: background 0.25s ease, border-color 0.25s ease;
+  transition: background 0.35s ease, border-color 0.25s ease;
 }
 
 body.dark-theme .adventure-trail-board.island-mountain-board {
-  background: #121316 !important;
+  background: radial-gradient(circle at 50% 0%, #16222E 0%, #10151D 60%, #0D1117 100%) !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 6px 6px 0px #000000 !important;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.55), 5px 5px 0px #000000 !important;
 }
 
-/* Biome Specific Ambiances */
 .adventure-trail-board[data-biome="nether"] {
-  background: #180C10 !important;
-  border-color: #8B0000 !important;
+  background: radial-gradient(circle at 50% 0%, #2D1117 0%, #1B0B10 60%, #13060A 100%) !important;
+  border-color: #991B1B !important;
 }
 body.dark-theme .adventure-trail-board[data-biome="nether"] {
-  background: #14080B !important;
+  background: radial-gradient(circle at 50% 0%, #250C12 0%, #15070B 65%, #0F0407 100%) !important;
 }
 
 .adventure-trail-board[data-biome="end"] {
-  background: #0E0817 !important;
-  border-color: #5B21B6 !important;
+  background: radial-gradient(circle at 50% 0%, #1E1136 0%, #110922 60%, #0A0516 100%) !important;
+  border-color: #6D28D9 !important;
 }
 body.dark-theme .adventure-trail-board[data-biome="end"] {
-  background: #0A0512 !important;
+  background: radial-gradient(circle at 50% 0%, #1A0E30 0%, #0E071D 65%, #080412 100%) !important;
 }
 
-/* Floating Clouds & Sky Atmosphere */
+/* Spatial Floating Clouds & Biome Ambient Motes */
 .island-sky-decor {
   position: absolute;
   inset: 0;
@@ -10088,47 +10089,48 @@ body.dark-theme .adventure-trail-board[data-biome="end"] {
 
 .pixel-cloud {
   position: absolute;
-  background: #FFFFFF;
-  border: 2px solid var(--ink, #0B0B0E);
-  box-shadow: 2px 2px 0px var(--ink, #0B0B0E);
-  border-radius: 8px;
-  opacity: 0.75;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(11, 11, 14, 0.25);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  opacity: 0.78;
+  transform: translate3d(calc(var(--mx, 0) * -12px), calc(var(--my, 0) * -8px), 0);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.pixel-cloud.c1 {
-  top: 40px;
-  left: 20px;
-  width: 64px;
-  height: 18px;
-  animation: floatCloud 24s ease-in-out infinite alternate;
-}
-.pixel-cloud.c2 {
-  top: 180px;
-  right: 24px;
-  width: 82px;
-  height: 22px;
-  animation: floatCloud 30s ease-in-out infinite alternate-reverse;
-}
-.pixel-cloud.c3 {
-  bottom: 120px;
-  left: 30px;
-  width: 70px;
-  height: 20px;
-  animation: floatCloud 28s ease-in-out infinite alternate;
-}
+.pixel-cloud.c1 { top: 44px; left: 26px; width: 72px; height: 20px; }
+.pixel-cloud.c2 { top: 210px; right: 24px; width: 88px; height: 22px; transform: translate3d(calc(var(--mx, 0) * -18px), calc(var(--my, 0) * -10px), 0); }
+.pixel-cloud.c3 { bottom: 140px; left: 32px; width: 74px; height: 20px; transform: translate3d(calc(var(--mx, 0) * -8px), calc(var(--my, 0) * -6px), 0); }
 
-body.dark-theme .pixel-cloud {
-  background: #1F232B !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 2px 2px 0px #000000 !important;
+body.dark-theme .pixel-cloud,
+.adventure-trail-board[data-biome="nether"] .pixel-cloud,
+.adventure-trail-board[data-biome="end"] .pixel-cloud {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
   opacity: 0.55;
 }
 
-@keyframes floatCloud {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(18px); }
+@keyframes moteFloat {
+  0%, 100% { transform: translateY(0) scale(0.9); opacity: 0.25; }
+  50% { transform: translateY(-18px) scale(1.15); opacity: 0.85; }
 }
 
-/* ── Top Island Biome Header Bar (Matches User Reference Image) ── */
+.ambient-mote {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #FFE600;
+  box-shadow: 0 0 10px #FFE600;
+  animation: moteFloat 5s ease-in-out infinite;
+}
+.adventure-trail-board[data-biome="nether"] .ambient-mote { background: #FB923C; box-shadow: 0 0 10px #F97316; }
+.adventure-trail-board[data-biome="end"] .ambient-mote { background: #C084FC; box-shadow: 0 0 12px #A855F7; }
+.ambient-mote.m1 { top: 18%; left: 12%; animation-delay: 0s; }
+.ambient-mote.m2 { top: 40%; right: 10%; animation-delay: 1.4s; animation-duration: 6.2s; }
+.ambient-mote.m3 { top: 66%; left: 8%; animation-delay: 2.3s; animation-duration: 5.4s; }
+.ambient-mote.m4 { bottom: 18%; right: 14%; animation-delay: 0.9s; animation-duration: 7s; }
+
+/* ── Frosted Apple-Styled Biome HUD Header ── */
 .island-header-bar {
   position: relative;
   width: 100%;
@@ -10136,37 +10138,43 @@ body.dark-theme .pixel-cloud {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.1rem 1.4rem;
-  margin-bottom: 1.5rem;
-  background: #FFFFFF;
-  border: 2.5px solid var(--ink, #0B0B0E);
+  padding: 1rem 1.3rem;
+  margin-bottom: 1.25rem;
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
+  border: 2px solid var(--ink, #0B0B0E);
   border-radius: 18px;
-  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
-  z-index: 10;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 3.5px 3.5px 0px var(--ink, #0B0B0E);
+  z-index: 12;
 }
 
-body.dark-theme .island-header-bar {
-  background: #18191E !important;
+body.dark-theme .island-header-bar,
+.adventure-trail-board[data-biome="nether"] .island-header-bar,
+.adventure-trail-board[data-biome="end"] .island-header-bar {
+  background: rgba(24, 25, 32, 0.88) !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 4px 4px 0px #000000 !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35), 3.5px 3.5px 0px #000000 !important;
 }
 
 .island-header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
   min-width: 0;
   flex: 1;
 }
 
 .island-biome-cube {
   flex-shrink: 0;
-  filter: drop-shadow(2px 2px 0px var(--ink, #0B0B0E));
+  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.4));
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.island-header-left:hover .island-biome-cube {
+  transform: translateY(-2px) rotate(-4deg) scale(1.06);
 }
 
-.island-title-group {
-  min-width: 0;
-}
+.island-title-group { min-width: 0; }
 
 .island-badge-pill {
   display: inline-block;
@@ -10174,13 +10182,12 @@ body.dark-theme .island-header-bar {
   color: #0B0B0E;
   font-family: var(--font-mono, monospace);
   font-weight: 900;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.05em;
-  padding: 0.18rem 0.55rem;
+  padding: 0.16rem 0.52rem;
   border-radius: 6px;
   border: 1.5px solid #0B0B0E;
-  box-shadow: 1px 1px 0px #0B0B0E;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.22rem;
 }
 
 .island-heading {
@@ -10188,180 +10195,330 @@ body.dark-theme .island-header-bar {
   font-weight: 800;
   color: var(--ink, #0B0B0E);
   margin: 0;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   line-height: 1.2;
 }
-
-body.dark-theme .island-heading {
+body.dark-theme .island-heading,
+.adventure-trail-board[data-biome="nether"] .island-heading,
+.adventure-trail-board[data-biome="end"] .island-heading {
   color: #F4F4F5 !important;
 }
 
 .island-sub {
-  font-size: 0.78rem;
+  font-size: 0.77rem;
   font-weight: 600;
   color: #52525B;
   margin: 0.2rem 0 0;
   line-height: 1.35;
 }
-
-body.dark-theme .island-sub {
-  color: #94A3B8 !important;
+body.dark-theme .island-sub,
+.adventure-trail-board[data-biome="nether"] .island-sub,
+.adventure-trail-board[data-biome="end"] .island-sub {
+  color: #A1A1AA !important;
 }
 
 .island-header-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.55rem;
+  gap: 0.5rem;
   flex-shrink: 0;
 }
 
-.island-stat-chip {
+.island-stats-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.island-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: #FAF8F5;
   border: 1.5px solid var(--ink, #0B0B0E);
-  padding: 0.3rem 0.65rem;
-  border-radius: 8px;
-  box-shadow: 2px 2px 0px var(--ink, #0B0B0E);
+  padding: 0.26rem 0.58rem;
+  border-radius: 9px;
 }
-
-body.dark-theme .island-stat-chip {
-  background: #24262C !important;
+body.dark-theme .island-stat-chip,
+.adventure-trail-board[data-biome="nether"] .island-stat-chip,
+.adventure-trail-board[data-biome="end"] .island-stat-chip {
+  background: #24262E !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 2px 2px 0px #000000 !important;
 }
 
-.chip-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #71717A;
-  text-transform: uppercase;
-}
+.chip-icon { display: inline-flex; align-items: center; }
 
 .chip-val {
   font-family: var(--font-mono, monospace);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 800;
   color: var(--ink, #0B0B0E);
 }
-
-body.dark-theme .chip-val {
+body.dark-theme .chip-val,
+.adventure-trail-board[data-biome="nether"] .chip-val,
+.adventure-trail-board[data-biome="end"] .chip-val {
   color: #F4F4F5 !important;
 }
 
 .island-mini-bar {
-  width: 50px;
+  width: 44px;
   height: 6px;
   background: #E4E4E7;
   border-radius: 999px;
   overflow: hidden;
-  border: 1px solid var(--ink, #0B0B0E);
+  border: 1px solid #0B0B0E;
 }
 
 .mini-bar-fill {
   height: 100%;
   background: #10B981;
-  transition: width 0.3s ease;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.island-locate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.26rem 0.6rem;
+  border-radius: 9px;
+  border: 1.5px solid var(--ink, #0B0B0E);
+  background: #FFE600;
+  color: #0B0B0E;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), background 0.15s ease;
+}
+.island-locate-btn:hover { background: #FFED4A; transform: translateY(-1px); }
+.island-locate-btn:active { transform: scale(0.95); }
 
 .island-track-tabs {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.32rem;
 }
 
 .track-pill-btn {
   background: #FFFFFF;
   border: 1.5px solid var(--ink, #0B0B0E);
-  box-shadow: 1.5px 1.5px 0px var(--ink, #0B0B0E);
-  border-radius: 8px;
-  padding: 0.25rem 0.6rem;
+  border-radius: 9px;
+  padding: 0.26rem 0.62rem;
   font-family: var(--font-ui, sans-serif);
   font-size: 0.72rem;
   font-weight: 800;
   color: var(--ink, #0B0B0E);
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 0.15s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.track-pill-btn:hover { background: #FFFEEB; transform: translateY(-1px); }
+.track-pill-btn.active { background: #FFE600; color: #0B0B0E; border-color: #0B0B0E; box-shadow: 2px 2px 0px #0B0B0E; }
 
-.track-pill-btn:hover {
-  background: #FFFEEB;
-  transform: translate(-1px, -1px);
-}
-
-.track-pill-btn.active {
-  background: #FFE600;
-  border-color: #0B0B0E;
-  color: #0B0B0E;
-  box-shadow: 2px 2px 0px #0B0B0E;
-}
-
-body.dark-theme .track-pill-btn {
-  background: #202228 !important;
+body.dark-theme .track-pill-btn,
+.adventure-trail-board[data-biome="nether"] .track-pill-btn,
+.adventure-trail-board[data-biome="end"] .track-pill-btn {
+  background: #20222A !important;
   color: #E4E4E7 !important;
   border-color: rgba(255, 255, 255, 0.18) !important;
-  box-shadow: 1.5px 1.5px 0px #000000 !important;
 }
-
-body.dark-theme .track-pill-btn.active {
+body.dark-theme .track-pill-btn.active,
+.adventure-trail-board[data-biome="nether"] .track-pill-btn.active,
+.adventure-trail-board[data-biome="end"] .track-pill-btn.active {
   background: #FFE600 !important;
   color: #0B0B0E !important;
   border-color: #FFE600 !important;
-  box-shadow: 2px 2px 0px #000000 !important;
 }
 
-/* ── The Mountain Island Canvas & Diorama ── */
+/* ── Island Terrain & Synced Cobblestone SVG Canvas ── */
 .island-canvas {
   position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding: 1.5rem 0 2rem;
+  gap: 2.25rem;
+  padding: 5.4rem 0 2.4rem;
   z-index: 5;
 }
 
-/* Winding Mountain Stepping Stone Stations */
+.trail-world-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+@keyframes waterfallFlow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -44; }
+}
+.wf-stream-line {
+  animation: waterfallFlow 1.2s linear infinite;
+}
+.wf-stream-line.wf-delay {
+  animation-duration: 1.5s;
+}
+
+@keyframes trailEnergyFlow {
+  0% { stroke-dashoffset: 40; }
+  100% { stroke-dashoffset: 0; }
+}
+.trail-progress-glow {
+  animation: trailEnergyFlow 1.6s linear infinite;
+}
+
+.trail-segment-hover {
+  transition: opacity 0.25s ease;
+}
+
+/* Staggered Apple Spring Station Entrance */
+@keyframes stationEnter {
+  0% { opacity: 0; transform: translateX(var(--node-x, 0px)) translateY(14px) scale(0.95); }
+  100% { opacity: 1; transform: translateX(var(--node-x, 0px)) translateY(0) scale(1); }
+}
+
 .island-node-station {
   position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1.35rem;
   z-index: 6;
   transform: translateX(var(--node-x, 0px));
-  transition: transform 0.2s ease;
+  animation: stationEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--stagger-i, 0) * 35ms);
 }
 
-.island-node-station.layout-pill-right {
-  flex-direction: row;
+.island-node-station.layout-pill-right { flex-direction: row; }
+.island-node-station.layout-pill-left  { flex-direction: row-reverse; }
+
+@keyframes stationPulseRing {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 230, 0, 0)); }
+  50% { filter: drop-shadow(0 0 18px rgba(255, 230, 0, 0.85)); }
+}
+.island-node-station.station-pulse-highlight .island-pedestal {
+  animation: stationPulseRing 0.55s ease-in-out 2;
 }
 
-.island-node-station.layout-pill-left {
-  flex-direction: row-reverse;
-}
-
-/* Scenery prop positioned beside node */
-.station-scenery {
+/* Interactive Biome World Props */
+.station-scenery.interactive-prop {
   position: absolute;
-  top: -16px;
+  top: -24px;
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 8;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.16));
+}
+.station-scenery.prop-side-left  { left: 4%; }
+.station-scenery.prop-side-right { right: 4%; }
+
+.station-scenery.interactive-prop:hover {
+  transform: translateY(-4px) scale(1.08);
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
+}
+
+.station-scenery.interactive-prop:active {
+  transform: scale(0.92);
+}
+
+@keyframes propSpring {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.22, 0.84) rotate(-5deg); }
+  55% { transform: scale(0.92, 1.14) rotate(5deg); }
+  80% { transform: scale(1.04, 0.96) rotate(-2deg); }
+  100% { transform: scale(1); }
+}
+.station-scenery.prop-bouncing .prop-svg {
+  animation: propSpring 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes flameFlickerSoft {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.1) scaleX(0.94); }
+}
+.prop-campfire .prop-flame-group {
+  transform-origin: 19px 28px;
+  animation: flameFlickerSoft 1.2s ease-in-out infinite;
+}
+.prop-campfire.fire-stoked .prop-flame-group {
+  transform-origin: 19px 28px;
+  filter: drop-shadow(0 0 8px #F97316);
+}
+
+@keyframes crystalShimmer {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.28) drop-shadow(0 0 6px rgba(56, 189, 248, 0.6)); }
+}
+.prop-ore:not(.prop-discovered) .prop-crystal {
+  animation: crystalShimmer 2.4s ease-in-out infinite;
+}
+
+/* Ephemeral Particle Bursts & Prop Callouts */
+@keyframes mapParticleFly {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2) rotate(var(--rot)); opacity: 0; }
+}
+.map-fx-particle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  border: 1px solid #0B0B0E;
   pointer-events: none;
-  z-index: 2;
+  z-index: 30;
+  animation: mapParticleFly 0.68s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.layout-pill-right .station-scenery {
-  left: 2%;
+@keyframes propCalloutPop {
+  0% { opacity: 0; transform: translate(-50%, -80%) scale(0.9); }
+  100% { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+.map-prop-callout {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  max-width: 240px;
+  padding: 0.45rem 0.78rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
+  border: 1.5px solid rgba(11, 11, 14, 0.16);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  color: #0B0B0E;
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.35;
+  pointer-events: none;
+  z-index: 40;
+  animation: propCalloutPop 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.map-prop-callout.fading-out {
+  opacity: 0;
+  transform: translate(-50%, -110%) scale(0.95);
+}
+body.dark-theme .map-prop-callout,
+.adventure-trail-board[data-biome="nether"] .map-prop-callout,
+.adventure-trail-board[data-biome="end"] .map-prop-callout {
+  background: rgba(24, 25, 32, 0.94) !important;
+  color: #F4F4F5 !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
 }
 
-.layout-pill-left .station-scenery {
-  right: 2%;
-}
-
-/* ── 3D Stepping Stone Pedestal ── */
+/* ── 3D Stepping Stone Pedestals & Active Champion ── */
 .island-pedestal {
   position: relative;
   background: none;
@@ -10371,41 +10528,46 @@ body.dark-theme .track-pill-btn.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   flex-shrink: 0;
 }
-
-.island-pedestal:hover {
-  transform: translateY(-4px);
-}
+.island-pedestal:hover { transform: translateY(-5px) scale(1.04); }
+.island-pedestal:active { transform: translateY(-1px) scale(0.96); }
 
 .island-pedestal.pedestal-active {
-  animation: activePedestalFloat 2s ease-in-out infinite;
+  animation: activePedestalFloat 2.4s ease-in-out infinite;
 }
-
 @keyframes activePedestalFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-3px); }
 }
 
+@keyframes spinPortalRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.pedestal-active-ring {
+  position: absolute;
+  bottom: 8px;
+  width: 70px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px dashed rgba(192, 132, 252, 0.85);
+  pointer-events: none;
+  animation: spinPortalRing 8s linear infinite;
+}
+
 .pedestal-active-glow {
   position: absolute;
   bottom: 6px;
-  width: 60px;
-  height: 20px;
+  width: 64px;
+  height: 22px;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.8) 0%, rgba(168, 85, 247, 0) 70%);
-  filter: blur(4px);
+  filter: blur(5px);
   pointer-events: none;
-  animation: activePortalPulse 1.8s infinite;
 }
 
-@keyframes activePortalPulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.15); }
-}
-
-/* Character Sprite standing on active pedestal (Chosen Profile Avatar) */
 .station-character-sprite {
   position: absolute;
   top: -72px;
@@ -10414,36 +10576,49 @@ body.dark-theme .track-pill-btn.active {
   display: flex;
   flex-direction: column;
   align-items: center;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
   z-index: 15;
-  animation: playerMapIdle 2s ease-in-out infinite;
+  animation: playerMapIdle 2.2s ease-in-out infinite;
+  transition: filter 0.15s ease;
+}
+.station-character-sprite:hover {
+  filter: brightness(1.08) drop-shadow(0 6px 12px rgba(168, 85, 247, 0.4));
 }
 
 @keyframes playerMapIdle {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50% { transform: translateX(-50%) translateY(-4px); }
 }
+@keyframes playerMapCheer {
+  0% { transform: translateX(-50%) translateY(0) scale(1); }
+  35% { transform: translateX(-50%) translateY(-18px) scale(1.12); }
+  65% { transform: translateX(-50%) translateY(0) scale(0.94); }
+  100% { transform: translateX(-50%) translateY(0) scale(1); }
+}
+.station-character-sprite.hero-cheering {
+  animation: playerMapCheer 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
 
 .station-speech-bubble {
   background: #FFE600;
   color: #0B0B0E;
   font-family: var(--font-mono, monospace);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   font-weight: 900;
-  padding: 0.18rem 0.5rem;
-  border-radius: 6px;
+  padding: 0.16rem 0.5rem;
+  border-radius: 7px;
   border: 1.5px solid #0B0B0E;
   box-shadow: 1.5px 1.5px 0px #0B0B0E;
   white-space: nowrap;
   margin-bottom: 3px;
 }
 
-/* 3D Voxel Body of Chosen Player Skin */
 .player-voxel-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.36));
 }
 
 .player-voxel-head {
@@ -10478,12 +10653,8 @@ body.dark-theme .track-pill-btn.active {
   border: 1.5px solid #0B0B0E;
   border-radius: 2px;
 }
-.player-arm.arm-left {
-  left: -6px;
-}
-.player-arm.arm-right {
-  right: -6px;
-}
+.player-arm.arm-left { left: -6px; }
+.player-arm.arm-right { right: -6px; }
 
 .player-belt {
   width: 100%;
@@ -10513,50 +10684,60 @@ body.dark-theme .track-pill-btn.active {
   border-radius: 2px;
   border: 1.5px solid #0B0B0E;
   z-index: 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
-/* ── Quest Label Pill (Matches User Reference Image) ── */
+/* ── Tactile Quest Pills with Integrated Micro-Progress ── */
 .island-quest-pill {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.55rem 1rem;
-  background: #FFFFFF;
+  gap: 0.72rem;
+  padding: 0.58rem 0.95rem 0.68rem;
+  background: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--ink, #0B0B0E);
-  border-radius: 14px;
-  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
+  border-radius: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06), 3px 3px 0px var(--ink, #0B0B0E);
   cursor: pointer;
-  transition: all 0.15s ease;
-  min-width: 220px;
-  max-width: 320px;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background 0.15s ease;
+  min-width: 225px;
+  max-width: 318px;
+  overflow: hidden;
 }
 
 .island-quest-pill:hover {
   background: #FFFEEB;
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1), 4px 4px 0px var(--ink, #0B0B0E);
 }
 
-body.dark-theme .island-quest-pill {
-  background: #1A1D24 !important;
+.island-quest-pill:active {
+  transform: scale(0.98);
+}
+
+body.dark-theme .island-quest-pill,
+.adventure-trail-board[data-biome="nether"] .island-quest-pill,
+.adventure-trail-board[data-biome="end"] .island-quest-pill {
+  background: rgba(26, 29, 36, 0.94) !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 3px 3px 0px #000000 !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32), 3px 3px 0px #000000 !important;
 }
 
-body.dark-theme .island-quest-pill:hover {
-  background: #242832 !important;
-  box-shadow: 4px 4px 0px #000000 !important;
+body.dark-theme .island-quest-pill:hover,
+.adventure-trail-board[data-biome="nether"] .island-quest-pill:hover,
+.adventure-trail-board[data-biome="end"] .island-quest-pill:hover {
+  background: #242834 !important;
 }
 
 .island-quest-pill.pill-active {
   border-color: #0B0B0E;
-  box-shadow: 3.5px 3.5px 0px #0B0B0E;
   background: #FFFDEB;
+  box-shadow: 0 10px 26px rgba(255, 230, 0, 0.22), 3.5px 3.5px 0px #0B0B0E;
 }
-
-body.dark-theme .island-quest-pill.pill-active {
-  background: #201E2B !important;
+body.dark-theme .island-quest-pill.pill-active,
+.adventure-trail-board[data-biome="nether"] .island-quest-pill.pill-active,
+.adventure-trail-board[data-biome="end"] .island-quest-pill.pill-active {
+  background: #221F30 !important;
   border-color: #FFE600 !important;
 }
 
@@ -10564,63 +10745,73 @@ body.dark-theme .island-quest-pill.pill-active {
   background: #0B0B0E;
   color: #FFFFFF;
   font-family: var(--font-mono, monospace);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 900;
-  padding: 0.25rem 0.55rem;
-  border-radius: 6px;
+  padding: 0.24rem 0.52rem;
+  border-radius: 7px;
   flex-shrink: 0;
 }
+.pill-active .pill-code-badge { background: #FFE600; color: #0B0B0E; border: 1.5px solid #0B0B0E; }
+.pill-done .pill-code-badge { background: #10B981; color: #FFFFFF; }
 
-.pill-active .pill-code-badge {
-  background: #FFE600;
-  color: #0B0B0E;
-  border: 1.5px solid #0B0B0E;
-}
-
-.pill-done .pill-code-badge {
-  background: #10B981;
-}
-
-.pill-text-col {
-  flex: 1;
-  min-width: 0;
-}
+.pill-text-col { flex: 1; min-width: 0; }
 
 .pill-title {
   font-family: var(--font-ui, sans-serif);
-  font-size: 0.88rem;
+  font-size: 0.87rem;
   font-weight: 800;
   color: var(--ink, #0B0B0E);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
-
-body.dark-theme .pill-title {
+body.dark-theme .pill-title,
+.adventure-trail-board[data-biome="nether"] .pill-title,
+.adventure-trail-board[data-biome="end"] .pill-title {
   color: #F4F4F5 !important;
 }
 
 .pill-sub {
-  font-size: 0.72rem;
+  font-size: 0.71rem;
   font-weight: 600;
   color: #71717A;
-  margin-top: 1px;
+  margin-top: 2px;
 }
-
-body.dark-theme .pill-sub {
+body.dark-theme .pill-sub,
+.adventure-trail-board[data-biome="nether"] .pill-sub,
+.adventure-trail-board[data-biome="end"] .pill-sub {
   color: #94A3B8 !important;
 }
 
-.pill-status-badge {
-  flex-shrink: 0;
+.pill-micro-track {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(11, 11, 14, 0.09);
+  margin-top: 5px;
+  overflow: hidden;
 }
+body.dark-theme .pill-micro-track,
+.adventure-trail-board[data-biome="nether"] .pill-micro-track,
+.adventure-trail-board[data-biome="end"] .pill-micro-track {
+  background: rgba(255, 255, 255, 0.12);
+}
+.pill-micro-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #10B981;
+  transition: width 0.35s ease;
+}
+.pill-active .pill-micro-fill { background: #A855F7; }
+
+.pill-status-badge { flex-shrink: 0; }
 
 .status-active-badge {
   background: #FFE600;
   color: #0B0B0E;
   font-family: var(--font-mono, monospace);
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   font-weight: 900;
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
@@ -10634,14 +10825,15 @@ body.dark-theme .pill-sub {
   background: #DCFCE7;
   color: #166534;
   font-family: var(--font-mono, monospace);
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   font-weight: 900;
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   border: 1.5px solid #10B981;
 }
-
-body.dark-theme .status-done-badge {
+body.dark-theme .status-done-badge,
+.adventure-trail-board[data-biome="nether"] .status-done-badge,
+.adventure-trail-board[data-biome="end"] .status-done-badge {
   background: #064E3B !important;
   color: #A7F3D0 !important;
 }
@@ -10650,14 +10842,15 @@ body.dark-theme .status-done-badge {
   background: #FEF9C3;
   color: #854D0E;
   font-family: var(--font-mono, monospace);
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   font-weight: 800;
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   border: 1.5px solid #EAB308;
 }
-
-body.dark-theme .status-ready-badge {
+body.dark-theme .status-ready-badge,
+.adventure-trail-board[data-biome="nether"] .status-ready-badge,
+.adventure-trail-board[data-biome="end"] .status-ready-badge {
   background: #713F12 !important;
   color: #FEF08A !important;
 }
@@ -10666,66 +10859,50 @@ body.dark-theme .status-ready-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #A1A1AA;
+  color: #9CA3AF;
 }
 
-/* ── Scenic Wooden Bridge & Mountain Waterfall ── */
+/* ── Animated Waterway Bridge & Sailboat Crossing ── */
 .island-feature-wrap {
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
   z-index: 4;
 }
 
 .island-feature-section {
   position: relative;
   width: 100%;
-  max-width: 540px;
-  height: 70px;
+  max-width: 560px;
+  height: 76px;
   margin: 0 auto;
-  border-radius: 16px;
+  border-radius: 18px;
   border: 2px solid var(--ink, #0B0B0E);
-  box-shadow: 3px 3px 0px var(--ink, #0B0B0E);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 3px 3px 0px var(--ink, #0B0B0E);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.island-overworld-river {
-  background: #60A5FA;
-}
-.river-stream {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+.river-stream { position: absolute; inset: 0; background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%); }
+.lava-stream  { position: absolute; inset: 0; background: linear-gradient(180deg, #FB923C 0%, #C2410C 100%); }
+.void-stream  { position: absolute; inset: 0; background: linear-gradient(180deg, #5B21B6 0%, #2E1065 100%); }
+
+@keyframes foamGlide {
+  0% { transform: translateX(-30px); opacity: 0.2; }
+  50% { opacity: 0.85; }
+  100% { transform: translateX(40px); opacity: 0.2; }
 }
 .water-foam {
   position: absolute;
-  height: 2px;
-  background: #FFFFFF;
-  border-radius: 2px;
-  opacity: 0.7;
+  height: 2.5px;
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  animation: foamGlide 3.2s ease-in-out infinite;
 }
-.water-foam.f1 { top: 18px; left: 15%; width: 50px; }
-.water-foam.f2 { bottom: 20px; right: 20%; width: 65px; }
-
-.island-nether-rift {
-  background: #7F1D1D;
-}
-.lava-stream {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #EA580C 0%, #C2410C 100%);
-}
-
-.island-end-rift {
-  background: #2E1065;
-}
-.void-stream {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #4C1D95 0%, #2E1065 100%);
-}
+.water-foam.f1 { top: 18px; left: 12%; width: 52px; }
+.water-foam.f2 { bottom: 20px; right: 16%; width: 64px; animation-delay: 0.8s; }
+.water-foam.f3 { top: 44px; left: 26%; width: 38px; animation-delay: 1.6s; }
 
 .feature-bridge {
   position: relative;
@@ -10740,21 +10917,49 @@ body.dark-theme .status-ready-badge {
   gap: 3px;
   background: #5C3A21;
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 2px solid #0B0B0E;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
-
 .bridge-planks span {
   display: block;
   width: 14px;
   height: 28px;
   background: #8B5A2B;
   border: 1px solid #0B0B0E;
+  border-radius: 2px;
+}
+
+@keyframes boatBob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-3px) rotate(1.5deg); }
+}
+@keyframes boatSail {
+  0% { transform: translateX(0) rotate(0deg); }
+  45% { transform: translateX(130px) rotate(-3deg) scale(1.04); }
+  75% { transform: translateX(150px) rotate(3deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+.map-boat-btn {
+  position: absolute;
+  left: 14%;
+  top: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 6;
+  animation: boatBob 2.6s ease-in-out infinite;
+  transition: filter 0.15s ease;
+}
+.map-boat-btn:hover { filter: drop-shadow(0 0 6px #FFE600); }
+.map-boat-btn.boat-sailing {
+  animation: boatSail 1.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .feature-tag {
   position: absolute;
-  bottom: 4px;
+  bottom: 5px;
   right: 12px;
   font-family: var(--font-mono, monospace);
   font-size: 0.65rem;
@@ -10764,44 +10969,41 @@ body.dark-theme .status-ready-badge {
   z-index: 6;
 }
 
-/* ── Milestone Capstone Summit Dais ── */
+/* ── Capstone Summit Chest Dais ── */
 .island-capstone-station {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 0.85rem;
   z-index: 8;
 }
 
 .capstone-chest-btn {
-  background: #FFFFFF;
-  border: 2.5px solid var(--ink, #0B0B0E);
+  background: rgba(255, 255, 255, 0.94);
+  border: 2px solid var(--ink, #0B0B0E);
   border-radius: 20px;
-  box-shadow: 4px 4px 0px var(--ink, #0B0B0E);
-  padding: 1.25rem 2rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09), 4px 4px 0px var(--ink, #0B0B0E);
+  padding: 1.15rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background 0.15s ease;
 }
 
 .capstone-chest-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14), 5px 5px 0px var(--ink, #0B0B0E);
   background: #FFFEEB;
 }
 
-body.dark-theme .capstone-chest-btn {
-  background: #1A1D24 !important;
+body.dark-theme .capstone-chest-btn,
+.adventure-trail-board[data-biome="nether"] .capstone-chest-btn,
+.adventure-trail-board[data-biome="end"] .capstone-chest-btn {
+  background: rgba(26, 29, 36, 0.94) !important;
   border-color: rgba(255, 255, 255, 0.18) !important;
-  box-shadow: 4px 4px 0px #000000 !important;
-}
-
-body.dark-theme .capstone-chest-btn:hover {
-  background: #222630 !important;
-  box-shadow: 6px 6px 0px #000000 !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), 4px 4px 0px #000000 !important;
 }
 
 .capstone-label-pill {
@@ -10813,13 +11015,14 @@ body.dark-theme .capstone-chest-btn:hover {
 
 .capstone-code-tag {
   font-family: var(--font-mono, monospace);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.05em;
   color: #B45309;
 }
-
-body.dark-theme .capstone-code-tag {
+body.dark-theme .capstone-code-tag,
+.adventure-trail-board[data-biome="nether"] .capstone-code-tag,
+.adventure-trail-board[data-biome="end"] .capstone-code-tag {
   color: #FCD34D !important;
 }
 
@@ -10828,8 +11031,9 @@ body.dark-theme .capstone-code-tag {
   font-weight: 800;
   color: var(--ink, #0B0B0E);
 }
-
-body.dark-theme .capstone-name {
+body.dark-theme .capstone-name,
+.adventure-trail-board[data-biome="nether"] .capstone-name,
+.adventure-trail-board[data-biome="end"] .capstone-name {
   color: #F4F4F5 !important;
 }
 
@@ -10837,20 +11041,20 @@ body.dark-theme .capstone-name {
   background: #FFE600;
   color: #0B0B0E;
   font-family: var(--font-mono, monospace);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 900;
-  padding: 0.18rem 0.6rem;
+  padding: 0.18rem 0.65rem;
   border-radius: 999px;
   border: 1.5px solid #0B0B0E;
 }
 
-/* ── Chapter Diorama Popover Modal ── */
+/* ── Apple-Crafted Frosted Chapter Inspection Sheet ── */
 .trail-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(11, 11, 14, 0.68);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(11, 11, 14, 0.56);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -10859,188 +11063,196 @@ body.dark-theme .capstone-name {
 }
 
 .trail-modal-card {
-  background: #FFFFFF;
-  border: 3px solid var(--ink, #0B0B0E);
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid var(--ink, #0B0B0E);
   border-radius: 22px;
-  box-shadow: 6px 6px 0px var(--ink, #0B0B0E);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.25), 5px 5px 0px var(--ink, #0B0B0E);
   width: 100%;
-  max-width: 480px;
-  max-height: 88vh;
+  max-width: 500px;
+  max-height: 90vh;
   overflow-y: auto;
-  padding: 1.75rem;
-  animation: modalCardPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 1.35rem 1.5rem;
+  animation: modalCardPop 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body.dark-theme .trail-modal-card {
-  background: #18191E !important;
+  background: rgba(24, 25, 32, 0.96) !important;
   color: #F4F4F5 !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 6px 6px 0px #000000 !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.6), 5px 5px 0px #000000 !important;
 }
 
 @keyframes modalCardPop {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: translateY(14px) scale(0.95); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .trail-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
-.trail-modal-badges {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+.trail-modal-badges { display: flex; align-items: center; gap: 0.45rem; }
 
 .trail-modal-pill {
   background: #FFE600;
   color: #0B0B0E;
   font-family: var(--font-mono, monospace);
   font-weight: 900;
-  font-size: 0.75rem;
-  padding: 0.2rem 0.55rem;
+  font-size: 0.74rem;
+  padding: 0.18rem 0.55rem;
   border-radius: 6px;
   border: 1.5px solid #0B0B0E;
 }
 
 .trail-modal-status {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
-  padding: 0.2rem 0.55rem;
+  padding: 0.18rem 0.55rem;
   border-radius: 6px;
   text-transform: uppercase;
 }
-
-.trail-modal-status.status-done {
-  background: #DCFCE7;
-  color: #166534;
-}
-
-.trail-modal-status.status-active {
-  background: #FEF9C3;
-  color: #854D0E;
-}
-
-.trail-modal-status.status-locked {
-  background: #F4F4F5;
-  color: #71717A;
-}
-
-body.dark-theme .trail-modal-status.status-done {
-  background: #064E3B !important;
-  color: #A7F3D0 !important;
-}
-
-body.dark-theme .trail-modal-status.status-active {
-  background: #713F12 !important;
-  color: #FEF08A !important;
-}
-
-body.dark-theme .trail-modal-status.status-locked {
-  background: #27272A !important;
-  color: #A1A1AA !important;
-}
+.trail-modal-status.status-done { background: #DCFCE7; color: #166534; }
+.trail-modal-status.status-active { background: #FEF9C3; color: #854D0E; }
+.trail-modal-status.status-locked { background: #F4F4F5; color: #71717A; }
+body.dark-theme .trail-modal-status.status-done { background: #064E3B !important; color: #A7F3D0 !important; }
+body.dark-theme .trail-modal-status.status-active { background: #713F12 !important; color: #FEF08A !important; }
+body.dark-theme .trail-modal-status.status-locked { background: #27272A !important; color: #A1A1AA !important; }
 
 .trail-modal-close {
-  background: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(11, 11, 14, 0.06);
   border: none;
   cursor: pointer;
   color: var(--ink, #0B0B0E);
-  padding: 0.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.15s ease;
 }
-
+.trail-modal-close:hover { background: rgba(11, 11, 14, 0.12); }
 body.dark-theme .trail-modal-close {
+  background: rgba(255, 255, 255, 0.1);
   color: #F4F4F5 !important;
 }
 
 .trail-modal-title {
-  font-size: 1.35rem;
+  font-size: 1.32rem;
   font-weight: 800;
   color: var(--ink, #0B0B0E);
-  margin: 0.35rem 0 0.5rem;
+  margin: 0.3rem 0 0.4rem;
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
-
-body.dark-theme .trail-modal-title {
-  color: #F4F4F5 !important;
-}
+body.dark-theme .trail-modal-title { color: #F4F4F5 !important; }
 
 .trail-modal-desc {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: #52525B;
   line-height: 1.45;
-  margin: 0 0 1.15rem;
+  margin: 0 0 0.95rem;
 }
+body.dark-theme .trail-modal-desc { color: #94A3B8 !important; }
 
-body.dark-theme .trail-modal-desc {
-  color: #94A3B8 !important;
+.trail-modal-progress-wrap {
+  margin-bottom: 1rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 12px;
+  background: #FAF8F5;
+  border: 1px solid rgba(11, 11, 14, 0.1);
+}
+body.dark-theme .trail-modal-progress-wrap {
+  background: #20222B;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.trail-modal-prog-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  font-weight: 700;
+  margin-bottom: 0.38rem;
+}
+.trail-modal-prog-track {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(11, 11, 14, 0.1);
+  overflow: hidden;
+}
+body.dark-theme .trail-modal-prog-track { background: rgba(255, 255, 255, 0.12); }
+.trail-modal-prog-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #10B981, #38BDF8);
+  transition: width 0.35s ease;
 }
 
 .trail-modal-meta {
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  gap: 0.6rem;
+  margin-bottom: 1.05rem;
+  flex-wrap: wrap;
 }
 
 .trail-meta-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   background: #F4F4F5;
   color: var(--ink, #0B0B0E);
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  padding: 0.3rem 0.7rem;
+  padding: 0.26rem 0.62rem;
   border-radius: 8px;
   border: 1.5px solid var(--ink, #0B0B0E);
 }
-
 body.dark-theme .trail-meta-chip {
   background: #24262C !important;
   color: #F4F4F5 !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Modal Lesson List */
 .modal-lesson-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.4rem;
+  gap: 0.36rem;
+  margin-bottom: 1rem;
 }
 
 .modal-lesson-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.55rem 0.85rem;
+  gap: 0.68rem;
+  padding: 0.45rem 0.75rem;
   background: #FAF8F5;
-  border: 1.5px solid var(--ink, #0B0B0E);
-  border-radius: 10px;
+  border: 1.5px solid rgba(11, 11, 14, 0.15);
+  border-radius: 12px;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
-
+.modal-lesson-row:hover {
+  transform: translateX(2px);
+  background: #FFFEEB;
+}
 body.dark-theme .modal-lesson-row {
   background: #22252D !important;
   border-color: rgba(255, 255, 255, 0.14) !important;
+}
+body.dark-theme .modal-lesson-row:hover {
+  background: #282B36 !important;
 }
 
 .modal-lesson-row.lesson-done {
   background: #F0FDF4;
   border-color: #10B981;
 }
-
 body.dark-theme .modal-lesson-row.lesson-done {
   background: #0B2519 !important;
   border-color: #059669 !important;
 }
+.modal-lesson-row.lesson-locked { opacity: 0.65; }
 
 .modal-lesson-idx {
   width: 24px;
@@ -11049,71 +11261,56 @@ body.dark-theme .modal-lesson-row.lesson-done {
   align-items: center;
   justify-content: center;
   background: #E4E4E7;
-  border-radius: 6px;
+  color: #0B0B0E;
+  border-radius: 7px;
   font-family: var(--font-mono, monospace);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
   flex-shrink: 0;
 }
+.lesson-done .modal-lesson-idx { background: #10B981; color: #FFFFFF; }
+.modal-extra-quiz .modal-lesson-idx { background: #EDE9FE; color: #6D28D9; }
+.modal-extra-code .modal-lesson-idx { background: #D1FAE5; color: #047857; }
 
-.lesson-done .modal-lesson-idx {
-  background: #10B981;
-  color: #FFFFFF;
-}
-
-.modal-lesson-info {
-  flex: 1;
-  min-width: 0;
-}
-
+.modal-lesson-info { flex: 1; min-width: 0; }
 .modal-lesson-title {
-  font-size: 0.84rem;
+  font-size: 0.83rem;
   font-weight: 700;
   color: var(--ink, #0B0B0E);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-body.dark-theme .modal-lesson-title {
-  color: #F4F4F5 !important;
-}
-
-.modal-lesson-xp {
-  font-size: 0.7rem;
-  color: #71717A;
-}
+body.dark-theme .modal-lesson-title { color: #F4F4F5 !important; }
+.modal-lesson-xp { font-size: 0.7rem; color: #71717A; }
 
 .modal-lesson-launch-btn {
-  padding: 0.25rem 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.74rem;
   font-weight: 800;
   background: #FFE600;
   color: #0B0B0E;
   border: 1.5px solid #0B0B0E;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
+  white-space: nowrap;
 }
-
-.lesson-done .modal-lesson-launch-btn {
-  background: #FFFFFF;
-  color: var(--ink, #0B0B0E);
+.modal-lesson-launch-btn.btn-quiz-pill { background: #8B5CF6; color: #FFFFFF; }
+.modal-lesson-launch-btn.btn-code-pill { background: #10B981; color: #0B0B0E; }
+.modal-lesson-launch-btn:disabled {
+  background: #E4E4E7;
+  color: #71717A;
+  border-color: #A1A1AA;
+  cursor: not-allowed;
 }
+.lesson-done .modal-lesson-launch-btn { background: #FFFFFF; color: var(--ink, #0B0B0E); }
+body.dark-theme .lesson-done .modal-lesson-launch-btn { background: #18191E !important; color: #F4F4F5 !important; }
 
-body.dark-theme .lesson-done .modal-lesson-launch-btn {
-  background: #18191E !important;
-  color: #F4F4F5 !important;
-}
-
-.trail-modal-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
+.trail-modal-actions { display: flex; gap: 0.75rem; }
 .trail-btn-action {
   flex: 1;
-  padding: 0.85rem 1rem;
-  font-size: 0.95rem;
+  padding: 0.82rem 1rem;
+  font-size: 0.92rem;
   font-weight: 800;
   background: #FFE600;
   color: #0B0B0E;
@@ -11121,19 +11318,24 @@ body.dark-theme .lesson-done .modal-lesson-launch-btn {
   border-radius: 12px;
   box-shadow: 3px 3px 0px #0B0B0E;
   cursor: pointer;
+  transition: transform 0.14s ease, background 0.14s ease;
+}
+.trail-btn-action:hover:not(:disabled) { background: #FFED4A; transform: translateY(-1px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .island-node-station,
+  .wf-stream-line,
+  .trail-progress-glow,
+  .ambient-mote,
+  .pedestal-active-ring,
+  .map-boat-btn,
+  .station-character-sprite,
+  .island-pedestal.pedestal-active {
+    animation: none !important;
+  }
 }
 
 @media (max-width: 640px) {
-  .meowger-pet-wrap {
-    bottom: 14px;
-    right: 14px;
-    transform: scale(0.92);
-  }
-  .meowger-speech-bubble {
-    right: -10px;
-    bottom: 68px;
-    max-width: 220px;
-  }
   .adventure-trail-board.island-mountain-board {
     border-radius: 20px;
     padding: 1rem 0.65rem 2.5rem;
@@ -11141,34 +11343,39 @@ body.dark-theme .lesson-done .modal-lesson-launch-btn {
   .island-header-bar {
     flex-direction: column;
     align-items: stretch;
-    padding: 1rem;
-    gap: 0.85rem;
+    padding: 0.9rem;
+    gap: 0.75rem;
   }
   .island-header-right {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
     width: 100%;
+  }
+  .island-stats-row {
+    justify-content: flex-start;
   }
   .island-node-station {
     transform: none !important;
-    gap: 0.75rem;
+    animation: none !important;
+    gap: 0.65rem;
+    padding-left: 16px;
   }
   .island-quest-pill {
     min-width: 0;
     max-width: none;
     flex: 1;
-    padding: 0.45rem 0.75rem;
+    padding: 0.45rem 0.72rem 0.58rem;
   }
-  .pill-title {
-    font-size: 0.8rem;
+  .pill-title { font-size: 0.8rem; }
+  .station-scenery.interactive-prop {
+    top: -22px;
+    transform: scale(0.76);
   }
-  .station-scenery {
-    display: none;
-  }
+  .station-scenery.prop-side-left { left: -2px; }
+  .station-scenery.prop-side-right { right: -2px; }
   .island-feature-section {
     max-width: 100%;
-    height: 58px;
+    height: 62px;
   }
 }
 
